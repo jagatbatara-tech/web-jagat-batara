@@ -7,11 +7,54 @@ backend:
 media_folder: "images"
 public_folder: "/images"
 
-# Ini adalah struktur kategori untuk menu dropdown lo nanti
 collections:
   - name: "studi-kasus"
     label: "Studi Kasus"
     folder: "studi-kasus"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Judul", name: "title", widget: "string"}
+      - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
+      - {label: "Isi Artikel", name: "body", widget: "markdown"}
+
+  - name: "day-in-my-life"
+    label: "Day In My Life"
+    folder: "day-in-my-life"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Judul", name: "title", widget: "string"}
+      - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
+      - {label: "Isi Artikel", name: "body", widget: "markdown"}
+
+  - name: "supply-chain"
+    label: "Supply Chain"
+    folder: "supply-chain"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Judul", name: "title", widget: "string"}
+      - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
+      - {label: "Isi Artikel", name: "body", widget: "markdown"}
+
+  - name: "data-storytelling"
+    label: "Story Telling with Data"
+    folder: "data-storytelling"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Judul", name: "title", widget: "string"}
+      - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
+      - {label: "Isi Artikel", name: "body", widget: "markdown"}
+
+  - name: "ai"
+    label: "Artificial Intelligence"
+    folder: "ai"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:

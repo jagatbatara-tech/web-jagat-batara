@@ -10,43 +10,62 @@
 <body>
 
     <!-- Navigasi Atas -->
-    <nav class="navbar">
-        <div class="logo">JAGAT BATARA.</div>
-        
-        <div class="nav-right">
-            <!-- Dropdown Menu Utama -->
-            <div class="dropdown">
-                <button class="dropbtn">Daftar Isi ▾</button>
-                <div class="dropdown-content">
-                    <a href="#about">Tentang</a>
-                    <a href="#experience">Pengalaman</a>
-                    <a href="#track-record">Kredensial</a>
-                    
-                    <!-- Dropdown Level 2: Knowledge Sharing -->
-                    <div class="nested-dropdown">
-                        <a href="#knowledge-sharing" class="nested-dropbtn">Knowledge Sharing ◂</a>
-                        <div class="nested-dropdown-content">
-                            
-                            <!-- Dropdown Level 3: Studi Kasus (Contoh Sub dari Sub) -->
-                            <div class="nested-dropdown">
-                                <a href="studi-kasus.html">Studi Kasus</a>
-                                </div>
-                            </div>
-                                <a href="day-in-my-life.html">Day In My Life</a>
-                                <a href="supply-chain.html">Supply Chain</a>
-                                <a href="data-storytelling.html">Story Telling with Data</a>
-                                <a href="ai.html">Artificial Intelligence</a>
-                        </div>
+<nav class="navbar">
+    #aboutJAGAT BATARA.</a>
+
+    <div class="nav-right">
+        <div class="dropdown">
+            <button
+                class="dropbtn"
+                type="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+            >
+                Daftar Isi
+                <span class="dropdown-arrow">▾</span>
+            </button>
+
+            <div class="dropdown-content">
+                #aboutTentang</a>
+                #experiencePengalaman</a>
+                #track-recordKredensial</a>
+
+                <!-- Knowledge Sharing sebagai parent -->
+                <div class="submenu">
+                    <button
+                        class="submenu-button"
+                        type="button"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        <span>Knowledge Sharing</span>
+                        <span class="submenu-arrow">▾</span>
+                    </button>
+
+                    <!-- Child Knowledge Sharing -->
+                    <div class="submenu-content">
+                        <a href="studi-kasus.html">Studi Kasus</a>
+                        <a href="day-in-my-life.html">Day In My Life</a>
+                        <a href="supply-chain.html">Supply Chain</a>
+                        <a href="data-storytelling.html">
+                            Data Storytelling
+                        </a>
+                        <a href="ai.html">
+                            Artificial Intelligence
+                        </a>
                     </div>
                 </div>
             </div>
-            
-            <!-- Language Switcher (EN dinonaktifkan sementara) -->
-            <div class="lang-switch">
-                <span class="active-lang">ID</span> <span class="lang-divider">|</span> <span style="color:#CCC; cursor:not-allowed;">EN</span>
-            </div>
         </div>
-    </nav>
+
+        <div class="lang-switch">
+            <span class="active-lang">ID</span>
+            <span class="lang-divider">|</span>
+            <span class="inactive-lang">EN</span>
+        </div>
+    </div>
+</nav>
+
 
     <!-- Hero Banner dengan Background Image -->
     <header class="hero-section" id="about">

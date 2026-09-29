@@ -1,0 +1,337 @@
+/* Reset Dasar */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #FFFFFF; 
+    color: #111111; 
+    line-height: 1.6;
+}
+
+/* Navigasi */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 10%;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #EAEAEA;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -0.5px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+/* Dropdown Utama */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: transparent;
+    color: #111111;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 1px solid #EAEAEA;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.dropbtn:hover {
+    background-color: #FAFAFA;
+    border-color: #DDDDDD;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #FFFFFF;
+    min-width: 220px;
+    box-shadow: 0px 8px 24px rgba(0,0,0,0.08);
+    border: 1px solid #EAEAEA;
+    border-radius: 6px;
+    z-index: 101;
+    margin-top: 5px;
+}
+
+/* Dropdown Bersarang (Level 2, 3, dst) */
+.nested-dropdown {
+    position: relative;
+}
+
+.nested-dropbtn {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nested-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 100%; /* Muncul ke arah kiri */
+    top: -1px;
+    background-color: #FFFFFF;
+    min-width: 220px;
+    box-shadow: -4px 8px 24px rgba(0,0,0,0.08);
+    border: 1px solid #EAEAEA;
+    border-radius: 6px;
+    margin-right: 2px;
+}
+
+/* Tautan di dalam Dropdown */
+.dropdown-content a, .nested-dropdown-content a {
+    color: #555555;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-bottom: 1px solid #FAFAFA;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.dropdown-content a:last-child, .nested-dropdown-content a:last-child {
+    border-bottom: none;
+}
+
+.dropdown-content a:hover, .nested-dropdown-content a:hover {
+    background-color: #FAFAFA;
+    color: #111111;
+}
+
+/* Memunculkan menu saat di-hover */
+.dropdown:hover > .dropdown-content {
+    display: block;
+}
+
+.nested-dropdown:hover > .nested-dropdown-content {
+    display: block;
+}
+
+/* Language Switcher */
+.lang-switch {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.lang-switch .lang-link {
+    color: #999999;
+    text-decoration: none;
+}
+
+.lang-switch .active-lang {
+    color: #111111;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.lang-switch .lang-divider {
+    color: #DDDDDD;
+    margin: 0 8px;
+}
+
+/* Hero Section */
+.hero-section {
+    padding: 140px 10% 120px;
+    background-image: linear-gradient(rgba(17, 17, 17, 0.85), rgba(17, 17, 17, 0.95)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+    color: #FFFFFF;
+}
+
+.hero-content {
+    max-width: 850px;
+}
+
+.hero-section h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 25px;
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    font-size: 1.15rem;
+    color: #DDDDDD;
+    margin-bottom: 40px;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 15px 30px;
+    background-color: #FFFFFF;
+    color: #111111;
+    text-decoration: none;
+    font-weight: 700;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #EAEAEA;
+}
+
+/* Section Umum */
+.credentials-section {
+    padding: 80px 10%;
+    border-top: 1px solid #EAEAEA;
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.section-header p {
+    color: #555555;
+    margin-bottom: 50px;
+}
+
+/* TIMELINE PENGALAMAN */
+.timeline {
+    position: relative;
+    max-width: 900px;
+    margin: 0;
+    padding-left: 25px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: #EAEAEA;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+    padding-left: 40px;
+}
+
+.timeline-icon {
+    position: absolute;
+    left: -20px;
+    top: 0;
+    width: 42px;
+    height: 42px;
+    background: #111111;
+    color: #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    z-index: 1;
+    box-shadow: 0 0 0 5px #FFFFFF;
+}
+
+.timeline-content {
+    background: #FFFFFF;
+    padding: 25px 30px;
+    border: 1px solid #EAEAEA;
+    border-radius: 8px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timeline-content:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.06);
+    border-color: #DDDDDD;
+}
+
+.timeline-content h3 {
+    font-size: 1.25rem;
+    color: #111111;
+    margin-bottom: 4px;
+}
+
+.timeline-content h4 {
+    font-size: 0.95rem;
+    color: #666666;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+/* GRID BOX */
+.grid-container {
+    display: grid;
+    gap: 40px;
+}
+
+.grid-box {
+    background: #FFFFFF;
+    padding: 40px;
+    border: 1px solid #EAEAEA;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+}
+
+.grid-box:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+}
+
+.grid-box h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #111111;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.grid-box p {
+    margin-bottom: 15px;
+}
+
+.badge-list {
+    list-style: none;
+}
+
+.badge-list li {
+    margin-bottom: 15px;
+    padding-left: 20px;
+    position: relative;
+    font-weight: 600;
+}
+
+.badge-list li::before {
+    content: "■";
+    position: absolute;
+    left: 0;
+    color: #111111;
+    font-size: 0.8rem;
+    top: 2px;
+}
+
+/* Responsif untuk HP */
+@media (max-width: 768px) {
+    .hero-section h1 { font-size: 2.2rem; }
+    .grid-container { grid-template-columns: 1fr !important; }
+    .nav-right { gap: 15px; }
+    .dropbtn { padding: 6px 12px; font-size: 0.85rem; }
+    .timeline-content { padding: 20px; }
+}

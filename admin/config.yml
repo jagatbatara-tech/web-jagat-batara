@@ -1,0 +1,20 @@
+backend:
+  name: github
+  repo: jagatbatara-tech/web-jagat-batara
+  branch: main
+
+media_folder: "images"
+public_folder: "/images"
+
+# Ini adalah struktur kategori untuk menu dropdown lo nanti
+collections:
+  - name: "studi-kasus"
+    label: "Studi Kasus"
+    folder: "studi-kasus"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Judul", name: "title", widget: "string"}
+      - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
+      - {label: "Isi Artikel", name: "body", widget: "markdown"}

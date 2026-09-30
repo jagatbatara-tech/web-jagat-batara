@@ -1,140 +1,204 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studi Kasus | Jagat Batara</title>
-    <!-- Tipografi Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Script Markdown Parser -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        :root { --primary: #004B23; --text-dark: #0f172a; --text-gray: #475569; --bg-light: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; color: var(--text-dark); background-color: var(--bg-light); line-height: 1.7; padding: 40px 20px; margin: 0; }
-        .container { max-width: 850px; margin: 0 auto; }
-        
-        .nav-back { display: inline-block; margin-bottom: 30px; color: var(--primary); text-decoration: none; font-weight: 600; transition: 0.2s; }
-        .nav-back:hover { opacity: 0.8; }
-        .page-title { margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-weight: 800; }
-        
-        /* Gaya untuk List/Card Arsip */
-        .archive-card { 
-            background: #ffffff; padding: 30px; border-radius: 8px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03); margin-bottom: 25px; 
-            border-left: 4px solid var(--primary); transition: 0.3s;
-            cursor: pointer; display: block; text-decoration: none; color: inherit;
-        }
-        .archive-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
-        .archive-title { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin-bottom: 10px; }
-        .archive-excerpt { color: var(--text-gray); font-size: 0.95rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        
-        /* Gaya untuk Artikel Penuh */
-        .full-article { background: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .full-article h1 { font-size: 2rem; font-weight: 800; margin-bottom: 25px; color: var(--primary); line-height: 1.2; }
-        .full-article h2, .full-article h3 { margin-top: 30px; margin-bottom: 15px; }
-        .full-article img { max-width: 100%; border-radius: 6px; margin: 20px 0; }
-        .full-article a { color: var(--primary); font-weight: 600; }
-        
-        .loading { text-align: center; color: var(--text-gray); font-weight: 600; padding: 50px; }
-        .hidden { display: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studi Kasus | Jagat Batara</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+<style>
+  :root{
+    --navy:#0B1F3A; --navy-deep:#0F2038; --teal:#1C9C8C; --teal-d:#1B7A6E;
+    --blue:#2E6FB5; --good:#27AE60; --accent:#F2A65A;
+    --ink:#0f172a; --muted:#475569; --bg:#f8fafc; --card:#ffffff; --border:#e2e8f0;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:'Inter',sans-serif; color:var(--ink); background:var(--bg); line-height:1.7; margin:0; padding:0 0 60px;}
+  .container{max-width:900px; margin:0 auto; padding:0 20px;}
+  .nav-back{display:inline-block; margin:30px 0; color:var(--teal-d); text-decoration:none; font-weight:600;}
+  .nav-back:hover{opacity:.8;}
+  .page-title{margin-bottom:30px; border-bottom:2px solid var(--border); padding-bottom:10px; font-weight:800;}
+  .hidden{display:none;}
+  .loading{text-align:center; color:var(--muted); font-weight:600; padding:50px;}
+
+  /* Archive cards */
+  .archive-card{background:#fff; padding:26px 28px; border-radius:10px; box-shadow:0 2px 10px rgba(0,0,0,.04);
+    margin-bottom:20px; border-left:4px solid var(--teal); text-decoration:none; color:inherit; display:block; transition:.25s;}
+  .archive-card:hover{transform:translateY(-3px); box-shadow:0 10px 22px rgba(0,0,0,.08);}
+  .archive-kicker{font-size:11.5px; font-weight:700; letter-spacing:1.5px; color:var(--teal-d); text-transform:uppercase; margin-bottom:6px;}
+  .archive-title{font-size:1.3rem; font-weight:700; margin-bottom:8px;}
+  .archive-excerpt{color:var(--muted); font-size:.93rem; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
+
+  /* ===== Full article — hero ===== */
+  .hero{background:linear-gradient(135deg, var(--navy) 0%, var(--navy-deep) 100%); color:#fff;
+    padding:48px 40px; border-radius:14px; margin-bottom:36px;}
+  .kicker{font-size:12.5px; font-weight:700; letter-spacing:2.5px; color:var(--teal); text-transform:uppercase; margin-bottom:12px;}
+  .hero h1{font-size:32px; line-height:1.3; margin:0 0 14px; font-weight:800;}
+  .hero p.lead{font-size:16px; color:#C9D6E3; margin:0 0 22px; max-width:680px;}
+  .badges{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px;}
+  .badge{background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); color:#DCE7F0; font-size:12px; padding:5px 12px; border-radius:16px;}
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px;}
+  .stat{background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); border-radius:8px; padding:14px 16px;}
+  .stat .num{font-size:22px; font-weight:700; color:var(--teal);}
+  .stat .lbl{font-size:10.5px; color:#AEC4DA; text-transform:uppercase; letter-spacing:.4px; margin-top:3px;}
+
+  /* ===== Body content (markdown) ===== */
+  .full-article{background:#fff; padding:40px; border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,.05);}
+  .full-article h2{font-size:1.35rem; color:var(--navy); margin-top:34px; border-left:4px solid var(--accent); padding-left:12px;}
+  .full-article h3{font-size:1.1rem; color:var(--navy); margin-top:24px;}
+  .full-article p{font-size:15px;}
+  .full-article ul{padding-left:20px;}
+  .full-article li{margin-bottom:8px; font-size:14.5px;}
+  .full-article strong{color:var(--navy);}
+
+  /* ===== Figures ===== */
+  .figure{margin:32px 0; text-align:center;}
+  .figure img{max-width:100%; border-radius:10px; border:1px solid var(--border); box-shadow:0 8px 20px rgba(15,32,56,.1);}
+  .figure figcaption{font-size:12.5px; color:var(--muted); margin-top:8px; font-style:italic;}
+
+  /* ===== Tech stack ===== */
+  .tech-grid{display:flex; flex-wrap:wrap; gap:8px; margin:20px 0 30px;}
+  .tech-pill{background:#EEF3F8; border:1px solid var(--border); color:var(--navy); font-size:12.5px; font-weight:600; padding:6px 14px; border-radius:6px;}
+
+  /* ===== Impact summary ===== */
+  .impact-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin:24px 0 30px;}
+  .impact-card{background:var(--navy); color:#fff; border-radius:10px; padding:20px 10px; text-align:center;}
+  .impact-card .num{font-size:22px; font-weight:700; color:var(--teal);}
+  .impact-card .lbl{font-size:11px; color:#B8C8DA; margin-top:5px;}
+
+  /* ===== Disclaimer ===== */
+  .disclaimer{background:#FBF3E9; border:1px solid #EBD7B8; border-radius:8px; padding:16px 20px; font-size:13px; color:#6B4A1E; margin-top:34px;}
+
+  @media (max-width:640px){ .hero{padding:32px 22px;} .hero h1{font-size:24px;} .full-article{padding:26px;} }
+</style>
 </head>
 <body>
-    <div class="container">
-        
-        <!-- Area List Arsip -->
-        <div id="archive-view">
-            <a href="index.html" class="nav-back">← Kembali ke Beranda</a>
-            <h1 class="page-title">Arsip Studi Kasus</h1>
-            <div id="loading-archive" class="loading">Memuat daftar studi kasus...</div>
-            <div id="archive-container"></div>
-        </div>
+  <div class="container">
 
-        <!-- Area Artikel Penuh -->
-        <div id="single-view" class="hidden">
-            <a href="studi-kasus.html" class="nav-back">← Kembali ke Daftar Arsip</a>
-            <div id="loading-single" class="loading">Memuat artikel...</div>
-            <div id="single-container" class="full-article"></div>
-        </div>
-
+    <!-- Area List Arsip -->
+    <div id="archive-view">
+      <a href="index.html" class="nav-back">&larr; Kembali ke Beranda</a>
+      <h1 class="page-title">Arsip Studi Kasus</h1>
+      <div id="loading-archive" class="loading">Memuat daftar studi kasus...</div>
+      <div id="archive-container"></div>
     </div>
 
-    <script>
-        // URL Folder GitHub lo
-        const repoUrl = 'https://api.github.com/repos/jagatbatara-tech/web-jagat-batara/contents/studi-kasus';
-        
-        // Fungsi untuk mengekstrak Judul dari Frontmatter CMS
-        function parseCMSData(text) {
-            const parts = text.split('---');
-            if (parts.length >= 3) {
-                const frontmatter = parts[1];
-                const body = parts.slice(2).join('---');
-                
-                // Cari Judul (bisa 'title:' atau 'judul:')
-                const titleMatch = frontmatter.match(/(?:title|judul):\s*['"]?(.*?)['"]?\n/i);
-                const title = titleMatch ? titleMatch[1].trim() : 'Studi Kasus';
-                
-                return { title, body };
-            }
-            return { title: 'Studi Kasus', body: text };
-        }
+    <!-- Area Artikel Penuh -->
+    <div id="single-view" class="hidden">
+      <a href="studi-kasus.html" class="nav-back">&larr; Kembali ke Daftar Arsip</a>
+      <div id="loading-single" class="loading">Memuat artikel...</div>
+      <div id="single-container"></div>
+    </div>
 
-        // Cek URL: Apakah sedang membuka artikel spesifik atau melihat daftar?
-        const urlParams = new URLSearchParams(window.location.search);
-        const postFile = urlParams.get('post');
+  </div>
 
-        if (postFile) {
-            // TAMPILKAN ARTIKEL PENUH
-            document.getElementById('archive-view').classList.add('hidden');
-            document.getElementById('single-view').classList.remove('hidden');
+  <script>
+    const REPO = 'jagatbatara-tech/web-jagat-batara';
+    const BRANCH = 'main';
+    const FOLDER = 'studi-kasus';
+    const listUrl = `https://api.github.com/repos/${REPO}/contents/${FOLDER}`;
 
-            fetch(`https://raw.githubusercontent.com/jagatbatara-tech/web-jagat-batara/main/studi-kasus/${postFile}`)
-                .then(res => res.text())
-                .then(text => {
-                    document.getElementById('loading-single').style.display = 'none';
-                    const { title, body } = parseCMSData(text);
-                    
-                    // Bersihkan kode bintang yang bocor (opsional jika Sveltia error)
-                    const cleanBody = body.replace(/^\*\*(.*?)\*\*$/gm, '<strong>$1</strong>');
-                    
-                    const htmlContent = marked.parse(cleanBody);
-                    document.getElementById('single-container').innerHTML = `<h1>${title}</h1>${htmlContent}`;
-                })
-                .catch(() => document.getElementById('loading-single').innerText = 'Gagal memuat artikel.');
-        
-        } else {
-            // TAMPILKAN DAFTAR ARSIP (JUDUL & RINGKASAN SAJA)
-            fetch(repoUrl)
-                .then(res => res.json())
-                .then(files => {
-                    document.getElementById('loading-archive').style.display = 'none';
-                    const container = document.getElementById('archive-container');
-                    
-                    files.reverse().forEach(file => {
-                        if(file.name.endsWith('.md')) {
-                            fetch(file.download_url)
-                                .then(res => res.text())
-                                .then(text => {
-                                    const { title, body } = parseCMSData(text);
-                                    
-                                    // Bikin Ringkasan (Ambil teks mentah tanpa kode markdown, batasi 200 karakter)
-                                    let excerpt = body.replace(/[#*`_>]/g, '').trim();
-                                    excerpt = excerpt.length > 200 ? excerpt.substring(0, 200) + '...' : excerpt;
+    // Split raw markdown file into { frontmatter (object), body (markdown string) }
+    function parsePost(raw) {
+      const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
+      if (!match) return { fm: {}, body: raw };
+      let fm = {};
+      try { fm = jsyaml.load(match[1]) || {}; }
+      catch (e) { console.error('YAML parse error', e); }
+      return { fm, body: match[2] || '' };
+    }
 
-                                    const card = document.createElement('a');
-                                    card.href = `?post=${file.name}`; // Link menuju artikel penuh
-                                    card.className = 'archive-card';
-                                    card.innerHTML = `
-                                        <div class="archive-title">${title}</div>
-                                        <div class="archive-excerpt">${excerpt}</div>
-                                    `;
-                                    container.appendChild(card);
-                                });
-                        }
-                    });
-                })
-                .catch(() => document.getElementById('loading-archive').innerText = 'Gagal memuat arsip.');
-        }
-    </script>
+    function renderList(items, wrapClass) {
+      if (!items || !items.length) return '';
+      return `<div class="${wrapClass}">` + items.map(i => `<span class="tech-pill">${i}</span>`).join('') + `</div>`;
+    }
+
+    function renderStatGrid(stats, cardClass) {
+      if (!stats || !stats.length) return '';
+      return `<div class="${cardClass === 'impact-card' ? 'impact-grid' : 'stats'}">` +
+        stats.map(s => `<div class="${cardClass}"><div class="num">${s.value}</div><div class="lbl">${s.label}</div></div>`).join('') +
+        `</div>`;
+    }
+
+    function renderFigure(imgPath, caption) {
+      if (!imgPath) return '';
+      return `<figure class="figure"><img src="${imgPath}" alt="${caption || ''}">
+        ${caption ? `<figcaption>${caption}</figcaption>` : ''}</figure>`;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const postFile = urlParams.get('post');
+
+    if (postFile) {
+      document.getElementById('archive-view').classList.add('hidden');
+      document.getElementById('single-view').classList.remove('hidden');
+
+      fetch(`https://raw.githubusercontent.com/${REPO}/${BRANCH}/${FOLDER}/${postFile}`)
+        .then(res => res.text())
+        .then(raw => {
+          document.getElementById('loading-single').style.display = 'none';
+          const { fm, body } = parsePost(raw);
+          const bodyHtml = marked.parse(body || '');
+
+          const heroStatsHtml = renderStatGrid(fm.hero_stats, 'stat');
+          const badgesHtml = fm.tags && fm.tags.length
+            ? `<div class="badges">` + fm.tags.map(t => `<span class="badge">${t}</span>`).join('') + `</div>` : '';
+
+          const heroHtml = `
+            <div class="hero">
+              ${fm.kicker ? `<div class="kicker">${fm.kicker}</div>` : ''}
+              <h1>${fm.title || 'Studi Kasus'}</h1>
+              ${fm.summary ? `<p class="lead">${fm.summary}</p>` : ''}
+              ${badgesHtml}
+              ${heroStatsHtml}
+            </div>`;
+
+          const archHtml = renderFigure(fm.architecture_image, fm.architecture_caption);
+          const dashHtml = renderFigure(fm.dashboard_image, fm.dashboard_caption);
+          const techHtml = fm.tech_stack && fm.tech_stack.length
+            ? `<h3>Tools &amp; Techniques</h3>${renderList(fm.tech_stack, 'tech-grid')}` : '';
+          const impactHtml = fm.impact_summary && fm.impact_summary.length
+            ? `<h3>Impact Summary</h3>${renderStatGrid(fm.impact_summary, 'impact-card')}` : '';
+          const disclaimerHtml = fm.disclaimer
+            ? `<div class="disclaimer"><strong>Catatan:</strong> ${fm.disclaimer}</div>` : '';
+
+          document.getElementById('single-container').innerHTML =
+            heroHtml +
+            `<div class="full-article">${bodyHtml}${archHtml}${dashHtml}${techHtml}${impactHtml}${disclaimerHtml}</div>`;
+        })
+        .catch(() => document.getElementById('loading-single').innerText = 'Gagal memuat artikel.');
+
+    } else {
+      fetch(listUrl)
+        .then(res => res.json())
+        .then(files => {
+          document.getElementById('loading-archive').style.display = 'none';
+          const container = document.getElementById('archive-container');
+
+          files.filter(f => f.name.endsWith('.md')).reverse().forEach(file => {
+            fetch(file.download_url)
+              .then(res => res.text())
+              .then(raw => {
+                const { fm, body } = parsePost(raw);
+                const title = fm.title || 'Studi Kasus';
+                const kicker = fm.kicker || '';
+                let excerpt = fm.summary || body.replace(/[#*`_>[\]]/g, '').trim();
+                excerpt = excerpt.length > 200 ? excerpt.substring(0, 200) + '...' : excerpt;
+
+                const card = document.createElement('a');
+                card.href = `?post=${file.name}`;
+                card.className = 'archive-card';
+                card.innerHTML = `
+                  ${kicker ? `<div class="archive-kicker">${kicker}</div>` : ''}
+                  <div class="archive-title">${title}</div>
+                  <div class="archive-excerpt">${excerpt}</div>`;
+                container.appendChild(card);
+              });
+          });
+        })
+        .catch(() => document.getElementById('loading-archive').innerText = 'Gagal memuat arsip.');
+    }
+  </script>
 </body>
 </html>

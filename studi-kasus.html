@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Studi Kasus | Jagat Batara</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
-<style>
-  :root{
+<script src="vr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.:root{
     --primary:#004B23; --primary-d:#003318;
     --text-dark:#0f172a; --text-gray:#475569; --bg-light:#f8fafc;
     --card:#ffffff; --border:#e2e8f0; --accent:#F2A65A;
@@ -22,7 +20,6 @@
   .hidden{display:none;}
   .loading{text-align:center; color:var(--text-gray); font-weight:600; padding:50px;}
 
-  /* Archive cards — unchanged from original */
   .archive-card{
     background:#ffffff; padding:30px; border-radius:8px;
     box-shadow:0 2px 10px rgba(0,0,0,0.03); margin-bottom:25px;
@@ -34,7 +31,6 @@
   .archive-title{font-size:1.4rem; font-weight:700; color:var(--text-dark); margin-bottom:10px;}
   .archive-excerpt{color:var(--text-gray); font-size:0.95rem; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
 
-  /* ===== Full article — hero (uses primary green) ===== */
   .hero{background:linear-gradient(135deg, var(--primary) 0%, var(--primary-d) 100%); color:#fff;
     padding:48px 40px; border-radius:14px; margin-bottom:36px;}
   .kicker{font-size:12.5px; font-weight:700; letter-spacing:2.5px; color:#8FE0B8; text-transform:uppercase; margin-bottom:12px;}
@@ -47,7 +43,6 @@
   .stat .num{font-size:22px; font-weight:700; color:#8FE0B8;}
   .stat .lbl{font-size:10.5px; color:#D5E8DC; text-transform:uppercase; letter-spacing:.4px; margin-top:3px;}
 
-  /* ===== Body content (markdown) ===== */
   .full-article{background:#ffffff; padding:40px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.05);}
   .full-article h1{font-size:2rem; font-weight:800; margin-bottom:25px; color:var(--primary); line-height:1.2;}
   .full-article h2{font-size:1.35rem; color:var(--primary); margin-top:34px; border-left:4px solid var(--accent); padding-left:12px;}
@@ -59,22 +54,18 @@
   .full-article a{color:var(--primary); font-weight:600;}
   .full-article img{max-width:100%; border-radius:6px; margin:20px 0;}
 
-  /* ===== Figures ===== */
   .figure{margin:32px 0; text-align:center;}
   .figure img{max-width:100%; border-radius:10px; border:1px solid var(--border); box-shadow:0 8px 20px rgba(15,32,56,.1); margin:0;}
   .figure figcaption{font-size:12.5px; color:var(--text-gray); margin-top:8px; font-style:italic;}
 
-  /* ===== Tech stack ===== */
   .tech-grid{display:flex; flex-wrap:wrap; gap:8px; margin:20px 0 30px;}
   .tech-pill{background:#EAF3EC; border:1px solid var(--border); color:var(--primary); font-size:12.5px; font-weight:600; padding:6px 14px; border-radius:6px;}
 
-  /* ===== Impact summary ===== */
   .impact-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin:24px 0 30px;}
   .impact-card{background:var(--primary); color:#fff; border-radius:10px; padding:20px 10px; text-align:center;}
   .impact-card .num{font-size:22px; font-weight:700; color:#8FE0B8;}
   .impact-card .lbl{font-size:11px; color:#D5E8DC; margin-top:5px;}
 
-  /* ===== Disclaimer ===== */
   .disclaimer{background:#FBF3E9; border:1px solid #EBD7B8; border-radius:8px; padding:16px 20px; font-size:13px; color:#6B4A1E; margin-top:34px;}
 
   @media (max-width:640px){ .hero{padding:32px 22px;} .hero h1{font-size:24px;} .full-article{padding:26px;} }
@@ -83,7 +74,6 @@
 <body>
   <div class="container">
 
-    <!-- Area List Arsip -->
     <div id="archive-view">
       <a href="index.html" class="nav-back">&larr; Kembali ke Beranda</a>
       <h1 class="page-title">Arsip Studi Kasus</h1>
@@ -91,7 +81,6 @@
       <div id="archive-container"></div>
     </div>
 
-    <!-- Area Artikel Penuh -->
     <div id="single-view" class="hidden">
       <a href="studi-kasus.html" class="nav-back">&larr; Kembali ke Daftar Arsip</a>
       <div id="loading-single" class="loading">Memuat artikel...</div>
@@ -106,7 +95,6 @@
     const FOLDER = 'studi-kasus';
     const listUrl = `https://api.github.com/repos/${REPO}/contents/${FOLDER}`;
 
-    // Split raw markdown file into { frontmatter (object), body (markdown string) }
     function parsePost(raw) {
       const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
       if (!match) return { fm: {}, body: raw };
@@ -152,7 +140,6 @@
           const badgesHtml = fm.tags && fm.tags.length
             ? `<div class="badges">` + fm.tags.map(t => `<span class="badge">${t}</span>`).join('') + `</div>` : '';
 
-          // If there are no rich fields at all (old-style post), skip the hero banner entirely
           const hasRichFields = fm.kicker || fm.summary || (fm.tags && fm.tags.length) || (fm.hero_stats && fm.hero_stats.length);
 
           const heroHtml = hasRichFields ? `
@@ -173,7 +160,6 @@
           const disclaimerHtml = fm.disclaimer
             ? `<div class="disclaimer"><strong>Catatan:</strong> ${fm.disclaimer}</div>` : '';
 
-          // If no hero banner, fall back to plain <h1> title inside the article (old-style behaviour)
           const titleFallback = hasRichFields ? '' : `<h1>${fm.title || 'Studi Kasus'}</h1>`;
 
           document.getElementById('single-container').innerHTML =

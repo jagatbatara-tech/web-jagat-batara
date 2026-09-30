@@ -1,43 +1,143 @@
 ---
-title: 'Otomasi Data Quality Check: Transformasi Validasi Data'
-date: 2026-09-29T20:16:00
-thumbnail: https://images.unsplash.com/photo-1578575437130-527eed3abbec?q=80&w=2070&auto=format&fit=crop
+title: "Automated Data Quality Program for Industrial Operations"
+slug: "data-quality-automation"
+kicker: "Case Study · Process Automation & Analytics"
+date: 2026-09-30
+featured: true
+summary: >
+  Designed and shipped a rule-based data quality engine and executive
+  dashboard that replaced a weekly manual audit process with a fully
+  automated, statistically grounded daily pipeline — built for a mining
+  & logistics operation and scaled to a growing portfolio of datasets.
+tags:
+  - Low-code Automation
+  - Rule Engine Design
+  - Statistical Anomaly Detection
+  - Power BI
+  - Data Governance
+hero_stats:
+  - value: "~4 hrs → 0"
+    label: "Manual QA effort / week"
+  - value: "80+"
+    label: "Automated validation rules"
+  - value: "Daily"
+    label: "Unattended execution"
+  - value: "2 → 5"
+    label: "Datasets on the roadmap"
+architecture_image: "/portfolio-project-images/architecture-diagram.png"
+architecture_caption: >
+  End-to-end pipeline: scheduled trigger → rule engine → AI narration
+  with fallback → audit log → dashboard
+dashboard_image: "/portfolio-project-images/dashboard-mockup.png"
+dashboard_caption: >
+  Illustrative mockup — dataset names and figures are representative,
+  not production data
+tech_stack:
+  - "Low-code Workflow Automation"
+  - "TypeScript (Office Scripts)"
+  - "Power BI & DAX"
+  - "Power Query (M)"
+  - "Statistical Process Control (3σ)"
+  - "Rule-Based Validation Design"
+  - "Data Modeling"
+  - "Applied Generative AI (narrative layer)"
+impact_summary:
+  - value: "100%"
+    label: "Manual audit effort eliminated"
+  - value: "80+"
+    label: "Business rules codified"
+  - value: "Days"
+    label: "To replicate to a new domain"
+  - value: "1"
+    label: "Unified dashboard, growing portfolio"
+disclaimer: >
+  Company name, dataset names, and all figures shown here are
+  illustrative and have been generalized to protect confidential
+  operational data. The architecture, rule logic, and design decisions
+  described reflect the actual system built and deployed in production.
 ---
 
-### **Ringkasan Eksekutif**
+## Situation
 
-Kecepatan pengambilan keputusan dalam logistik maritim sering kali tersandera oleh kualitas data operasional yang buruk. Studi kasus ini membedah inisiatif transformasi digital untuk mengeliminasi beban rekonsiliasi data mingguan yang memakan waktu. Melalui perancangan ulang proses bisnis dan implementasi Automated Quality Gateway, inisiatif ini berhasil mengubah operasional dari reaktif menjadi proaktif—mencegah anomali data di titik masuk, mereduksi human error, dan mengembalikan kapasitas tim untuk fokus pada inisiatif strategis bernilai tinggi.
+A mid-sized mining and logistics operation managed daily vessel berthing
+and cargo data entirely through manual spreadsheet tracking. Data
+quality checks were performed weekly by hand — a process taking
+approximately four hours per cycle, prone to reviewer fatigue, limited
+to format-level checks, and lacking any statistical baseline or audit
+trail. Errors routinely surfaced only after reports had already reached
+management.
 
-### 1. Konteks Bisnis (The Situation)
+## Task
 
-Dalam ekosistem rantai pasok industri berat, operasional pelabuhan maritim (Port & Marine) mengelola ribuan titik data krusial setiap harinya—mencakup siklus waktu tongkang, kapasitas muat, hingga pemakaian bahan bakar. Integritas data ini tidak bisa ditawar, karena ia menjadi fondasi bagi dasbor eksekutif dan model prediktif perusahaan. Sistem logistik tidak hanya menuntut data yang cepat, tetapi data yang memiliki akurasi absolut (single source of truth).
+Design and build an automated, rule-based data quality system that
+could:
 
-### 2. Tantangan Sistemik (The Complication)
+- Validate operational data daily without manual intervention
+- Detect statistical anomalies dynamically, rather than against fixed
+  thresholds
+- Surface a portfolio-level view across multiple data domains as the
+  program scaled beyond a single dataset
 
-Sebelum intervensi dilakukan, arsitektur aliran data di lapangan memiliki kelemahan fundamental yang memicu bottleneck operasional:
+## Action
 
-- PARADOKS PEMBERSIHAN DATA (The Data Cleansing Trap): Tim analitik dan operasional menghabiskan porsi waktu yang tidak proporsional setiap akhir minggu hanya untuk melakukan validasi manual. Proses ini sangat lambat, repetitif, dan membunuh produktivitas.
-- INKONSISTENSI AKIBAT INTERVENSI MANUAL: Ketergantungan pada data entry tanpa validasi sistemik membuka ruang lebar bagi human error (seperti salah ketik atau format).
-- LATENSI KEPUTUSAN: Karena data harus menunggu akhir minggu untuk dicuci secara manual, manajemen kehilangan momentum untuk melakukan intervensi operasional secara real-time.
+- **Authored a tiered validation rulebook** (Critical / High / Info
+  severity) covering completeness, chronological sequence, cross-field
+  reconciliation, and reference-data integrity — 80+ rules in total,
+  developed rule-by-rule with domain stakeholders before any code was
+  written.
+- **Built a dynamic statistical outlier layer** using 3-sigma
+  detection, segmented by operational context (e.g. terminal × cargo
+  type × vessel class) rather than fixed limits.
+- **Refined the statistical model through iterative tuning** —
+  including correcting a real bias where downtime metrics scaled with
+  operation duration; re-expressing them as a ratio of total time
+  removed false positives without losing sensitivity.
+- **Externalized all reference data and thresholds** into a
+  master-data workbook, eliminating hardcoded business logic so
+  non-technical stakeholders could adjust rules without a code change.
+- **Orchestrated the full pipeline** in a low-code automation platform:
+  scheduled daily trigger → rule engine execution → AI-assisted
+  narrative summary (with a deterministic fallback for resilience when
+  AI capacity was unavailable) → severity-routed email alerts →
+  append-only audit log.
+- **Extended the architecture to a second data domain**, designing a
+  scalable data model (append-only run history + refreshable finding
+  detail) so the same pipeline pattern could serve a growing portfolio
+  of monitored datasets without redesign.
+- **Designed and built a two-tier Power BI dashboard**: an executive
+  summary aggregating readiness scores across all monitored domains,
+  and a drill-down view per domain showing top failing rules, affected
+  records, and quality trend over time.
 
-### 3. Business Process Flow: Arsitektur Transformasi
+## Result
 
-Untuk memberikan gambaran utuh mengenai rekayasa ulang alur kerja yang dilakukan, berikut adalah perbandingan arsitektur proses bisnis sebelum (AS-IS) dan sesudah (TO-BE) implementasi sistem automasi:
+- Reduced manual QA effort from ~4 hours/week to zero ongoing manual
+  work.
+- Established an auditable, repeatable rule catalog that surfaced
+  systemic data issues invisible to manual spot-checks.
+- Delivered a reusable blueprint successfully replicated to a second
+  operational domain in days, not months.
+- Gave leadership a live, portfolio-wide view of data quality trends —
+  a capability that did not exist before.
 
-![](/images/Code_Generated_Image.png)
+## Design Principles
 
-### 4. Pendekatan Strategis (The Resolution)
+**Deterministic core, AI narrates** — All numbers and findings are
+computed by rule-based logic. AI is used only to generate readable
+summaries, eliminating hallucination risk on the underlying data.
 
-Transformasi di atas dieksekusi melalui metodologi tiga fase yang mengawinkan disiplin analisis bisnis dengan kapabilitas arsitektur IT:
+**Zero hardcoded thresholds** — Reference lists and business
+thresholds live in an external master-data source, so operational
+adjustments don't require a code change or redeployment.
 
-1. KODIFIKASI ATURAN BISNIS (Data Governance): Menerjemahkan pengetahuan lapangan menjadi Master Validation Rulebook. Seluruh parameter—mulai dari batas toleransi tonase, sekuensi waktu bersandar, hingga logika operasional—distandardisasi dalam satu matriks yang disepakati oleh seluruh pemangku kepentingan.
-2. PENYUSUNAN CETAK BIRU SISTEM: Matriks tersebut kemudian diformalkan menjadi Business Requirements Document (BRD) yang presisi. Langkah ini memastikan tidak ada ambiguitas saat tim engineering membangun mesin automasinya, menjembatani kesenjangan antara bahasa operasional dan logika pemrograman.
-3. IMPLEMENTASI PREVENTIVE CONTROL: Mengubah sistem dari mencari kesalahan di akhir menjadi mencegah kesalahan di awal. Sistem kini bertindak sebagai penjaga gerbang tak kasat mata yang mencegat data tidak masuk akal secara real-time saat pengguna menekan tombol submit.
+**Statistically sound outliers** — Metrics that naturally scale with
+an uncontrolled factor are compared as normalized ratios rather than
+raw totals, avoiding bias toward larger or longer-running records.
 
-### 5. Dampak Bisnis Terukur (The Impact)
+## Dashboard Notes
 
-Pergeseran paradigma dari validasi manual ke automasi logis ini memberikan Return on Investment (ROI) operasional yang masif:
-
-- EFISIENSI WAKTU (Zero Manual Checks): Mengeliminasi 100% beban rekonsiliasi data mingguan. Proses yang memakan puluhan jam per bulan berhasil dihapuskan selamanya.
-- PENINGKATAN INTEGRITAS DATA: Menekan tingkat kesalahan input mendekati angka nol, membangun fondasi kepercayaan yang kuat antara manajemen dan data analitik.
-- PEMBERDAYAAN MODAL MANUSIA: Waktu yang berhasil diselamatkan dari pekerjaan administratif kini dialihkan sepenuhnya untuk inisiatif optimalisasi rantai pasok dan penyusunan strategi logistik lintas departemen.
+The dashboard was designed around a simple question hierarchy: *is the
+portfolio healthy?* (executive summary) followed by *what specifically
+is wrong, and where?* (per-dataset drill-down). A dataset scorecard
+pattern lets new domains join the program by adding a row — not a
+redesign.

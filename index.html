@@ -3,244 +3,302 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jagat Batara | Senior Supply Chain & Business Analyst</title>
+    <title>Jagat Batara | Senior Business Analyst & Digital Creator</title>
     <!-- Tipografi Profesional: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* CSS Reset & Variables */
+        /* === RESET & VARIABEL WARNA === */
         :root {
-            --bcg-green: #004B23;
-            --bcg-green-hover: #003619;
+            --primary: #004B23; /* Hijau Konsultan */
+            --primary-hover: #003619;
             --text-dark: #0f172a;
             --text-gray: #475569;
-            --bg-white: #ffffff;
+            --bg-light: #f8fafc;
+            --white: #ffffff;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; color: var(--text-dark); background-color: var(--white); line-height: 1.7; overflow-x: hidden; scroll-behavior: smooth; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            color: var(--text-dark);
-            background-color: var(--bg-white);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Navbar Styling */
+        /* === NAVBAR & DROPDOWN === */
         .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 5%;
-            background-color: var(--bg-white);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 5%; background-color: var(--white);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: fixed; width: 100%; top: 0; z-index: 1000;
         }
+        .logo { font-size: 1.25rem; font-weight: 800; color: var(--text-dark); text-decoration: none; letter-spacing: -0.5px; }
+        
+        .nav-right { display: flex; align-items: center; gap: 30px; }
+        .nav-links { display: flex; list-style: none; gap: 25px; margin: 0; align-items: center; }
+        .nav-links li a { text-decoration: none; color: var(--text-gray); font-weight: 500; font-size: 0.95rem; transition: 0.2s; }
+        .nav-links li a:hover { color: var(--primary); }
 
-        .navbar-brand {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            text-decoration: none;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            align-items: center;
-            gap: 32px;
-        }
-
-        .nav-item a {
-            text-decoration: none;
-            color: var(--text-gray);
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: color 0.3s ease;
-        }
-
-        .nav-item a:hover {
-            color: var(--bcg-green);
-        }
-
-        /* Dropdown Styling */
-        .dropdown {
-            position: relative;
-        }
-
-        .dropdown > a {
-            color: var(--text-dark);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-        }
-
-        .dropdown > a::after {
-            content: '▾';
-            font-size: 0.8rem;
-        }
-
+        /* Dropdown Level 1 (Knowledge Sharing) */
+        .dropdown { position: relative; }
+        .dropdown-btn { color: var(--primary) !important; font-weight: 600 !important; cursor: pointer; display: flex; align-items: center; gap: 5px; }
         .dropdown-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 15px;
-            background-color: var(--bg-white);
-            min-width: 240px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(10px);
-            transition: all 0.3s ease;
-            list-style: none;
-            padding: 10px 0;
+            position: absolute; top: 100%; right: 0; margin-top: 15px; background: var(--white);
+            min-width: 240px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-radius: 8px;
+            border: 1px solid #e2e8f0; opacity: 0; visibility: hidden; transform: translateY(10px);
+            transition: all 0.3s ease; list-style: none; padding: 10px 0;
         }
+        .dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-menu li { position: relative; }
+        .dropdown-menu li a { display: block; padding: 12px 20px; color: var(--text-gray); border-left: 3px solid transparent; }
+        .dropdown-menu li a:hover { background-color: var(--bg-light); color: var(--primary); border-left: 3px solid var(--primary); }
 
-        /* Hover Trigger */
-        .dropdown:hover .dropdown-menu {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
+        /* Dropdown Level 2 (Sub-bab Studi Kasus) */
+        .sub-dropdown {
+            position: absolute; top: 0; right: 100%; margin-right: 2px; background: var(--white);
+            min-width: 200px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-radius: 8px;
+            border: 1px solid #e2e8f0; opacity: 0; visibility: hidden; transition: 0.3s; padding: 10px 0; list-style: none;
         }
+        .has-sub:hover .sub-dropdown { opacity: 1; visibility: visible; }
+        .has-sub-btn { display: flex; justify-content: space-between; align-items: center; }
 
-        .dropdown-menu li a {
-            display: block;
-            padding: 12px 24px;
-            color: var(--text-gray);
-            font-size: 0.9rem;
-            border-left: 3px solid transparent;
-        }
+        .lang-switch { font-size: 0.85rem; font-weight: 600; color: var(--text-gray); }
+        .active-lang { color: var(--primary); }
 
-        .dropdown-menu li a:hover {
-            background-color: #f8fafc;
-            color: var(--bcg-green);
-            border-left: 3px solid var(--bcg-green);
-        }
-
-        /* Hero Section (Mengembalikan Desain Asli) */
-        .hero {
-            height: 100vh;
-            min-height: 600px;
-            display: flex;
-            align-items: center;
-            padding: 0 5%;
-            margin-top: 70px;
-            position: relative;
-            background-color: #0f172a;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            /* Latar belakang industri/logistik dengan overlay gelap */
+        /* === HERO SECTION === */
+        .hero-section {
+            position: relative; height: 100vh; min-height: 600px; display: flex; align-items: center;
+            padding: 0 5%; margin-top: 60px;
             background-image: linear-gradient(to right, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.7) 100%), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            z-index: 1;
+            background-size: cover; background-position: center;
         }
+        .hero-content { position: relative; z-index: 2; max-width: 800px; }
+        .hero-content h1 { font-size: 3.2rem; font-weight: 800; color: var(--white); line-height: 1.1; margin-bottom: 24px; letter-spacing: -1px; }
+        .hero-content .subtitle { font-size: 1.15rem; color: #cbd5e1; margin-bottom: 40px; line-height: 1.7; }
+        .cta-button { display: inline-block; background: var(--primary); color: var(--white); padding: 16px 32px; font-weight: 600; text-decoration: none; border-radius: 6px; transition: 0.2s; }
+        .cta-button:hover { background: var(--primary-hover); transform: translateY(-2px); }
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
+        /* === SECTION LAYOUTS === */
+        .credentials-section { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 60px; max-width: 700px; margin-left: auto; margin-right: auto; }
+        .section-header h2 { font-size: 2.2rem; font-weight: 800; color: var(--text-dark); margin-bottom: 15px; }
+        .section-header p { color: var(--text-gray); font-size: 1.1rem; }
+
+        /* === TIMELINE (PENGALAMAN) === */
+        .timeline { position: relative; max-width: 900px; margin: 0 auto; padding-left: 20px; border-left: 3px solid #e2e8f0; }
+        .timeline-item { position: relative; padding-bottom: 40px; padding-left: 40px; }
+        .timeline-icon {
+            position: absolute; left: -22px; top: 0; background: var(--white); border: 3px solid var(--primary);
+            width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
         }
+        .timeline-content h3 { font-size: 1.2rem; color: var(--primary); font-weight: 700; }
+        .timeline-content h4 { font-size: 0.95rem; color: var(--text-gray); font-weight: 600; margin-bottom: 10px; }
+        .timeline-content p { color: #334155; font-size: 0.95rem; }
 
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--bg-white);
-            line-height: 1.1;
-            margin-bottom: 24px;
-            letter-spacing: -1px;
+        /* === GRID BOXES (KREDENSIAL & HUB KONTEN) === */
+        .grid-container { display: grid; gap: 30px; }
+        .grid-box {
+            background: var(--white); padding: 40px 30px; border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-top: 4px solid var(--primary);
+            transition: 0.3s; border: 1px solid #f1f5f9;
         }
+        .grid-box:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.08); transform: translateY(-5px); }
+        .grid-box h3 { font-size: 1.15rem; color: var(--text-dark); margin-bottom: 15px; }
+        .badge-list { list-style: none; }
+        .badge-list li { position: relative; padding-left: 20px; margin-bottom: 12px; font-size: 0.95rem; color: var(--text-gray); }
+        .badge-list li::before { content: '✓'; position: absolute; left: 0; color: var(--primary); font-weight: bold; }
 
-        .hero-subtitle {
-            font-size: 1.15rem;
-            color: #cbd5e1;
-            margin-bottom: 40px;
-            max-width: 650px;
-            line-height: 1.7;
-        }
-
-        .btn-primary {
-            display: inline-block;
-            background-color: var(--bcg-green);
-            color: var(--bg-white);
-            padding: 16px 36px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 14px rgba(0, 75, 35, 0.4);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--bcg-green-hover);
-            transform: translateY(-2px);
-        }
-
-        /* Responsif untuk Z Fold 5 & Mobile */
+        /* Responsif */
         @media (max-width: 768px) {
-            .navbar { flex-direction: column; padding: 15px; }
-            .nav-menu { flex-wrap: wrap; justify-content: center; margin-top: 15px; gap: 15px; }
-            .dropdown-menu { position: static; box-shadow: none; border: none; opacity: 1; visibility: visible; transform: none; display: none; }
-            .dropdown:hover .dropdown-menu { display: block; }
-            .hero-title { font-size: 2.5rem; }
+            .nav-right { display: none; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .timeline { padding-left: 15px; }
+            .timeline-item { padding-left: 25px; }
+            .timeline-icon { left: -22px; width: 40px; height: 40px; }
+            .grid-container { grid-template-columns: 1fr !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigasi -->
+    <!-- Navigasi Atas -->
     <nav class="navbar">
-        <a href="index.html" class="navbar-brand">Jagat Batara</a>
-        <ul class="nav-menu">
-            <li class="nav-item"><a href="index.html">Beranda</a></li>
-            <li class="nav-item"><a href="tentang.html">Tentang</a></li>
-            <li class="nav-item"><a href="pengalaman.html">Pengalaman</a></li>
-            <li class="nav-item"><a href="kredensial.html">Kredensial</a></li>
+        <a href="index.html" class="logo">JAGAT BATARA.</a>
+        
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#about">Tentang</a></li>
+                <li><a href="#experience">Pengalaman</a></li>
+                <li><a href="#track-record">Kredensial</a></li>
+                
+                <!-- Dropdown Level 1: Knowledge Sharing -->
+                <li class="dropdown">
+                    <a class="dropdown-btn">Knowledge Sharing ▾</a>
+                    <ul class="dropdown-menu">
+                        
+                        <!-- Dropdown Level 2: Studi Kasus dengan Sub-bab -->
+                        <li class="has-sub">
+                            <a href="studi-kasus.html" class="has-sub-btn">Studi Kasus ◂</a>
+                            <ul class="sub-dropdown">
+                                <li><a href="mitigasi-risiko.html">Mitigasi Risiko</a></li>
+                                <li><a href="jetty-bor.html">Jetty BOR</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a href="day-in-my-life.html">Day In My Life</a></li>
+                        <li><a href="supply-chain.html">Supply Chain</a></li>
+                        <li><a href="data-storytelling.html">Story Telling with Data</a></li>
+                        <li><a href="ai.html">Artificial Intelligence</a></li>
+                    </ul>
+                </li>
+            </ul>
             
-            <!-- Menu Dropdown Utama -->
-            <li class="nav-item dropdown">
-                <a>Knowledge Sharing</a>
-                <ul class="dropdown-menu">
-                    <!-- Tautan ke masing-masing sub-bab -->
-                    <li><a href="studi-kasus.html">Studi Kasus</a></li>
-                    <li><a href="day-in-my-life.html">Day In My Life</a></li>
-                    <li><a href="supply-chain.html">Supply Chain</a></li>
-                    <li><a href="data-storytelling.html">Story Telling with Data</a></li>
-                    <li><a href="ai.html">Artificial Intelligence</a></li>
-                </ul>
-            </li>
-        </ul>
+            <!-- Language Switcher -->
+            <div class="lang-switch">
+                <span class="active-lang">ID</span> | <span style="color:#cbd5e1; cursor:not-allowed;">EN</span>
+            </div>
+        </div>
     </nav>
 
-    <!-- Konten Utama (Hero Section) -->
-    <section class="hero">
+    <!-- Hero Banner -->
+    <header class="hero-section" id="about">
         <div class="hero-content">
-            <h1 class="hero-title">Mengubah Data Menjadi Keputusan Strategis.</h1>
-            <p class="hero-subtitle">Praktisi Rantai Pasok bersertifikasi APICS CSCP dengan spesialisasi analitik di sektor pertambangan, logistik pelabuhan, dan transformasi digital.</p>
-            <a href="studi-kasus.html" class="btn-primary">Lihat Studi Kasus</a>
+            <h1>Mengubah Data Menjadi Keputusan Strategis.</h1>
+            <p class="subtitle">Senior Business Analyst & Strategi Rantai Pasok bersertifikasi APICS CSCP. Berpengalaman 15 tahun di industri logistik dan operasional pertambangan. Menggabungkan ketajaman analitik dengan teknologi AI (Claude, Copilot, Power BI) untuk memecahkan masalah kompleks.</p>
+            <a href="#experience" class="cta-button">Eksplorasi Profil</a>
+        </div>
+    </header>
+
+    <!-- Pengalaman Profesional -->
+    <section id="experience" class="credentials-section">
+        <div class="section-header">
+            <h2>Pengalaman Profesional</h2>
+            <p>Rekam jejak dalam mentransformasi operasional melalui perencanaan strategis, akademis, dan otomatisasi AI.</p>
+        </div>
+        
+        <div class="timeline">
+            <!-- Item 1: AMMAN -->
+            <div class="timeline-item">
+                <div class="timeline-icon">🚀</div>
+                <div class="timeline-content">
+                    <h3>Senior Logistics & Supply Chain Lead (Senior Business Analyst)</h3>
+                    <h4>PT AMMAN Mineral | Apr 2021 - Sekarang</h4>
+                    <p>Memimpin strategi rantai pasok dan infrastruktur logistik. Mengembangkan <i>business case</i> untuk investasi infrastruktur berskala besar dan inisiatif optimasi biaya yang signifikan. Membangun model analitik berbasis AI untuk kontrol kualitas data dan otomasi alur kerja operasional.</p>
+                </div>
+            </div>
+            
+            <!-- Item 2: Telkom University -->
+            <div class="timeline-item">
+                <div class="timeline-icon">🎓</div>
+                <div class="timeline-content">
+                    <h3>Dosen Luar Biasa (Part-Time)</h3>
+                    <h4>Telkom University | Nov 2017 - Jan 2022</h4>
+                    <p>Mengajar Analisis Bisnis, Manajemen Operasi, Pemodelan Bisnis, Perencanaan Bisnis, Statistik, dan Pemasaran Jasa. Mengembangkan keterampilan pelatihan dan presentasi yang aplikatif untuk pelibatan pemangku kepentingan.</p>
+                </div>
+            </div>
+
+            <!-- Item 3: MII -->
+            <div class="timeline-item">
+                <div class="timeline-icon">💻</div>
+                <div class="timeline-content">
+                    <h3>Business Analyst</h3>
+                    <h4>PT Mitra Integrasi Informatika | Mei 2017 - Apr 2021</h4>
+                    <p>Memimpin proyek transformasi digital dan pengembangan dasbor Business Intelligence terintegrasi untuk klien di sektor pertambangan dan logistik.</p>
+                </div>
+            </div>
+
+            <!-- Item 4: YCP -->
+            <div class="timeline-item">
+                <div class="timeline-icon">📊</div>
+                <div class="timeline-content">
+                    <h3>Business Analyst</h3>
+                    <h4>YCP Solidiance | Apr 2015 - Mei 2017</h4>
+                    <p>Spesialisasi dalam strategi <i>go-to-market</i> dan intelijen pasar industri berat. Memberikan rekomendasi berbasis data untuk ekspansi strategis klien.</p>
+                </div>
+            </div>
+
+            <!-- Item 5: Arutmin -->
+            <div class="timeline-item">
+                <div class="timeline-icon">⛏️</div>
+                <div class="timeline-content">
+                    <h3>Geologist</h3>
+                    <h4>PT Arutmin Indonesia | Apr 2010 - Apr 2011</h4>
+                    <p>Melakukan aktivitas eksplorasi komprehensif dan mengembangkan model sumber daya batubara yang akurat untuk mendukung operasi penambangan.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Track Record & Kredensial -->
+    <section id="track-record" class="credentials-section" style="background-color: var(--bg-light);">
+        <div class="section-header">
+            <h2>Track Record & Kredensial</h2>
+            <p>Dibangun di atas fondasi akademis yang solid dan diuji oleh standar sertifikasi global.</p>
+        </div>
+        
+        <div class="grid-container" style="grid-template-columns: 1fr 1fr;">
+            <div class="grid-box">
+                <h3>Fondasi Akademis</h3>
+                <p style="margin-bottom: 15px;"><strong>M.T. Industrial Engineering & Management</strong><br>Institut Teknologi Bandung (ITB)</p>
+                <p><strong>S.T. Geological Engineering</strong><br>Institut Teknologi Bandung (ITB)</p>
+            </div>
+            
+            <div class="grid-box">
+                <h3>Sertifikasi & Keahlian Inti</h3>
+                <ul class="badge-list">
+                    <li>APICS Certified Supply Chain Professional (CSCP) - ID: 195078</li>
+                    <li>Microsoft Power BI Data Analyst (PL-300) & Qlik Sense BA</li>
+                    <li>Pengawas Operasional Pertama (POP) - Safety</li>
+                    <li>AI & Automation (SAP HANA, Power Automate, Digital Twin)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bagian Knowledge Sharing (Hub Konten) -->
+    <section id="knowledge-sharing" class="credentials-section">
+        <div class="section-header">
+            <h2>Knowledge Sharing</h2>
+            <p>Ruang eksplorasi ide, analisis data, dan catatan lapangan seputar operasional industri dan teknologi.</p>
+        </div>
+        
+        <div class="grid-container" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+            <a href="studi-kasus.html" style="text-decoration: none; color: inherit;">
+                <div class="grid-box" style="height: 100%; display: flex; flex-direction: column;">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">💼</div>
+                    <h3>Studi Kasus</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: auto;">Membedah masalah operasional nyata dan strategi penyelesaiannya.</p>
+                </div>
+            </a>
+            
+            <a href="day-in-my-life.html" style="text-decoration: none; color: inherit;">
+                <div class="grid-box" style="height: 100%; display: flex; flex-direction: column;">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">☕</div>
+                    <h3>Day In My Life</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: auto;">Dinamika kerja, catatan lapangan, dan keseharian di industri.</p>
+                </div>
+            </a>
+
+            <a href="supply-chain.html" style="text-decoration: none; color: inherit;">
+                <div class="grid-box" style="height: 100%; display: flex; flex-direction: column;">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">⛓️</div>
+                    <h3>Supply Chain</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: auto;">Manajemen risiko, optimasi logistik, dan best-practice CSCP.</p>
+                </div>
+            </a>
+
+            <a href="data-storytelling.html" style="text-decoration: none; color: inherit;">
+                <div class="grid-box" style="height: 100%; display: flex; flex-direction: column;">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">📊</div>
+                    <h3>Story Telling with Data</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: auto;">Mengubah deretan angka dan dataset menjadi narasi visual yang bermakna.</p>
+                </div>
+            </a>
+
+            <a href="ai.html" style="text-decoration: none; color: inherit;">
+                <div class="grid-box" style="height: 100%; display: flex; flex-direction: column;">
+                    <div style="font-size: 2.5rem; margin-bottom: 15px;">🤖</div>
+                    <h3>Artificial Intelligence</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-gray); margin-top: auto;">Eksplorasi otomasi, prompt engineering, dan masa depan analitik.</p>
+                </div>
+            </a>
         </div>
     </section>
 

@@ -2,717 +2,247 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jagat Batara | Senior Supply Chain & Business Analyst</title>
+    <!-- Tipografi Profesional: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* CSS Reset & Variables */
+        :root {
+            --bcg-green: #004B23;
+            --bcg-green-hover: #003619;
+            --text-dark: #0f172a;
+            --text-gray: #475569;
+            --bg-white: #ffffff;
+        }
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <meta
-        name="description"
-        content="Portofolio Jagat Batara, Senior Business Analyst dan praktisi strategi rantai pasok dengan pengalaman di bidang logistik, pertambangan, data, dan otomasi AI."
-    >
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-    <title>
-        Jagat Batara | Senior Business Analyst & Digital Creator
-    </title>
+        /* Navbar Styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background-color: var(--bg-white);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
 
-    <!-- Google Fonts -->
-    https://fonts.googleapis.com
-    https://fonts.gstatic.com
+        .navbar-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
 
-    https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            align-items: center;
+            gap: 32px;
+        }
 
-    <!-- File CSS -->
-    <link rel="stylesheet" href="style.css">
+        .nav-item a {
+            text-decoration: none;
+            color: var(--text-gray);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item a:hover {
+            color: var(--bcg-green);
+        }
+
+        /* Dropdown Styling */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown > a {
+            color: var(--text-dark);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .dropdown > a::after {
+            content: '▾';
+            font-size: 0.8rem;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 15px;
+            background-color: var(--bg-white);
+            min-width: 240px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            list-style: none;
+            padding: 10px 0;
+        }
+
+        /* Hover Trigger */
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li a {
+            display: block;
+            padding: 12px 24px;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+        }
+
+        .dropdown-menu li a:hover {
+            background-color: #f8fafc;
+            color: var(--bcg-green);
+            border-left: 3px solid var(--bcg-green);
+        }
+
+        /* Hero Section (Mengembalikan Desain Asli) */
+        .hero {
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            margin-top: 70px;
+            position: relative;
+            background-color: #0f172a;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* Latar belakang industri/logistik dengan overlay gelap */
+            background-image: linear-gradient(to right, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.7) 100%), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--bg-white);
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: #cbd5e1;
+            margin-bottom: 40px;
+            max-width: 650px;
+            line-height: 1.7;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--bcg-green);
+            color: var(--bg-white);
+            padding: 16px 36px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px rgba(0, 75, 35, 0.4);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--bcg-green-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Responsif untuk Z Fold 5 & Mobile */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; padding: 15px; }
+            .nav-menu { flex-wrap: wrap; justify-content: center; margin-top: 15px; gap: 15px; }
+            .dropdown-menu { position: static; box-shadow: none; border: none; opacity: 1; visibility: visible; transform: none; display: none; }
+            .dropdown:hover .dropdown-menu { display: block; }
+            .hero-title { font-size: 2.5rem; }
+        }
+    </style>
 </head>
-
 <body>
 
-    <!-- ===================================
-         NAVIGASI ATAS
-    ==================================== -->
-
+    <!-- Navigasi -->
     <nav class="navbar">
-        #about
-            JAGAT BATARA.
-        </a>
-
-        <div class="nav-right">
-
-            <!-- Dropdown Daftar Isi -->
-            <div class="dropdown">
-                <button
-                    class="dropbtn"
-                    type="button"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                    aria-controls="main-menu"
-                >
-                    <span>Daftar Isi</span>
-                    <span
-                        class="dropdown-arrow"
-                        aria-hidden="true"
-                    >
-                        ▾
-                    </span>
-                </button>
-
-                <div
-                    class="dropdown-content"
-                    id="main-menu"
-                >
-                    #about
-                        Tentang
-                    </a>
-
-                    #experience
-                        Pengalaman
-                    </a>
-
-                    #track-record
-                        Kredensial
-                    </a>
-
-                    <!-- Knowledge Sharing sebagai parent -->
-                    <div class="nested-dropdown">
-                        <button
-                            class="nested-dropbtn"
-                            type="button"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                            aria-controls="knowledge-submenu"
-                        >
-                            <span>Knowledge Sharing</span>
-
-                            <span
-                                class="nested-arrow"
-                                aria-hidden="true"
-                            >
-                                ▾
-                            </span>
-                        </button>
-
-                        <!-- Child Knowledge Sharing -->
-                        <div
-                            class="nested-dropdown-content"
-                            id="knowledge-submenu"
-                        >
-                            <a href="studi-kasus.html">
-                                Studi Kasus
-                            </a>
-
-                            <a href="day-in-my-life.html">
-                                Day In My Life
-                            </a>
-
-                            <a href="supply-chain.html">
-                                Supply Chain
-                            </a>
-
-                            <a href="data-storytelling.html">
-                                Story Telling with Data
-                            </a>
-
-                            <a href="ai.html">
-                                Artificial Intelligence
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Language Switcher -->
-            <div
-                class="lang-switch"
-                aria-label="Pilihan bahasa"
-            >
-                <span class="active-lang">
-                    ID
-                </span>
-
-                <span class="lang-divider">
-                    |
-                </span>
-
-                <span
-                    class="inactive-lang"
-                    aria-disabled="true"
-                    title="Versi bahasa Inggris belum tersedia"
-                >
-                    EN
-                </span>
-            </div>
-        </div>
+        <a href="index.html" class="navbar-brand">Jagat Batara</a>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="index.html">Beranda</a></li>
+            <li class="nav-item"><a href="tentang.html">Tentang</a></li>
+            <li class="nav-item"><a href="pengalaman.html">Pengalaman</a></li>
+            <li class="nav-item"><a href="kredensial.html">Kredensial</a></li>
+            
+            <!-- Menu Dropdown Utama -->
+            <li class="nav-item dropdown">
+                <a>Knowledge Sharing</a>
+                <ul class="dropdown-menu">
+                    <!-- Tautan ke masing-masing sub-bab -->
+                    <li><a href="studi-kasus.html">Studi Kasus</a></li>
+                    <li><a href="day-in-my-life.html">Day In My Life</a></li>
+                    <li><a href="supply-chain.html">Supply Chain</a></li>
+                    <li><a href="data-storytelling.html">Story Telling with Data</a></li>
+                    <li><a href="ai.html">Artificial Intelligence</a></li>
+                </ul>
+            </li>
+        </ul>
     </nav>
 
-
-    <!-- ===================================
-         HERO SECTION
-    ==================================== -->
-
-    <header class="hero-section" id="about">
+    <!-- Konten Utama (Hero Section) -->
+    <section class="hero">
         <div class="hero-content">
-            <h1>
-                Mengubah Data Menjadi Keputusan Strategis.
-            </h1>
-
-            <p class="subtitle">
-                Senior Business Analyst dan praktisi strategi
-                rantai pasok bersertifikasi APICS CSCP.
-                Berpengalaman lebih dari 15 tahun di bidang
-                pertambangan, konsultasi bisnis, transformasi
-                digital, logistik, dan operasional. Menggabungkan
-                ketajaman analitik dengan teknologi AI seperti
-                Claude, Copilot, dan Power BI untuk memecahkan
-                masalah kompleks.
-            </p>
-
-            #contact
-                Mari Berkolaborasi
-            </a>
-        </div>
-    </header>
-
-
-    <!-- ===================================
-         PENGALAMAN PROFESIONAL
-    ==================================== -->
-
-    <section
-        id="experience"
-        class="credentials-section"
-    >
-        <div class="section-header">
-            <h2>Pengalaman Profesional</h2>
-
-            <p>
-                Rekam jejak dalam mentransformasi operasional
-                melalui perencanaan strategis, akademis,
-                analisis data, dan otomatisasi AI.
-            </p>
-        </div>
-
-        <div class="timeline">
-
-            <!-- Item 1: AMMAN -->
-            <article class="timeline-item">
-                <div
-                    class="timeline-icon"
-                    aria-hidden="true"
-                >
-                    🚀
-                </div>
-
-                <div class="timeline-content">
-                    <h3>
-                        Senior Logistics & Supply Chain Lead
-                        (Senior Business Analyst)
-                    </h3>
-
-                    <h4>
-                        PT AMMAN Mineral | Apr 2021 - Sekarang
-                    </h4>
-
-                    <p>
-                        Memimpin strategi rantai pasok dan
-                        infrastruktur logistik. Mengembangkan
-                        <i>business case</i> untuk investasi
-                        infrastruktur berskala besar dan inisiatif
-                        optimasi biaya. Membangun model analitik
-                        berbasis AI untuk kontrol kualitas data dan
-                        otomasi alur kerja operasional.
-                    </p>
-                </div>
-            </article>
-
-
-            <!-- Item 2: Telkom University -->
-            <article class="timeline-item">
-                <div
-                    class="timeline-icon"
-                    aria-hidden="true"
-                >
-                    🎓
-                </div>
-
-                <div class="timeline-content">
-                    <h3>
-                        Dosen Luar Biasa (Part-Time)
-                    </h3>
-
-                    <h4>
-                        Telkom University | Nov 2017 - Jan 2022
-                    </h4>
-
-                    <p>
-                        Mengajar Analisis Bisnis, Manajemen Operasi,
-                        Pemodelan Bisnis, Perencanaan Bisnis,
-                        Statistik, dan Pemasaran Jasa. Mengembangkan
-                        keterampilan pelatihan dan presentasi yang
-                        aplikatif untuk pelibatan pemangku kepentingan.
-                    </p>
-                </div>
-            </article>
-
-
-            <!-- Item 3: MII -->
-            <article class="timeline-item">
-                <div
-                    class="timeline-icon"
-                    aria-hidden="true"
-                >
-                    💻
-                </div>
-
-                <div class="timeline-content">
-                    <h3>
-                        Business Analyst
-                    </h3>
-
-                    <h4>
-                        PT Mitra Integrasi Informatika |
-                        Mei 2017 - Apr 2021
-                    </h4>
-
-                    <p>
-                        Memimpin proyek transformasi digital dan
-                        pengembangan dasbor Business Intelligence
-                        terintegrasi untuk klien di sektor
-                        pertambangan dan logistik.
-                    </p>
-                </div>
-            </article>
-
-
-            <!-- Item 4: YCP -->
-            <article class="timeline-item">
-                <div
-                    class="timeline-icon"
-                    aria-hidden="true"
-                >
-                    📊
-                </div>
-
-                <div class="timeline-content">
-                    <h3>
-                        Business Analyst
-                    </h3>
-
-                    <h4>
-                        YCP Solidiance | Apr 2015 - Mei 2017
-                    </h4>
-
-                    <p>
-                        Spesialisasi dalam strategi
-                        <i>go-to-market</i> dan intelijen pasar
-                        industri berat. Memberikan rekomendasi
-                        berbasis data untuk ekspansi strategis klien.
-                    </p>
-                </div>
-            </article>
-
-
-            <!-- Item 5: Arutmin -->
-            <article class="timeline-item">
-                <div
-                    class="timeline-icon"
-                    aria-hidden="true"
-                >
-                    ⛏️
-                </div>
-
-                <div class="timeline-content">
-                    <h3>
-                        Geologist
-                    </h3>
-
-                    <h4>
-                        PT Arutmin Indonesia |
-                        Apr 2010 - Apr 2011
-                    </h4>
-
-                    <p>
-                        Melakukan aktivitas eksplorasi komprehensif
-                        dan mengembangkan model sumber daya batubara
-                        yang akurat untuk mendukung operasi
-                        penambangan.
-                    </p>
-                </div>
-            </article>
-
+            <h1 class="hero-title">Mengubah Data Menjadi Keputusan Strategis.</h1>
+            <p class="hero-subtitle">Praktisi Rantai Pasok bersertifikasi APICS CSCP dengan spesialisasi analitik di sektor pertambangan, logistik pelabuhan, dan transformasi digital.</p>
+            <a href="studi-kasus.html" class="btn-primary">Lihat Studi Kasus</a>
         </div>
     </section>
-
-
-    <!-- ===================================
-         TRACK RECORD DAN KREDENSIAL
-    ==================================== -->
-
-    <section
-        id="track-record"
-        class="credentials-section"
-        style="background-color: #FAFAFA;"
-    >
-        <div class="section-header">
-            <h2>Track Record & Kredensial</h2>
-
-            <p>
-                Dibangun di atas fondasi akademis yang solid
-                dan diuji oleh standar sertifikasi global.
-            </p>
-        </div>
-
-        <div
-            class="grid-container"
-            style="grid-template-columns: 1fr 1fr;"
-        >
-            <div class="grid-box">
-                <h3>Fondasi Akademis</h3>
-
-                <p>
-                    <strong>
-                        M.T. Industrial Engineering & Management
-                    </strong>
-                    <br>
-                    Institut Teknologi Bandung (ITB)
-                </p>
-
-                <p>
-                    <strong>
-                        S.T. Geological Engineering
-                    </strong>
-                    <br>
-                    Institut Teknologi Bandung (ITB)
-                </p>
-            </div>
-
-            <div class="grid-box">
-                <h3>Sertifikasi & Keahlian Inti</h3>
-
-                <ul class="badge-list">
-                    <li>
-                        APICS Certified Supply Chain Professional
-                        (CSCP) - ID: 195078
-                    </li>
-
-                    <li>
-                        Microsoft Power BI Data Analyst (PL-300)
-                        & Qlik Sense BA
-                    </li>
-
-                    <li>
-                        Pengawas Operasional Pertama (POP) -
-                        Safety
-                    </li>
-
-                    <li>
-                        AI & Automation, SAP HANA,
-                        Power Automate, dan Digital Twin
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- ===================================
-         KNOWLEDGE SHARING
-    ==================================== -->
-
-    <section
-        id="knowledge-sharing"
-        class="credentials-section"
-    >
-        <div class="section-header">
-            <h2>Knowledge Sharing</h2>
-
-            <p>
-                Ruang eksplorasi ide, analisis data, dan
-                catatan lapangan seputar operasional industri
-                dan teknologi.
-            </p>
-        </div>
-
-        <div class="grid-container knowledge-grid">
-
-            <!-- Studi Kasus -->
-            <a
-                href="studi-kasus.html"
-                class="knowledge-card"
-            >
-                <div class="grid-box">
-                    <div
-                        class="card-icon"
-                        aria-hidden="true"
-                    >
-                        💼
-                    </div>
-
-                    <h3>Studi Kasus</h3>
-
-                    <p>
-                        Membedah masalah operasional nyata dan
-                        strategi penyelesaiannya.
-                    </p>
-                </div>
-            </a>
-
-
-            <!-- Day In My Life -->
-            <a
-                href="day-in-my-life.html"
-                class="knowledge-card"
-            >
-                <div class="grid-box">
-                    <div
-                        class="card-icon"
-                        aria-hidden="true"
-                    >
-                        ☕
-                    </div>
-
-                    <h3>Day In My Life</h3>
-
-                    <p>
-                        Dinamika kerja, catatan lapangan, dan
-                        keseharian di industri.
-                    </p>
-                </div>
-            </a>
-
-
-            <!-- Supply Chain -->
-            <a
-                href="supply-chain.html"
-                class="knowledge-card"
-            >
-                <div class="grid-box">
-                    <div
-                        class="card-icon"
-                        aria-hidden="true"
-                    >
-                        ⛓️
-                    </div>
-
-                    <h3>Supply Chain</h3>
-
-                    <p>
-                        Manajemen risiko, optimasi logistik,
-                        dan praktik terbaik CSCP.
-                    </p>
-                </div>
-            </a>
-
-
-            <!-- Data Storytelling -->
-            <a
-                href="data-storytelling.html"
-                class="knowledge-card"
-            >
-                <div class="grid-box">
-                    <div
-                        class="card-icon"
-                        aria-hidden="true"
-                    >
-                        📊
-                    </div>
-
-                    <h3>Story Telling with Data</h3>
-
-                    <p>
-                        Mengubah deretan angka dan dataset
-                        menjadi narasi visual yang bermakna.
-                    </p>
-                </div>
-            </a>
-
-
-            <!-- Artificial Intelligence -->
-            <a
-                href="ai.html"
-                class="knowledge-card"
-            >
-                <div class="grid-box">
-                    <div
-                        class="card-icon"
-                        aria-hidden="true"
-                    >
-                        🤖
-                    </div>
-
-                    <h3>Artificial Intelligence</h3>
-
-                    <p>
-                        Eksplorasi otomasi, prompt engineering,
-                        dan masa depan analitik.
-                    </p>
-                </div>
-            </a>
-
-        </div>
-    </section>
-
-
-    <!-- ===================================
-         CONTACT
-    ==================================== -->
-
-    <section
-        id="contact"
-        class="contact-section"
-    >
-        <div class="contact-content">
-            <h2>Mari Berkolaborasi</h2>
-
-            <p>
-                Terbuka untuk diskusi mengenai analisis bisnis,
-                transformasi digital, optimasi rantai pasok,
-                data storytelling, dan otomasi berbasis AI.
-            </p>
-
-            <!-- Ganti email dengan alamat email Anda -->
-            emailanda@example.com
-                Hubungi Saya
-            </a>
-        </div>
-    </section>
-
-
-    <!-- ===================================
-         FOOTER
-    ==================================== -->
-
-    <footer class="footer">
-        <p>
-            &copy; 2026 Jagat Batara.
-            Seluruh hak cipta dilindungi.
-        </p>
-    </footer>
-
-
-    <!-- ===================================
-         SCRIPT DROPDOWN
-    ==================================== -->
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const dropdown =
-                document.querySelector(".dropdown");
-
-            const dropdownButton =
-                document.querySelector(".dropbtn");
-
-            const nestedDropdown =
-                document.querySelector(".nested-dropdown");
-
-            const nestedButton =
-                document.querySelector(".nested-dropbtn");
-
-            const menuLinks =
-                document.querySelectorAll(
-                    ".dropdown-content a"
-                );
-
-            /*
-             * Membuka atau menutup dropdown utama.
-             * Digunakan khususnya untuk perangkat layar sentuh.
-             */
-            dropdownButton.addEventListener(
-                "click",
-                function (event) {
-                    event.stopPropagation();
-
-                    const isOpen =
-                        dropdown.classList.toggle("is-open");
-
-                    dropdownButton.setAttribute(
-                        "aria-expanded",
-                        String(isOpen)
-                    );
-
-                    if (!isOpen) {
-                        closeNestedDropdown();
-                    }
-                }
-            );
-
-            /*
-             * Membuka atau menutup child Knowledge Sharing.
-             */
-            nestedButton.addEventListener(
-                "click",
-                function (event) {
-                    event.stopPropagation();
-
-                    const isOpen =
-                        nestedDropdown.classList.toggle(
-                            "is-open"
-                        );
-
-                    nestedButton.setAttribute(
-                        "aria-expanded",
-                        String(isOpen)
-                    );
-                }
-            );
-
-            /*
-             * Menutup menu setelah tautan dipilih.
-             */
-            menuLinks.forEach(function (link) {
-                link.addEventListener("click", function () {
-                    closeMainDropdown();
-                });
-            });
-
-            /*
-             * Menutup dropdown ketika pengguna mengklik
-             * area di luar navigasi.
-             */
-            document.addEventListener(
-                "click",
-                function (event) {
-                    if (!dropdown.contains(event.target)) {
-                        closeMainDropdown();
-                    }
-                }
-            );
-
-            /*
-             * Menutup dropdown menggunakan tombol Escape.
-             */
-            document.addEventListener(
-                "keydown",
-                function (event) {
-                    if (event.key === "Escape") {
-                        closeMainDropdown();
-                        dropdownButton.focus();
-                    }
-                }
-            );
-
-            function closeNestedDropdown() {
-                nestedDropdown.classList.remove("is-open");
-
-                nestedButton.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-            }
-
-            function closeMainDropdown() {
-                dropdown.classList.remove("is-open");
-
-                dropdownButton.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-                closeNestedDropdown();
-            }
-        });
-    </script>
 
 </body>
 </html>

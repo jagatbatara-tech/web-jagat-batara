@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studi Kasus | Jagat Batara</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Script untuk menerjemahkan Markdown ke HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; color: #1e293b; background-color: #f8fafc; line-height: 1.7; padding: 40px 20px; }
+        .container { max-width: 850px; margin: 0 auto; }
+        .nav-back { display: inline-block; margin-bottom: 30px; color: #004B23; text-decoration: none; font-weight: 600; }
+        .nav-back:hover { text-decoration: underline; }
+        .article-card { background: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 40px; border-top: 4px solid #004B23; }
+        h1, h2, h3 { color: #0f172a; margin-top: 30px; margin-bottom: 15px; }
+        img { max-width: 100%; border-radius: 6px; margin: 20px 0; border: 1px solid #e2e8f0; }
+        ul, ol { margin-left: 25px; margin-bottom: 15px; }
+        li { margin-bottom: 8px; }
+        .loading { text-align: center; color: #64748b; font-weight: 600; padding: 50px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="nav-back">← Kembali ke Beranda</a>
+        
+        <h1 style="margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">Arsip Studi Kasus</h1>
+        
+        <div id="loading" class="loading">Memuat data dari server...</div>
+        <div id="content-container"></div>
+    </div>
+
+    <script>
+        // API GitHub untuk membaca isi folder studi-kasus
+        // Ganti dengan username GitHub dan nama repo lo yang benar
+        const repoUrl = 'https://api.github.com/repos/jagatbatara-tech/web-jagat-batara/contents/studi-kasus';
+        
+        fetch(repoUrl)
+            .then(response => response.json())
+            .then(files => {
+                document.getElementById('loading').style.display = 'none';
+                const container = document.getElementById('content-container');
+                
+                // Balikkan urutan agar artikel terbaru di atas
+                files.reverse().forEach(file => {
+                    if(file.name.endsWith('.md')) {
+                        fetch(file.download_url)
+                            .then(res => res.text())
+                            .then(text => {
+                                // Potong Frontmatter (metadata CMS diapit '---')
+                                let markdownBody = text;
+                                const parts = text.split('---');
+                                if (parts.length >= 3) {
+                                    markdownBody = parts.slice(2).join('---');
+                                }
+                                
+                                // Parse Markdown dan tampilkan
+                                const articleHTML = marked.parse(markdownBody);
+                                const articleDiv = document.createElement('div');
+                                articleDiv.className = 'article-card';
+                                articleDiv.innerHTML = articleHTML;
+                                container.appendChild(articleDiv);
+                            });
+                    }
+                });
+            })
+            .catch(err => {
+                document.getElementById('loading').innerText = 'Gagal memuat artikel.';
+                console.error(err);
+            });
+    </script>
+</body>
+</html>

@@ -4,70 +4,137 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studi Kasus | Jagat Batara</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Script untuk menerjemahkan Markdown ke HTML -->
+    <!-- Tipografi Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Script Markdown Parser -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; color: #1e293b; background-color: #f8fafc; line-height: 1.7; padding: 40px 20px; }
+        :root { --primary: #004B23; --text-dark: #0f172a; --text-gray: #475569; --bg-light: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; color: var(--text-dark); background-color: var(--bg-light); line-height: 1.7; padding: 40px 20px; margin: 0; }
         .container { max-width: 850px; margin: 0 auto; }
-        .nav-back { display: inline-block; margin-bottom: 30px; color: #004B23; text-decoration: none; font-weight: 600; }
-        .nav-back:hover { text-decoration: underline; }
-        .article-card { background: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 40px; border-top: 4px solid #004B23; }
-        h1, h2, h3 { color: #0f172a; margin-top: 30px; margin-bottom: 15px; }
-        img { max-width: 100%; border-radius: 6px; margin: 20px 0; border: 1px solid #e2e8f0; }
-        ul, ol { margin-left: 25px; margin-bottom: 15px; }
-        li { margin-bottom: 8px; }
-        .loading { text-align: center; color: #64748b; font-weight: 600; padding: 50px; }
+        
+        .nav-back { display: inline-block; margin-bottom: 30px; color: var(--primary); text-decoration: none; font-weight: 600; transition: 0.2s; }
+        .nav-back:hover { opacity: 0.8; }
+        .page-title { margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; font-weight: 800; }
+        
+        /* Gaya untuk List/Card Arsip */
+        .archive-card { 
+            background: #ffffff; padding: 30px; border-radius: 8px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03); margin-bottom: 25px; 
+            border-left: 4px solid var(--primary); transition: 0.3s;
+            cursor: pointer; display: block; text-decoration: none; color: inherit;
+        }
+        .archive-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
+        .archive-title { font-size: 1.4rem; font-weight: 700; color: var(--text-dark); margin-bottom: 10px; }
+        .archive-excerpt { color: var(--text-gray); font-size: 0.95rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        /* Gaya untuk Artikel Penuh */
+        .full-article { background: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .full-article h1 { font-size: 2rem; font-weight: 800; margin-bottom: 25px; color: var(--primary); line-height: 1.2; }
+        .full-article h2, .full-article h3 { margin-top: 30px; margin-bottom: 15px; }
+        .full-article img { max-width: 100%; border-radius: 6px; margin: 20px 0; }
+        .full-article a { color: var(--primary); font-weight: 600; }
+        
+        .loading { text-align: center; color: var(--text-gray); font-weight: 600; padding: 50px; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="nav-back">← Kembali ke Beranda</a>
         
-        <h1 style="margin-bottom: 30px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">Arsip Studi Kasus</h1>
-        
-        <div id="loading" class="loading">Memuat data dari server...</div>
-        <div id="content-container"></div>
+        <!-- Area List Arsip -->
+        <div id="archive-view">
+            <a href="index.html" class="nav-back">← Kembali ke Beranda</a>
+            <h1 class="page-title">Arsip Studi Kasus</h1>
+            <div id="loading-archive" class="loading">Memuat daftar studi kasus...</div>
+            <div id="archive-container"></div>
+        </div>
+
+        <!-- Area Artikel Penuh -->
+        <div id="single-view" class="hidden">
+            <a href="studi-kasus.html" class="nav-back">← Kembali ke Daftar Arsip</a>
+            <div id="loading-single" class="loading">Memuat artikel...</div>
+            <div id="single-container" class="full-article"></div>
+        </div>
+
     </div>
 
     <script>
-        // API GitHub untuk membaca isi folder studi-kasus
-        // Ganti dengan username GitHub dan nama repo lo yang benar
+        // URL Folder GitHub lo
         const repoUrl = 'https://api.github.com/repos/jagatbatara-tech/web-jagat-batara/contents/studi-kasus';
         
-        fetch(repoUrl)
-            .then(response => response.json())
-            .then(files => {
-                document.getElementById('loading').style.display = 'none';
-                const container = document.getElementById('content-container');
+        // Fungsi untuk mengekstrak Judul dari Frontmatter CMS
+        function parseCMSData(text) {
+            const parts = text.split('---');
+            if (parts.length >= 3) {
+                const frontmatter = parts[1];
+                const body = parts.slice(2).join('---');
                 
-                // Balikkan urutan agar artikel terbaru di atas
-                files.reverse().forEach(file => {
-                    if(file.name.endsWith('.md')) {
-                        fetch(file.download_url)
-                            .then(res => res.text())
-                            .then(text => {
-                                // Potong Frontmatter (metadata CMS diapit '---')
-                                let markdownBody = text;
-                                const parts = text.split('---');
-                                if (parts.length >= 3) {
-                                    markdownBody = parts.slice(2).join('---');
-                                }
-                                
-                                // Parse Markdown dan tampilkan
-                                const articleHTML = marked.parse(markdownBody);
-                                const articleDiv = document.createElement('div');
-                                articleDiv.className = 'article-card';
-                                articleDiv.innerHTML = articleHTML;
-                                container.appendChild(articleDiv);
-                            });
-                    }
-                });
-            })
-            .catch(err => {
-                document.getElementById('loading').innerText = 'Gagal memuat artikel.';
-                console.error(err);
-            });
+                // Cari Judul (bisa 'title:' atau 'judul:')
+                const titleMatch = frontmatter.match(/(?:title|judul):\s*['"]?(.*?)['"]?\n/i);
+                const title = titleMatch ? titleMatch[1].trim() : 'Studi Kasus';
+                
+                return { title, body };
+            }
+            return { title: 'Studi Kasus', body: text };
+        }
+
+        // Cek URL: Apakah sedang membuka artikel spesifik atau melihat daftar?
+        const urlParams = new URLSearchParams(window.location.search);
+        const postFile = urlParams.get('post');
+
+        if (postFile) {
+            // TAMPILKAN ARTIKEL PENUH
+            document.getElementById('archive-view').classList.add('hidden');
+            document.getElementById('single-view').classList.remove('hidden');
+
+            fetch(`https://raw.githubusercontent.com/jagatbatara-tech/web-jagat-batara/main/studi-kasus/${postFile}`)
+                .then(res => res.text())
+                .then(text => {
+                    document.getElementById('loading-single').style.display = 'none';
+                    const { title, body } = parseCMSData(text);
+                    
+                    // Bersihkan kode bintang yang bocor (opsional jika Sveltia error)
+                    const cleanBody = body.replace(/^\*\*(.*?)\*\*$/gm, '<strong>$1</strong>');
+                    
+                    const htmlContent = marked.parse(cleanBody);
+                    document.getElementById('single-container').innerHTML = `<h1>${title}</h1>${htmlContent}`;
+                })
+                .catch(() => document.getElementById('loading-single').innerText = 'Gagal memuat artikel.');
+        
+        } else {
+            // TAMPILKAN DAFTAR ARSIP (JUDUL & RINGKASAN SAJA)
+            fetch(repoUrl)
+                .then(res => res.json())
+                .then(files => {
+                    document.getElementById('loading-archive').style.display = 'none';
+                    const container = document.getElementById('archive-container');
+                    
+                    files.reverse().forEach(file => {
+                        if(file.name.endsWith('.md')) {
+                            fetch(file.download_url)
+                                .then(res => res.text())
+                                .then(text => {
+                                    const { title, body } = parseCMSData(text);
+                                    
+                                    // Bikin Ringkasan (Ambil teks mentah tanpa kode markdown, batasi 200 karakter)
+                                    let excerpt = body.replace(/[#*`_>]/g, '').trim();
+                                    excerpt = excerpt.length > 200 ? excerpt.substring(0, 200) + '...' : excerpt;
+
+                                    const card = document.createElement('a');
+                                    card.href = `?post=${file.name}`; // Link menuju artikel penuh
+                                    card.className = 'archive-card';
+                                    card.innerHTML = `
+                                        <div class="archive-title">${title}</div>
+                                        <div class="archive-excerpt">${excerpt}</div>
+                                    `;
+                                    container.appendChild(card);
+                                });
+                        }
+                    });
+                })
+                .catch(() => document.getElementById('loading-archive').innerText = 'Gagal memuat arsip.');
+        }
     </script>
 </body>
 </html>

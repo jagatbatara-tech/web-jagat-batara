@@ -73,33 +73,33 @@ Merancang dan membangun sistem data quality berbasis rule yang mampu:
 
 ## Action
 
-- **Meny**un r**ebook validasi berting**t** (severity Critical / High /
+- **Menyusun rulebook validasi bertingkat** (severity Critical / High /
   Info) yang mencakup kelengkapan data, urutan kronologis, rekonsiliasi
   lintas-kolom, dan integritas data referensi — 80+ rule secara total,
   dikembangkan rule demi rule bersama stakeholder domain sebelum satu
   baris kode pun ditulis.
-- **Membangun lapisan de**ksi outlier statistik** menggunakan metode
+- **Membangun lapisan deteksi outlier statistik** menggunakan metode
   3-sigma, disegmentasi berdasarkan konteks operasional (misalnya
   terminal × jenis kargo × kelas kapal), bukan ambang batas tetap.
-- **Menyempurnakan model statistik l**at iterasi tuning** — termasuk
+- **Menyempurnakan model statistik lewat iterasi tuning** — termasuk
   memperbaiki bias nyata di mana metrik downtime justru berskala
   mengikuti durasi operasi; dengan menyatakannya ulang sebagai rasio
   terhadap total waktu, false positive hilang tanpa kehilangan
   sensitivitas deteksi.
-- **Menge**ternalisasi seluruh data referens**dan threshold** ke dalam
+- **Mengeksternalisasi seluruh data referensi dan threshold** ke dalam
   workbook master data, menghilangkan business logic yang hardcode
   sehingga stakeholder non-teknis dapat menyesuaikan rule tanpa
   perubahan kode.
-- **Mengorkestrasi**eluruh pipeline** dalam platform low-code
+- **Mengorkestrasi seluruh pipeline** dalam platform low-code
   automation: trigger harian terjadwal → eksekusi rule engine →
   ringkasan naratif berbantuan AI (dengan fallback deterministik untuk
   ketahanan saat kapasitas AI tidak tersedia) → alert email berbasis
   severity → audit log yang terus bertambah (append-only).
-- **Memperluas arsitekt** ke domain data**edua**, merancang model data
+- **Memperluas arsitektur ke domain data kedua**, merancang model data
   yang skalabel (riwayat run append-only + detail temuan yang selalu
   ter-refresh) sehingga pola pipeline yang sama dapat melayani
   portofolio dataset yang terus bertambah tanpa perlu didesain ulang.
-- **Merancang dan membangun**ashboard Power BI dua lapis**: ringkasan
+- **Merancang dan membangun dashboard Power BI dua lapis**: ringkasan
   eksekutif yang mengagregasi skor kesiapan data di seluruh domain yang
   dipantau, dan tampilan drill-down per domain yang menunjukkan rule
   yang paling sering gagal, record yang terdampak, serta tren kualitas
@@ -121,16 +121,16 @@ Merancang dan membangun sistem data quality berbasis rule yang mampu:
 
 ## Prinsip Desain
 
-**De**r**nistic core, AI hanya menar**ikan** — Seluruh angka dan
+**Deterministic core, AI hanya menarasikan** — Seluruh angka dan
 temuan dihitung oleh logika berbasis rule. AI hanya digunakan untuk
 menghasilkan ringkasan yang mudah dibaca, menghilangkan risiko
 halusinasi pada data yang mendasarinya.
 
-**Zero h**dcoded threshold** — Daftar referensi dan ambang batas
+**Zero hardcoded threshold** — Daftar referensi dan ambang batas
 bisnis disimpan di sumber master data eksternal, sehingga penyesuaian
 operasional tidak memerlukan perubahan kode atau deployment ulang.
 
-**Outlier y**g sol** secara statistik** — Metrik yang secara alami
+**Outlier yang solid secara statistik** — Metrik yang secara alami
 berskala mengikuti faktor yang tidak terkontrol dibandingkan sebagai
 rasio yang dinormalisasi, bukan angka mentah — menghindari bias
 terhadap record yang lebih besar atau berdurasi lebih panjang.
@@ -139,6 +139,6 @@ terhadap record yang lebih besar atau berdurasi lebih panjang.
 
 Dashboard dirancang mengikuti hierarki pertanyaan sederhana: *apakah
 portofolio ini sehat?* (ringkasan eksekutif) diikuti *apa tepatnya yang
-sal*h, dan di*mana?* (drill-down per dataset). Pola scorecard dataset
+salah, dan di mana?* (drill-down per dataset). Pola scorecard dataset
 memungkinkan domain baru bergabung ke program hanya dengan menambah
 satu baris — bukan mendesain ulang.

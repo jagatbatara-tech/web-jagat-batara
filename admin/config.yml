@@ -8,16 +8,48 @@ media_folder: "images"
 public_folder: "/images"
 
 collections:
-  - name: "studi-kasus"
+
+    - name: "studi-kasus"
     label: "Studi Kasus"
     folder: "studi-kasus"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "Judul", name: "title", widget: "string"}
+      - {label: "Kicker (label kecil di atas judul)", name: "kicker", widget: "string", default: "Case Study"}
       - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Ringkasan (paragraf hero)", name: "summary", widget: "text", required: false}
+      - label: "Tags / Badge"
+        name: "tags"
+        widget: "list"
+        required: false
+        field: {label: "Tag", name: "tag", widget: "string"}
+      - label: "Hero Stats (angka highlight, maks 4)"
+        name: "hero_stats"
+        widget: "list"
+        required: false
+        fields:
+          - {label: "Value", name: "value", widget: "string"}
+          - {label: "Label", name: "label", widget: "string"}
       - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
-      - {label: "Isi Artikel", name: "body", widget: "markdown"}
+      - {label: "Gambar Arsitektur", name: "architecture_image", widget: "image", required: false}
+      - {label: "Caption Gambar Arsitektur", name: "architecture_caption", widget: "string", required: false}
+      - {label: "Gambar Dashboard", name: "dashboard_image", widget: "image", required: false}
+      - {label: "Caption Gambar Dashboard", name: "dashboard_caption", widget: "string", required: false}
+      - label: "Tech Stack"
+        name: "tech_stack"
+        widget: "list"
+        required: false
+        field: {label: "Teknologi", name: "tech", widget: "string"}
+      - label: "Impact Summary (angka hasil akhir)"
+        name: "impact_summary"
+        widget: "list"
+        required: false
+        fields:
+          - {label: "Value", name: "value", widget: "string"}
+          - {label: "Label", name: "label", widget: "string"}
+      - {label: "Disclaimer / Catatan Kerahasiaan", name: "disclaimer", widget: "text", required: false}
+      - {label: "Isi Artikel (Situation/Task/Action/Result)", name: "body", widget: "markdown"}
 
   - name: "day-in-my-life"
     label: "Day In My Life"

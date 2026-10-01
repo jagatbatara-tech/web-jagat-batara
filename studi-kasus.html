@@ -2,225 +2,34 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Arsip artikel studi kasus Jagat Batara.">
   <title>Studi Kasus | Jagat Batara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/category.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
-  <script src="assets/bilingual.js"></script>
-  <style>
-    :root{
-      --primary:#004B23; --primary-d:#003318;
-      --text-dark:#0f172a; --text-gray:#475569; --bg-light:#f8fafc;
-      --card:#ffffff; --border:#e2e8f0; --accent:#F2A65A;
-    }
-    *{box-sizing:border-box;}
-    body{font-family:'Inter',sans-serif; color:var(--text-dark); background:var(--bg-light); line-height:1.7; margin:0; padding:0 0 60px;}
-    .container{max-width:900px; margin:0 auto; padding:0 20px;}
-    .nav-back{display:inline-block; margin:30px 0; color:var(--primary); text-decoration:none; font-weight:600; transition:.2s;}
-    .nav-back:hover{opacity:.8;}
-    .page-title{margin-bottom:30px; border-bottom:2px solid var(--border); padding-bottom:10px; font-weight:800;}
-    .hidden{display:none;}
-    .loading{text-align:center; color:var(--text-gray); font-weight:600; padding:50px;}
-
-    .archive-card{
-      background:#ffffff; padding:30px; border-radius:8px;
-      box-shadow:0 2px 10px rgba(0,0,0,0.03); margin-bottom:25px;
-      border-left:4px solid var(--primary); transition:0.3s;
-      cursor:pointer; display:block; text-decoration:none; color:inherit;
-    }
-    .archive-card:hover{transform:translateY(-3px); box-shadow:0 10px 20px rgba(0,0,0,0.06);}
-    .archive-kicker{font-size:11.5px; font-weight:700; letter-spacing:1.5px; color:var(--primary); text-transform:uppercase; margin-bottom:6px;}
-    .archive-title{font-size:1.4rem; font-weight:700; color:var(--text-dark); margin-bottom:10px;}
-    .archive-excerpt{color:var(--text-gray); font-size:0.95rem; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
-
-    .hero{background:linear-gradient(135deg, var(--primary) 0%, var(--primary-d) 100%); color:#fff;
-      padding:48px 40px; border-radius:14px; margin-bottom:36px;}
-    .kicker{font-size:12.5px; font-weight:700; letter-spacing:2.5px; color:#8FE0B8; text-transform:uppercase; margin-bottom:12px;}
-    .hero h1{font-size:32px; line-height:1.3; margin:0 0 14px; font-weight:800;}
-    .hero p.lead{font-size:16px; color:#D5E8DC; margin:0 0 22px; max-width:680px;}
-    .badges{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:28px;}
-    .badge{background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.22); color:#EAF5EE; font-size:12px; padding:5px 12px; border-radius:16px;}
-    .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px;}
-    .stat{background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.18); border-radius:8px; padding:14px 16px;}
-    .stat .num{font-size:22px; font-weight:700; color:#8FE0B8;}
-    .stat .lbl{font-size:10.5px; color:#D5E8DC; text-transform:uppercase; letter-spacing:.4px; margin-top:3px;}
-
-    .full-article{background:#ffffff; padding:40px; border-radius:8px; box-shadow:0 4px 15px rgba(0,0,0,0.05);}
-    .full-article h1{font-size:2rem; font-weight:800; margin-bottom:25px; color:var(--primary); line-height:1.2;}
-    .full-article h2{font-size:1.35rem; color:var(--primary); margin-top:34px; border-left:4px solid var(--accent); padding-left:12px;}
-    .full-article h3{font-size:1.1rem; color:var(--primary); margin-top:24px; margin-bottom:15px;}
-    .full-article p{font-size:15px;}
-    .full-article ul{padding-left:20px;}
-    .full-article li{margin-bottom:8px; font-size:14.5px;}
-    .full-article strong{color:var(--primary);}
-    .full-article a{color:var(--primary); font-weight:600;}
-    .full-article img{max-width:100%; border-radius:6px; margin:20px 0;}
-
-    .figure{margin:32px 0; text-align:center;}
-    .figure img{max-width:100%; border-radius:10px; border:1px solid var(--border); box-shadow:0 8px 20px rgba(15,32,56,.1); margin:0;}
-    .figure figcaption{font-size:12.5px; color:var(--text-gray); margin-top:8px; font-style:italic;}
-
-    .tech-grid{display:flex; flex-wrap:wrap; gap:8px; margin:20px 0 30px;}
-    .tech-pill{background:#EAF3EC; border:1px solid var(--border); color:var(--primary); font-size:12.5px; font-weight:600; padding:6px 14px; border-radius:6px;}
-
-    .impact-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin:24px 0 30px;}
-    .impact-card{background:var(--primary); color:#fff; border-radius:10px; padding:20px 10px; text-align:center;}
-    .impact-card .num{font-size:22px; font-weight:700; color:#8FE0B8;}
-    .impact-card .lbl{font-size:11px; color:#D5E8DC; margin-top:5px;}
-
-    .disclaimer{background:#FBF3E9; border:1px solid #EBD7B8; border-radius:8px; padding:16px 20px; font-size:13px; color:#6B4A1E; margin-top:34px;}
-
-    @media (max-width:640px){ .hero{padding:32px 22px;} .hero h1{font-size:24px;} .full-article{padding:26px;} }
-  </style>
+  <script src="assets/category-page.js" defer></script>
 </head>
-<body>
-  <div class="container">
-    <div id="archive-view">
-      <a href="index.html" class="nav-back">&larr; Kembali ke Beranda</a>
-      <h1 class="page-title">Arsip Studi Kasus</h1>
-      <div id="loading-archive" class="loading">Memuat daftar studi kasus...</div>
-      <div id="archive-container"></div>
-    </div>
-
-    <div id="single-view" class="hidden">
-      <a href="studi-kasus.html" class="nav-back">&larr; Kembali ke Daftar Arsip</a>
-      <div id="loading-single" class="loading">Memuat artikel...</div>
+<body data-category="studi-kasus" data-language="id">
+  <header id="site-header" class="navbar"></header>
+  <main class="container">
+    <section id="archive-view" hidden>
+      <header class="page-heading">
+        <p class="eyebrow">Knowledge Sharing</p>
+        <h1 id="archive-title"></h1>
+        <p id="archive-description"></p>
+      </header>
+      <p id="loading-archive" class="loading" role="status"></p>
+      <div id="archive-container" class="archive-grid"></div>
+    </section>
+    <section id="single-view" hidden>
+      <a id="back-link" class="back-link" href="studi-kasus.html"></a>
+      <p id="loading-single" class="loading" role="status"></p>
       <div id="single-container"></div>
-    </div>
-  </div>
-
-  <script>
-    const REPO = 'jagatbatara-tech/web-jagat-batara';
-    const BRANCH = 'main';
-    const FOLDER = 'studi-kasus';
-    const listUrl = 'https://api.github.com/repos/' + REPO + '/contents/' + FOLDER;
-
-    const Bilingual = window.Bilingual || {
-      currentLang: 'id',
-      translateFrontMatter: async (fm) => fm,
-      translateBody: async (body) => body
-    };
-    const currentLang = Bilingual.currentLang;
-
-    function parsePost(raw) {
-      const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
-      if (!match) return { fm: {}, body: raw };
-      let fm = {};
-      try { fm = jsyaml.load(match[1]) || {}; }
-      catch (e) { console.error('YAML parse error', e); }
-      return { fm: fm, body: match[2] || '' };
-    }
-
-    function renderTechPills(items) {
-      if (!items || !items.length) return '';
-      return '<div class="tech-grid">' + items.map(function(i){ return '<span class="tech-pill">' + i + '</span>'; }).join('') + '</div>';
-    }
-
-    function renderStatGrid(stats, wrapClass, cardClass) {
-      if (!stats || !stats.length) return '';
-      return '<div class="' + wrapClass + '">' +
-        stats.map(function(s){ return '<div class="' + cardClass + '"><div class="num">' + s.value + '</div><div class="lbl">' + s.label + '</div></div>'; }).join('') +
-        '</div>';
-    }
-
-    function renderFigure(imgPath, caption) {
-      if (!imgPath) return '';
-      return '<figure class="figure"><img src="' + imgPath + '" alt="' + (caption || '') + '">' +
-        (caption ? ('<figcaption>' + caption + '</figcaption>') : '') + '</figure>';
-    }
-
-    async function getTranslatedFrontMatter(fm) {
-      if (!Bilingual || currentLang !== 'en') return fm;
-      return Bilingual.translateFrontMatter(fm);
-    }
-
-    async function getTranslatedBody(body) {
-      if (!Bilingual || currentLang !== 'en') return body;
-      return Bilingual.translateBody(body);
-    }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    const postFile = urlParams.get('post');
-
-    if (postFile) {
-      document.getElementById('archive-view').classList.add('hidden');
-      document.getElementById('single-view').classList.remove('hidden');
-
-      fetch('https://raw.githubusercontent.com/' + REPO + '/' + BRANCH + '/' + FOLDER + '/' + postFile)
-        .then(function(res){ return res.text(); })
-        .then(async function(raw){
-          document.getElementById('loading-single').style.display = 'none';
-          const parsed = parsePost(raw);
-          const fm = await getTranslatedFrontMatter(parsed.fm);
-          const body = await getTranslatedBody(parsed.body);
-          const bodyHtml = marked.parse(body || '');
-
-          const heroStatsHtml = renderStatGrid(fm.hero_stats, 'stats', 'stat');
-          const badgesHtml = (fm.tags && fm.tags.length)
-            ? ('<div class="badges">' + fm.tags.map(function(t){ return '<span class="badge">' + t + '</span>'; }).join('') + '</div>') : '';
-
-          const hasRichFields = fm.kicker || fm.summary || (fm.tags && fm.tags.length) || (fm.hero_stats && fm.hero_stats.length);
-
-          const heroHtml = hasRichFields ? (
-            '<div class="hero">' +
-              (fm.kicker ? ('<div class="kicker">' + fm.kicker + '</div>') : '') +
-              '<h1>' + (fm.title || 'Studi Kasus') + '</h1>' +
-              (fm.summary ? ('<p class="lead">' + fm.summary + '</p>') : '') +
-              badgesHtml +
-              heroStatsHtml +
-            '</div>') : '';
-
-          const archHtml = renderFigure(fm.architecture_image, fm.architecture_caption);
-          const dashHtml = renderFigure(fm.dashboard_image, fm.dashboard_caption);
-          const techHtml = (fm.tech_stack && fm.tech_stack.length)
-            ? ('<h3>Tools &amp; Techniques</h3>' + renderTechPills(fm.tech_stack)) : '';
-          const impactHtml = (fm.impact_summary && fm.impact_summary.length)
-            ? ('<h3>Impact Summary</h3>' + renderStatGrid(fm.impact_summary, 'impact-grid', 'impact-card')) : '';
-          const disclaimerHtml = fm.disclaimer
-            ? ('<div class="disclaimer"><strong>Catatan:</strong> ' + fm.disclaimer + '</div>') : '';
-
-          const titleFallback = hasRichFields ? '' : ('<h1>' + (fm.title || 'Studi Kasus') + '</h1>');
-
-          document.getElementById('single-container').innerHTML =
-            heroHtml +
-            '<div class="full-article">' + titleFallback + bodyHtml + archHtml + dashHtml + techHtml + impactHtml + disclaimerHtml + '</div>';
-        })
-        .catch(function(){ document.getElementById('loading-single').innerText = 'Gagal memuat artikel.'; });
-
-    } else {
-      fetch(listUrl)
-        .then(function(res){ return res.json(); })
-        .then(async function(files){
-          document.getElementById('loading-archive').style.display = 'none';
-          const container = document.getElementById('archive-container');
-
-          const mdFiles = files.filter(function(f){ return f.name.endsWith('.md'); }).reverse();
-
-          for (const file of mdFiles) {
-            const fileRes = await fetch(file.download_url);
-            const raw = await fileRes.text();
-            const parsed = parsePost(raw);
-            const fm = await getTranslatedFrontMatter(parsed.fm);
-            const body = await getTranslatedBody(parsed.body);
-
-            const title = fm.title || 'Studi Kasus';
-            const kicker = fm.kicker || '';
-            let excerpt = fm.summary || body.replace(/[#*`_>\[\]]/g, '').trim();
-            excerpt = excerpt.length > 200 ? excerpt.substring(0, 200) + '...' : excerpt;
-
-            const card = document.createElement('a');
-            card.href = '?post=' + file.name + (currentLang === 'en' ? '&lang=en' : '');
-            card.className = 'archive-card';
-            card.innerHTML =
-              (kicker ? ('<div class="archive-kicker">' + kicker + '</div>') : '') +
-              '<div class="archive-title">' + title + '</div>' +
-              '<div class="archive-excerpt">' + excerpt + '</div>';
-            container.appendChild(card);
-          }
-        })
-        .catch(function(){ document.getElementById('loading-archive').innerText = 'Gagal memuat arsip.'; });
-    }
-  </script>
+    </section>
+  </main>
+  <footer><div class="container"><p>&copy; 2026 Jagat Batara</p></div></footer>
 </body>
 </html>

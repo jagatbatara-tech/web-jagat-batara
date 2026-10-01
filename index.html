@@ -31,12 +31,15 @@
   .container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
   .navbar { position: sticky; top: 0; z-index: 1000; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(226,232,240,0.9); }
   .nav-inner { display: flex; align-items: center; justify-content: space-between; min-height: 76px; gap: 24px; }
+  .logo-section { display: flex; align-items: center; gap: 4px; }
   .logo { text-decoration: none; font-weight: 800; letter-spacing: -0.7px; font-size: 1.25rem; color: var(--text-dark); }
+  .logo-title { font-size: 0.75rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; line-height: 1.2; }
   .nav-links { display: flex; align-items: center; gap: 28px; list-style: none; margin: 0; padding: 0; }
   .nav-links a { text-decoration: none; color: var(--text-gray); font-size: 0.96rem; font-weight: 600; }
   .nav-links a:hover, .nav-links a:focus-visible { color: var(--primary); outline: none; }
   .dropdown { position: relative; }
-  .dropdown > a { display: flex; align-items: center; gap: 8px; color: var(--primary); }
+  .dropdown > a { display: flex; align-items: center; gap: 8px; color: var(--text-gray); transition: color 0.2s ease; }
+  .dropdown > a:hover { color: var(--primary); }
   .dropdown-menu { position: absolute; top: calc(100% + 14px); right: 0; min-width: 240px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); opacity: 0; visibility: hidden; transform: translateY(8px); transition: all 0.2s ease; z-index: 1001; }
   .dropdown:hover .dropdown-menu, .dropdown:focus-within .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
   .dropdown-menu a { display: block; padding: 12px 18px; font-size: 0.92rem; border-left: 3px solid transparent; transition: all 0.2s ease; }
@@ -74,6 +77,7 @@
   .mini-box { background: var(--primary-soft); padding: 20px; border-radius: 12px; border-left: 4px solid var(--primary); }
   .mini-box strong { display: block; font-size: 1.1rem; color: var(--primary-strong); margin-bottom: 6px; }
   .mini-box span { display: block; font-size: 0.9rem; color: var(--text-gray); line-height: 1.6; }
+  #certifications { background: var(--white); }
   #experience { background: var(--white); }
   .experience-timeline { display: flex; flex-direction: column; gap: 48px; }
   .timeline-item { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: start; }
@@ -117,27 +121,32 @@
     .timeline-item { grid-template-columns: auto 1fr; gap: 20px; }
     .stats-bar { grid-template-columns: repeat(2, 1fr); }
     .hero { padding: 100px 0 80px; }
+    .logo-title { display: block; }
   }
 </style>
 </head>
 <body>
   <header class="navbar">
     <div class="container nav-inner">
-      <a href="index.html" class="logo">Jagat Batara</a>
+      <div class="logo-section">
+        <a href="index.html" class="logo">Jagat Batara</a>
+        <div class="logo-title">M.T., CSCP</div>
+      </div>
       <nav>
         <ul class="nav-links">
           <li><a href="#about">Tentang</a></li>
+          <li><a href="#certifications">Sertifikasi</a></li>
+          <li><a href="#experience">Pengalaman</a></li>
           <li class="dropdown">
-            <a href="#">Artikel ↓</a>
+            <a href="#knowledge-sharing">Knowledge Sharing <i class="fas fa-chevron-down"></i></a>
             <div class="dropdown-menu">
               <a href="studi-kasus.html">Studi Kasus</a>
               <a href="supply-chain.html">Supply Chain Insights</a>
               <a href="data-storytelling.html">Data Storytelling</a>
-              <a href="ai.html">AI & Automation</a>
+              <a href="ai.html">n8n & Automation</a>
               <a href="day-in-my-life.html">Day in My Life</a>
             </div>
           </li>
-          <li><a href="#knowledge-sharing">Knowledge Sharing</a></li>
           <li class="lang-switch">
             <a href="index.html" class="active">ID</a>
             <span>|</span>
@@ -203,8 +212,10 @@
           </div>
         </div>
       </div>
+    </section>
 
-      <div class="container skills-section">
+    <section id="certifications">
+      <div class="container">
         <div class="section-head">
           <h2>Certifications & Key Skills</h2>
           <p>Professional certifications dan kemampuan teknis yang mendukung keahlian saya dalam strategic planning, supply chain design, dan data-driven decision making.</p>

@@ -9,15 +9,16 @@ public_folder: "/images"
 
 collections:
 
-    - name: "studi-kasus"
-    label: "Studi Kasus"
+  # ===== STUDI KASUS / CASE STUDIES =====
+  - name: "studi-kasus"
+    label: "📚 Studi Kasus (Bahasa Indonesia)"
     folder: "studi-kasus"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "Judul", name: "title", widget: "string"}
       - {label: "Kicker (label kecil di atas judul)", name: "kicker", widget: "string", default: "Case Study"}
-      - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Tanggal Publish", name: "date", widget: "datetime"}
       - {label: "Ringkasan (paragraf hero)", name: "summary", widget: "text", required: false}
       - label: "Tags / Badge"
         name: "tags"
@@ -49,48 +50,148 @@ collections:
           - {label: "Value", name: "value", widget: "string"}
           - {label: "Label", name: "label", widget: "string"}
       - {label: "Disclaimer / Catatan Kerahasiaan", name: "disclaimer", widget: "text", required: false}
+      - {label: "Link Versi Inggris", name: "en_link", widget: "string", hint: "contoh: case-studies-en/2024-01-15-example", required: false}
       - {label: "Isi Artikel (Situation/Task/Action/Result)", name: "body", widget: "markdown"}
 
-  - name: "day-in-my-life"
-    label: "Day In My Life"
-    folder: "day-in-my-life"
+  - name: "studi-kasus-en"
+    label: "📚 Case Studies (English)"
+    folder: "studi-kasus-en"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
-      - {label: "Judul", name: "title", widget: "string"}
-      - {label: "Tanggal", name: "date", widget: "datetime"}
-      - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
-      - {label: "Isi Artikel", name: "body", widget: "markdown"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Kicker (small label above title)", name: "kicker", widget: "string", default: "Case Study"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Summary (hero paragraph)", name: "summary", widget: "text", required: false}
+      - label: "Tags / Badge"
+        name: "tags"
+        widget: "list"
+        required: false
+        field: {label: "Tag", name: "tag", widget: "string"}
+      - label: "Hero Stats (numbers highlight, max 4)"
+        name: "hero_stats"
+        widget: "list"
+        required: false
+        fields:
+          - {label: "Value", name: "value", widget: "string"}
+          - {label: "Label", name: "label", widget: "string"}
+      - {label: "Cover Image", name: "thumbnail", widget: "image", required: false}
+      - {label: "Architecture Image", name: "architecture_image", widget: "image", required: false}
+      - {label: "Architecture Image Caption", name: "architecture_caption", widget: "string", required: false}
+      - {label: "Dashboard Image", name: "dashboard_image", widget: "image", required: false}
+      - {label: "Dashboard Image Caption", name: "dashboard_caption", widget: "string", required: false}
+      - label: "Tech Stack"
+        name: "tech_stack"
+        widget: "list"
+        required: false
+        field: {label: "Technology", name: "tech", widget: "string"}
+      - label: "Impact Summary (final results numbers)"
+        name: "impact_summary"
+        widget: "list"
+        required: false
+        fields:
+          - {label: "Value", name: "value", widget: "string"}
+          - {label: "Label", name: "label", widget: "string"}
+      - {label: "Disclaimer / Confidentiality Note", name: "disclaimer", widget: "text", required: false}
+      - {label: "Link to Indonesian Version", name: "id_link", widget: "string", hint: "example: studi-kasus/2024-01-15-example", required: false}
+      - {label: "Article Content (Situation/Task/Action/Result)", name: "body", widget: "markdown"}
 
+  # ===== SUPPLY CHAIN =====
   - name: "supply-chain"
-    label: "Supply Chain"
+    label: "🔗 Supply Chain (Bahasa Indonesia)"
     folder: "supply-chain"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "Judul", name: "title", widget: "string"}
-      - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Tanggal Publish", name: "date", widget: "datetime"}
       - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
+      - {label: "Link Versi Inggris", name: "en_link", widget: "string", hint: "contoh: supply-chain-en/2024-01-15-example", required: false}
       - {label: "Isi Artikel", name: "body", widget: "markdown"}
 
+  - name: "supply-chain-en"
+    label: "🔗 Supply Chain (English)"
+    folder: "supply-chain-en"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Cover Image", name: "thumbnail", widget: "image", required: false}
+      - {label: "Link to Indonesian Version", name: "id_link", widget: "string", hint: "example: supply-chain/2024-01-15-example", required: false}
+      - {label: "Article Content", name: "body", widget: "markdown"}
+
+  # ===== DATA STORYTELLING =====
   - name: "data-storytelling"
-    label: "Story Telling with Data"
+    label: "📊 Data Storytelling (Bahasa Indonesia)"
     folder: "data-storytelling"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "Judul", name: "title", widget: "string"}
-      - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Tanggal Publish", name: "date", widget: "datetime"}
       - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
+      - {label: "Link Versi Inggris", name: "en_link", widget: "string", hint: "contoh: data-storytelling-en/2024-01-15-example", required: false}
       - {label: "Isi Artikel", name: "body", widget: "markdown"}
 
+  - name: "data-storytelling-en"
+    label: "📊 Data Storytelling (English)"
+    folder: "data-storytelling-en"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Cover Image", name: "thumbnail", widget: "image", required: false}
+      - {label: "Link to Indonesian Version", name: "id_link", widget: "string", hint: "example: data-storytelling/2024-01-15-example", required: false}
+      - {label: "Article Content", name: "body", widget: "markdown"}
+
+  # ===== AI & AUTOMATION =====
   - name: "ai"
-    label: "Artificial Intelligence"
+    label: "🤖 AI & Automation (Bahasa Indonesia)"
     folder: "ai"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - {label: "Judul", name: "title", widget: "string"}
-      - {label: "Tanggal", name: "date", widget: "datetime"}
+      - {label: "Tanggal Publish", name: "date", widget: "datetime"}
       - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
+      - {label: "Link Versi Inggris", name: "en_link", widget: "string", hint: "contoh: ai-en/2024-01-15-example", required: false}
       - {label: "Isi Artikel", name: "body", widget: "markdown"}
+
+  - name: "ai-en"
+    label: "🤖 AI & Automation (English)"
+    folder: "ai-en"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Cover Image", name: "thumbnail", widget: "image", required: false}
+      - {label: "Link to Indonesian Version", name: "id_link", widget: "string", hint: "example: ai/2024-01-15-example", required: false}
+      - {label: "Article Content", name: "body", widget: "markdown"}
+
+  # ===== DAY IN MY LIFE =====
+  - name: "day-in-my-life"
+    label: "☀️ Day in My Life (Bahasa Indonesia)"
+    folder: "day-in-my-life"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Judul", name: "title", widget: "string"}
+      - {label: "Tanggal Publish", name: "date", widget: "datetime"}
+      - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
+      - {label: "Link Versi Inggris", name: "en_link", widget: "string", hint: "contoh: day-in-my-life-en/2024-01-15-example", required: false}
+      - {label: "Isi Artikel", name: "body", widget: "markdown"}
+
+  - name: "day-in-my-life-en"
+    label: "☀️ Day in My Life (English)"
+    folder: "day-in-my-life-en"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Cover Image", name: "thumbnail", widget: "image", required: false}
+      - {label: "Link to Indonesian Version", name: "id_link", widget: "string", hint: "example: day-in-my-life/2024-01-15-example", required: false}
+      - {label: "Article Content", name: "body", widget: "markdown"}

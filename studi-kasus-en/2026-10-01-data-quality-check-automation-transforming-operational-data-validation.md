@@ -15,7 +15,7 @@ dashboard_caption: ''
 tech_stack: []
 impact_summary: []
 disclaimer: ''
-id_link: ''
+id_link: https://web-jagat-batara.jagat-batara.workers.dev/studi-kasus?post=2026-09-29-otomasi-data-quality-check-transformasi-validasi-data.md
 ---
 
 ***

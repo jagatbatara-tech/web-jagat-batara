@@ -72,7 +72,8 @@
   <script>
     const REPO = 'jagatbatara-tech/web-jagat-batara';
     const BRANCH = 'main';
-    const FOLDER = 'data-storytelling';
+    const currentLang = new URLSearchParams(window.location.search).get('lang');
+    const FOLDER = currentLang === 'en' ? 'data-storytelling-en' : 'data-storytelling';
     const listUrl = 'https://api.github.com/repos/' + REPO + '/contents/' + FOLDER;
     function parsePost(raw){ const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/); if(!match) return {fm:{}, body:raw}; let fm={}; try { fm = jsyaml.load(match[1]) || {}; } catch (e) { console.error('YAML parse error',e); } return {fm:fm, body:match[2]||''}; }
     function renderTechPills(items){ if(!items||!items.length) return ''; return '<div class="tech-grid">' + items.map(function(i){ return '<span class="tech-pill">' + i + '</span>'; }).join('') + '</div>'; }
@@ -84,8 +85,9 @@
       document.getElementById('archive-view').classList.add('hidden');
       document.getElementById('single-view').classList.remove('hidden');
       fetch('https://raw.githubusercontent.com/' + REPO + '/' + BRANCH + '/' + FOLDER + '/' + postFile)
-        .then(function(res){ return res.text(); })
+        .then(function(res){ if(res.status===404) return null; if(!res.ok) throw new Error('Failed to load article'); return res.text(); })
         .then(function(raw){
+          if(raw===null){ document.getElementById('loading-single').style.display = 'none'; return; }
           document.getElementById('loading-single').style.display = 'none';
           const parsed = parsePost(raw); const fm = parsed.fm; const body = parsed.body; const bodyHtml = marked.parse(body || '');
           const heroStatsHtml = renderStatGrid(fm.hero_stats, 'stats', 'stat');
@@ -103,10 +105,11 @@
         .catch(function(){ document.getElementById('loading-single').innerText = 'Gagal memuat artikel.'; });
     } else {
       fetch(listUrl)
-        .then(function(res){ return res.json(); })
+        .then(function(res){ if(res.status===404) return []; if(!res.ok) throw new Error('Failed to load archive'); return res.json(); })
         .then(function(files){
           document.getElementById('loading-archive').style.display = 'none';
           const container = document.getElementById('archive-container');
+          if(!Array.isArray(files)) throw new Error('Invalid archive response');
           files.filter(function(f){ return f.name.endsWith('.md'); }).reverse().forEach(function(file){
             fetch(file.download_url)
               .then(function(res){ return res.text(); })

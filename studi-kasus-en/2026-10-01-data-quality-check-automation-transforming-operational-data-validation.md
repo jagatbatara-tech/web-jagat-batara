@@ -6,21 +6,41 @@ summary: Designing and building a data quality rule engine and executive dashboa
 tags:
   - Low-code Automation
   - Rule Engine Design
-hero_stats: []
+hero_stats:
+  - value: "~4 hours → 0"
+    label: Manual QA effort / week
+  - value: "80+"
+    label: Automated validation rules
+  - value: Daily
+    label: Unattended execution
+  - value: "2 → 5"
+    label: Datasets in roadmap
 thumbnail: ''
-architecture_image: ''
-architecture_caption: ''
-dashboard_image: ''
-dashboard_caption: ''
-tech_stack: []
-impact_summary: []
-disclaimer: ''
-id_link: https://web-jagat-batara.jagat-batara.workers.dev/studi-kasus?post=2026-09-29-otomasi-data-quality-check-transformasi-validasi-data.md
+architecture_image: /images/architecture-diagram.png
+architecture_caption: 'End-to-end pipeline: scheduled trigger → rule engine → AI narrative with fallback → audit log → dashboard'
+dashboard_image: /images/dashboard-mockup.png
+dashboard_caption: Illustrative mockup — dataset names and figures are representative, not production data
+tech_stack:
+  - Low-code Workflow Automation
+  - TypeScript (Office Scripts)
+  - Power BI & DAX
+  - Power Query (M)
+  - Statistical Process Control (3σ)
+  - Rule-Based Validation Design
+  - Data Modeling
+  - Applied Generative AI (narrative layer)
+impact_summary:
+  - value: "100%"
+    label: Manual audit effort eliminated
+  - value: "80+"
+    label: Business rules codified
+  - value: Days
+    label: Time to replicate to a new domain
+  - value: "1"
+    label: Unified dashboard for a growing portfolio
+disclaimer: Company names, dataset names, and all figures are illustrative and generalized to protect confidential operational data. The architecture and rule logic described reflect a real system built and operated in production.
+id_link: studi-kasus/2026-09-29-otomasi-data-quality-check-transformasi-validasi-data
 ---
-
-***
-
-***
 
 ## Situation
 

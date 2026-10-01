@@ -77,14 +77,14 @@
 <body>
   <div class="container">
     <div id="archive-view">
-      <a href="index.html" class="nav-back">&larr; Kembali ke Beranda</a>
+      <a id="archive-home-link" href="index.html" class="nav-back">&larr; Kembali ke Beranda</a>
       <h1 class="page-title">Arsip Studi Kasus</h1>
       <div id="loading-archive" class="loading">Memuat daftar studi kasus...</div>
       <div id="archive-container"></div>
     </div>
 
     <div id="single-view" class="hidden">
-      <a href="studi-kasus.html" class="nav-back">&larr; Kembali ke Daftar Arsip</a>
+      <a id="single-archive-link" href="studi-kasus.html" class="nav-back">&larr; Kembali ke Daftar Arsip</a>
       <div id="loading-single" class="loading">Memuat artikel...</div>
       <div id="single-container"></div>
     </div>
@@ -93,8 +93,6 @@
   <script>
     const REPO = 'jagatbatara-tech/web-jagat-batara';
     const BRANCH = 'main';
-    const FOLDER = 'studi-kasus';
-    const listUrl = 'https://api.github.com/repos/' + REPO + '/contents/' + FOLDER;
 
     const Bilingual = window.Bilingual || {
       currentLang: 'id',
@@ -102,6 +100,12 @@
       translateBody: async (body) => body
     };
     const currentLang = Bilingual.currentLang;
+    const FOLDER = currentLang === 'en' ? 'studi-kasus-en' : 'studi-kasus';
+    const listUrl = 'https://api.github.com/repos/' + REPO + '/contents/' + FOLDER;
+    const languageQuery = currentLang === 'en' ? '?lang=en' : '';
+
+    document.getElementById('archive-home-link').href = currentLang === 'en' ? 'index-en.html' : 'index.html';
+    document.getElementById('single-archive-link').href = 'studi-kasus.html' + languageQuery;
 
     function parsePost(raw) {
       const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
@@ -131,12 +135,12 @@
     }
 
     async function getTranslatedFrontMatter(fm) {
-      if (!Bilingual || currentLang !== 'en') return fm;
+      if (!Bilingual || currentLang !== 'en' || FOLDER === 'studi-kasus-en') return fm;
       return Bilingual.translateFrontMatter(fm);
     }
 
     async function getTranslatedBody(body) {
-      if (!Bilingual || currentLang !== 'en') return body;
+      if (!Bilingual || currentLang !== 'en' || FOLDER === 'studi-kasus-en') return body;
       return Bilingual.translateBody(body);
     }
 

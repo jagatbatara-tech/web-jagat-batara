@@ -4,10 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jagat Batara | Senior Business Analyst & Digital Creator</title>
-<meta name="description" content="Jagat Batara — M.T., CSCP. Senior Business Analyst dengan 15+ tahun pengalaman di supply chain, logistics, dan strategic planning. Transition dari Geologist, Management Consultant, ke Supply Chain Expert.">
+<meta name="description" content="Jagat Batara — M.T., CSCP. Senior Business Analyst dengan 15+ tahun pengalaman di supply chain, logistics, dan strategic planning. Transition dari Geologist menuju Supply Chain Expert.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   :root {
     --primary: #004B23;
@@ -36,20 +37,20 @@
   .nav-links a:hover, .nav-links a:focus-visible { color: var(--primary); outline: none; }
   .dropdown { position: relative; }
   .dropdown > a { display: flex; align-items: center; gap: 8px; color: var(--primary); }
-  .dropdown-menu { position: absolute; top: calc(100% + 14px); right: 0; min-width: 240px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); opacity: 0; visibility: hidden; transform: translateY(-8px); transition: all 0.2s ease; }
+  .dropdown-menu { position: absolute; top: calc(100% + 14px); right: 0; min-width: 240px; background: var(--white); border: 1px solid var(--border); border-radius: 12px; box-shadow: var(--shadow); opacity: 0; visibility: hidden; transform: translateY(8px); transition: all 0.2s ease; z-index: 1001; }
   .dropdown:hover .dropdown-menu, .dropdown:focus-within .dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
   .dropdown-menu a { display: block; padding: 12px 18px; font-size: 0.92rem; border-left: 3px solid transparent; transition: all 0.2s ease; }
   .dropdown-menu a:hover, .dropdown-menu a:focus-visible { background: var(--bg-soft); border-left-color: var(--primary); outline: none; }
   .lang-switch { display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 700; color: var(--text-gray); }
   .lang-switch a { text-decoration: none; color: var(--text-gray); }
   .lang-switch .active { color: var(--primary); }
-  .hero { background: linear-gradient(90deg, rgba(15, 23, 42, 0.90), rgba(15, 23, 42, 0.72)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2000&auto=format&fit=crop') center/cover; color: var(--white); padding: 160px 0 140px; }
+  .hero { background: linear-gradient(90deg, rgba(15, 23, 42, 0.90), rgba(15, 23, 42, 0.72)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2000&auto=format&fit=crop') center/cover; padding: 120px 0 80px; }
   .hero-inner { max-width: 840px; }
-  .eyebrow { display: inline-block; margin-bottom: 18px; padding: 8px 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 999px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255,255,255,0.7); }
-  h1 { margin: 0 0 18px; font-size: clamp(2.7rem, 4vw, 4.3rem); line-height: 1.06; letter-spacing: -1.8px; font-weight: 800; }
+  .eyebrow { display: inline-block; margin-bottom: 18px; padding: 8px 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 999px; font-size: 0.72rem; color: rgba(255,255,255,0.8); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+  h1 { margin: 0 0 18px; font-size: clamp(2.7rem, 4vw, 4.3rem); line-height: 1.06; letter-spacing: -1.8px; font-weight: 800; color: var(--white); }
   .hero-copy { max-width: 680px; font-size: 1.1rem; color: rgba(255,255,255,0.8); margin-bottom: 34px; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 56px; }
-  .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.96rem; transition: all 0.2s ease; border: none; cursor: pointer; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.96rem; transition: all 0.3s ease; border: none; cursor: pointer; }
   .btn-primary { background: var(--primary); color: var(--white); }
   .btn-primary:hover, .btn-primary:focus-visible { background: var(--primary-strong); outline: none; }
   .btn-secondary { background: rgba(255,255,255,0.1); color: var(--white); border: 1px solid rgba(255,255,255,0.2); }
@@ -74,20 +75,24 @@
   .mini-box strong { display: block; font-size: 1.1rem; color: var(--primary-strong); margin-bottom: 6px; }
   .mini-box span { display: block; font-size: 0.9rem; color: var(--text-gray); line-height: 1.6; }
   #experience { background: var(--white); }
-  .experience-timeline { display: flex; flex-direction: column; gap: 32px; }
-  .timeline-item { display: grid; grid-template-columns: 220px 1fr; gap: 36px; }
-  .timeline-marker { position: relative; padding-top: 4px; }
-  .timeline-marker:before { content: ""; position: absolute; width: 16px; height: 16px; background: var(--primary); border-radius: 50%; left: -8px; top: 12px; border: 4px solid var(--white); box-shadow: 0 0 0 2px var(--primary); }
-  .timeline-marker:after { content: ""; position: absolute; width: 2px; height: calc(100% + 32px); background: var(--border); left: 0; top: 28px; }
-  .timeline-item:last-child .timeline-marker:after { display: none; }
-  .timeline-content h3 { margin: 0 0 6px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); }
-  .timeline-content .role { font-size: 0.9rem; color: var(--primary); font-weight: 600; margin-bottom: 12px; }
+  .experience-timeline { display: flex; flex-direction: column; gap: 48px; }
+  .timeline-item { display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: start; }
+  .timeline-item::before { content: ""; position: absolute; left: 32px; top: 64px; width: 2px; height: calc(100% + 48px); background: var(--border); }
+  .timeline-item:last-child::before { display: none; }
+  .timeline-item { position: relative; }
+  .timeline-icon { width: 64px; height: 64px; background: linear-gradient(135deg, var(--primary), var(--primary-strong)); color: var(--white); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; position: relative; z-index: 2; box-shadow: 0 4px 12px rgba(0, 75, 35, 0.15); }
+  .timeline-content h3 { margin: 4px 0; font-size: 1.2rem; font-weight: 700; color: var(--text-dark); }
+  .timeline-content .role { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; color: var(--primary); font-weight: 600; margin-bottom: 4px; }
+  .timeline-content .role i { font-size: 0.8rem; }
+  .timeline-content .period { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--muted); margin-bottom: 14px; }
+  .timeline-content .period i { font-size: 0.75rem; }
   .timeline-content p { margin: 0 0 12px; color: var(--text-gray); line-height: 1.7; }
   .timeline-content ul { margin: 12px 0 0; padding: 0 0 0 20px; color: var(--text-gray); }
   .timeline-content li { margin-bottom: 8px; line-height: 1.6; }
   .skills-section { margin-top: 80px; }
   .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-  .skill-card { background: var(--white); padding: 28px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-soft); }
+  .skill-card { background: var(--white); padding: 28px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-soft); transition: all 0.3s ease; }
+  .skill-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
   .skill-card h4 { margin: 0 0 16px; font-size: 1rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
   .skill-card ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
   .skill-card li { font-size: 0.95rem; color: var(--text-gray); display: flex; align-items: center; gap: 8px; }
@@ -97,20 +102,19 @@
   .certification-highlight p { margin: 0; font-size: 0.95rem; color: var(--text-gray); line-height: 1.7; }
   #knowledge-sharing { background: var(--bg-soft); }
   .articles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; }
-  .article-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-soft); transition: all 0.3s ease; text-decoration: none; }
+  .article-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-soft); transition: all 0.3s ease; text-decoration: none; display: flex; flex-direction: column; }
   .article-card:hover, .article-card:focus-visible { transform: translateY(-4px); box-shadow: var(--shadow); outline: none; }
-  .article-card-image { width: 100%; height: 200px; background: linear-gradient(135deg, var(--primary-soft), rgba(0,75,35,0.1)); display: flex; align-items: center; justify-content: center; }
+  .article-card-image { width: 100%; height: 200px; background: linear-gradient(135deg, var(--primary-soft), rgba(0,75,35,0.1)); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; flex-shrink: 0; color: var(--primary); }
   .article-card-image img { width: 100%; height: 100%; object-fit: cover; }
-  .article-card-content { padding: 24px; }
-  .article-card-tag { display: inline-block; margin-bottom: 12px; padding: 4px 10px; background: var(--primary-soft); color: var(--primary); font-size: 0.75rem; font-weight: 700; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .article-card-content { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+  .article-card-tag { display: inline-block; margin-bottom: 12px; padding: 4px 10px; background: var(--primary-soft); color: var(--primary); font-size: 0.75rem; font-weight: 700; border-radius: 4px; width: fit-content; }
   .article-card h3 { margin: 0 0 12px; font-size: 1.1rem; font-weight: 700; color: var(--text-dark); line-height: 1.4; }
   .article-card p { margin: 0; font-size: 0.9rem; color: var(--text-gray); line-height: 1.6; }
   footer { background: var(--text-dark); color: var(--white); padding: 48px 0; text-align: center; }
   footer p { margin: 0; font-size: 0.9rem; opacity: 0.8; }
   @media (max-width: 768px) {
     .about-grid { grid-template-columns: 1fr; gap: 32px; }
-    .timeline-item { grid-template-columns: 1fr; gap: 12px; }
-    .timeline-marker { padding-left: 28px; }
+    .timeline-item { grid-template-columns: auto 1fr; gap: 20px; }
     .stats-bar { grid-template-columns: repeat(2, 1fr); }
     .hero { padding: 100px 0 80px; }
   }
@@ -149,7 +153,7 @@
       <div class="container hero-inner">
         <span class="eyebrow">Business Analyst · Supply Chain · Data Storytelling</span>
         <h1>Mengubah data menjadi keputusan strategis.</h1>
-        <p class="hero-copy">Saya adalah Jagat Batara — profesional dengan M.T. dan CSCP certification, 15+ tahun pengalaman dalam strategic planning, supply chain design, dan AI-enabled analytics. Saya membantu organisasi melihat pola, memetakan masalah, dan mengubah insight menjadi aksi yang berdampak.</p>
+        <p class="hero-copy">Saya adalah Jagat Batara — profesional dengan M.T. dan CSCP certification, 15+ tahun pengalaman dalam strategic planning, supply chain design, dan AI-enabled analytics. Dari Geologist hingga Supply Chain Expert, saya membantu organisasi mengoptimalkan operasi dan membuat keputusan berbasis data.</p>
         <div class="hero-actions">
           <a href="#experience" class="btn btn-primary">Eksplorasi Profil</a>
           <a href="#knowledge-sharing" class="btn btn-secondary">Lihat Knowledge Sharing</a>
@@ -157,8 +161,8 @@
         <div class="stats-bar" aria-label="Highlights">
           <div class="stat"><strong>15+</strong><span>Tahun pengalaman</span></div>
           <div class="stat"><strong>M.T., CSCP</strong><span>Certified Professional</span></div>
-          <div class="stat"><strong>Geologist→Consultant→SCM</strong><span>Unique career transition</span></div>
-          <div class="stat"><strong>AI & Automation</strong><span>Claude, Power BI, SAP</span></div>
+          <div class="stat"><strong>Geologist → Consultant → SCM</strong><span>Career Transition</span></div>
+          <div class="stat"><strong>n8n, Power BI, Qlik</strong><span>Automation & Analytics</span></div>
         </div>
       </div>
     </section>
@@ -167,12 +171,12 @@
       <div class="container">
         <div class="section-head">
           <h2>Tentang saya</h2>
-          <p>Saya bekerja di persimpangan antara analisis, operasi, dan pengambilan keputusan strategis. Perjalanan karir saya — dari Geologist hingga Management Consultant, IT Consultant, dan Supply Chain Expert — memberi saya perspektif unik dalam memecahkan masalah kompleks.</p>
+          <p>Saya bekerja di persimpangan antara analisis, operasi, dan pengambilan keputusan strategis. Perjalanan karir saya — dari Geologist hingga Management Consultant, IT Consultant, dan kini sebagai Senior Supply Chain Strategist — mencerminkan dedikasi terhadap continuous learning dan operational excellence.</p>
         </div>
         <div class="about-grid">
           <div class="card about-copy">
-            <p>Saya adalah profesional dengan latar belakang yang beragam: Geological Engineering (ITB 2010) dan Master of Industrial Engineering & Management (ITB 2014). Pengalaman saya meliputi field operations di mining, management consulting di strategi bisnis, IT consulting di digital transformation, hingga supply chain strategic planning — semua memberikan fondasi yang kuat untuk memahami tantangan bisnis dari berbagai sudut pandang.</p>
-            <p>Saya percaya bahwa keputusan terbaik lahir dari kombinasi antara data yang solid, konteks operasional yang mendalam, dan perspektif strategis. Itulah yang mendorong saya untuk terus membangun solusi yang tidak hanya analytically sound, tetapi juga benar-benar relevan dan actionable di lapangan.</p>
+            <p>Saya adalah profesional dengan latar belakang yang beragam: Geological Engineering (ITB 2010) dan Master of Industrial Engineering & Management (ITB 2014). Pengalaman saya meliputi strategic planning di mining & logistics, digital transformation, dan AI-enabled analytics untuk enterprise clients.</p>
+            <p>Saya percaya bahwa keputusan terbaik lahir dari kombinasi antara data yang solid, konteks operasional yang mendalam, dan perspektif strategis. Itulah yang mendorong saya untuk terus berinovasi dan membawa value dalam setiap proyek yang saya tangani.</p>
             <ul class="badge-list">
               <li>Senior Business Analyst & Supply Chain Strategist</li>
               <li>Certified in Supply Chain Management (APICS CSCP)</li>
@@ -186,15 +190,15 @@
             </div>
             <div class="mini-box">
               <strong>Career Transition</strong>
-              <span>Geologist → Management Consultant → IT Consultant → Supply Chain Expert</span>
+              <span>Geologist (2010) → Management Consultant (2015) → IT Consultant (2017) → Supply Chain Expert (2021-Present)</span>
             </div>
             <div class="mini-box">
               <strong>Core Expertise</strong>
               <span>Strategic Planning, Supply Chain Design, Logistics, Digital Transformation, Data Analytics</span>
             </div>
             <div class="mini-box">
-              <strong>Skills</strong>
-              <span>AI Tools (Claude, Copilot), Power BI, SAP HANA, Power Automate, Qlik Sense</span>
+              <strong>Key Tools & Technologies</strong>
+              <span>n8n, Power Automate, Power BI, Qlik Sense, Claude AI, SAP HANA</span>
             </div>
           </div>
         </div>
@@ -208,7 +212,7 @@
         
         <div class="certification-highlight">
           <h3>APICS Certified Supply Chain Professional (CSCP)</h3>
-          <p>Certification ID: 195078. Globally recognized, best-practice framework untuk merancang, mengelola, dan mengoptimalkan kompleks supply chain dan logistics networks. Fokus pada demand management, supply planning, operations, dan network design.</p>
+          <p>Certification ID: 195078. Globally recognized, best-practice framework untuk merancang, mengelola, dan mengoptimalkan kompleks supply chain dan logistics networks. Fokus pada demand planning, procurement strategy, production planning, logistics operations, dan supply chain integration.</p>
         </div>
 
         <div class="skills-grid">
@@ -233,17 +237,27 @@
             </ul>
           </div>
           <div class="skill-card">
-            <h4>Digital & AI Analytics</h4>
+            <h4>Automation & Workflow</h4>
             <ul>
-              <li>AI-Enabled Process Automation & Data Analytics</li>
-              <li>Anthropic Claude & Microsoft Copilot (prompt engineering)</li>
-              <li>Power BI & Qlik Sense (business intelligence)</li>
-              <li>Power Automate (workflow automation)</li>
-              <li>SAP HANA & Fiori (enterprise systems)</li>
+              <li><strong>n8n</strong> – Complex workflow automation</li>
+              <li><strong>Power Automate</strong> – RPA & cloud workflows</li>
+              <li>AI-Enabled Process Automation</li>
+              <li>Intelligent Document Processing</li>
+              <li>Real-time Data Integration & Sync</li>
             </ul>
           </div>
           <div class="skill-card">
-            <h4>Certifications & Compliance</h4>
+            <h4>Data & Analytics</h4>
+            <ul>
+              <li><strong>Power BI</strong> – Advanced dashboards & reports</li>
+              <li><strong>Qlik Sense</strong> – Associative analytics & storytelling</li>
+              <li>Anthropic Claude & Microsoft Copilot (AI analysis)</li>
+              <li>SAP HANA & Fiori (enterprise systems)</li>
+              <li>Predictive Analytics & Data Visualization</li>
+            </ul>
+          </div>
+          <div class="skill-card">
+            <h4>Certifications & Languages</h4>
             <ul>
               <li>APICS CSCP (Certified Supply Chain Professional)</li>
               <li>POP Certification (operational supervision & safety)</li>
@@ -260,63 +274,75 @@
       <div class="container">
         <div class="section-head">
           <h2>Pengalaman Profesional</h2>
-          <p>Perjalanan karir saya mencerminkan evolusi dari operational expertise menuju strategic business leadership.</p>
+          <p>Perjalanan karir saya mencerminkan evolusi dari operational expertise menuju strategic business leadership, dengan fokus pada automation dan data-driven decision making.</p>
         </div>
 
         <div class="experience-timeline">
           <div class="timeline-item">
-            <div class="timeline-marker"></div>
+            <div class="timeline-icon">
+              <i class="fas fa-briefcase"></i>
+            </div>
             <div class="timeline-content">
               <h3>Senior Logistics & Supply Chain Lead</h3>
-              <div class="role">PT AMMAN Mineral (Copper & Gold Mining) — Sumbawa | April 2021 – Present</div>
-              <p>Memimpin tim operasional dan proyek dalam membangun infrastruktur logistik foundational dan strategi supply chain berbasis AI-enabled technology untuk inisiatif mining strategis.</p>
+              <div class="role"><i class="fas fa-building"></i> PT AMMAN Mineral (Copper & Gold Mining)</div>
+              <div class="period"><i class="fas fa-map-marker-alt"></i> Sumbawa | <i class="fas fa-calendar"></i> April 2021 – Present</div>
+              <p>Memimpin tim operasional dan proyek dalam membangun infrastruktur logistik foundational dan strategi supply chain berbasis automation & advanced analytics untuk inisiatif mining strategis.</p>
               <ul>
                 <li>Strategic Planning & Business Case Development untuk capex infrastructure expansion</li>
                 <li>End-to-end logistics intelligence initiative dengan fokus pada cost optimization dan risk mitigation</li>
                 <li>Jetty Berth Occupancy Ratio (BOR) modeling dengan AI-assisted analysis untuk capacity planning</li>
-                <li>AI-Automated Data Quality Control — replacing manual review dengan AI-powered validation routines</li>
-                <li>Process Automation menggunakan Power Automate + Claude untuk daily reporting dan insights generation</li>
-                <li>Supply Chain Risk Mitigation — predictive analytics untuk PO delays dan lead time variances</li>
+                <li>AI-Automated Data Quality Control menggunakan n8n dan Claude — replacing manual review</li>
+                <li>Process Automation dengan n8n + Power Automate + Claude untuk daily reporting dan insights</li>
+                <li>Advanced Analytics dengan Power BI & Qlik — predictive analytics untuk PO delays dan lead time variances</li>
                 <li>Digital Twin deployment untuk real-time inventory visibility dan reconciliation</li>
-                <li>Mencapai 95% Delivery In Full, On Time (DIFOT) rate melalui forecasting dan KPI monitoring yang improved</li>
+                <li>Mencapai 95% Delivery In Full, On Time (DIFOT) rate melalui forecasting yang improved</li>
               </ul>
             </div>
           </div>
 
           <div class="timeline-item">
-            <div class="timeline-marker"></div>
+            <div class="timeline-icon">
+              <i class="fas fa-chart-line"></i>
+            </div>
             <div class="timeline-content">
               <h3>Business Analyst</h3>
-              <div class="role">PT Mitra Integrasi Informatika (IT Consulting) — Jakarta | May 2017 – April 2021</div>
-              <p>Mengelola dan deliver project kompleks untuk klien di sektor mining dan logistics dengan fokus pada requirement gathering dan translasi menjadi business & technology solutions.</p>
+              <div class="role"><i class="fas fa-building"></i> PT Mitra Integrasi Informatika (IT Consulting)</div>
+              <div class="period"><i class="fas fa-map-marker-alt"></i> Jakarta | <i class="fas fa-calendar"></i> May 2017 – April 2021</div>
+              <p>Mengelola dan deliver project kompleks untuk klien di sektor mining dan logistics dengan fokus pada requirement gathering dan translasi menjadi business & technology solutions yang sustainable.</p>
               <ul>
-                <li>Led digital transformation project untuk real-time business intelligence dashboard</li>
-                <li>Improved operational efficiency klien hingga 20% melalui analytics dan automation</li>
-                <li>Specialized dalam solving complex operational challenges di heavy industries</li>
+                <li>Led digital transformation project untuk real-time business intelligence dengan Power BI & Qlik</li>
+                <li>Improved operational efficiency klien hingga 20% melalui automation (Power Automate, n8n) dan analytics</li>
+                <li>Specialized dalam solving complex operational challenges di heavy industries dengan data-driven approach</li>
               </ul>
             </div>
           </div>
 
           <div class="timeline-item">
-            <div class="timeline-marker"></div>
+            <div class="timeline-icon">
+              <i class="fas fa-lightbulb"></i>
+            </div>
             <div class="timeline-content">
-              <h3>Business Analyst</h3>
-              <div class="role">YCP Solidiance (Management Consulting) — Jakarta | April 2015 – May 2017</div>
-              <p>Specialized dalam go-to-market strategy dan market intelligence untuk klien di heavy industries, terutama mining dan cement logistics.</p>
+              <h3>Business Analyst & Strategy Consultant</h3>
+              <div class="role"><i class="fas fa-building"></i> YCP Solidiance (Management Consulting)</div>
+              <div class="period"><i class="fas fa-map-marker-alt"></i> Jakarta | <i class="fas fa-calendar"></i> April 2015 – May 2017</div>
+              <p>Specialized dalam go-to-market strategy dan market intelligence untuk klien di heavy industries, terutama mining dan cement logistics dengan focus pada competitive advantage.</p>
               <ul>
                 <li>Market sizing, competitive landscape analysis, dan regulatory requirements assessment</li>
-                <li>Led strategic projects dengan fokus pada logistics process improvement</li>
-                <li>Developed data-driven recommendations untuk business strategy enhancement</li>
+                <li>Led strategic projects dengan fokus pada logistics process improvement dan supply chain optimization</li>
+                <li>Developed data-driven recommendations untuk business strategy enhancement dan market entry</li>
               </ul>
             </div>
           </div>
 
           <div class="timeline-item">
-            <div class="timeline-marker"></div>
+            <div class="timeline-icon">
+              <i class="fas fa-flask"></i>
+            </div>
             <div class="timeline-content">
-              <h3>Geologist</h3>
-              <div class="role">PT Arutmin Indonesia (Coal Mining) — Balikpapan | April 2010 – April 2011</div>
-              <p>Conducted comprehensive exploration activities dan developed accurate coal resource models untuk support mining operations.</p>
+              <h3>Geologist & Exploration Officer</h3>
+              <div class="role"><i class="fas fa-building"></i> PT Arutmin Indonesia (Coal Mining)</div>
+              <div class="period"><i class="fas fa-map-marker-alt"></i> Balikpapan | <i class="fas fa-calendar"></i> April 2010 – April 2011</div>
+              <p>Conducted comprehensive exploration activities dan developed accurate coal resource models untuk support mining operations dan geological assessment.</p>
             </div>
           </div>
         </div>
@@ -333,7 +359,7 @@
         <div class="articles-grid">
           <a href="studi-kasus.html" class="article-card">
             <div class="article-card-image">
-              <img src="images/case-study.jpg" alt="Case Studies">
+              <i class="fas fa-folder-open"></i>
             </div>
             <div class="article-card-content">
               <span class="article-card-tag">Case Study</span>
@@ -344,7 +370,7 @@
 
           <a href="supply-chain.html" class="article-card">
             <div class="article-card-image">
-              <img src="images/supply-chain.jpg" alt="Supply Chain">
+              <i class="fas fa-project-diagram"></i>
             </div>
             <div class="article-card-content">
               <span class="article-card-tag">Supply Chain</span>
@@ -355,29 +381,29 @@
 
           <a href="data-storytelling.html" class="article-card">
             <div class="article-card-image">
-              <img src="images/data-storytelling.jpg" alt="Data Storytelling">
+              <i class="fas fa-chart-pie"></i>
             </div>
             <div class="article-card-content">
               <span class="article-card-tag">Data Storytelling</span>
               <h3>Data Storytelling & Visualization</h3>
-              <p>Cara mengkomunikasikan insights kompleks melalui data visualization yang jelas, compelling narrative, dan actionable recommendations.</p>
+              <p>Menggunakan Power BI dan Qlik untuk mengkomunikasikan insights kompleks melalui visualisasi yang jelas, narrative yang compelling, dan actionable recommendations.</p>
             </div>
           </a>
 
           <a href="ai.html" class="article-card">
             <div class="article-card-image">
-              <img src="images/ai.jpg" alt="AI & Automation">
+              <i class="fas fa-robot"></i>
             </div>
             <div class="article-card-content">
               <span class="article-card-tag">AI & Automation</span>
-              <h3>AI & Automation in Business</h3>
-              <p>Eksplorasi practical use cases AI generatif, prompt engineering, dan automation tools untuk meningkatkan decision-making dan operational efficiency.</p>
+              <h3>n8n & Power Automate</h3>
+              <p>Practical guide untuk workflow automation dengan n8n dan Power Automate, AI generatif dengan Claude & Copilot, dan automation tools untuk meningkatkan operational efficiency.</p>
             </div>
           </a>
 
           <a href="day-in-my-life.html" class="article-card">
             <div class="article-card-image">
-              <img src="images/day-in-my-life.jpg" alt="Day in My Life">
+              <i class="fas fa-clock"></i>
             </div>
             <div class="article-card-content">
               <span class="article-card-tag">Personal</span>

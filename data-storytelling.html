@@ -112,7 +112,7 @@
               .then(function(res){ return res.text(); })
               .then(function(raw){
                 const parsed = parsePost(raw); const fm = parsed.fm; const body = parsed.body; const title = fm.title || 'Story Telling with Data'; const kicker = fm.kicker || ''; let excerpt = fm.summary || body.replace(/[#*`_>\[\]]/g, '').trim(); excerpt = excerpt.length > 200 ? excerpt.substring(0, 200) + '...' : excerpt;
-                const card = document.createElement('a'); card.href = '?post=' + file.name; card.className = 'archive-card'; card.innerHTML = (kicker ? ('<div class="archive-kicker">' + kicker + '</div>') : '') + '<div class="archive-title">' + title + '</div>' + '<div class="archive-excerpt">' + excerpt + '</div>';
+                const card = document.createElement('a'); card.href = '?post=' + encodeURIComponent(file.name) + (urlParams.get('lang') === 'en' ? '&lang=en' : ''); card.className = 'archive-card'; card.innerHTML = (kicker ? ('<div class="archive-kicker">' + kicker + '</div>') : '') + '<div class="archive-title">' + title + '</div>' + '<div class="archive-excerpt">' + excerpt + '</div>';
                 container.appendChild(card);
               });
           });
@@ -120,5 +120,6 @@
         .catch(function(){ document.getElementById('loading-archive').innerText = 'Gagal memuat arsip.'; });
     }
   </script>
+<script src="assets/language-switcher.js"></script>
 </body>
 </html>

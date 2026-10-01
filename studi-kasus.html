@@ -210,7 +210,7 @@
             excerpt = excerpt.length > 200 ? excerpt.substring(0, 200) + '...' : excerpt;
 
             const card = document.createElement('a');
-            card.href = '?post=' + file.name + (currentLang === 'en' ? '&lang=en' : '');
+            card.href = '?post=' + encodeURIComponent(file.name) + (currentLang === 'en' ? '&lang=en' : '');
             card.className = 'archive-card';
             card.innerHTML =
               (kicker ? ('<div class="archive-kicker">' + kicker + '</div>') : '') +
@@ -222,5 +222,6 @@
         .catch(function(){ document.getElementById('loading-archive').innerText = 'Gagal memuat arsip.'; });
     }
   </script>
+<script src="assets/language-switcher.js"></script>
 </body>
 </html>

@@ -192,7 +192,7 @@
                 excerpt = excerpt.length > 200 ? excerpt.substring(0, 200) + '...' : excerpt;
 
                 const card = document.createElement('a');
-                card.href = '?post=' + file.name;
+                card.href = '?post=' + encodeURIComponent(file.name) + (new URLSearchParams(window.location.search).get('lang') === 'en' ? '&lang=en' : '');
                 card.className = 'archive-card';
                 card.innerHTML =
                   (kicker ? ('<div class="archive-kicker">' + kicker + '</div>') : '') +
@@ -206,4 +206,5 @@
     }
   </script>
 </body>
+<script src="assets/language-switcher.js"></script>
 </html>

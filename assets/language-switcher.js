@@ -21,11 +21,20 @@
   const switcher = document.createElement('nav');
   switcher.className = 'site-language-switcher';
   switcher.setAttribute('aria-label', 'Language');
-  switcher.innerHTML = `
-    <a href="${languageUrl('id')}"${currentLang === 'id' ? ' aria-current="page"' : ''}>ID</a>
-    <span aria-hidden="true">|</span>
-    <a href="${languageUrl('en')}"${currentLang === 'en' ? ' aria-current="page"' : ''}>EN</a>
-  `;
+  ['id', 'en'].forEach((lang, index) => {
+    if (index) {
+      const separator = document.createElement('span');
+      separator.setAttribute('aria-hidden', 'true');
+      separator.textContent = '|';
+      switcher.appendChild(separator);
+    }
+
+    const link = document.createElement('a');
+    link.href = languageUrl(lang);
+    link.textContent = lang.toUpperCase();
+    if (currentLang === lang) link.setAttribute('aria-current', 'page');
+    switcher.appendChild(link);
+  });
 
   const style = document.createElement('style');
   style.textContent = `

@@ -1,0 +1,43 @@
+name: Update RSS feed
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'studi-kasus/**.md'
+      - 'studi-kasus-en/**.md'
+      - 'supply-chain/**.md'
+      - 'supply-chain-en/**.md'
+      - 'data-storytelling/**.md'
+      - 'data-storytelling-en/**.md'
+      - 'ai/**.md'
+      - 'ai-en/**.md'
+      - 'day-in-my-life/**.md'
+      - 'day-in-my-life-en/**.md'
+      - 'scripts/generate-feed.js'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update-feed:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Generate feed.xml
+        run: node scripts/generate-feed.js
+      - name: Commit feed.xml if changed
+        run: |
+          if ! git diff --quiet -- feed.xml; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add feed.xml
+            git commit -m "chore: regenerate feed.xml [skip ci]"
+            git push
+          else
+            echo "feed.xml unchanged"
+          fi

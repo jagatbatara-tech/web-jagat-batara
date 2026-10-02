@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>Jagat Batara — Knowledge Sharing</title>
+  <link>https://jagatbatara-tech.github.io/web-jagat-batara</link>
+  <description>Artikel terbaru dari Jagat Batara: studi kasus, supply chain, data storytelling, automation, dan lainnya.</description>
+  <lastBuildDate>Fri, 02 Oct 2026 03:05:47 GMT</lastBuildDate>
+  <item>
+    <title>Ship-to-Shore Crane: Optimasi Kinerja Terminal Peti Kemas dari Perspektif Operasional</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/supply-chain.html?post=2026-10-01-ship-to-shore-crane-optimasi-kinerja-terminal.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/supply-chain.html?post=2026-10-01-ship-to-shore-crane-optimasi-kinerja-terminal.md</guid>
+    <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Pengalaman 15 tahun di industri logistik dan operasional pertambangan mengajarkan saya bahwa mayoritas terminal peti kemas belum mengoptimalkan potensi Ship-to-Shore Crane (STS) secara maksimal. Artikel ini berbagi insight tentang fundamental STS, KPI yang perlu dipantau, bottleneck operasional yang sering terjadi, dan framework data-driven untuk continuous improvement.</description>
+  </item>
+  <item>
+    <title>Story Telling with Data</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/data-storytelling.html?post=2026-10-01-story-telling-with-data.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/data-storytelling.html?post=2026-10-01-story-telling-with-data.md</guid>
+    <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Data tanpa narasi sering tidak berdampak. Artikel ini membahas bagaimana saya melihat storytelling sebagai alat penting untuk mengubah angka menjadi keputusan.</description>
+  </item>
+  <item>
+    <title>Artificial Intelligence</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/ai.html?post=2026-10-01-artificial-intelligence.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/ai.html?post=2026-10-01-artificial-intelligence.md</guid>
+    <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+    <description>AI bukan hanya soal teknologi, tetapi juga soal bagaimana kita membangun keputusan yang lebih cepat, lebih tajam, dan lebih manusiawi.</description>
+  </item>
+  <item>
+    <title>Day in My Life</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/day-in-my-life.html?post=2026-10-01-day-in-my-life.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/day-in-my-life.html?post=2026-10-01-day-in-my-life.md</guid>
+    <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Catatan singkat tentang bagaimana hari-hari saya diisi oleh aktivitas operasional, diskusi strategis, dan momen kecil yang membentuk ritme kerja.</description>
+  </item>
+  <item>
+    <title>Otomasi Data Quality Check: Transformasi Validasi Data Operasional</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/studi-kasus.html?post=2026-09-29-otomasi-data-quality-check-transformasi-validasi-data.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/studi-kasus.html?post=2026-09-29-otomasi-data-quality-check-transformasi-validasi-data.md</guid>
+    <pubDate>Tue, 29 Sep 2026 00:00:00 GMT</pubDate>
+    <description>Merancang dan membangun rule engine data quality serta dashboard eksekutif yang menggantikan proses audit manual mingguan dengan pipeline harian otomatis berbasis statistik — dibangun untuk operasi mining &amp; logistics dan diskalakan ke portofolio dataset yang terus bertambah.</description>
+  </item>
+</channel>
+</rss>

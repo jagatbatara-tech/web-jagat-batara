@@ -117,7 +117,16 @@
   .skill-card li:before { content: "◆"; color: var(--primary); font-size: 0.7rem; }
   .certification-highlight { background: var(--primary-soft); border-left: 4px solid var(--primary); padding: 24px; border-radius: 8px; margin-bottom: 32px; }
   .certification-highlight h3 { margin: 0 0 12px; font-size: 1.15rem; font-weight: 700; color: var(--primary-strong); }
+  .certification-preview-trigger { appearance: none; padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; text-decoration: underline dotted; text-underline-offset: 4px; cursor: pointer; }
+  .certification-preview-trigger:hover, .certification-preview-trigger:focus-visible { color: var(--primary); }
+  .certification-preview-trigger:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
   .certification-highlight p { margin: 0; font-size: 0.95rem; color: var(--text-gray); line-height: 1.7; }
+  .cscp-certificate-dialog { width: min(92vw, 960px); max-width: 92vw; max-height: 90vh; padding: 20px; border: 0; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+  .cscp-certificate-dialog::backdrop { background: rgba(15,23,42,0.65); }
+  .cscp-certificate-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+  .cscp-certificate-dialog-header p { margin: 0; color: var(--text-gray); font-size: 0.9rem; }
+  .cscp-certificate-dialog-close { border: 0; background: transparent; color: var(--muted); font-size: 1.6rem; line-height: 1; cursor: pointer; }
+  .cscp-certificate-dialog img { max-width: 100%; max-height: 75vh; object-fit: contain; margin: 0 auto; }
   #knowledge-sharing { background: var(--bg-soft); }
   .articles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; }
   .article-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-soft); transition: all 0.3s ease; text-decoration: none; display: flex; flex-direction: column; }
@@ -255,9 +264,18 @@
         </div>
         
         <div class="certification-highlight">
-          <h3>APICS Certified Supply Chain Professional (CSCP)</h3>
+          <h3><button class="certification-preview-trigger" type="button" aria-haspopup="dialog" aria-controls="cscp-certificate-dialog">APICS Certified Supply Chain Professional (CSCP)</button></h3>
           <p>Certification ID: 195078. Globally recognized, best-practice framework untuk merancang, mengelola, dan mengoptimalkan kompleks supply chain dan logistics networks. Fokus pada demand planning, procurement strategy, production planning, logistics operations, dan supply chain integration.</p>
         </div>
+        <dialog class="cscp-certificate-dialog" id="cscp-certificate-dialog" aria-label="CSCP certificate preview">
+          <div class="cscp-certificate-dialog-header">
+            <p>Klik sertifikat untuk membuka verifikasi Credly.</p>
+            <button class="cscp-certificate-dialog-close" type="button" aria-label="Tutup pratinjau sertifikat">&times;</button>
+          </div>
+          <a href="https://www.credly.com/badges/73d7d9c5-1040-4f93-bb4e-8f671920570c/linked_in_profile" target="_blank" rel="noopener noreferrer" aria-label="Buka verifikasi sertifikat CSCP di Credly">
+            <img src="CSCP%20Certificate.jpg" alt="Sertifikat APICS Certified Supply Chain Professional">
+          </a>
+        </dialog>
 
         <div class="skills-grid">
           <div class="skill-card">
@@ -467,5 +485,6 @@
   </footer>
 <script src="assets/search-index.js"></script>
 <script src="assets/site-widgets.js"></script>
+<script src="assets/cscp-certificate.js"></script>
 </body>
 </html>

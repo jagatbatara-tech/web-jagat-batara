@@ -1,0 +1,42 @@
+name: Announce new articles on GitHub Discussions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'studi-kasus/**.md'
+      - 'studi-kasus-en/**.md'
+      - 'supply-chain/**.md'
+      - 'supply-chain-en/**.md'
+      - 'data-storytelling/**.md'
+      - 'data-storytelling-en/**.md'
+      - 'ai/**.md'
+      - 'ai-en/**.md'
+      - 'day-in-my-life/**.md'
+      - 'day-in-my-life-en/**.md'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  discussions: write
+
+jobs:
+  announce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history is needed so the before/after commit diff (used to
+          # find which article files were newly added by this push) works
+          # even across merge commits.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Announce newly added articles as GitHub Discussions
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          BEFORE_SHA: ${{ github.event.before }}
+          AFTER_SHA: ${{ github.sha }}
+        run: node scripts/notify-discussions.js

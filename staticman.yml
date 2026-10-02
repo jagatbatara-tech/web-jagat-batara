@@ -8,11 +8,13 @@
 #      this repository.
 #   2. Register the repo with the public Staticman API (or point
 #      assets/comments.js STATICMAN_ENDPOINT at your own instance).
-#   3. Before merging a comment PR, verify the submitted email exists in your
-#      newsletter subscriber list (Buttondown dashboard) — this enforces the
-#      "must be subscribed to comment" rule.
+#   3. Before merging a comment PR, verify the submitted GitHub username is
+#      actually watching this repo's Discussions (Watch → Custom →
+#      Discussions) — this enforces the "must be subscribed to comment" rule.
+#      GitHub does not expose a public subscriber list, so this check is a
+#      manual, trust-based step by the site owner (see SETUP.md).
 comments:
-  allowedFields: ["name", "email", "message"]
+  allowedFields: ["name", "github", "message"]
   allowedOrigins: ["jagatbatara-tech.github.io"]
   branch: "main"
   commitMessage: "New comment: {fields.name} on {options.slug}"
@@ -20,9 +22,7 @@ comments:
   format: "yaml"
   moderation: true
   path: "comments/{options.collection}/{options.slug}"
-  requiredFields: ["name", "email", "message"]
-  transforms:
-    email: md5
+  requiredFields: ["name", "github", "message"]
   generatedFields:
     date:
       type: date

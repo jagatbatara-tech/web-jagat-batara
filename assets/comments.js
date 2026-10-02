@@ -31,18 +31,18 @@
     heading: 'Comments',
     loading: 'Loading comments…',
     empty: 'No comments yet. Be the first to comment!',
-    name: 'Name', email: 'Email (must match your newsletter subscription)',
+    name: 'Name', github: 'GitHub username (used to confirm your Discussions subscription)',
     message: 'Comment', submit: 'Submit for approval',
-    subscribeRequired: 'I confirm I am subscribed to the newsletter with this email address (required — unsubscribed emails will not be approved).',
+    subscribeRequired: 'I confirm I am subscribed to this repo\'s GitHub Discussions (Watch → Custom → Discussions) with this GitHub account (required — comments from non-subscribers will not be approved).',
     pending: 'Thanks! Your comment was submitted and is pending approval.',
     error: 'Something went wrong submitting your comment. Please try again later.'
   } : {
     heading: 'Komentar',
     loading: 'Memuat komentar…',
     empty: 'Belum ada komentar. Jadilah yang pertama berkomentar!',
-    name: 'Nama', email: 'Email (harus sama dengan email subscribe newsletter)',
+    name: 'Nama', github: 'Username GitHub (dipakai untuk konfirmasi subscribe Discussions)',
     message: 'Komentar', submit: 'Kirim untuk disetujui',
-    subscribeRequired: 'Saya konfirmasi sudah subscribe newsletter dengan email ini (wajib — email yang belum subscribe tidak akan disetujui).',
+    subscribeRequired: 'Saya konfirmasi sudah subscribe GitHub Discussions repo ini (Watch → Custom → Discussions) dengan akun ini (wajib — komentar dari yang belum subscribe tidak akan disetujui).',
     pending: 'Terima kasih! Komentar kamu sudah dikirim dan menunggu persetujuan.',
     error: 'Terjadi kesalahan saat mengirim komentar. Silakan coba lagi nanti.'
   };
@@ -116,7 +116,7 @@
       '<div class="jb-comment-list"><p class="jb-comment-msg">' + t.loading + '</p></div>' +
       '<form class="jb-comment-form">' +
         '<input type="text" name="fields[name]" required placeholder="' + t.name + '">' +
-        '<input type="email" name="fields[email]" required placeholder="' + t.email + '">' +
+        '<input type="text" name="fields[github]" required placeholder="' + t.github + '">' +
         '<textarea name="fields[message]" required placeholder="' + t.message + '"></textarea>' +
         '<label class="jb-checkbox"><input type="checkbox" required> ' + t.subscribeRequired + '</label>' +
         '<input type="hidden" name="options[slug]" value="' + escapeHtml(slug) + '">' +

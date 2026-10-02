@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 /**
  * Generates feed.xml (RSS 2.0) from every article in the Indonesian
- * knowledge-sharing collections. This feed is what a newsletter service
- * (e.g. Buttondown's "RSS-to-email" automation, see SETUP.md) polls in
- * order to automatically email subscribers whenever a new article is
- * published.
+ * knowledge-sharing collections. This feed is a general-purpose syndication
+ * feed for the site (usable by any RSS reader); new-article notifications
+ * to subscribers are handled separately by
+ * .github/workflows/notify-discussions.yml, which posts to GitHub
+ * Discussions instead of relying on a third-party email service.
  *
  * No external dependencies — uses only Node's built-in fs/path modules so
  * it can run in CI without an npm install step.
@@ -13,48 +14,10 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { parseFrontMatter } = require('./lib/front-matter');
+const { SITE_URL, COLLECTIONS } = require('./lib/site-config');
 
-const SITE_URL = 'https://jagatbatara-tech.github.io/web-jagat-batara';
 const ROOT = path.join(__dirname, '..');
-
-const COLLECTIONS = [
-  { folder: 'studi-kasus', page: 'studi-kasus.html' },
-  { folder: 'supply-chain', page: 'supply-chain.html' },
-  { folder: 'data-storytelling', page: 'data-storytelling.html' },
-  { folder: 'ai', page: 'ai.html' },
-  { folder: 'day-in-my-life', page: 'day-in-my-life.html' }
-];
-
-function parseFrontMatter(raw) {
-  const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
-  if (!match) return { fm: {}, body: raw };
-  const fm = {};
-  const lines = match[1].split('\n');
-  let i = 0;
-  while (i < lines.length) {
-    const line = lines[i];
-    const m = line.match(/^([A-Za-z0-9_]+):\s*(.*)$/);
-    if (m) {
-      const key = m[1];
-      let value = m[2].trim();
-      if (value === '>' || value === '|' || value === '>-' || value === '|-') {
-        // Folded/literal block scalar: collect subsequent indented lines.
-        const blockLines = [];
-        i += 1;
-        while (i < lines.length && (lines[i] === '' || /^\s+/.test(lines[i])) && !/^[A-Za-z0-9_]+:/.test(lines[i])) {
-          blockLines.push(lines[i].replace(/^\s+/, ''));
-          i += 1;
-        }
-        fm[key] = blockLines.join(value.startsWith('|') ? '\n' : ' ').trim();
-        continue;
-      }
-      value = value.replace(/^['"]|['"]$/g, '');
-      if (value && value !== '') fm[key] = value;
-    }
-    i += 1;
-  }
-  return { fm: fm, body: match[2] || '' };
-}
 
 function escapeXml(str) {
   return String(str || '').replace(/[&<>"']/g, function (c) {

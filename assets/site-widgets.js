@@ -2,7 +2,9 @@
  * site-widgets.js
  * Injects two site-wide widgets into every page that includes this script:
  *  - a search button + modal (full-text search across all articles)
- *  - a newsletter subscription box (Buttondown-powered, see SETUP.md)
+ *  - a "subscribe" box that links visitors to this repo's GitHub
+ *    Discussions (Announcements category) instead of a 3rd-party
+ *    newsletter service — see SETUP.md for why and how this works.
  *
  * Both widgets are injected via JS so a single <script> include adds them
  * to any page without having to hand-edit every page's markup.
@@ -23,11 +25,10 @@
       searchEmpty: 'Ketik untuk mencari artikel…',
       searchNoResult: 'Tidak ada artikel yang cocok.',
       searchLoading: 'Memuat indeks artikel…',
-      subscribeTitle: '📬 Dapatkan Artikel Terbaru',
-      subscribeCopy: 'Subscribe untuk mendapat notifikasi email setiap ada artikel baru. Anda juga perlu subscribe agar bisa berkomentar di artikel.',
-      subscribePlaceholder: 'Alamat email kamu',
-      subscribeButton: 'Subscribe',
-      subscribeNote: 'Tanpa spam. Berhenti kapan saja.'
+      subscribeTitle: '📬 Dapatkan Notifikasi Artikel Terbaru via GitHub',
+      subscribeCopy: 'Artikel baru diumumkan di tab Discussions repo ini. Klik tombol di bawah, lalu di halaman Discussions pilih "Watch" → "Custom" → centang "Discussions" agar GitHub mengirim notifikasi/email setiap ada artikel baru. Perlu akun GitHub (gratis) — dan Anda juga perlu subscribe seperti ini agar bisa berkomentar di artikel.',
+      subscribeButton: '🔔 Subscribe via GitHub Discussions',
+      subscribeNote: 'Tanpa server atau layanan pihak ketiga — sepenuhnya memakai fitur bawaan GitHub.'
     },
     en: {
       searchPlaceholder: 'Search articles, topics, or keywords…',
@@ -35,17 +36,15 @@
       searchEmpty: 'Start typing to search articles…',
       searchNoResult: 'No matching articles found.',
       searchLoading: 'Loading article index…',
-      subscribeTitle: '📬 Get New Articles by Email',
-      subscribeCopy: 'Subscribe to get an email whenever a new article is published. You also need to subscribe before you can comment on articles.',
-      subscribePlaceholder: 'Your email address',
-      subscribeButton: 'Subscribe',
-      subscribeNote: 'No spam. Unsubscribe anytime.'
+      subscribeTitle: '📬 Get Notified of New Articles via GitHub',
+      subscribeCopy: 'New articles are announced in this repo\'s Discussions tab. Click the button below, then on the Discussions page choose "Watch" → "Custom" → check "Discussions" so GitHub emails/notifies you whenever a new article is posted. Requires a free GitHub account — and you\'ll need to subscribe this way before you can comment on articles.',
+      subscribeButton: '🔔 Subscribe via GitHub Discussions',
+      subscribeNote: 'No server or third-party service — this uses GitHub\'s own built-in features only.'
     }
   }[lang];
 
-  // Buttondown username used for the subscribe form + RSS-to-email automation.
-  // Update this once a real Buttondown (or compatible) account is created — see SETUP.md.
-  const BUTTONDOWN_USERNAME = 'jagatbatara';
+  const REPO = 'jagatbatara-tech/web-jagat-batara';
+  const DISCUSSIONS_URL = 'https://github.com/' + REPO + '/discussions';
 
   function injectStyles() {
     const style = document.createElement('style');
@@ -69,13 +68,9 @@
       .jb-subscribe-box{max-width:900px;margin:40px auto;padding:28px 32px;border-radius:14px;background:linear-gradient(135deg,#004B23 0%,#003318 100%);color:#fff;}
       .jb-subscribe-box h3{margin:0 0 8px;font-size:1.2rem;}
       .jb-subscribe-box p{margin:0 0 16px;color:#D5E8DC;font-size:.92rem;}
-      .jb-subscribe-form{display:flex;gap:10px;flex-wrap:wrap;}
-      .jb-subscribe-form input[type=email]{flex:1;min-width:220px;padding:11px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font:inherit;}
-      .jb-subscribe-form input[type=email]::placeholder{color:#B9D6C3;}
-      .jb-subscribe-form button{padding:11px 20px;border-radius:8px;border:none;background:#F2A65A;color:#1b1203;font-weight:700;cursor:pointer;}
-      .jb-subscribe-form button:hover{opacity:.9;}
+      .jb-subscribe-cta{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:8px;border:none;background:#F2A65A;color:#1b1203;font-weight:700;cursor:pointer;text-decoration:none;}
+      .jb-subscribe-cta:hover{opacity:.9;}
       .jb-subscribe-note{margin-top:10px;font-size:.78rem;color:#9FC6AC;}
-      .jb-subscribe-msg{margin-top:10px;font-size:.85rem;font-weight:600;}
     `;
     document.head.appendChild(style);
   }
@@ -164,11 +159,7 @@
     box.innerHTML =
       '<h3>' + i18n.subscribeTitle + '</h3>' +
       '<p>' + i18n.subscribeCopy + '</p>' +
-      '<form class="jb-subscribe-form" action="https://buttondown.email/api/emails/embed-subscribe/' + BUTTONDOWN_USERNAME + '" method="post" target="popupwindow" ' +
-        'onsubmit="window.open(\'https://buttondown.email/' + BUTTONDOWN_USERNAME + '\', \'popupwindow\')">' +
-        '<input type="email" name="email" required placeholder="' + i18n.subscribePlaceholder + '">' +
-        '<button type="submit">' + i18n.subscribeButton + '</button>' +
-      '</form>' +
+      '<a class="jb-subscribe-cta" href="' + DISCUSSIONS_URL + '" target="_blank" rel="noopener">' + i18n.subscribeButton + '</a>' +
       '<div class="jb-subscribe-note">' + i18n.subscribeNote + '</div>';
     target.appendChild(box);
   }

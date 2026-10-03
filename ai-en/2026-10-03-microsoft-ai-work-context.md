@@ -1,14 +1,14 @@
 ---
 title: "Understanding Microsoft's AI Ecosystem: It's About Context, Not Just the Model"
-kicker: "AI & Digital Transformation"
 date: 2026-10-03T00:00:00.000Z
-summary: >
-  The difference between Microsoft 365 Copilot, GitHub Copilot, Copilot Studio, and Azure AI Foundry is not simply the model they use, but the work context they understand.
+thumbnail: ''
+id_link: ai/2026-10-03-microsoft-ai-work-context
+kicker: AI & Digital Transformation
+summary: The difference between Microsoft 365 Copilot, GitHub Copilot, Copilot Studio, and Azure AI Foundry is not simply the model they use, but the work context they understand.
 tags:
   - AI
   - Microsoft Copilot
   - Digital Transformation
-id_link: "ai/2026-10-03-microsoft-ai-work-context"
 ---
 
 While studying AB-731, I came across a question I found quite interesting. What baffled me was not that Microsoft's AI products were very different, but that they seemed to have so many pieces.
@@ -53,6 +53,6 @@ And maybe that's where I started to understand Microsoft's AI ecosystem.
 
 It's not a matter of which AI is the smartest, but which AI has the most relevant context for the work we're doing.
 
-![Post about work context across Microsoft's AI ecosystem](https://github.com/user-attachments/assets/739af352-c6ff-4c9f-a3a4-d23178216aab)
+![Post about work context across Microsoft's AI ecosystem](/images/1000473533.png)
 
 #AB731 #AITransformationLeader #MicrosoftAI #Microsoft365Copilot #GitHubCopilot #AzureAIFoundry #CopilotStudio #AgenticAI #GenerativeAI #DigitalTransformation #ArtificialIntelligence

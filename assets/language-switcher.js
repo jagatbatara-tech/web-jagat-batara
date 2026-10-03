@@ -23,11 +23,13 @@
   }
 
   const translations = {
-    'Back to Home': 'Kembali ke Beranda',
-    'Back to Archive List': 'Kembali ke Daftar Arsip',
+    '← Back to Home': '← Kembali ke Beranda',
+    '← Back to Archive List': '← Kembali ke Daftar Arsip',
     'Case Studies Archive': 'Arsip Studi Kasus',
     'Supply Chain Archive': 'Arsip Supply Chain',
     'Data Storytelling Archive': 'Arsip Data Storytelling',
+    'Artificial Intelligence': 'Kecerdasan Buatan',
+    'Day in My Life': 'Sehari dalam Hidupku',
     'Loading case studies...': 'Memuat daftar studi kasus...',
     'Loading articles...': 'Memuat daftar artikel...',
     'Loading article...': 'Memuat artikel...',
@@ -36,7 +38,9 @@
     'Failed to load case studies.': 'Gagal memuat arsip studi kasus.',
     'Case Studies | Jagat Batara': 'Studi Kasus | Jagat Batara',
     'Supply Chain | Jagat Batara': 'Supply Chain | Jagat Batara',
-    'Data Storytelling | Jagat Batara': 'Data Storytelling | Jagat Batara'
+    'Data Storytelling | Jagat Batara': 'Penceritaan Data | Jagat Batara',
+    'Artificial Intelligence | Jagat Batara': 'Kecerdasan Buatan | Jagat Batara',
+    'Day in My Life | Jagat Batara': 'Sehari dalam Hidupku | Jagat Batara'
   };
 
   if (currentLang === 'id') {
@@ -80,6 +84,46 @@
     link.href = languageUrl(lang);
     link.textContent = lang.toUpperCase();
     if (currentLang === lang) link.setAttribute('aria-current', 'page');
+    link.addEventListener('click', async (event) => {
+      const post = params.get('post');
+      if (lang === currentLang || homepage || !post || !/^[A-Za-z0-9_-]+\.md$/.test(post)) return;
+
+      event.preventDefault();
+      const sourceFolder = currentLang === 'en' ? base + '-en' : base;
+      const targetFolder = lang === 'en' ? base + '-en' : base;
+      const rawUrl = (folder, file) => 'https://raw.githubusercontent.com/jagatbatara-tech/web-jagat-batara/main/' + folder + '/' + encodeURIComponent(file);
+
+      try {
+        const source = await fetch(rawUrl(sourceFolder, post));
+        if (source.ok) {
+          const match = (await source.text()).match(/^---\s*\n([\s\S]*?)\n---/);
+          let frontMatter = {};
+          if (match && window.jsyaml) {
+            try { frontMatter = window.jsyaml.load(match[1]) || {}; } catch {}
+          }
+
+          const linkKey = currentLang === 'id' ? 'en_link' : 'id_link';
+          const linkedFile = String(frontMatter[linkKey] || '').trim().split('/').pop();
+          const candidates = [linkedFile, post].filter((file, index, all) => file && all.indexOf(file) === index);
+
+          for (const candidate of candidates) {
+            const file = candidate.endsWith('.md') ? candidate : candidate + '.md';
+            if (!/^[A-Za-z0-9_-]+\.md$/.test(file)) continue;
+            const target = await fetch(rawUrl(targetFolder, file));
+            if (!target.ok) continue;
+
+            const url = new URL(window.location.href);
+            url.searchParams.set('post', file);
+            if (lang === 'id') url.searchParams.set('lang', 'id');
+            else url.searchParams.delete('lang');
+            window.location.assign(url.pathname + url.search + url.hash);
+            return;
+          }
+        }
+      } catch {}
+
+      window.location.assign(link.href);
+    });
     switcher.appendChild(link);
   });
 

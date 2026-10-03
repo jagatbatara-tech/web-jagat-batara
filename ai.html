@@ -93,13 +93,13 @@
           const heroStatsHtml = renderStatGrid(fm.hero_stats, 'stats', 'stat');
           const badgesHtml = (fm.tags && fm.tags.length) ? ('<div class="badges">' + fm.tags.map(function(t){ return '<span class="badge">' + t + '</span>'; }).join('') + '</div>') : '';
           const hasRichFields = fm.kicker || fm.summary || (fm.tags && fm.tags.length) || (fm.hero_stats && fm.hero_stats.length);
-          const heroHtml = hasRichFields ? ('<div class="hero">' + (fm.kicker ? ('<div class="kicker">' + fm.kicker + '</div>') : '') + '<h1>' + (fm.title || 'Artificial Intelligence') + '</h1>' + (fm.summary ? ('<p class="lead">' + fm.summary + '</p>') : '') + badgesHtml + heroStatsHtml + '</div>') : '';
+          const heroHtml = hasRichFields ? ('<div class="hero">' + (fm.kicker ? ('<div class="kicker">' + fm.kicker + '</div>') : '') + '<h1>' + (fm.title || (currentLang === 'id' ? 'Kecerdasan Buatan' : 'Artificial Intelligence')) + '</h1>' + (fm.summary ? ('<p class="lead">' + fm.summary + '</p>') : '') + badgesHtml + heroStatsHtml + '</div>') : '';
           const archHtml = renderFigure(fm.architecture_image, fm.architecture_caption);
           const dashHtml = renderFigure(fm.dashboard_image, fm.dashboard_caption);
           const techHtml = (fm.tech_stack && fm.tech_stack.length) ? ('<h3>' + (currentLang === 'id' ? 'Tools &amp; Teknik' : 'Tools &amp; Techniques') + '</h3>' + renderTechPills(fm.tech_stack)) : '';
           const impactHtml = (fm.impact_summary && fm.impact_summary.length) ? ('<h3>' + (currentLang === 'id' ? 'Ringkasan Dampak' : 'Impact Summary') + '</h3>' + renderStatGrid(fm.impact_summary, 'impact-grid', 'impact-card')) : '';
           const disclaimerHtml = fm.disclaimer ? ('<div class="disclaimer"><strong>' + (currentLang === 'id' ? 'Catatan:' : 'Note:') + '</strong> ' + fm.disclaimer + '</div>') : '';
-          const titleFallback = hasRichFields ? '' : ('<h1>' + (fm.title || 'Artificial Intelligence') + '</h1>');
+          const titleFallback = hasRichFields ? '' : ('<h1>' + (fm.title || (currentLang === 'id' ? 'Kecerdasan Buatan' : 'Artificial Intelligence')) + '</h1>');
           document.getElementById('single-container').innerHTML = heroHtml + '<div class="full-article">' + titleFallback + bodyHtml + archHtml + dashHtml + techHtml + impactHtml + disclaimerHtml + '</div>';
         })
         .catch(function(){ document.getElementById('loading-single').innerText = currentLang === 'id' ? 'Gagal memuat artikel.' : 'Failed to load article.'; });
@@ -110,7 +110,9 @@
           document.getElementById('loading-archive').style.display = 'none';
           const container = document.getElementById('archive-container');
           if(!Array.isArray(files)) throw new Error('Invalid archive response');
-          files.filter(function(f){ return f.name.endsWith('.md'); }).reverse().forEach(function(file){
+          const mdFiles = files.filter(function(f){ return f.name.endsWith('.md'); }).reverse();
+          if(!mdFiles.length){ container.textContent = currentLang === 'id' ? 'Belum ada artikel dalam bahasa ini.' : 'No articles are available in English yet.'; return; }
+          mdFiles.forEach(function(file){
             fetch(file.download_url)
               .then(function(res){ return res.text(); })
               .then(function(raw){

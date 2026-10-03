@@ -193,7 +193,12 @@
           const container = document.getElementById('archive-container');
 
           if (!Array.isArray(files)) throw new Error('Invalid archive response');
-          files.filter(function(f){ return f.name.endsWith('.md'); }).reverse().forEach(function(file){
+          const mdFiles = files.filter(function(f){ return f.name.endsWith('.md'); }).reverse();
+          if (!mdFiles.length) {
+            container.textContent = currentLang === 'id' ? 'Belum ada artikel dalam bahasa ini.' : 'No articles are available in English yet.';
+            return;
+          }
+          mdFiles.forEach(function(file){
             fetch(file.download_url)
               .then(function(res){ return res.text(); })
               .then(function(raw){

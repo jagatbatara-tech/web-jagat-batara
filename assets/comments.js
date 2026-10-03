@@ -21,7 +21,7 @@
 
   const params = new URLSearchParams(window.location.search);
   const postFile = params.get('post');
-  const lang = params.get('lang') === 'en' ? 'en' : 'id';
+  const lang = params.get('lang') === 'id' ? 'id' : 'en';
   if (!postFile) return; // only render on single-article view
 
   const slug = postFile.replace(/\.md$/, '').replace(/[^A-Za-z0-9_-]/g, '');

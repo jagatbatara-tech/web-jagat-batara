@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,22 +58,22 @@
 <body>
   <div class="container">
     <div id="archive-view">
-      <a href="index.html" class="nav-back">&larr; Kembali ke Beranda</a>
-      <h1 class="page-title">Story Telling with Data</h1>
-      <div id="loading-archive" class="loading">Memuat daftar artikel...</div>
+      <a href="index.html" class="nav-back">&larr; Back to Home</a>
+      <h1 class="page-title">Data Storytelling Archive</h1>
+      <div id="loading-archive" class="loading">Loading articles...</div>
       <div id="archive-container"></div>
     </div>
     <div id="single-view" class="hidden">
-      <a href="data-storytelling.html" class="nav-back">&larr; Kembali ke Daftar Arsip</a>
-      <div id="loading-single" class="loading">Memuat artikel...</div>
+      <a href="data-storytelling.html" class="nav-back">&larr; Back to Archive List</a>
+      <div id="loading-single" class="loading">Loading article...</div>
       <div id="single-container"></div>
     </div>
   </div>
   <script>
     const REPO = 'jagatbatara-tech/web-jagat-batara';
     const BRANCH = 'main';
-    const currentLang = new URLSearchParams(window.location.search).get('lang');
-    const FOLDER = currentLang === 'en' ? 'data-storytelling-en' : 'data-storytelling';
+    const currentLang = new URLSearchParams(window.location.search).get('lang') === 'id' ? 'id' : 'en';
+    const FOLDER = currentLang === 'id' ? 'data-storytelling' : 'data-storytelling-en';
     const listUrl = 'https://api.github.com/repos/' + REPO + '/contents/' + FOLDER;
     function parsePost(raw){ const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/); if(!match) return {fm:{}, body:raw}; let fm={}; try { fm = jsyaml.load(match[1]) || {}; } catch (e) { console.error('YAML parse error',e); } return {fm:fm, body:match[2]||''}; }
     function renderTechPills(items){ if(!items||!items.length) return ''; return '<div class="tech-grid">' + items.map(function(i){ return '<span class="tech-pill">' + i + '</span>'; }).join('') + '</div>'; }
@@ -96,13 +96,13 @@
           const heroHtml = hasRichFields ? ('<div class="hero">' + (fm.kicker ? ('<div class="kicker">' + fm.kicker + '</div>') : '') + '<h1>' + (fm.title || 'Story Telling with Data') + '</h1>' + (fm.summary ? ('<p class="lead">' + fm.summary + '</p>') : '') + badgesHtml + heroStatsHtml + '</div>') : '';
           const archHtml = renderFigure(fm.architecture_image, fm.architecture_caption);
           const dashHtml = renderFigure(fm.dashboard_image, fm.dashboard_caption);
-          const techHtml = (fm.tech_stack && fm.tech_stack.length) ? ('<h3>Tools &amp; Techniques</h3>' + renderTechPills(fm.tech_stack)) : '';
-          const impactHtml = (fm.impact_summary && fm.impact_summary.length) ? ('<h3>Impact Summary</h3>' + renderStatGrid(fm.impact_summary, 'impact-grid', 'impact-card')) : '';
-          const disclaimerHtml = fm.disclaimer ? ('<div class="disclaimer"><strong>Catatan:</strong> ' + fm.disclaimer + '</div>') : '';
+          const techHtml = (fm.tech_stack && fm.tech_stack.length) ? ('<h3>' + (currentLang === 'id' ? 'Tools &amp; Teknik' : 'Tools &amp; Techniques') + '</h3>' + renderTechPills(fm.tech_stack)) : '';
+          const impactHtml = (fm.impact_summary && fm.impact_summary.length) ? ('<h3>' + (currentLang === 'id' ? 'Ringkasan Dampak' : 'Impact Summary') + '</h3>' + renderStatGrid(fm.impact_summary, 'impact-grid', 'impact-card')) : '';
+          const disclaimerHtml = fm.disclaimer ? ('<div class="disclaimer"><strong>' + (currentLang === 'id' ? 'Catatan:' : 'Note:') + '</strong> ' + fm.disclaimer + '</div>') : '';
           const titleFallback = hasRichFields ? '' : ('<h1>' + (fm.title || 'Story Telling with Data') + '</h1>');
           document.getElementById('single-container').innerHTML = heroHtml + '<div class="full-article">' + titleFallback + bodyHtml + archHtml + dashHtml + techHtml + impactHtml + disclaimerHtml + '</div>';
         })
-        .catch(function(){ document.getElementById('loading-single').innerText = 'Gagal memuat artikel.'; });
+        .catch(function(){ document.getElementById('loading-single').innerText = currentLang === 'id' ? 'Gagal memuat artikel.' : 'Failed to load article.'; });
     } else {
       fetch(listUrl)
         .then(function(res){ if(res.status===404) return []; if(!res.ok) throw new Error('Failed to load archive'); return res.json(); })
@@ -110,17 +110,19 @@
           document.getElementById('loading-archive').style.display = 'none';
           const container = document.getElementById('archive-container');
           if(!Array.isArray(files)) throw new Error('Invalid archive response');
-          files.filter(function(f){ return f.name.endsWith('.md'); }).reverse().forEach(function(file){
+          const mdFiles = files.filter(function(f){ return f.name.endsWith('.md'); }).reverse();
+          if(!mdFiles.length){ container.textContent = currentLang === 'id' ? 'Belum ada artikel dalam bahasa ini.' : 'No articles are available in English yet.'; return; }
+          mdFiles.forEach(function(file){
             fetch(file.download_url)
               .then(function(res){ return res.text(); })
               .then(function(raw){
                 const parsed = parsePost(raw); const fm = parsed.fm; const body = parsed.body; const title = fm.title || 'Story Telling with Data'; const kicker = fm.kicker || ''; let excerpt = fm.summary || body.replace(/[#*`_>\[\]]/g, '').trim(); excerpt = excerpt.length > 200 ? excerpt.substring(0, 200) + '...' : excerpt;
-                const card = document.createElement('a'); card.href = '?post=' + encodeURIComponent(file.name) + (urlParams.get('lang') === 'en' ? '&lang=en' : ''); card.className = 'archive-card'; card.innerHTML = (kicker ? ('<div class="archive-kicker">' + kicker + '</div>') : '') + '<div class="archive-title">' + title + '</div>' + '<div class="archive-excerpt">' + excerpt + '</div>';
+                const card = document.createElement('a'); card.href = '?post=' + encodeURIComponent(file.name) + (currentLang === 'id' ? '&lang=id' : ''); card.className = 'archive-card'; card.innerHTML = (kicker ? ('<div class="archive-kicker">' + kicker + '</div>') : '') + '<div class="archive-title">' + title + '</div>' + '<div class="archive-excerpt">' + excerpt + '</div>';
                 container.appendChild(card);
               });
           });
         })
-        .catch(function(){ document.getElementById('loading-archive').innerText = 'Gagal memuat arsip.'; });
+        .catch(function(){ document.getElementById('loading-archive').innerText = currentLang === 'id' ? 'Gagal memuat arsip.' : 'Failed to load archive.'; });
     }
   </script>
 <script src="assets/language-switcher.js"></script>

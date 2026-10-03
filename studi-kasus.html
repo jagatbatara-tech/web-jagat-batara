@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Studi Kasus | Jagat Batara</title>
+  <title>Case Studies | Jagat Batara</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
@@ -77,15 +77,15 @@
 <body>
   <div class="container">
     <div id="archive-view">
-      <a id="archive-home-link" href="index.html" class="nav-back">&larr; Kembali ke Beranda</a>
-      <h1 class="page-title">Arsip Studi Kasus</h1>
-      <div id="loading-archive" class="loading">Memuat daftar studi kasus...</div>
+      <a id="archive-home-link" href="index.html" class="nav-back">&larr; Back to Home</a>
+      <h1 class="page-title">Case Studies Archive</h1>
+      <div id="loading-archive" class="loading">Loading case studies...</div>
       <div id="archive-container"></div>
     </div>
 
     <div id="single-view" class="hidden">
-      <a id="single-archive-link" href="studi-kasus.html" class="nav-back">&larr; Kembali ke Daftar Arsip</a>
-      <div id="loading-single" class="loading">Memuat artikel...</div>
+      <a id="single-archive-link" href="studi-kasus.html" class="nav-back">&larr; Back to Archive List</a>
+      <div id="loading-single" class="loading">Loading article...</div>
       <div id="single-container"></div>
     </div>
   </div>
@@ -100,11 +100,11 @@
       translateBody: async (body) => body
     };
     const currentLang = Bilingual.currentLang;
-    const FOLDER = currentLang === 'en' ? 'studi-kasus-en' : 'studi-kasus';
+    const FOLDER = currentLang === 'id' ? 'studi-kasus' : 'studi-kasus-en';
     const listUrl = 'https://api.github.com/repos/' + REPO + '/contents/' + FOLDER;
-    const languageQuery = currentLang === 'en' ? '?lang=en' : '';
+    const languageQuery = currentLang === 'id' ? '?lang=id' : '';
 
-    document.getElementById('archive-home-link').href = currentLang === 'en' ? 'index-en.html' : 'index.html';
+    document.getElementById('archive-home-link').href = currentLang === 'id' ? 'index-id.html' : 'index.html';
     document.getElementById('single-archive-link').href = 'studi-kasus.html' + languageQuery;
 
     function parsePost(raw) {
@@ -169,7 +169,7 @@
           const heroHtml = hasRichFields ? (
             '<div class="hero">' +
               (fm.kicker ? ('<div class="kicker">' + fm.kicker + '</div>') : '') +
-              '<h1>' + (fm.title || 'Studi Kasus') + '</h1>' +
+              '<h1>' + (fm.title || (currentLang === 'id' ? 'Studi Kasus' : 'Case Studies')) + '</h1>' +
               (fm.summary ? ('<p class="lead">' + fm.summary + '</p>') : '') +
               badgesHtml +
               heroStatsHtml +
@@ -178,28 +178,32 @@
           const archHtml = renderFigure(fm.architecture_image, fm.architecture_caption);
           const dashHtml = renderFigure(fm.dashboard_image, fm.dashboard_caption);
           const techHtml = (fm.tech_stack && fm.tech_stack.length)
-            ? ('<h3>Tools &amp; Techniques</h3>' + renderTechPills(fm.tech_stack)) : '';
+            ? ('<h3>' + (currentLang === 'id' ? 'Tools &amp; Teknik' : 'Tools &amp; Techniques') + '</h3>' + renderTechPills(fm.tech_stack)) : '';
           const impactHtml = (fm.impact_summary && fm.impact_summary.length)
-            ? ('<h3>Impact Summary</h3>' + renderStatGrid(fm.impact_summary, 'impact-grid', 'impact-card')) : '';
+            ? ('<h3>' + (currentLang === 'id' ? 'Ringkasan Dampak' : 'Impact Summary') + '</h3>' + renderStatGrid(fm.impact_summary, 'impact-grid', 'impact-card')) : '';
           const disclaimerHtml = fm.disclaimer
-            ? ('<div class="disclaimer"><strong>Catatan:</strong> ' + fm.disclaimer + '</div>') : '';
+            ? ('<div class="disclaimer"><strong>' + (currentLang === 'id' ? 'Catatan:' : 'Note:') + '</strong> ' + fm.disclaimer + '</div>') : '';
 
-          const titleFallback = hasRichFields ? '' : ('<h1>' + (fm.title || 'Studi Kasus') + '</h1>');
+          const titleFallback = hasRichFields ? '' : ('<h1>' + (fm.title || (currentLang === 'id' ? 'Studi Kasus' : 'Case Studies')) + '</h1>');
 
           document.getElementById('single-container').innerHTML =
             heroHtml +
             '<div class="full-article">' + titleFallback + bodyHtml + archHtml + dashHtml + techHtml + impactHtml + disclaimerHtml + '</div>';
         })
-        .catch(function(){ document.getElementById('loading-single').innerText = 'Gagal memuat artikel.'; });
+        .catch(function(){ document.getElementById('loading-single').innerText = currentLang === 'id' ? 'Gagal memuat artikel.' : 'Failed to load article.'; });
 
     } else {
       fetch(listUrl)
-        .then(function(res){ return res.json(); })
+        .then(function(res){ if (res.status === 404) return []; if (!res.ok) throw new Error('Failed to load archive'); return res.json(); })
         .then(async function(files){
           document.getElementById('loading-archive').style.display = 'none';
           const container = document.getElementById('archive-container');
 
           const mdFiles = files.filter(function(f){ return f.name.endsWith('.md'); }).reverse();
+          if (!mdFiles.length) {
+            container.textContent = currentLang === 'id' ? 'Belum ada artikel dalam bahasa ini.' : 'No articles are available in English yet.';
+            return;
+          }
 
           for (const file of mdFiles) {
             const fileRes = await fetch(file.download_url);
@@ -214,7 +218,7 @@
             excerpt = excerpt.length > 200 ? excerpt.substring(0, 200) + '...' : excerpt;
 
             const card = document.createElement('a');
-            card.href = '?post=' + encodeURIComponent(file.name) + (currentLang === 'en' ? '&lang=en' : '');
+            card.href = '?post=' + encodeURIComponent(file.name) + (currentLang === 'id' ? '&lang=id' : '');
             card.className = 'archive-card';
             card.innerHTML =
               (kicker ? ('<div class="archive-kicker">' + kicker + '</div>') : '') +
@@ -223,7 +227,7 @@
             container.appendChild(card);
           }
         })
-        .catch(function(){ document.getElementById('loading-archive').innerText = 'Gagal memuat arsip.'; });
+        .catch(function(){ document.getElementById('loading-archive').innerText = currentLang === 'id' ? 'Gagal memuat arsip.' : 'Failed to load archive.'; });
     }
   </script>
 <script src="assets/language-switcher.js"></script>

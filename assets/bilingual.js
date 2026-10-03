@@ -1,6 +1,6 @@
 window.Bilingual = (() => {
-  const DEFAULT_LANG = 'id';
-  const currentLang = new URLSearchParams(window.location.search).get('lang') || DEFAULT_LANG;
+  const DEFAULT_LANG = 'en';
+  const currentLang = new URLSearchParams(window.location.search).get('lang') === 'id' ? 'id' : DEFAULT_LANG;
 
   async function translateText(text) {
     if (!text || currentLang !== 'en') return text;

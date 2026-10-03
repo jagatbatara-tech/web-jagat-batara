@@ -60,7 +60,7 @@
           body: stripMarkdown(parsed.body).slice(0, 4000),
           date: fm.date || '',
           collectionLabel: lang === 'en' ? collection.labelEn : collection.labelId,
-          url: collection.page + '?post=' + encodeURIComponent(file.name) + (lang === 'en' ? '&lang=en' : '')
+          url: collection.page + '?post=' + encodeURIComponent(file.name) + (lang === 'id' ? '&lang=id' : '')
         });
       } catch (e) { /* skip unreadable file */ }
     }));

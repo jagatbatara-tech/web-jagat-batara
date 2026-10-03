@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -77,15 +77,15 @@
   <div class="container">
 
     <div id="archive-view">
-      <a href="index.html" class="nav-back">&larr; Kembali ke Beranda</a>
-      <h1 class="page-title">Arsip Supply Chain</h1>
-      <div id="loading-archive" class="loading">Memuat daftar artikel...</div>
+      <a href="index.html" class="nav-back">&larr; Back to Home</a>
+      <h1 class="page-title">Supply Chain Archive</h1>
+      <div id="loading-archive" class="loading">Loading articles...</div>
       <div id="archive-container"></div>
     </div>
 
     <div id="single-view" class="hidden">
-      <a href="supply-chain.html" class="nav-back">&larr; Kembali ke Daftar Arsip</a>
-      <div id="loading-single" class="loading">Memuat artikel...</div>
+      <a href="supply-chain.html" class="nav-back">&larr; Back to Archive List</a>
+      <div id="loading-single" class="loading">Loading article...</div>
       <div id="single-container"></div>
     </div>
 
@@ -94,8 +94,8 @@
   <script>
     const REPO = 'jagatbatara-tech/web-jagat-batara';
     const BRANCH = 'main';
-    const currentLang = new URLSearchParams(window.location.search).get('lang');
-    const FOLDER = currentLang === 'en' ? 'supply-chain-en' : 'supply-chain';
+    const currentLang = new URLSearchParams(window.location.search).get('lang') === 'id' ? 'id' : 'en';
+    const FOLDER = currentLang === 'id' ? 'supply-chain' : 'supply-chain-en';
     const listUrl = 'https://api.github.com/repos/' + REPO + '/contents/' + FOLDER;
 
     function parsePost(raw) {
@@ -167,11 +167,11 @@
           const archHtml = renderFigure(fm.architecture_image, fm.architecture_caption);
           const dashHtml = renderFigure(fm.dashboard_image, fm.dashboard_caption);
           const techHtml = (fm.tech_stack && fm.tech_stack.length)
-            ? ('<h3>Tools &amp; Techniques</h3>' + renderTechPills(fm.tech_stack)) : '';
+            ? ('<h3>' + (currentLang === 'id' ? 'Tools &amp; Teknik' : 'Tools &amp; Techniques') + '</h3>' + renderTechPills(fm.tech_stack)) : '';
           const impactHtml = (fm.impact_summary && fm.impact_summary.length)
-            ? ('<h3>Impact Summary</h3>' + renderStatGrid(fm.impact_summary, 'impact-grid', 'impact-card')) : '';
+            ? ('<h3>' + (currentLang === 'id' ? 'Ringkasan Dampak' : 'Impact Summary') + '</h3>' + renderStatGrid(fm.impact_summary, 'impact-grid', 'impact-card')) : '';
           const disclaimerHtml = fm.disclaimer
-            ? ('<div class="disclaimer"><strong>Catatan:</strong> ' + fm.disclaimer + '</div>') : '';
+            ? ('<div class="disclaimer"><strong>' + (currentLang === 'id' ? 'Catatan:' : 'Note:') + '</strong> ' + fm.disclaimer + '</div>') : '';
 
           const titleFallback = hasRichFields ? '' : ('<h1>' + (fm.title || 'Supply Chain') + '</h1>');
 
@@ -179,7 +179,7 @@
             heroHtml +
             '<div class="full-article">' + titleFallback + bodyHtml + archHtml + dashHtml + techHtml + impactHtml + disclaimerHtml + '</div>';
         })
-        .catch(function(){ document.getElementById('loading-single').innerText = 'Gagal memuat artikel.'; });
+        .catch(function(){ document.getElementById('loading-single').innerText = currentLang === 'id' ? 'Gagal memuat artikel.' : 'Failed to load article.'; });
 
     } else {
       fetch(listUrl)
@@ -206,7 +206,7 @@
                 excerpt = excerpt.length > 200 ? excerpt.substring(0, 200) + '...' : excerpt;
 
                 const card = document.createElement('a');
-                card.href = '?post=' + encodeURIComponent(file.name) + (new URLSearchParams(window.location.search).get('lang') === 'en' ? '&lang=en' : '');
+                card.href = '?post=' + encodeURIComponent(file.name) + (currentLang === 'id' ? '&lang=id' : '');
                 card.className = 'archive-card';
                 card.innerHTML =
                   (kicker ? ('<div class="archive-kicker">' + kicker + '</div>') : '') +
@@ -216,7 +216,7 @@
               });
           });
         })
-        .catch(function(){ document.getElementById('loading-archive').innerText = 'Gagal memuat arsip.'; });
+        .catch(function(){ document.getElementById('loading-archive').innerText = currentLang === 'id' ? 'Gagal memuat arsip.' : 'Failed to load archive.'; });
     }
   </script>
 <script src="assets/language-switcher.js"></script>

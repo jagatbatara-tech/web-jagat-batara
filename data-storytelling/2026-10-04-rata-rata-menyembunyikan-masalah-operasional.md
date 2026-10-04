@@ -21,7 +21,7 @@ Bayangkan target waktu pengiriman adalah 10 hari. Laporan bulanan menunjukkan ra
 
 Bagaimana mungkin rata-ratanya tetap 9 hari? Sejumlah kecil pengiriman yang sangat cepat—misalnya tiba dalam 1 atau 2 hari—dapat menarik rata-rata turun dan menutupi pengalaman 30% pengiriman lainnya. Sebagian pengiriman itu mungkin terlambat jauh lebih lama; rata-rata saja tidak memberi tahu kita seberapa parah atau di mana keterlambatan terjadi.
 
-![Ilustrasi perbedaan laporan KPI berdasarkan rata-rata dan data operasional sebenarnya](https://github.com/user-attachments/assets/e8493566-72a4-4018-b67d-f36ae6d95ecd)
+![Ilustrasi perbedaan laporan KPI berdasarkan rata-rata dan data operasional sebenarnya](https://github.com/user-attachments/assets/6f325a24-a048-4861-a404-d7e090e6083e)
 
 ## Rata-rata bukan keseluruhan cerita
 

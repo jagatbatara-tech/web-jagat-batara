@@ -21,7 +21,7 @@ Imagine the delivery lead-time target is 10 days. The monthly report shows an av
 
 How can the average still be 9 days? A small number of very fast deliveries—say, arriving in 1 or 2 days—can pull the average down and hide the experience of the other 30%. Some of those shipments may be severely delayed; the average alone cannot tell us how late they were or where the delays occurred.
 
-![Illustration of the difference between an average-based KPI report and actual operational data](https://github.com/user-attachments/assets/e8493566-72a4-4018-b67d-f36ae6d95ecd)
+![Illustration of the difference between an average-based KPI report and actual operational data](https://github.com/user-attachments/assets/6f325a24-a048-4861-a404-d7e090e6083e)
 
 ## The average is not the whole story
 

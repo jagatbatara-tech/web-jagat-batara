@@ -130,6 +130,11 @@ collections:
     fields:
       - {label: "Judul", name: "title", widget: "string"}
       - {label: "Tanggal Publish", name: "date", widget: "datetime"}
+      - label: "Tag"
+        name: "tags"
+        widget: "list"
+        required: false
+        field: {label: "Tag", name: "tag", widget: "string"}
       - {label: "Gambar Cover", name: "thumbnail", widget: "image", required: false}
       - {label: "Link Versi Inggris", name: "en_link", widget: "string", hint: "contoh: data-storytelling-en/2024-01-15-example", required: false}
       - {label: "Isi Artikel", name: "body", widget: "markdown"}
@@ -142,6 +147,11 @@ collections:
     fields:
       - {label: "Title", name: "title", widget: "string"}
       - {label: "Publish Date", name: "date", widget: "datetime"}
+      - label: "Tags"
+        name: "tags"
+        widget: "list"
+        required: false
+        field: {label: "Tag", name: "tag", widget: "string"}
       - {label: "Cover Image", name: "thumbnail", widget: "image", required: false}
       - {label: "Link to Indonesian Version", name: "id_link", widget: "string", hint: "example: data-storytelling/2024-01-15-example", required: false}
       - {label: "Article Content", name: "body", widget: "markdown"}

@@ -1,6 +1,8 @@
 ---
-title: "The “Average”: Corporate’s Favorite Rug for Sweeping Operational Sins Under"
+title: 'The “Average”: Corporate’s Favorite Rug for Sweeping Operational Sins Under'
 date: 2026-10-04T00:00:00.000Z
+thumbnail: ''
+id_link: data-storytelling/2026-10-04-rata-rata-menyembunyikan-masalah-operasional
 tags:
   - DataAnalytics
   - SupplyChain
@@ -10,7 +12,6 @@ tags:
   - OperationsManagement
   - CSCP
   - ContinuousImprovement
-id_link: "data-storytelling/2026-10-04-rata-rata-menyembunyikan-masalah-operasional"
 ---
 
 ## When the average looks safe, but customers are still waiting
@@ -21,7 +22,7 @@ Imagine the delivery lead-time target is 10 days. The monthly report shows an av
 
 How can the average still be 9 days? A small number of very fast deliveries—say, arriving in 1 or 2 days—can pull the average down and hide the experience of the other 30%. Some of those shipments may be severely delayed; the average alone cannot tell us how late they were or where the delays occurred.
 
-![Illustration of the difference between an average-based KPI report and actual operational data](https://github.com/user-attachments/assets/6f325a24-a048-4861-a404-d7e090e6083e)
+![Illustration of the difference between an average-based KPI report and actual operational data](/images/1000397007.jpg)
 
 ## The average is not the whole story
 

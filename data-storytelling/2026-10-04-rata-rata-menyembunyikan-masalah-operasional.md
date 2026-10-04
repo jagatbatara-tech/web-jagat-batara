@@ -1,6 +1,8 @@
 ---
-title: "Angka “Rata-rata”: Karpet Favorit Korporat untuk Menyembunyikan Masalah Operasional"
+title: 'Angka “Rata-rata”: Karpet Favorit Korporat untuk Menyembunyikan Masalah Operasional'
 date: 2026-10-04T00:00:00.000Z
+thumbnail: ''
+en_link: data-storytelling-en/2026-10-04-the-average-hides-operational-problems
 tags:
   - DataAnalytics
   - SupplyChain
@@ -10,7 +12,6 @@ tags:
   - OperationsManagement
   - CSCP
   - ContinuousImprovement
-en_link: "data-storytelling-en/2026-10-04-the-average-hides-operational-problems"
 ---
 
 ## Ketika rata-rata terlihat aman, tetapi pelanggan tetap menunggu
@@ -21,7 +22,7 @@ Bayangkan target waktu pengiriman adalah 10 hari. Laporan bulanan menunjukkan ra
 
 Bagaimana mungkin rata-ratanya tetap 9 hari? Sejumlah kecil pengiriman yang sangat cepat—misalnya tiba dalam 1 atau 2 hari—dapat menarik rata-rata turun dan menutupi pengalaman 30% pengiriman lainnya. Sebagian pengiriman itu mungkin terlambat jauh lebih lama; rata-rata saja tidak memberi tahu kita seberapa parah atau di mana keterlambatan terjadi.
 
-![Ilustrasi perbedaan laporan KPI berdasarkan rata-rata dan data operasional sebenarnya](https://github.com/user-attachments/assets/6f325a24-a048-4861-a404-d7e090e6083e)
+![Ilustrasi perbedaan laporan KPI berdasarkan rata-rata dan data operasional sebenarnya](/images/1000397007.jpg)
 
 ## Rata-rata bukan keseluruhan cerita
 

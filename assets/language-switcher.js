@@ -147,15 +147,15 @@
       gap: 8px;
       align-items: center;
       padding: 8px 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      background: #fff;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
       font: 600 14px/1.2 Inter, sans-serif;
     }
-    .site-language-switcher a { color: #475569; text-decoration: none; }
-    .site-language-switcher a[aria-current="page"] { color: #2E6E73; font-weight: 700; }
-    .site-language-switcher span { color: #94a3b8; }
+    .site-language-switcher a { color: #fff; text-decoration: none; text-shadow: 0 1px 3px rgba(0, 0, 0, .7); }
+    .site-language-switcher a[aria-current="page"] { color: #d4aa61; font-weight: 700; }
+    .site-language-switcher span { color: rgba(255, 255, 255, .75); }
   `;
   document.head.appendChild(style);
   if (!existingSwitcher) document.body.appendChild(switcher);

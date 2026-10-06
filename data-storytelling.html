@@ -115,15 +115,7 @@
           const container = document.getElementById('archive-container');
           if(!Array.isArray(files)) throw new Error('Invalid archive response');
           const mdFiles = files.filter(function(f){ return f.name.endsWith('.md'); }).reverse();
-          const guideCard = document.createElement('a');
-          guideCard.href = 'supply-chain-en/CSCP%20Inventory%20Warehouse%20KPI%20EN.html' + (currentLang === 'id' ? '?lang=id' : '');
-          guideCard.className = 'archive-card';
-          guideCard.innerHTML = '<div class="archive-kicker">' + (currentLang === 'id' ? 'Panduan interaktif · Bahasa Inggris' : 'Interactive guide · English') + '</div>' +
-            '<div class="archive-title">' + (currentLang === 'id' ? 'KPI Persediaan dan Gudang: Panduan Praktis' : 'Inventory and Warehouse KPIs: A Practical Guide') + '</div>' +
-            renderTags(['InventoryManagement', 'WarehouseManagement', 'KPI', 'CSCP'], 'archive-tags') +
-            '<div class="archive-excerpt">' + (currentLang === 'id' ? 'Panduan lengkap dengan rumus, contoh, benchmark, kamus KPI, dan enam kalkulator interaktif.' : 'Full guide with formulas, examples, benchmarks, a KPI dictionary, and six interactive calculators.') + '</div>';
-          container.appendChild(guideCard);
-          if(!mdFiles.length) return;
+          if(!mdFiles.length){ container.textContent = currentLang === 'id' ? 'Belum ada artikel dalam bahasa ini.' : 'No articles are available in English yet.'; return; }
           mdFiles.forEach(function(file){
             fetch(file.download_url)
               .then(function(res){ return res.text(); })

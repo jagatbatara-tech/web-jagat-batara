@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Desain &amp; Optimalisasi Supply Chain — Ringkasan CSCP Modul 2, Bagian A</title>
+  <meta name="description" content="Ringkasan berbahasa Indonesia tentang desain jaringan supply chain, efisiensi dan responsivitas, teknologi, analisis manfaat-biaya, dan kematangan supply chain.">
+  <style>
+    :root{color-scheme:light;--ink:#202a2a;--muted:#5d6868;--green:#17634c;--pale:#edf5f0;--line:#d9e2de;--gold:#e8b65b}
+    *{box-sizing:border-box}
+    body{margin:0;background:#f5f6f3;color:var(--ink);font:16px/1.75 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    header,main,footer{width:min(100% - 36px,1000px);margin:auto}
+    header{padding:44px 0 24px}
+    header p,footer{color:var(--muted)}
+    .eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
+    h1,h2,h3{line-height:1.25}
+    h1{font-size:clamp(2rem,5vw,3.3rem);margin:.35em 0}
+    h2{font-size:1.7rem;margin:2.2em 0 .7em;padding-left:14px;border-left:4px solid var(--gold)}
+    h3{font-size:1.15rem;margin:1.6em 0 .5em;color:var(--green)}
+    a{color:var(--green);font-weight:650}
+    .topline{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+    .summary,.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 26px;margin:20px 0}
+    .summary{background:var(--pale)}
+    .toc{display:flex;flex-wrap:wrap;gap:10px;padding:18px 0 4px}
+    .toc a{padding:7px 11px;border:1px solid var(--line);border-radius:20px;text-decoration:none;background:#fff;font-size:.9rem}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+    .card{padding:17px;background:#fff;border:1px solid var(--line);border-radius:9px}
+    .card b{color:var(--green)}
+    .step{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
+    .step:last-child{border:0}
+    .step b{color:var(--green)}
+    table{width:100%;border-collapse:collapse;background:#fff;font-size:.94rem;margin:18px 0}
+    th,td{text-align:left;vertical-align:top;padding:11px;border:1px solid var(--line)}
+    th{background:var(--pale);color:var(--green)}
+    .scroll{overflow-x:auto}
+    .callout{border-left:4px solid var(--gold);padding:12px 16px;background:#fff8e8;margin:18px 0}
+    .language{font-size:.95rem}
+    footer{padding:32px 0 50px;border-top:1px solid var(--line);margin-top:45px;font-size:.9rem}
+    @media(max-width:620px){header{padding-top:30px}.step{grid-template-columns:1fr;gap:2px}.panel,.summary{padding:18px}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topline">
+      <span class="eyebrow">CSCP Learning System 2024 · Modul 2 · Bagian A</span>
+      <span class="language">Bahasa: Indonesia · <a href="Supply%20Chain%20Design%20%26%20Optimization_EN.html">English version</a></span>
+    </div>
+    <h1>Desain &amp; Optimalisasi Supply Chain</h1>
+    <p>Bagaimana strategi bisnis diterjemahkan menjadi jaringan supply chain, kapan efisiensi atau responsivitas perlu diutamakan, dan bagaimana teknologi dinilai sebagai keputusan bisnis—bukan sekadar proyek TI.</p>
+    <p><a href="../supply-chain.html?lang=id">← Kembali ke arsip Supply Chain</a></p>
+    <nav class="toc" aria-label="Daftar isi">
+      <a href="#ringkasan">Ringkasan</a><a href="#strategi">1 · Strategi dan desain</a>
+      <a href="#kinerja">2 · Efisien, responsif, tangguh</a><a href="#teknologi">3 · Peran TI</a>
+      <a href="#investasi">4 · Manfaat-biaya &amp; ROI</a><a href="#kematangan">5 · Tahap kematangan</a>
+      <a href="#nukleus">6 · Perusahaan inti</a><a href="#diskusi">Pertanyaan diskusi</a>
+    </nav>
+  </header>
+  <main>
+    <section id="ringkasan">
+      <h2>Intisari Bagian A</h2>
+      <div class="grid">
+        <article class="card"><b>01 · Desain mengikuti strategi</b><br>Strategi organisasi mendorong strategi supply chain, lalu desain dan konfigurasi jaringan, hingga sasaran kinerja yang terukur.</article>
+        <article class="card"><b>02 · Tidak semua hal bisa dimaksimalkan</b><br>Efisiensi dan responsivitas saling memiliki trade-off. Keduanya tetap membutuhkan ketahanan.</article>
+        <article class="card"><b>03 · Teknologi harus menciptakan nilai bersih</b><br>Justifikasi TI adalah keputusan bisnis yang menjadi tanggung jawab manajer supply chain, termasuk memperhitungkan biaya tersembunyi.</article>
+        <article class="card"><b>04 · Tahap kematangan tidak dapat dilompati</b><br>Perjalanan dari Tahap 1 ke 5 membutuhkan kepemimpinan, kepercayaan antar mitra, dan sering kali perusahaan inti sebagai penggerak.</article>
+      </div>
+    </section>
+
+    <section id="strategi">
+      <h2>1 · Menerjemahkan strategi menjadi desain</h2>
+      <p>Strategi bersifat menyeluruh dan berjangka panjang. Desain supply chain serta konfigurasi jaringan mengubahnya menjadi keputusan operasional yang konkret.</p>
+      <div class="panel">
+        <div class="step"><b>Langkah 1 · Strategi organisasi</b><span>Bagaimana perusahaan bersaing berdasarkan kapabilitasnya.</span></div>
+        <div class="step"><b>Langkah 2 · Strategi supply chain</b><span>Mendukung dan memungkinkan strategi organisasi.</span></div>
+        <div class="step"><b>Langkah 3 · Desain dan konfigurasi</b><span>Menentukan mitra, fasilitas, produk, moda transportasi, dan sistem informasi.</span></div>
+        <div class="step"><b>Langkah 4 · Sasaran terukur</b><span>Menetapkan target bagi setiap manajer di sepanjang rantai.</span></div>
+      </div>
+      <p>Contohnya, bila perusahaan bersaing dengan harga rendah untuk produk komoditas, supply chain dirancang agar berbiaya serendah mungkin dan terotomasi—bukan agar menjadi yang tercepat atau paling responsif. Dalam kerangka SCOR DS, tahap ini berada pada <em>plan</em>, yang menetapkan arah bagi <em>orchestrate, source, transform, order, fulfill</em>, dan <em>return</em>.</p>
+      <div class="callout">Strategi supply chain dan keputusan desain harus selaras. Hubungannya bukan sekadar “strategi dahulu, keputusan kemudian”; keduanya saling memengaruhi.</div>
+      <h3>Empat ranah keputusan strategis</h3>
+      <ol>
+        <li><b>Pelanggan dan pasar.</b> Tidak ada satu strategi yang cocok untuk semua supply chain. Inditex (Zara), misalnya, mengelola dua rantai berbeda: untuk produk fungsional dan produk fesyen.</li>
+        <li><b>Teknologi.</b> Bandingkan manfaat dengan biaya. Menurut teori kendala (TOC), mempercepat aliran menuju titik kendala tidak memberi nilai tambah.</li>
+        <li><b>Proses dan aliran.</b> Pilih satu atau beberapa proses yang paling penting bagi strategi, lalu ukur dan bandingkan kinerjanya. Aliran proses menunjukkan pihak yang perlu dilibatkan.</li>
+        <li><b>Sumber pasokan.</b> Tentukan apakah aktivitas dilakukan sendiri dengan transaksi langsung atau dialihdayakan. Aktivitas non-inti sering dikontrakkan kepada mitra di lokasi paling sesuai—dekat bahan baku atau pelanggan, maupun karena pertimbangan pajak dan biaya.</li>
+      </ol>
+      <h3>Empat aliran yang menentukan pihak yang terlibat</h3>
+      <ul><li><b>Informasi:</b> pesanan, aktivitas penjualan, dan prakiraan.</li><li><b>Produk:</b> pergerakan barang yang menambah nilai sejak bahan diperoleh.</li><li><b>Kas:</b> pembayaran dan modal kerja.</li><li><b>Arus balik:</b> produk yang dikembalikan, diperbaiki, atau diproduksi ulang.</li></ul>
+      <h3>Konfigurasi jaringan: apa yang dioptimalkan?</h3>
+      <p>Konfigurasi jaringan adalah keputusan strategis mengenai cara pemasok, pabrik, pusat distribusi, dan sumber daya manufaktur disusun. Setiap keputusan dinilai berdasarkan dampaknya terhadap seluruh rantai, bukan hanya satu persoalan.</p>
+      <ul><li>Lokasi pabrik dan kapasitas produksi setiap produk.</li><li>Jumlah, lokasi, kapasitas, dan kapabilitas gudang.</li><li>Transportasi di antara seluruh fasilitas.</li></ul>
+      <p>Dalam kondisi ideal, bahan terus bergerak dan tidak lama mengendap di gudang sampai tiba tepat waktu. Namun, fluktuasi permintaan, kecelakaan, dan cuaca membuat persediaan di sejumlah titik tetap diperlukan.</p>
+      <p>Menambah gudang dapat mendekatkan barang ke pelanggan, memperpendek waktu pengiriman, dan—sampai titik tertentu—menekan biaya transportasi. Di sisi lain, total persediaan dan kebutuhan ruang gudang bertambah. Biaya transportasi dipengaruhi jarak, diskon volume, dan jenis angkutan.</p>
+      <h3>Uji tuntas untuk ekspansi global</h3>
+      <ul><li><b>Pelabuhan dan bandara:</b> ukuran dan mutu fasilitas.</li><li><b>Jalan raya:</b> kondisi dan jangkauan jaringan.</li><li><b>Kereta api:</b> rute yang mengurangi keterlambatan; perbedaan lebar rel dan batas kapasitas dapat menambah waktu tunggu.</li><li><b>Perbatasan:</b> kelengkapan dan beban administrasi.</li></ul>
+    </section>
+
+    <section id="kinerja">
+      <h2>2 · Efisien, responsif, dan tangguh</h2>
+      <p>Organisasi sering harus menyeimbangkan efisiensi (operasi berbiaya rendah) dengan responsivitas. Ketahanan merupakan unsur ketiga yang dibutuhkan kedua jenis rantai tersebut.</p>
+      <p>Responsivitas berarti menanggapi perubahan kebutuhan pelanggan melalui layanan pelanggan dan/atau kelincahan. Dalam SCOR DS, kelincahan diukur dari kemampuan menaikkan atau menurunkan volume produksi tanpa dampak besar pada biaya atau operasi. Karena fokus pelanggan, kelincahan, dan ketahanan memerlukan biaya—misalnya kapasitas cadangan—efisiensi dan responsivitas tidak dapat dimaksimalkan sekaligus, tetapi keduanya tetap penting.</p>
+      <div class="scroll"><table>
+        <thead><tr><th>Karakteristik</th><th>Berfokus pada efisiensi</th><th>Responsif</th></tr></thead>
+        <tbody>
+          <tr><td>Prioritas</td><td>Biaya</td><td>Kecepatan dan fleksibilitas</td></tr>
+          <tr><td>Permintaan</td><td>Stabil, ketidakpastian rendah</td><td>Tidak stabil, ketidakpastian tinggi</td></tr>
+          <tr><td>Kesalahan prakiraan</td><td>Dapat dikelola</td><td>Dapat signifikan</td></tr>
+          <tr><td>Struktur pasar</td><td>Lokasi permintaan dan pemasok jarang berubah</td><td>Beradaptasi; lokasi permintaan dan pemasok dapat berubah</td></tr>
+          <tr><td>Siklus hidup produk</td><td>Panjang</td><td>Pendek</td></tr>
+          <tr><td>Peluncuran produk</td><td>Jarang atau direncanakan jauh-jauh hari</td><td>Lebih sering</td></tr>
+          <tr><td>Variasi produk</td><td>Terbatas</td><td>Lebih beragam</td></tr>
+          <tr><td>Ciri operasi</td><td>Pesanan dipenuhi dari persediaan; prakiraan deret waktu; cocok untuk produksi berdasarkan stok.</td><td>Data pelanggan waktu nyata; beberapa gudang dekat pelanggan; kapasitas cadangan; 3PL cepat; pemasok tangkas; cocok untuk produksi berdasarkan pesanan atau perakitan berdasarkan pesanan.</td></tr>
+          <tr><td>Pola prakiraan</td><td>Berdasarkan permintaan.</td><td>Berdasarkan fleksibilitas sistem dan bantalan kapasitas. Saat volume dan variasi tinggi, prakirakan komponen lalu tunda perakitan akhir.</td></tr>
+        </tbody>
+      </table></div>
+      <p><b>Tingkat layanan</b> adalah ukuran—biasanya berupa persentase—seberapa baik permintaan dipenuhi dari persediaan atau jadwal produksi saat ini, sesuai tanggal dan jumlah pengiriman yang diminta pelanggan.</p>
+      <h3>Studi kasus: Gap Inc.</h3>
+      <ul><li><b>Old Navy · berorientasi biaya:</b> manufaktur dan sumber pasokan di Tiongkok, dengan biaya tenaga kerja dan material yang lebih rendah.</li><li><b>The Gap · trendi, harga menengah:</b> supply chain di Amerika Tengah, tempat kecepatan dan fleksibilitas paling penting.</li><li><b>Banana Republic · kualitas:</b> supply chain di Italia, yang kaya akan kain bermutu dan fesyen berkualitas.</li></ul>
+      <p>Konsekuensinya adalah biaya overhead dan transportasi lebih tinggi serta skala pembelian dan produksi yang lebih kecil dibandingkan satu supply chain. Manfaatnya, jaringan dapat saling mendukung bila salah satunya terganggu.</p>
+      <h3>Ketahanan</h3>
+      <p>ASCM mendefinisikan ketahanan supply chain sebagai kemampuan untuk mengantisipasi gangguan, menyusun rencana pencegahan atau mitigasi, dan/atau memulihkan fungsi supply chain setelah gangguan.</p>
+      <ul><li>Persediaan pengaman.</li><li>Beberapa pemasok, meskipun lebih mahal.</li><li>Pemanfaatan kapasitas yang sengaja dibuat rendah.</li><li>Indikator untuk mendeteksi ancaman.</li><li>Mekanisme untuk merespons dengan cepat dan tepat.</li></ul>
+      <p>Menurut Hau Lee, efisiensi itu perlu tetapi belum cukup. Supply chain juga harus tangkas, adaptif, dan selaras. Rantai yang berfokus pada efisiensi mungkin menghindari inisiatif ketahanan yang paling mahal, tetapi tidak semuanya.</p>
+    </section>
+
+    <section id="teknologi">
+      <h2>3 · TI supply chain: dari data ke tindakan</h2>
+      <p>Sistem informasi bukan sekadar kumpulan data. Manusia dan proses mengubah data menjadi informasi, lalu informasi menjadi tindakan.</p>
+      <p>Menurut definisi ASCM, sistem informasi adalah perangkat keras dan perangkat lunak yang saling terkait, bersama manusia dan proses untuk mengumpulkan, mengolah, dan menyebarkan informasi bagi perencanaan, pengambilan keputusan, serta pengendalian.</p>
+      <p>Teknologi sebaiknya mengotomasi, mengendalikan, dan menstandarkan proses agar orang dapat berfokus pada alasan di balik transaksi, aspek hubungan antarmanusia, dan pengecualian.</p>
+      <h3>Delapan manfaat TI bagi supply chain</h3>
+      <ol><li><b>Kecepatan, kelincahan, dan skalabilitas:</b> pertukaran informasi yang aman antar mitra memungkinkan terbentuknya rantai virtual.</li><li><b>Visibilitas global berbiaya rendah:</b> data dalam jumlah besar dapat mengalir melalui internet dengan biaya rendah.</li><li><b>Mencegah efek bullwhip:</b> data logistik terintegrasi mencegah prakiraan dibuat dari informasi yang tidak lengkap.</li><li><b>Aliran informasi menggantikan aliran persediaan:</b> beralih dari sistem dorong ke tarik dengan data penjualan di titik penjualan secara waktu nyata.</li><li><b>Berbagi pengetahuan:</b> memperkuat kapabilitas strategis dan taktis setiap mitra.</li><li><b>Koordinasi perencanaan:</b> mitra mengejar profitabilitas seluruh rantai, bukan hanya keuntungan masing-masing.</li><li><b>Akurasi data:</b> pemrosesan menyeluruh—data dimasukkan sekali, disimpan di satu tempat, dan digunakan berkali-kali.</li><li><b>Hubungan dan kepercayaan baru:</b> berkurangnya hambatan memudahkan penambahan mitra, sedangkan berbagi informasi waktu nyata memperkuat kepercayaan.</li></ol>
+      <div class="callout"><b>Peringatan dari teori kendala:</b> tidak ada gunanya membeli teknologi mahal untuk mempercepat aliran informasi, bahan, atau pembayaran jika semuanya hanya akan bergerak lebih cepat menuju titik kendala. Teknologi yang tepat harus diterapkan pada proses yang tepat oleh orang yang tepat.</div>
+    </section>
+
+    <section id="investasi">
+      <h2>4 · Analisis manfaat-biaya investasi TI</h2>
+      <p>Investasi TI layak dilakukan hanya jika menghasilkan nilai bersih. Ini adalah keputusan bisnis; kasus bisnisnya menjadi tanggung jawab manajer supply chain, bukan departemen TI.</p>
+      <div class="grid">
+        <article class="card"><h3>Manfaat terukur</h3><p>Biaya pemeliharaan lebih rendah, volume penjualan lebih tinggi, pengurangan pergantian proses, hasil keuangan lebih baik, overhead lebih rendah, dan siklus kas-ke-kas yang lebih pendek.</p></article>
+        <article class="card"><h3>Manfaat tak berwujud</h3><p>Implementasi lebih cepat, retensi pelanggan, layanan pelanggan, visibilitas status pesanan, kepuasan dan efisiensi karyawan, serta penempatan ulang tenaga kerja.</p></article>
+      </div>
+      <p>Perkiraan manfaat tak berwujud sebaiknya disusun melalui konsensus, bukan pendapat satu orang. Dampak terhadap tenaga kerja lebih tepat diposisikan sebagai penempatan ulang, bukan pengurangan jumlah karyawan; perkiraan penghematan dari PHK sering keliru dan merusak semangat kerja.</p>
+      <h3>Tiga kategori biaya</h3>
+      <ol><li><b>Belanja modal:</b> diamortisasi selama perkiraan umur teknologi. Jika periode amortisasi melampaui umur sebenarnya, biaya akan tampak lebih rendah daripada kenyataan.</li><li><b>Biaya proyek satu kali:</b> termasuk biaya tersembunyi seperti meneliti alternatif, perjalanan untuk pelatihan, konversi data, serta produktivitas yang hilang selama masa belajar.</li><li><b>Dukungan berkelanjutan:</b> lisensi atau langganan, pemeliharaan vendor, perbaikan bug, peningkatan versi, pajak aset tetap, dan staf pendukung TI.</li></ol>
+      <h3>Mengapa proyek TI sering melampaui anggaran?</h3>
+      <ul><li>Biaya besar terlewat, terutama biaya dukungan operasional.</li><li>Perkiraan menganggap semua berjalan sesuai rencana tanpa ruang untuk penyimpangan.</li><li>Biaya sengaja dibuat terlalu rendah untuk memperoleh persetujuan proyek.</li><li>Manajemen perubahan atau pelatihan tidak disiapkan sehingga mutu dan penerimaan hasil kerja berisiko.</li></ul>
+      <p>Dua hal yang kerap terlupakan: menurut ASCM, gaji pegawai tetap merupakan biaya tertanam (<em>sunk cost</em>) yang sudah dibayar dan tidak relevan bagi keputusan masa depan, tetapi biaya pengalihan pegawai tersebut ke proyek tetap harus dihitung. Pertimbangkan juga biaya jika proyek tidak dilakukan—misalnya pesaing membangun model bisnis berbasis teknologi baru.</p>
+      <h3>Rumus dan contoh dari modul</h3>
+      <div class="panel">
+        <p><b>Total manfaat selama 5 tahun:</b> $345.000 · <b>Total biaya selama 5 tahun:</b> $259.000</p>
+        <p><b>Rasio manfaat-biaya</b> = total manfaat ÷ total biaya<br>345.000 ÷ 259.000 ≈ 1,33</p>
+        <p><b>ROI</b> = (manfaat − biaya) ÷ biaya<br>(345.000 − 259.000) ÷ 259.000 ≈ 33%</p>
+        <p>Setiap $1 yang diinvestasikan menghasilkan nilai $1,33; nilai bersih yang tercipta adalah 33%.</p>
+      </div>
+      <p>Gunakan jangka waktu analisis yang pendek karena teknologi berisiko menjadi usang.</p>
+    </section>
+
+    <section id="kematangan">
+      <h2>5 · Tahap kematangan supply chain 1–5</h2>
+      <p>Posisi kematangan menentukan teknologi yang sesuai dan hal-hal yang perlu dibenahi terlebih dahulu. Perkembangan antar tahap berlangsung secara evolusioner, bukan dalam satu garis lurus.</p>
+      <div class="scroll"><table>
+        <thead><tr><th>Tahap</th><th>Ciri utama</th><th>Fokus untuk maju</th></tr></thead>
+        <tbody>
+          <tr><td><b>1 · Berbagai disfungsi</b></td><td>Beberapa sistem MRP lama yang terpisah mengikuti batas departemen; komunikasi memakai dokumen dan input ulang; belum ada pemimpin supply chain; kemampuan web minim; status pesanan atau waktu tunggu tidak tersedia tepat waktu; kinerja tidak diukur atau diukur dengan buruk.</td><td>Standarkan proses internal, siapkan kemampuan internet dan perangkat seluler, lakukan penerapan bertahap mulai dari pengadaan dan logistik (biasanya masing-masing memberi penghematan 5–8%); manajemen perubahan wajib dilakukan.</td></tr>
+          <tr><td><b>2 · Perusahaan semi-fungsional</b></td><td>MRP II lengkap; perencanaan terintegrasi lintas fungsi; proses terdokumentasi; KPI selaras dengan tujuan; hubungan eksternal utama melalui penyedia alih daya; penggunaan web masih bersifat fungsional.</td><td>Tunjuk pemimpin supply chain berpengalaman dalam integrasi eksternal dengan dukungan eksekutif; mulai dari perubahan yang tidak mengganggu kinerja pasar, seperti penggabungan pembelian untuk memperoleh diskon volume; terapkan strategi ramping untuk transportasi, gudang, persediaan, dan peralatan.</td></tr>
+          <tr><td><b>3 · Perusahaan terintegrasi</b></td><td>Perencanaan terintegrasi dari satu titik ke titik lain hingga perusahaan eksternal; berbagi informasi hampir waktu nyata; prakiraan kolaboratif dengan pelanggan dan pemasok tingkat pertama; ERP dan mungkin CRM/SRM; S&amp;OP.</td><td>Atasi resistansi budaya (“gagasan dari luar lebih buruk”) dan teknis (khawatir kehilangan data atau sulit menghubungkan sistem lama). Dibutuhkan pemimpin unit bisnis visioner bersama pemimpin supply chain dan kepala TI.</td></tr>
+          <tr><td><b>4 · Perusahaan diperluas</b></td><td>Jaringan pasokan; e-commerce; aliran informasi terotomasi; CPFR dan VMI; kontrak berbagi risiko dan imbal hasil; bursa publik atau privat; fungsi perusahaan virtual.</td><td>Kepemimpinan eksekutif berkelanjutan, keahlian manusia dan teknologi, sistem pengukuran kinerja terintegrasi, serta perangkat lunak yang adaptif dan dapat diskalakan.</td></tr>
+          <tr><td><b>5 · Supply chain terorkestrasi</b></td><td>Tim lintas organisasi dan lintas fungsi; manajemen perubahan matang; visibilitas menyeluruh; otomasi pekerjaan berulang agar orang berfokus pada pengecualian dan hubungan; analitik prediktif; penelusuran sampai tingkat pemasok 2 dan 3; standar keamanan siber dipatuhi semua mitra; teknologi menciptakan keunggulan kompetitif.</td><td>Pertahankan keunggulan melalui optimalisasi dan inovasi tanpa henti.</td></tr>
+        </tbody>
+      </table></div>
+      <p>Tabel kapabilitas di modul mencakup internet, integrasi, perencanaan supply chain, penjadwalan produksi, integrasi pemasok, dan pengiriman pelanggan—dari MRP, email, dan telepon dasar pada Tahap 1 hingga CTP, VMI, dan analitik berbasis data pada Tahap 4–5.</p>
+      <h3>Aturan penting dalam kematangan</h3>
+      <ul><li>Tahap tidak dapat dilompati; kolaborasi tim lintas perusahaan berkembang melalui pengalaman.</li><li>Mayoritas kapabilitas pada suatu tahap harus tersedia. ERP dan WMS saja tidak cukup untuk naik tahap.</li><li>Unit terlemah menjadi titik kendala. Divisi atau supply chain dalam satu organisasi dapat berada di tahap yang berbeda.</li><li>Staf sering terlalu optimistis menilai tahap organisasinya sendiri, sehingga menghambat perbaikan.</li><li>Banyak perusahaan terhenti di tengah jalan. Manfaat integrasi internal mudah terlihat, sedangkan integrasi eksternal membutuhkan lompatan kepercayaan yang lebih sulit.</li></ul>
+      <h3>Enam langkah menyusun strategi peningkatan</h3>
+      <ol><li>Tentukan sasaran dan kondisi akhir supply chain yang diinginkan.</li><li>Bentuk tim di dalam dan lintas perusahaan.</li><li>Atur proses operasional supply chain dan misi TI.</li><li>Rancang perubahan dengan jadwal ketat untuk semua pihak; ukur hasil dan berikan umpan balik.</li><li>Jelaskan proses beserta seluruh unsurnya.</li><li>Bangun infrastruktur teknis yang mendukung.</li></ol>
+      <p>Perencanaan dilakukan secara kolaboratif dan terpusat, sedangkan pelaksanaan berlangsung secara terdesentralisasi. Kemitraan tunggal sering menjadi titik awal untuk mencapai Tahap 4.</p>
+    </section>
+
+    <section id="nukleus">
+      <h2>6 · Perusahaan inti dan tim lintas fungsi</h2>
+      <p>Perpindahan antar tahap biasanya difasilitasi atau diorkestrasi oleh <b>perusahaan inti</b> (<em>nucleus firm</em> atau <em>channel master</em>): nama yang paling dikenal dalam kemitraan, atau nama yang tercantum pada produk, sehingga pada akhirnya bertanggung jawab atas kepuasan pelanggan.</p>
+      <h3>Peran perusahaan inti</h3>
+      <ul><li>Menjadi penggerak inisiatif.</li><li>Menghubungi calon mitra.</li><li>Melakukan audit teknologi.</li><li>Membentuk tim bersama mitra berkualifikasi lintas fungsi dan perusahaan.</li><li>Mengukur, memantau, dan mengelola supply chain lintas perusahaan agar terasa menyatu.</li></ul>
+      <h3>Tim yang lazim dibentuk</h3>
+      <p>Tim eksekutif, teknologi (dibentuk lebih dahulu), pembelian, produksi, penjualan, persediaan, dan pengiriman.</p>
+      <p>Tim teknologi dibentuk pertama karena cara menghubungkan sistem harus disepakati dan koneksi perlu dibangun sebelum tim lain dapat bergerak melampaui tahap konseptual. Anggotanya perlu mencakup staf TI umum—bukan hanya spesialis teknologi supply chain—untuk keahlian keamanan siber dan jaringan.</p>
+      <div class="grid">
+        <article class="card"><b>Tim eksekutif</b><br>Dipimpin perusahaan inti; menentukan laju dan sasaran strategis kolaborasi serta mengkaji strategi penetrasi pasar bersama.</article>
+        <article class="card"><b>Tim teknologi</b><br>Mengkaji kebutuhan basis data, jaringan, perangkat lunak, konfigurasi, komunikasi, dan keamanan; mencari jenis informasi yang memberi keuntungan bersama.</article>
+        <article class="card"><b>Tim pembelian, produksi, dan penjualan</b><br>Menggabungkan daya beli, memperbaiki manufaktur secara kolaboratif dan bertahap, serta mencari sinergi pemasaran, penjualan, dan layanan pelanggan.</article>
+        <article class="card"><b>Tim persediaan</b><br>Menentukan jumlah persediaan keseluruhan dan perputarannya untuk menunjukkan manfaat kolaborasi.</article>
+        <article class="card"><b>Tim pengiriman</b><br>Membandingkan ruang total dengan persediaan aktual; menyepakati praktik terbaik logistik, pemanfaatan aset, JIT, dan persediaan pengaman jaringan.</article>
+      </div>
+      <p>Hubungan eksternal berkembang melalui rapat kolaborasi → proyek percontohan → tim tetap atau berbasis proyek. Setelah proyek konektivitas awal selesai, jaringan baru mulai memasuki Tahap 3.</p>
+    </section>
+
+    <section id="diskusi">
+      <h2>Pertanyaan refleksi untuk organisasi Anda</h2>
+      <p>Pertanyaan berikut diambil dari Bagian A sebagai bahan diskusi tim. Jawabannya bergantung pada situasi masing-masing organisasi dan sebaiknya didukung fakta, bukan persepsi.</p>
+      <ol><li><b>Strategi dan desain:</b> apakah strategi organisasi lebih mengutamakan efisiensi atau responsivitas? Apakah desain jaringan dan pilihan sumber pasokan saat ini selaras dengannya?</li><li><b>Evaluasi menyeluruh:</b> keputusan konfigurasi mana—lokasi fasilitas, kapasitas, atau transportasi—yang masih dinilai per fungsi dan belum berdasarkan dampaknya pada seluruh rantai?</li><li><b>Lokasi titik kendala:</b> di mana titik kendala sebenarnya? Apakah teknologi yang direncanakan mengatasinya atau hanya mempercepat aliran menuju titik kendala yang sama?</li><li><b>Kasus bisnis TI:</b> biaya apa yang biasanya terlewat—dukungan operasional, manajemen perubahan dan pelatihan, atau biaya tidak menjalankan proyek? Apakah manfaat tak berwujud diperkirakan melalui konsensus atau pendapat satu orang?</li><li><b>Posisi kematangan:</b> berdasarkan kapabilitas yang benar-benar ada, organisasi atau unit Anda berada di tahap mana? Siapa yang menilainya dan seberapa besar risiko penilaian yang terlalu optimistis?</li></ol>
+    </section>
+    <aside class="panel"><b>Sumber dan batasan.</b> Halaman ini merupakan ringkasan orisinal APICS/ASCM CSCP Learning System 2024, versi 5.2, Modul 2 (Global Supply Chain Networks), Bagian A. Halaman ini bukan salinan teks APICS dan tidak menggantikan materi resmi. Materi aslinya dilindungi hak cipta APICS/ASCM. Matriks jenis supply chain dan produk (Exhibit 2-2) berupa gambar pada sumber, sehingga tabel perbandingan dibangun dari teks. Angka manfaat-biaya berasal dari teks modul. Halaman ini tidak memuat data perusahaan.</aside>
+  </main>
+  <footer>Ringkasan belajar dalam bahasa Indonesia · <a href="../supply-chain.html?lang=id">Arsip Supply Chain</a></footer>
+</body>
+</html>

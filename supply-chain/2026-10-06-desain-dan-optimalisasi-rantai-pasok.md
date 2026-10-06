@@ -11,6 +11,7 @@ tags:
   - Strategi Supply Chain
   - CSCP
 en_link: "supply-chain-en/2026-10-06-supply-chain-design-and-optimization"
+article_url: "supply-chain/desain-optimalisasi-supply-chain-id.html"
 ---
 
 Ringkasan ini menjelaskan bagaimana strategi bisnis membentuk desain supply chain, konfigurasi jaringan, dan sasaran kinerja yang terukur. Materinya merujuk pada CSCP Learning System 2024, Modul 2, Bagian A, dan ditulis ulang dengan kata-kata orisinal.

@@ -1,0 +1,89 @@
+:root {
+  --primary: #2E6E73;
+  --primary-d: #1C2526;
+  --primary-strong: #1C2526;
+  --primary-soft: #EAF3F3;
+  --text-dark: #151B1D;
+  --text-gray: #5B6568;
+  --muted: #6A7478;
+  --bg-light: #F4F2ED;
+  --bg-soft: #F4F2ED;
+  --white: #fff;
+  --card: #fff;
+  --border: #DDD8CC;
+  --accent: #B77A2B;
+  --bg: #F4F2ED;
+  --ink: #151B1D;
+  --line: #DDD8CC;
+  --copper: #B77A2B;
+  --gold: #C59B43;
+  --dark: #1C2526;
+  --teal: #2E6E73;
+  --pale: #EAF3F3;
+}
+
+body {
+  background-color: #F4F2ED;
+  color: #151B1D;
+  font-family: Inter, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: Inter, sans-serif;
+}
+
+.hero p.lead,
+.stat .lbl,
+.impact-card .lbl {
+  color: #E8E4DA;
+}
+
+.kicker,
+.stat .num,
+.impact-card .num {
+  color: #EAF3F3;
+}
+
+.archive-tag,
+.tech-pill {
+  background: #EAF3F3;
+}
+
+body.inventory-design-id .eyebrow,
+body.inventory-design-id h3,
+body.inventory-design-id a,
+body.inventory-design-id .card b,
+body.inventory-design-id .step b,
+body.inventory-design-id th {
+  color: #2E6E73;
+}
+
+.hero-shade {
+  background: linear-gradient(180deg, rgba(28, 37, 38, 0.28) 0%, rgba(28, 37, 38, 0.92) 100%);
+}
+
+nav.toc {
+  background-color: rgba(28, 37, 38, 0.97);
+}
+
+.page-action:not(.secondary) {
+  background: #B77A2B;
+  border-color: #B77A2B;
+}
+
+.page-action:not(.secondary):hover,
+.page-action:not(.secondary):focus-visible {
+  background: #94601F;
+  border-color: #94601F;
+  outline-color: #E8E4DA;
+}
+
+.takeaway,
+.sec-num,
+.stat b,
+.rules li::before {
+  font-family: Inter, sans-serif;
+}

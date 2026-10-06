@@ -6,25 +6,28 @@
   <title>Desain &amp; Optimalisasi Supply Chain — Ringkasan CSCP Modul 2, Bagian A</title>
   <meta name="description" content="Ringkasan berbahasa Indonesia tentang desain jaringan supply chain, efisiensi dan responsivitas, teknologi, analisis manfaat-biaya, dan kematangan supply chain.">
   <style>
-    :root{color-scheme:light;--ink:#202a2a;--muted:#5d6868;--green:#17634c;--pale:#edf5f0;--line:#d9e2de;--gold:#e8b65b}
+    :root{color-scheme:light;--ink:#151b1d;--muted:#5b6568;--green:#2e6e73;--pale:#eaf3f3;--line:#ddd8cc;--gold:#c59b43}
     *{box-sizing:border-box}
-    body{margin:0;background:#f5f6f3;color:var(--ink);font:16px/1.75 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-    header,main,footer{width:min(100% - 36px,1000px);margin:auto}
-    header{padding:44px 0 24px}
+    body{margin:0;background:#f4f2ed;color:var(--ink);font:17px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    header,main,footer{margin:auto}
+    header{width:100%;padding:48px 0 30px;background:linear-gradient(135deg,#1c2526,#003319);color:#fff}
+    header > *{width:min(100% - 56px,1024px);margin-left:auto;margin-right:auto}
     header p,footer{color:var(--muted)}
-    .eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
-    h1,h2,h3{line-height:1.25}
-    h1{font-size:clamp(2rem,5vw,3.3rem);margin:.35em 0}
-    h2{font-size:1.7rem;margin:2.2em 0 .7em;padding-left:14px;border-left:4px solid var(--gold)}
+    header p{color:#e8e4da}
+    .eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#c59b43}
+    h1,h2,h3{line-height:1.2}
+    h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(2rem,5vw,3.3rem);margin:.35em 0;color:#fff}
+    h2{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.65rem,3.6vw,2.5rem);margin:2.2em 0 .7em;padding-left:14px;border-left:4px solid var(--gold);color:#1c2526}
     h3{font-size:1.15rem;margin:1.6em 0 .5em;color:var(--green)}
     a{color:var(--green);font-weight:650}
     .topline{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
-    .summary,.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 26px;margin:20px 0}
+    main{width:min(100% - 56px,1024px);padding:8px 0 20px}
+    .summary,.panel{background:#fff;border:1px solid var(--line);border-radius:6px;padding:22px 26px;margin:20px 0}
     .summary{background:var(--pale)}
     .toc{display:flex;flex-wrap:wrap;gap:10px;padding:18px 0 4px}
-    .toc a{padding:7px 11px;border:1px solid var(--line);border-radius:20px;text-decoration:none;background:#fff;font-size:.9rem}
+    .toc a{padding:7px 11px;border:1px solid rgba(255,255,255,.3);border-radius:20px;text-decoration:none;background:rgba(255,255,255,.08);color:#fff;font-size:.9rem}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
-    .card{padding:17px;background:#fff;border:1px solid var(--line);border-radius:9px}
+    .card{padding:17px;background:#fff;border:1px solid var(--line);border-radius:6px}
     .card b{color:var(--green)}
     .step{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
     .step:last-child{border:0}
@@ -34,21 +37,28 @@
     th{background:var(--pale);color:var(--green)}
     .scroll{overflow-x:auto}
     .callout{border-left:4px solid var(--gold);padding:12px 16px;background:#fff8e8;margin:18px 0}
-    .language{font-size:.95rem}
-    footer{padding:32px 0 50px;border-top:1px solid var(--line);margin-top:45px;font-size:.9rem}
-    @media(max-width:620px){header{padding-top:30px}.step{grid-template-columns:1fr;gap:2px}.panel,.summary{padding:18px}}
+    .page-actions{display:flex;flex-wrap:wrap;gap:10px;margin:22px auto 0}
+    .page-action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border:1px solid #8fe0b8;border-radius:6px;background:#004b23;color:#fff;text-decoration:none;font:700 14px/1.2 inherit}
+    .page-action.secondary{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.55)}
+    .page-action:hover,.page-action:focus-visible{background:#003319;border-color:#fff;outline:2px solid #8fe0b8;outline-offset:2px}
+    .page-action.secondary:hover,.page-action.secondary:focus-visible{background:rgba(255,255,255,.2)}
+    footer{width:min(100% - 56px,1024px);padding:32px 0 50px;border-top:1px solid var(--line);margin-top:45px;font-size:.9rem}
+    @media(max-width:620px){header{padding-top:30px}.step{grid-template-columns:1fr;gap:2px}.panel,.summary{padding:18px}main,footer{width:calc(100% - 36px)}header > *{width:calc(100% - 36px)}}
   </style>
   <link rel="stylesheet" href="../assets/inventory-theme.css">
 </head>
-<body class="inventory-design-id">
+<body class="inventory-design-id" data-language-en="Supply%20Chain%20Design%20%26%20Optimization_EN.html" data-language-id="desain-optimalisasi-supply-chain-id.html">
   <header>
     <div class="topline">
       <span class="eyebrow">CSCP Learning System 2024 · Modul 2 · Bagian A</span>
-      <span class="language">Bahasa: Indonesia · <a href="Supply%20Chain%20Design%20%26%20Optimization_EN.html">English version</a></span>
+      <span class="language">Bahasa: Indonesia</span>
     </div>
     <h1>Desain &amp; Optimalisasi Supply Chain</h1>
     <p>Bagaimana strategi bisnis diterjemahkan menjadi jaringan supply chain, kapan efisiensi atau responsivitas perlu diutamakan, dan bagaimana teknologi dinilai sebagai keputusan bisnis—bukan sekadar proyek TI.</p>
-    <p><a href="../supply-chain.html?lang=id">← Kembali ke arsip Supply Chain</a></p>
+    <div class="page-actions">
+      <a class="page-action" href="../supply-chain.html?lang=id">← Kembali ke Supply Chain</a>
+      <a class="page-action secondary" href="../index-id.html">Beranda</a>
+    </div>
     <nav class="toc" aria-label="Daftar isi">
       <a href="#ringkasan">Ringkasan</a><a href="#strategi">1 · Strategi dan desain</a>
       <a href="#kinerja">2 · Efisien, responsif, tangguh</a><a href="#teknologi">3 · Peran TI</a>
@@ -204,5 +214,6 @@
     <aside class="panel"><b>Sumber dan batasan.</b> Halaman ini merupakan ringkasan orisinal APICS/ASCM CSCP Learning System 2024, versi 5.2, Modul 2 (Global Supply Chain Networks), Bagian A. Halaman ini bukan salinan teks APICS dan tidak menggantikan materi resmi. Materi aslinya dilindungi hak cipta APICS/ASCM. Matriks jenis supply chain dan produk (Exhibit 2-2) berupa gambar pada sumber, sehingga tabel perbandingan dibangun dari teks. Angka manfaat-biaya berasal dari teks modul. Halaman ini tidak memuat data perusahaan.</aside>
   </main>
   <footer>Ringkasan belajar dalam bahasa Indonesia · <a href="../supply-chain.html?lang=id">Arsip Supply Chain</a></footer>
+  <script src="../assets/language-switcher.js"></script>
 </body>
 </html>

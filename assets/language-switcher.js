@@ -1,12 +1,18 @@
 (() => {
   const params = new URLSearchParams(window.location.search);
-  const currentLang = params.get('lang') === 'id' ? 'id' : 'en';
+  const currentLang = params.get('lang') === 'id' || document.documentElement.lang === 'id' ? 'id' : 'en';
   document.documentElement.lang = currentLang;
 
   const base = window.location.pathname.split('/').pop().replace(/\.html$/, '');
   const homepage = base === '' || base === 'index' || base === 'index-en' || base === 'index-id';
 
   function languageUrl(lang) {
+    const mappedUrl = document.body.dataset['language' + lang.toUpperCase()];
+    if (mappedUrl) {
+      const url = new URL(mappedUrl, window.location.href);
+      return url.pathname + url.search + url.hash;
+    }
+
     const url = new URL(window.location.href);
     if (homepage) {
       url.pathname = url.pathname.replace(/[^/]*$/, lang === 'id' ? 'index-id.html' : 'index.html');
@@ -25,6 +31,8 @@
   const translations = {
     '← Back to Home': '← Kembali ke Beranda',
     '← Back to Archive List': '← Kembali ke Daftar Arsip',
+    '← Back to Supply Chain': '← Kembali ke Supply Chain',
+    'Home': 'Beranda',
     'Case Studies Archive': 'Arsip Studi Kasus',
     'Supply Chain Archive': 'Arsip Supply Chain',
     'Data Storytelling Archive': 'Arsip Data Storytelling',

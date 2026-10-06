@@ -77,10 +77,11 @@
     link.href = url.pathname + url.search + url.hash;
   });
 
-  const switcher = document.createElement('nav');
+  const existingSwitcher = document.querySelector('.site-language-switcher');
+  const switcher = existingSwitcher || document.createElement('nav');
   switcher.className = 'site-language-switcher';
   switcher.setAttribute('aria-label', currentLang === 'en' ? 'Language' : 'Bahasa');
-  ['en', 'id'].forEach((lang, index) => {
+  if (!existingSwitcher) ['en', 'id'].forEach((lang, index) => {
     if (index) {
       const separator = document.createElement('span');
       separator.setAttribute('aria-hidden', 'true');
@@ -153,9 +154,9 @@
       font: 600 14px/1.2 Inter, sans-serif;
     }
     .site-language-switcher a { color: #475569; text-decoration: none; }
-    .site-language-switcher a[aria-current="page"] { color: #004B23; font-weight: 700; }
+    .site-language-switcher a[aria-current="page"] { color: #2E6E73; font-weight: 700; }
     .site-language-switcher span { color: #94a3b8; }
   `;
   document.head.appendChild(style);
-  document.body.appendChild(switcher);
+  if (!existingSwitcher) document.body.appendChild(switcher);
 })();

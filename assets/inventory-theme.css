@@ -18,7 +18,6 @@
   --copper: #B77A2B;
   --gold: #C59B43;
   --dark: #1C2526;
-  --green: #2E6E73;
   --teal: #2E6E73;
   --pale: #EAF3F3;
 }
@@ -51,6 +50,15 @@ h4 {
 .archive-tag,
 .tech-pill {
   background: #EAF3F3;
+}
+
+body.inventory-design-id .eyebrow,
+body.inventory-design-id h3,
+body.inventory-design-id a,
+body.inventory-design-id .card b,
+body.inventory-design-id .step b,
+body.inventory-design-id th {
+  color: #2E6E73;
 }
 
 .hero-shade {

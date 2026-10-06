@@ -164,11 +164,20 @@ footer{background:var(--dark);color:#CFCABD;padding:40px 0;margin-top:70px;font-
 footer b{color:#fff}
 .hyp{border:2px dashed var(--amber);background:#FFFBF1;border-radius:6px;padding:20px 24px;margin-top:20px}
 .hyp .tag{background:var(--amber);color:#1C2526}
+.site-language-switcher{position:fixed;top:16px;right:16px;z-index:1000;display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border:0;border-radius:0;background:transparent;box-shadow:none;font:600 14px/1.2 Inter,sans-serif}
+.site-language-switcher a{color:#fff;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+.site-language-switcher a[aria-current="page"]{color:#d4aa61;font-weight:700}
+.site-language-switcher span{color:rgba(255,255,255,.75)}
+.page-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.page-action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border:1px solid var(--copper);border-radius:6px;background:var(--copper);color:#fff;text-decoration:none;font-family:inherit;font-size:14px;font-weight:700;line-height:1.2}
+.page-action.secondary{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.55)}
+.page-action:hover,.page-action:focus-visible{background:var(--dark);border-color:#fff;outline:2px solid var(--gold);outline-offset:2px}
+.page-action.secondary:hover,.page-action.secondary:focus-visible{background:rgba(255,255,255,.2)}
 @media print{nav.toc{display:none}.hero{min-height:360px}section{page-break-inside:avoid}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 <link rel="stylesheet" href="../assets/inventory-theme.css">
 </head>
-<body>
+<body data-language-en="Supply%20Chain%20Design%20%26%20Optimization_EN.html" data-language-id="desain-optimalisasi-supply-chain-id.html">
 
 <header class="hero">
   <div class="wrap">
@@ -178,10 +187,20 @@ footer b{color:#fff}
     <div class="meta">
       <span><b>Source:</b> APICS/ASCM CSCP Learning System 2024 (v5.2), Module 2</span>
       <span><b>Format:</b> study summary in original wording</span>
-      <span><b>Language:</b> English · <a href="desain-optimalisasi-supply-chain-id.html">Versi bahasa Indonesia</a></span>
+      <span><b>Language:</b> English</span>
+    </div>
+    <div class="page-actions">
+      <a class="page-action" href="../supply-chain.html">← Back to Supply Chain</a>
+      <a class="page-action secondary" href="../index.html">Home</a>
     </div>
   </div>
 </header>
+
+<nav class="site-language-switcher" aria-label="Language">
+  <a href="Supply%20Chain%20Design%20%26%20Optimization_EN.html" aria-current="page">EN</a>
+  <span aria-hidden="true">|</span>
+  <a href="desain-optimalisasi-supply-chain-id.html">ID</a>
+</nav>
 
 <nav class="toc"><div class="wrap">
   <a href="#ringkas">Summary</a>
@@ -534,5 +553,6 @@ footer b{color:#fff}
     <p><b>Limitations:</b> The matrix fitting supply chain type to product (Exhibit 2-2) is an image in the source, so it is built from the text. The benefit-cost figures come from the module's text. Photographic illustrations were generated with Microsoft Copilot; the network diagram is conceptual. This page contains no company data.</p>
   </div>
 </footer>
+<script src="../assets/language-switcher.js"></script>
 </body>
 </html>

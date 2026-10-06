@@ -6,25 +6,38 @@
   <title>Desain &amp; Optimalisasi Supply Chain — Ringkasan CSCP Modul 2, Bagian A</title>
   <meta name="description" content="Ringkasan berbahasa Indonesia tentang desain jaringan supply chain, efisiensi dan responsivitas, teknologi, analisis manfaat-biaya, dan kematangan supply chain.">
   <style>
-    :root{color-scheme:light;--ink:#202a2a;--muted:#5d6868;--green:#17634c;--pale:#edf5f0;--line:#d9e2de;--gold:#e8b65b}
+    :root{color-scheme:light;--ink:#151b1d;--muted:#5b6568;--green:#2e6e73;--pale:#eaf3f3;--line:#ddd8cc;--gold:#c59b43;--dark:#1c2526}
     *{box-sizing:border-box}
-    body{margin:0;background:#f5f6f3;color:var(--ink);font:16px/1.75 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-    header,main,footer{width:min(100% - 36px,1000px);margin:auto}
-    header{padding:44px 0 24px}
-    header p,footer{color:var(--muted)}
-    .eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green)}
-    h1,h2,h3{line-height:1.25}
-    h1{font-size:clamp(2rem,5vw,3.3rem);margin:.35em 0}
-    h2{font-size:1.7rem;margin:2.2em 0 .7em;padding-left:14px;border-left:4px solid var(--gold)}
+    body{margin:0;background:#f4f2ed;color:var(--ink);font:17px/1.65 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    header,main,footer{margin:auto}
+    .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+    .hero{position:relative;min-height:560px;display:flex;align-items:flex-end;background:linear-gradient(180deg,#273233,#101516);color:#fff}
+    .hero .wrap{padding-top:120px;padding-bottom:56px}
+    .kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12.5px;color:var(--gold);font-weight:700}
+    h1,h2,h3{line-height:1.2}
+    h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(38px,5.4vw,64px);letter-spacing:-.02em;line-height:1.08;margin:14px 0 16px;color:#fff;max-width:900px}
+    h2{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.65rem,3.6vw,2.5rem);margin:.2em 0 .7em;color:var(--dark)}
     h3{font-size:1.15rem;margin:1.6em 0 .5em;color:var(--green)}
     a{color:var(--green);font-weight:650}
-    .topline{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
-    .summary,.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px 26px;margin:20px 0}
-    .summary{background:var(--pale)}
-    .toc{display:flex;flex-wrap:wrap;gap:10px;padding:18px 0 4px}
-    .toc a{padding:7px 11px;border:1px solid var(--line);border-radius:20px;text-decoration:none;background:#fff;font-size:.9rem}
+    .hero p.lead{font-size:clamp(17px,2vw,20px);max-width:760px;color:#e8e4da;margin:0 0 26px}
+    .meta{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:13.5px;color:#cfcabd;border-top:1px solid rgba(255,255,255,.25);padding-top:16px}
+    .meta span{display:block}
+    main{width:100%;padding:0 0 20px}
+    .exec{background:var(--dark);color:#edeae1;padding:56px 0}
+    .exec h2{color:#fff}
+    .exec .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .exec .card{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.18);color:#edeae1}
+    .exec .card b{color:#d4aa61}
+    nav.toc{position:sticky;top:0;z-index:20;background:rgba(28,37,38,.96);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+    nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:0;padding-bottom:0;-webkit-overflow-scrolling:touch}
+    .toc a{white-space:nowrap;padding:15px 13px;color:#cfcabd;font-size:13px;text-decoration:none}
+    .toc a:hover,.toc a:focus-visible{color:#fff;background:rgba(255,255,255,.08)}
+    section{scroll-margin-top:56px;padding:64px 0 8px}
+    .sec-label{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+    .sec-num{font-family:Georgia,serif;font-size:54px;color:#b77a2b;line-height:1;font-weight:700}
+    .sec-label .t{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#6b7372;font-weight:700}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
-    .card{padding:17px;background:#fff;border:1px solid var(--line);border-radius:9px}
+    .card{padding:17px;background:#fff;border:1px solid var(--line);border-radius:6px}
     .card b{color:var(--green)}
     .step{display:grid;grid-template-columns:150px 1fr;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)}
     .step:last-child{border:0}
@@ -34,41 +47,72 @@
     th{background:var(--pale);color:var(--green)}
     .scroll{overflow-x:auto}
     .callout{border-left:4px solid var(--gold);padding:12px 16px;background:#fff8e8;margin:18px 0}
-    .language{font-size:.95rem}
-    footer{padding:32px 0 50px;border-top:1px solid var(--line);margin-top:45px;font-size:.9rem}
-    @media(max-width:620px){header{padding-top:30px}.step{grid-template-columns:1fr;gap:2px}.panel,.summary{padding:18px}}
+    .site-language-switcher{position:fixed;top:16px;right:16px;z-index:1000;display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border:0;border-radius:0;background:transparent;box-shadow:none;font:600 14px/1.2 Inter,sans-serif}
+    .site-language-switcher a{color:#fff;text-decoration:none;text-shadow:0 1px 3px rgba(0,0,0,.7)}
+    .site-language-switcher a[aria-current="page"]{color:#d4aa61;font-weight:700}
+    .site-language-switcher span{color:rgba(255,255,255,.75)}
+    body.inventory-design-id .site-language-switcher a{color:#fff}
+    body.inventory-design-id .site-language-switcher a[aria-current="page"]{color:#d4aa61}
+    body.inventory-design-id .site-language-switcher span{color:rgba(255,255,255,.75)}
+    .page-actions{display:flex;flex-wrap:wrap;gap:10px;margin:22px auto 0}
+    .page-action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border:1px solid #b77a2b;border-radius:6px;background:#b77a2b;color:#fff;text-decoration:none;font-family:inherit;font-size:14px;font-weight:700;line-height:1.2}
+    body.inventory-design-id .page-action{color:#fff}
+    .page-action.secondary{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.55)}
+    .page-action:hover,.page-action:focus-visible{background:#1c2526;border-color:#fff;outline:2px solid #c59b43;outline-offset:2px}
+    .page-action.secondary:hover,.page-action.secondary:focus-visible{background:rgba(255,255,255,.2)}
+    footer{background:var(--dark);color:#cfcabd;padding:40px 0;margin-top:70px;font-size:14px}
+    footer .wrap{padding-top:0;padding-bottom:0}
+    footer a{color:var(--gold)}
+    body.inventory-design-id footer a{color:var(--gold)}
+    @media(max-width:620px){.wrap{padding:0 18px}.hero{min-height:460px}.hero .wrap{padding-top:90px;padding-bottom:36px}.exec .grid{grid-template-columns:1fr 1fr}.step{grid-template-columns:1fr;gap:2px}.panel,.summary{padding:18px}section{padding:44px 0 4px}}
+    @media(max-width:420px){.exec .grid{grid-template-columns:1fr}}
   </style>
   <link rel="stylesheet" href="../assets/inventory-theme.css">
 </head>
-<body class="inventory-design-id">
-  <header>
-    <div class="topline">
-      <span class="eyebrow">CSCP Learning System 2024 · Modul 2 · Bagian A</span>
-      <span class="language">Bahasa: Indonesia · <a href="Supply%20Chain%20Design%20%26%20Optimization_EN.html">English version</a></span>
-    </div>
-    <h1>Desain &amp; Optimalisasi Supply Chain</h1>
-    <p>Bagaimana strategi bisnis diterjemahkan menjadi jaringan supply chain, kapan efisiensi atau responsivitas perlu diutamakan, dan bagaimana teknologi dinilai sebagai keputusan bisnis—bukan sekadar proyek TI.</p>
-    <p><a href="../supply-chain.html?lang=id">← Kembali ke arsip Supply Chain</a></p>
-    <nav class="toc" aria-label="Daftar isi">
-      <a href="#ringkasan">Ringkasan</a><a href="#strategi">1 · Strategi dan desain</a>
-      <a href="#kinerja">2 · Efisien, responsif, tangguh</a><a href="#teknologi">3 · Peran TI</a>
-      <a href="#investasi">4 · Manfaat-biaya &amp; ROI</a><a href="#kematangan">5 · Tahap kematangan</a>
-      <a href="#nukleus">6 · Perusahaan inti</a><a href="#diskusi">Pertanyaan diskusi</a>
-    </nav>
-  </header>
-  <main>
-    <section id="ringkasan">
-      <h2>Intisari Bagian A</h2>
-      <div class="grid">
-        <article class="card"><b>01 · Desain mengikuti strategi</b><br>Strategi organisasi mendorong strategi supply chain, lalu desain dan konfigurasi jaringan, hingga sasaran kinerja yang terukur.</article>
-        <article class="card"><b>02 · Tidak semua hal bisa dimaksimalkan</b><br>Efisiensi dan responsivitas saling memiliki trade-off. Keduanya tetap membutuhkan ketahanan.</article>
-        <article class="card"><b>03 · Teknologi harus menciptakan nilai bersih</b><br>Justifikasi TI adalah keputusan bisnis yang menjadi tanggung jawab manajer supply chain, termasuk memperhitungkan biaya tersembunyi.</article>
-        <article class="card"><b>04 · Tahap kematangan tidak dapat dilompati</b><br>Perjalanan dari Tahap 1 ke 5 membutuhkan kepemimpinan, kepercayaan antar mitra, dan sering kali perusahaan inti sebagai penggerak.</article>
+<body class="inventory-design-id" data-language-en="Supply%20Chain%20Design%20%26%20Optimization_EN.html" data-language-id="desain-optimalisasi-supply-chain-id.html">
+  <header class="hero">
+    <div class="wrap">
+      <div class="kicker">CSCP Learning System 2024 · Modul 2 · Bagian A</div>
+      <h1>Desain &amp; Optimalisasi Supply Chain</h1>
+      <p class="lead">Bagaimana strategi bisnis diterjemahkan menjadi jaringan supply chain, kapan efisiensi atau responsivitas perlu diutamakan, dan bagaimana teknologi dinilai sebagai keputusan bisnis—bukan sekadar proyek TI.</p>
+      <div class="meta">
+        <span><b>Sumber:</b> APICS/ASCM CSCP Learning System 2024 (v5.2), Modul 2</span>
+        <span><b>Format:</b> ringkasan belajar dengan susunan orisinal</span>
+        <span><b>Bahasa:</b> Indonesia</span>
       </div>
-    </section>
+      <div class="page-actions">
+        <a class="page-action" href="../supply-chain.html?lang=id">← Kembali ke Supply Chain</a>
+        <a class="page-action secondary" href="../index-id.html">Beranda</a>
+      </div>
+    </div>
+  </header>
+  <nav class="site-language-switcher" aria-label="Bahasa">
+    <a href="Supply%20Chain%20Design%20%26%20Optimization_EN.html">EN</a>
+    <span aria-hidden="true">|</span>
+    <a href="desain-optimalisasi-supply-chain-id.html" aria-current="page">ID</a>
+  </nav>
+  <nav class="toc" aria-label="Daftar isi"><div class="wrap">
+    <a href="#ringkasan">Ringkasan</a><a href="#strategi">1 · Strategi dan desain</a>
+    <a href="#kinerja">2 · Efisien, responsif, tangguh</a><a href="#teknologi">3 · Peran TI</a>
+    <a href="#investasi">4 · Manfaat-biaya &amp; ROI</a><a href="#kematangan">5 · Tahap kematangan</a>
+    <a href="#nukleus">6 · Perusahaan inti</a><a href="#diskusi">Pertanyaan diskusi</a>
+  </div></nav>
+  <main>
+    <div class="exec" id="ringkasan"><div class="wrap">
+      <div class="kicker">Ringkasan singkat</div>
+      <h2>Empat pesan utama dari Bagian A</h2>
+      <div class="grid">
+        <article class="card"><b>01</b><p><strong>Desain mengikuti strategi.</strong> Strategi organisasi mendorong strategi supply chain, lalu desain dan konfigurasi jaringan, hingga sasaran kinerja yang terukur.</p></article>
+        <article class="card"><b>02</b><p><strong>Tidak semua hal bisa dimaksimalkan.</strong> Efisiensi dan responsivitas saling memiliki trade-off. Keduanya tetap membutuhkan ketahanan.</p></article>
+        <article class="card"><b>03</b><p><strong>Teknologi harus menciptakan nilai bersih.</strong> Justifikasi TI adalah keputusan bisnis yang menjadi tanggung jawab manajer supply chain, termasuk memperhitungkan biaya tersembunyi.</p></article>
+        <article class="card"><b>04</b><p><strong>Tahap kematangan tidak dapat dilompati.</strong> Perjalanan dari Tahap 1 ke 5 membutuhkan kepemimpinan, kepercayaan antar mitra, dan sering kali perusahaan inti sebagai penggerak.</p></article>
+      </div>
+    </div></div>
 
+    <div class="wrap">
     <section id="strategi">
-      <h2>1 · Menerjemahkan strategi menjadi desain</h2>
+      <div class="sec-label"><div class="sec-num">1</div><span class="t">Strategi menjadi desain</span></div>
+      <h2>Menerjemahkan strategi menjadi desain</h2>
       <p>Strategi bersifat menyeluruh dan berjangka panjang. Desain supply chain serta konfigurasi jaringan mengubahnya menjadi keputusan operasional yang konkret.</p>
       <div class="panel">
         <div class="step"><b>Langkah 1 · Strategi organisasi</b><span>Bagaimana perusahaan bersaing berdasarkan kapabilitasnya.</span></div>
@@ -97,7 +141,8 @@
     </section>
 
     <section id="kinerja">
-      <h2>2 · Efisien, responsif, dan tangguh</h2>
+      <div class="sec-label"><div class="sec-num">2</div><span class="t">Efisien, responsif, tangguh</span></div>
+      <h2>Efisien, responsif, dan tangguh</h2>
       <p>Organisasi sering harus menyeimbangkan efisiensi (operasi berbiaya rendah) dengan responsivitas. Ketahanan merupakan unsur ketiga yang dibutuhkan kedua jenis rantai tersebut.</p>
       <p>Responsivitas berarti menanggapi perubahan kebutuhan pelanggan melalui layanan pelanggan dan/atau kelincahan. Dalam SCOR DS, kelincahan diukur dari kemampuan menaikkan atau menurunkan volume produksi tanpa dampak besar pada biaya atau operasi. Karena fokus pelanggan, kelincahan, dan ketahanan memerlukan biaya—misalnya kapasitas cadangan—efisiensi dan responsivitas tidak dapat dimaksimalkan sekaligus, tetapi keduanya tetap penting.</p>
       <div class="scroll"><table>
@@ -125,7 +170,8 @@
     </section>
 
     <section id="teknologi">
-      <h2>3 · TI supply chain: dari data ke tindakan</h2>
+      <div class="sec-label"><div class="sec-num">3</div><span class="t">Peran teknologi informasi</span></div>
+      <h2>TI supply chain: dari data ke tindakan</h2>
       <p>Sistem informasi bukan sekadar kumpulan data. Manusia dan proses mengubah data menjadi informasi, lalu informasi menjadi tindakan.</p>
       <p>Menurut definisi ASCM, sistem informasi adalah perangkat keras dan perangkat lunak yang saling terkait, bersama manusia dan proses untuk mengumpulkan, mengolah, dan menyebarkan informasi bagi perencanaan, pengambilan keputusan, serta pengendalian.</p>
       <p>Teknologi sebaiknya mengotomasi, mengendalikan, dan menstandarkan proses agar orang dapat berfokus pada alasan di balik transaksi, aspek hubungan antarmanusia, dan pengecualian.</p>
@@ -135,7 +181,8 @@
     </section>
 
     <section id="investasi">
-      <h2>4 · Analisis manfaat-biaya investasi TI</h2>
+      <div class="sec-label"><div class="sec-num">4</div><span class="t">Manfaat-biaya dan ROI</span></div>
+      <h2>Analisis manfaat-biaya investasi TI</h2>
       <p>Investasi TI layak dilakukan hanya jika menghasilkan nilai bersih. Ini adalah keputusan bisnis; kasus bisnisnya menjadi tanggung jawab manajer supply chain, bukan departemen TI.</p>
       <div class="grid">
         <article class="card"><h3>Manfaat terukur</h3><p>Biaya pemeliharaan lebih rendah, volume penjualan lebih tinggi, pengurangan pergantian proses, hasil keuangan lebih baik, overhead lebih rendah, dan siklus kas-ke-kas yang lebih pendek.</p></article>
@@ -158,7 +205,8 @@
     </section>
 
     <section id="kematangan">
-      <h2>5 · Tahap kematangan supply chain 1–5</h2>
+      <div class="sec-label"><div class="sec-num">5</div><span class="t">Tahap kematangan</span></div>
+      <h2>Tahap kematangan supply chain 1–5</h2>
       <p>Posisi kematangan menentukan teknologi yang sesuai dan hal-hal yang perlu dibenahi terlebih dahulu. Perkembangan antar tahap berlangsung secara evolusioner, bukan dalam satu garis lurus.</p>
       <div class="scroll"><table>
         <thead><tr><th>Tahap</th><th>Ciri utama</th><th>Fokus untuk maju</th></tr></thead>
@@ -179,7 +227,8 @@
     </section>
 
     <section id="nukleus">
-      <h2>6 · Perusahaan inti dan tim lintas fungsi</h2>
+      <div class="sec-label"><div class="sec-num">6</div><span class="t">Perusahaan inti</span></div>
+      <h2>Perusahaan inti dan tim lintas fungsi</h2>
       <p>Perpindahan antar tahap biasanya difasilitasi atau diorkestrasi oleh <b>perusahaan inti</b> (<em>nucleus firm</em> atau <em>channel master</em>): nama yang paling dikenal dalam kemitraan, atau nama yang tercantum pada produk, sehingga pada akhirnya bertanggung jawab atas kepuasan pelanggan.</p>
       <h3>Peran perusahaan inti</h3>
       <ul><li>Menjadi penggerak inisiatif.</li><li>Menghubungi calon mitra.</li><li>Melakukan audit teknologi.</li><li>Membentuk tim bersama mitra berkualifikasi lintas fungsi dan perusahaan.</li><li>Mengukur, memantau, dan mengelola supply chain lintas perusahaan agar terasa menyatu.</li></ul>
@@ -197,12 +246,15 @@
     </section>
 
     <section id="diskusi">
+      <div class="sec-label"><div class="sec-num">7</div><span class="t">Pertanyaan diskusi</span></div>
       <h2>Pertanyaan refleksi untuk organisasi Anda</h2>
       <p>Pertanyaan berikut diambil dari Bagian A sebagai bahan diskusi tim. Jawabannya bergantung pada situasi masing-masing organisasi dan sebaiknya didukung fakta, bukan persepsi.</p>
       <ol><li><b>Strategi dan desain:</b> apakah strategi organisasi lebih mengutamakan efisiensi atau responsivitas? Apakah desain jaringan dan pilihan sumber pasokan saat ini selaras dengannya?</li><li><b>Evaluasi menyeluruh:</b> keputusan konfigurasi mana—lokasi fasilitas, kapasitas, atau transportasi—yang masih dinilai per fungsi dan belum berdasarkan dampaknya pada seluruh rantai?</li><li><b>Lokasi titik kendala:</b> di mana titik kendala sebenarnya? Apakah teknologi yang direncanakan mengatasinya atau hanya mempercepat aliran menuju titik kendala yang sama?</li><li><b>Kasus bisnis TI:</b> biaya apa yang biasanya terlewat—dukungan operasional, manajemen perubahan dan pelatihan, atau biaya tidak menjalankan proyek? Apakah manfaat tak berwujud diperkirakan melalui konsensus atau pendapat satu orang?</li><li><b>Posisi kematangan:</b> berdasarkan kapabilitas yang benar-benar ada, organisasi atau unit Anda berada di tahap mana? Siapa yang menilainya dan seberapa besar risiko penilaian yang terlalu optimistis?</li></ol>
     </section>
     <aside class="panel"><b>Sumber dan batasan.</b> Halaman ini merupakan ringkasan orisinal APICS/ASCM CSCP Learning System 2024, versi 5.2, Modul 2 (Global Supply Chain Networks), Bagian A. Halaman ini bukan salinan teks APICS dan tidak menggantikan materi resmi. Materi aslinya dilindungi hak cipta APICS/ASCM. Matriks jenis supply chain dan produk (Exhibit 2-2) berupa gambar pada sumber, sehingga tabel perbandingan dibangun dari teks. Angka manfaat-biaya berasal dari teks modul. Halaman ini tidak memuat data perusahaan.</aside>
+    </div>
   </main>
-  <footer>Ringkasan belajar dalam bahasa Indonesia · <a href="../supply-chain.html?lang=id">Arsip Supply Chain</a></footer>
+  <footer><div class="wrap">Ringkasan belajar dalam bahasa Indonesia · <a href="../supply-chain.html?lang=id">Arsip Supply Chain</a></div></footer>
+  <script src="../assets/language-switcher.js"></script>
 </body>
 </html>

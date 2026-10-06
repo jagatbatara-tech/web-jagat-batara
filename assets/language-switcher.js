@@ -1,12 +1,18 @@
 (() => {
   const params = new URLSearchParams(window.location.search);
-  const currentLang = params.get('lang') === 'id' ? 'id' : 'en';
+  const currentLang = params.get('lang') === 'id' || document.documentElement.lang === 'id' ? 'id' : 'en';
   document.documentElement.lang = currentLang;
 
   const base = window.location.pathname.split('/').pop().replace(/\.html$/, '');
   const homepage = base === '' || base === 'index' || base === 'index-en' || base === 'index-id';
 
   function languageUrl(lang) {
+    const mappedUrl = document.body.dataset['language' + lang[0].toUpperCase() + lang.slice(1)];
+    if (mappedUrl) {
+      const url = new URL(mappedUrl, window.location.href);
+      return url.pathname + url.search + url.hash;
+    }
+
     const url = new URL(window.location.href);
     if (homepage) {
       url.pathname = url.pathname.replace(/[^/]*$/, lang === 'id' ? 'index-id.html' : 'index.html');
@@ -25,6 +31,8 @@
   const translations = {
     '← Back to Home': '← Kembali ke Beranda',
     '← Back to Archive List': '← Kembali ke Daftar Arsip',
+    '← Back to Supply Chain': '← Kembali ke Supply Chain',
+    'Home': 'Beranda',
     'Case Studies Archive': 'Arsip Studi Kasus',
     'Supply Chain Archive': 'Arsip Supply Chain',
     'Data Storytelling Archive': 'Arsip Data Storytelling',
@@ -69,10 +77,11 @@
     link.href = url.pathname + url.search + url.hash;
   });
 
-  const switcher = document.createElement('nav');
+  const existingSwitcher = document.querySelector('.site-language-switcher');
+  const switcher = existingSwitcher || document.createElement('nav');
   switcher.className = 'site-language-switcher';
   switcher.setAttribute('aria-label', currentLang === 'en' ? 'Language' : 'Bahasa');
-  ['en', 'id'].forEach((lang, index) => {
+  if (!existingSwitcher) ['en', 'id'].forEach((lang, index) => {
     if (index) {
       const separator = document.createElement('span');
       separator.setAttribute('aria-hidden', 'true');
@@ -138,16 +147,16 @@
       gap: 8px;
       align-items: center;
       padding: 8px 12px;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      background: #fff;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
       font: 600 14px/1.2 Inter, sans-serif;
     }
-    .site-language-switcher a { color: #475569; text-decoration: none; }
-    .site-language-switcher a[aria-current="page"] { color: #004B23; font-weight: 700; }
-    .site-language-switcher span { color: #94a3b8; }
+    .site-language-switcher a { color: #fff; text-decoration: none; text-shadow: 0 1px 3px rgba(0, 0, 0, .7); }
+    .site-language-switcher a[aria-current="page"] { color: #d4aa61; font-weight: 700; }
+    .site-language-switcher span { color: rgba(255, 255, 255, .75); }
   `;
   document.head.appendChild(style);
-  document.body.appendChild(switcher);
+  if (!existingSwitcher) document.body.appendChild(switcher);
 })();

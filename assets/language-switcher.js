@@ -7,7 +7,7 @@
   const homepage = base === '' || base === 'index' || base === 'index-en' || base === 'index-id';
 
   function languageUrl(lang) {
-    const mappedUrl = document.body.dataset['language' + lang.toUpperCase()];
+    const mappedUrl = document.body.dataset['language' + lang[0].toUpperCase() + lang.slice(1)];
     if (mappedUrl) {
       const url = new URL(mappedUrl, window.location.href);
       return url.pathname + url.search + url.hash;

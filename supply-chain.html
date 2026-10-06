@@ -32,6 +32,8 @@
   .archive-kicker{font-size:11.5px; font-weight:700; letter-spacing:1.5px; color:var(--primary); text-transform:uppercase; margin-bottom:6px;}
   .archive-title{font-size:1.4rem; font-weight:700; color:var(--text-dark); margin-bottom:10px;}
   .archive-excerpt{color:var(--text-gray); font-size:0.95rem; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;}
+  .archive-tags{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 12px;}
+  .archive-tag{background:#EAF3EC; border:1px solid var(--border); color:var(--primary); font-size:11px; font-weight:600; padding:3px 9px; border-radius:14px;}
 
   .hero{background:linear-gradient(135deg, var(--primary) 0%, var(--primary-d) 100%); color:#fff;
     padding:48px 40px; border-radius:14px; margin-bottom:36px;}
@@ -105,6 +107,19 @@
       try { fm = jsyaml.load(match[1]) || {}; }
       catch (e) { console.error('YAML parse error', e); }
       return { fm: fm, body: match[2] || '' };
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, function(char) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char];
+      });
+    }
+
+    function renderTags(tags) {
+      if (!Array.isArray(tags) || !tags.length) return '';
+      return '<div class="archive-tags">' + tags.map(function(tag) {
+        return '<span class="archive-tag">' + escapeHtml(tag) + '</span>';
+      }).join('') + '</div>';
     }
 
     function renderTechPills(items) {
@@ -216,6 +231,7 @@
                 card.innerHTML =
                   (kicker ? ('<div class="archive-kicker">' + kicker + '</div>') : '') +
                   '<div class="archive-title">' + title + '</div>' +
+                  renderTags(fm.tags) +
                   '<div class="archive-excerpt">' + excerpt + '</div>';
                 container.appendChild(card);
               });

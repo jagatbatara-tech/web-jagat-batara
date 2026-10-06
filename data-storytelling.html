@@ -116,7 +116,7 @@
           if(!Array.isArray(files)) throw new Error('Invalid archive response');
           const mdFiles = files.filter(function(f){ return f.name.endsWith('.md'); }).reverse();
           const guideCard = document.createElement('a');
-          guideCard.href = 'supply-chain-en/CSCP%20Inventory%20Warehouse%20KPI%20EN.html';
+          guideCard.href = 'supply-chain-en/CSCP%20Inventory%20Warehouse%20KPI%20EN.html' + (currentLang === 'id' ? '?lang=id' : '');
           guideCard.className = 'archive-card';
           guideCard.innerHTML = '<div class="archive-kicker">' + (currentLang === 'id' ? 'Panduan interaktif · Bahasa Inggris' : 'Interactive guide · English') + '</div>' +
             '<div class="archive-title">' + (currentLang === 'id' ? 'KPI Persediaan dan Gudang: Panduan Praktis' : 'Inventory and Warehouse KPIs: A Practical Guide') + '</div>' +

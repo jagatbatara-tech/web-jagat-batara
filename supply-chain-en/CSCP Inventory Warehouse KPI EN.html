@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Inventory and Warehouse KPIs: A Practical Guide with What-If Lab — CSCP Study Summary</title>
 <meta name="description" content="Plain-language guide to inventory and warehouse KPIs based on the CSCP Learning System, with formulas, worked examples, benchmarks, honest gaps, and six interactive what-if calculators.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#F8FAFC;--ink:#0F172A;--muted:#475569;--line:#E2E8F0;--copper:#004B23;--gold:#8FE0B8;--dark:#003319;--green:#004B23;--teal:#166534;--amber:#D49A3A;--red:#B64D42;--card:#FFFFFF}
 *{box-sizing:border-box}
@@ -16,9 +19,9 @@ h1,h2,h3,h4{font-family:"Inter",Arial,sans-serif;line-height:1.2;color:var(--dar
 a{color:var(--teal)}
 
 /* hero */
-.hero{position:relative;overflow:hidden;color:#fff;min-height:560px;display:flex;align-items:flex-end;background:#101516}
+.hero{position:relative;overflow:hidden;color:#fff;min-height:560px;display:flex;align-items:flex-end;background:var(--dark)}
 .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,21,22,.28) 0%,rgba(16,21,22,.92) 100%)}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,51,25,.28) 0%,rgba(0,51,25,.92) 100%)}
 .hero .wrap{position:relative;padding-bottom:56px;padding-top:120px}
 @media(max-width:600px){.hero{min-height:480px}.hero .wrap{padding-top:90px;padding-bottom:36px}}
 .kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12.5px;color:var(--gold);font-weight:700}
@@ -33,7 +36,7 @@ a{color:var(--teal)}
 .page-action.secondary:hover,.page-action.secondary:focus-visible{background:rgba(255,255,255,.2)}
 
 /* nav */
-nav.toc{position:sticky;top:0;z-index:30;background:rgba(28,37,38,.97)}
+nav.toc{position:sticky;top:0;z-index:30;background:rgba(0,51,25,.97)}
 nav.toc .wrap{display:flex;gap:2px;overflow-x:auto;padding-top:0;padding-bottom:0;-webkit-overflow-scrolling:touch}
 nav.toc a{color:#D9D4C7;text-decoration:none;font-size:13.5px;padding:14px 12px;white-space:nowrap;border-bottom:3px solid transparent}
 nav.toc a:hover{color:#fff;border-bottom-color:var(--copper)}
@@ -146,7 +149,7 @@ code,.mono{font-family:Consolas,"Courier New",monospace;font-size:13.5px}
 .count{font-size:13.5px;color:var(--muted);margin:4px 0 8px}
 
 footer{background:var(--dark);color:#CFCABD;padding:40px 0;margin-top:70px;font-size:14px}
-footer b{color:#fff}footer a{color:#E8C98A}
+footer b{color:#fff}footer a{color:var(--gold)}
 @media print{nav.toc{display:none}.hero{min-height:360px}section{page-break-inside:avoid}.btns,.tabs{display:none}.panel{display:block!important}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 </style>
 </head>
@@ -165,8 +168,8 @@ footer b{color:#fff}footer a{color:#E8C98A}
       <span><b>Format:</b> study summary in original wording</span>
     </div>
     <div class="page-actions">
-      <a class="page-action" href="../data-storytelling.html">Back to Data Storytelling</a>
-      <a class="page-action secondary" href="../index.html">Home</a>
+      <a class="page-action" id="archive-return" href="../data-storytelling.html">Back to Data Storytelling</a>
+      <a class="page-action secondary" id="home-return" href="../index.html">Home</a>
     </div>
   </div>
 </header>
@@ -803,6 +806,17 @@ footer b{color:#fff}footer a{color:#E8C98A}
   </div>
 </footer>
 
+<script>
+(function(){
+  if(new URLSearchParams(window.location.search).get('lang')!=='id') return;
+  var archiveLink=document.getElementById('archive-return');
+  var homeLink=document.getElementById('home-return');
+  archiveLink.href='../data-storytelling.html?lang=id';
+  archiveLink.textContent='Kembali ke Data Storytelling';
+  homeLink.href='../index-id.html';
+  homeLink.textContent='Beranda';
+})();
+</script>
 <script>
 (function(){
 function $(id){return document.getElementById(id);}

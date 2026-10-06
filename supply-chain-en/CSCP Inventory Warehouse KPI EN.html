@@ -6,11 +6,11 @@
 <title>Inventory and Warehouse KPIs: A Practical Guide with What-If Lab — CSCP Study Summary</title>
 <meta name="description" content="Plain-language guide to inventory and warehouse KPIs based on the CSCP Learning System, with formulas, worked examples, benchmarks, honest gaps, and six interactive what-if calculators.">
 <style>
-:root{--bg:#F4F2ED;--ink:#151B1D;--muted:#5B6568;--line:#DDD8CC;--copper:#B77A2B;--gold:#C59B43;--dark:#1C2526;--green:#3E745A;--teal:#2E6E73;--amber:#D49A3A;--red:#B64D42;--card:#FFFFFF}
+:root{--bg:#F8FAFC;--ink:#0F172A;--muted:#475569;--line:#E2E8F0;--copper:#004B23;--gold:#8FE0B8;--dark:#003319;--green:#004B23;--teal:#166534;--amber:#D49A3A;--red:#B64D42;--card:#FFFFFF}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Calibri,Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.65;font-size:17px;overflow-x:hidden}
-h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;line-height:1.2;color:var(--dark);margin:0}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Inter",Arial,sans-serif;line-height:1.65;font-size:17px;overflow-x:hidden}
+h1,h2,h3,h4{font-family:"Inter",Arial,sans-serif;line-height:1.2;color:var(--dark);margin:0}
 .wrap{max-width:1100px;margin:0 auto;padding:0 28px}
 @media(max-width:600px){.wrap{padding:0 18px}body{font-size:16px}}
 a{color:var(--teal)}
@@ -26,6 +26,11 @@ a{color:var(--teal)}
 .hero p.lead{font-size:clamp(17px,2vw,20px);max-width:800px;color:#E8E4DA;margin:0 0 26px}
 .meta{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:13.5px;color:#CFCABD;border-top:1px solid rgba(255,255,255,.25);padding-top:16px}
 .meta b{color:#fff}
+.page-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.page-action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border:1px solid #8FE0B8;border-radius:6px;background:#004B23;color:#fff;text-decoration:none;font-size:14px;font-weight:700;transition:background .2s,border-color .2s}
+.page-action:hover,.page-action:focus-visible{background:#003319;border-color:#fff;outline:2px solid #8FE0B8;outline-offset:2px}
+.page-action.secondary{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.55)}
+.page-action.secondary:hover,.page-action.secondary:focus-visible{background:rgba(255,255,255,.2)}
 
 /* nav */
 nav.toc{position:sticky;top:0;z-index:30;background:rgba(28,37,38,.97)}
@@ -108,7 +113,7 @@ code,.mono{font-family:Consolas,"Courier New",monospace;font-size:13.5px}
 /* lab */
 .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 0}
 .tabs button{background:#fff;border:1px solid var(--line);border-bottom:3px solid transparent;border-radius:5px 5px 0 0;padding:10px 14px;font-size:14px;font-weight:600;cursor:pointer;color:var(--dark)}
-.tabs button.on{background:var(--dark);color:#fff;border-bottom-color:var(--copper)}
+.tabs button.on{background:var(--primary,var(--dark));color:#fff;border-bottom-color:var(--gold)}
 .panel{display:none;background:#fff;border:1px solid var(--line);border-top:5px solid var(--copper);border-radius:0 6px 6px 6px;padding:22px;margin-bottom:10px}
 .panel.on{display:block}
 .panel h3{margin-top:0}
@@ -120,9 +125,10 @@ code,.mono{font-family:Consolas,"Courier New",monospace;font-size:13.5px}
 .scn{border-top:1px dashed #C9C3B4;margin-top:6px;padding-top:6px}
 .scn-t{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--copper);margin:8px 0 0}
 .btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
-.btns button{background:var(--dark);color:#fff;border:0;border-radius:4px;padding:8px 14px;font-size:13.5px;font-weight:600;cursor:pointer}
-.btns button.alt{background:#fff;color:var(--dark);border:1px solid #9AA3A6}
-.btns button:hover{background:var(--teal);color:#fff}
+.btns button{background:var(--copper);color:#fff;border:1px solid var(--copper);border-radius:6px;padding:9px 15px;font-size:13.5px;font-weight:700;cursor:pointer;transition:background .2s,border-color .2s}
+.btns button.alt{background:#fff;color:var(--dark);border:1px solid var(--line)}
+.btns button:hover{background:var(--dark);border-color:var(--dark);color:#fff}
+.btns button:focus-visible,.tabs button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
 .msg{font-size:13.5px;color:var(--red);font-weight:600;min-height:1.2em;margin:4px 0}
 .big{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
 .big div{flex:1 1 180px;background:var(--dark);color:#fff;border-radius:6px;padding:12px 16px}
@@ -157,6 +163,10 @@ footer b{color:#fff}footer a{color:#E8C98A}
       <span><b>Source base:</b> APICS/ASCM CSCP Learning System 2024 (v5.2), Modules 1, 2, 4, 5, 6</span>
       <span><b>Plus:</b> labeled industry sources</span>
       <span><b>Format:</b> study summary in original wording</span>
+    </div>
+    <div class="page-actions">
+      <a class="page-action" href="../data-storytelling.html">Back to Data Storytelling</a>
+      <a class="page-action secondary" href="../index.html">Home</a>
     </div>
   </div>
 </header>

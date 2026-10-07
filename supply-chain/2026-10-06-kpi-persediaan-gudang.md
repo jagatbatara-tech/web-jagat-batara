@@ -2,8 +2,8 @@
 title: "KPI Persediaan dan Gudang: Panduan Praktis"
 date: 2026-10-06T00:00:00.000Z
 summary: >
-  Panduan interaktif berbahasa Inggris dengan rumus, contoh, benchmark, kamus
-  KPI, dan enam kalkulator untuk mengeksplorasi kinerja persediaan dan gudang.
+  Panduan interaktif berbahasa Indonesia berisi rumus, contoh, tolok ukur,
+  kamus KPI, dan enam kalkulator untuk mengeksplorasi kinerja persediaan dan gudang.
 tags:
   - Inventory Management
   - Warehouse Management

@@ -1,17 +1,15 @@
 ---
-title: "Supply Chain Design & Optimization: CSCP Module 2, Section A"
+title: Supply Chain Design & Optimization
 date: 2026-10-06T00:00:00.000Z
-summary: >
-  A practical study summary on aligning supply chain network design with
-  business strategy, balancing efficiency with responsiveness and resilience,
-  and building a sound case for supply chain technology.
 tags:
   - Supply Chain Design
   - Network Optimization
   - Supply Chain Strategy
   - CSCP
-id_link: "supply-chain/2026-10-06-desain-dan-optimalisasi-rantai-pasok"
-article_url: "supply-chain/Supply%20Chain%20Design%20%26%20Optimization_EN.html"
+thumbnail: ''
+id_link: supply-chain/2026-10-06-desain-dan-optimalisasi-rantai-pasok
+article_url: supply-chain/Supply%20Chain%20Design%20%26%20Optimization_EN.html
+summary: A practical study summary on aligning supply chain network design with business strategy, balancing efficiency with responsiveness and resilience, and building a sound case for supply chain technology.
 ---
 
 This study summary explains how business strategy shapes supply chain design, network configuration, and measurable objectives. It is based on CSCP Learning System 2024, Module 2, Section A, and is written in original wording.

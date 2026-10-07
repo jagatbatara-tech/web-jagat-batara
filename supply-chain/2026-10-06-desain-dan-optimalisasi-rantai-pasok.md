@@ -1,17 +1,15 @@
 ---
-title: "Desain & Optimalisasi Supply Chain: Ringkasan CSCP Modul 2, Bagian A"
+title: Desain & Optimalisasi Supply Chain
 date: 2026-10-06T00:00:00.000Z
-summary: >
-  Ringkasan praktis tentang penyelarasan desain jaringan supply chain dengan
-  strategi bisnis, keseimbangan efisiensi, responsivitas, dan ketahanan,
-  serta penyusunan dasar investasi teknologi supply chain.
 tags:
   - Desain Supply Chain
   - Optimalisasi Jaringan
   - Strategi Supply Chain
   - CSCP
-en_link: "supply-chain-en/2026-10-06-supply-chain-design-and-optimization"
-article_url: "supply-chain/desain-optimalisasi-supply-chain-id.html"
+thumbnail: ''
+en_link: supply-chain-en/2026-10-06-supply-chain-design-and-optimization
+article_url: supply-chain/desain-optimalisasi-supply-chain-id.html
+summary: Ringkasan praktis tentang penyelarasan desain jaringan supply chain dengan strategi bisnis, keseimbangan efisiensi, responsivitas, dan ketahanan, serta penyusunan dasar investasi teknologi supply chain.
 ---
 
 Ringkasan ini menjelaskan bagaimana strategi bisnis membentuk desain supply chain, konfigurasi jaringan, dan sasaran kinerja yang terukur. Materinya merujuk pada CSCP Learning System 2024, Modul 2, Bagian A, dan ditulis ulang dengan kata-kata orisinal.

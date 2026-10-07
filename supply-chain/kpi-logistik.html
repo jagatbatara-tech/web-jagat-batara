@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KPI Logistik, Dijelaskan Secara Praktis | Jagat Batara</title>
+  <meta name="description" content="Panduan berbahasa Indonesia tentang KPI logistik berbasis CSCP: keandalan pengiriman, persediaan, gudang, transportasi, perdagangan, dan logistik balik.">
+  <style>
+    :root{--ink:#151b1d;--muted:#5b6568;--line:#ddd8cc;--gold:#c59b43;--dark:#1c2526;--green:#2e6e73;--paper:#f4f2ed;--white:#fff}
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.7 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    .wrap{width:min(1080px,100%);margin:auto;padding:0 28px}
+    .hero{background:linear-gradient(180deg,#273233,var(--dark));color:#fff;padding:120px 0 56px}
+    .kicker{color:#d4aa61;font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+    h1,h2{font-family:Georgia,"Times New Roman",serif;line-height:1.15}
+    h1{font-size:clamp(2.5rem,6vw,4.4rem);max-width:850px;margin:14px 0}
+    h2{color:var(--dark);font-size:clamp(1.7rem,4vw,2.4rem);margin:0 0 16px}
+    h3{color:var(--green);margin:28px 0 8px;line-height:1.3}
+    .lead{max-width:780px;color:#e8e4da;font-size:1.15rem}
+    .meta{display:flex;flex-wrap:wrap;gap:8px 24px;border-top:1px solid #ffffff40;padding-top:16px;color:#cfcabd;font-size:14px}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+    .action{display:inline-block;padding:9px 15px;border:1px solid var(--gold);border-radius:5px;background:#b77a2b;color:#fff;text-decoration:none;font-weight:700}
+    .action.secondary{background:transparent}
+    .site-language-switcher{position:fixed;z-index:10;top:16px;right:16px;display:flex;gap:9px;align-items:center;padding:8px 12px;background:#1c2526cc;font-size:14px;font-weight:700}
+    .site-language-switcher a{color:#fff;text-decoration:none}.site-language-switcher a[aria-current=page]{color:#d4aa61}
+    nav{position:sticky;top:0;z-index:5;background:var(--dark);overflow:auto}
+    nav .wrap{display:flex;gap:18px;white-space:nowrap;padding-top:13px;padding-bottom:13px}
+    nav a{color:#e8e4da;text-decoration:none;font-size:14px}
+    main{padding:32px 0 70px}
+    section{scroll-margin-top:58px;padding:34px 0;border-bottom:1px solid var(--line)}
+    .card,.callout{background:var(--white);border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin:16px 0}
+    .callout{border-left:4px solid var(--gold);background:#fff8e8}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+    table{width:100%;border-collapse:collapse;background:#fff;margin:16px 0;font-size:.95rem}
+    th,td{border:1px solid var(--line);padding:10px;text-align:left;vertical-align:top}
+    th{background:#eaf3f3;color:var(--green)}
+    .scroll{overflow-x:auto}
+    code{white-space:normal;background:#eef1f2;padding:2px 5px;border-radius:3px}
+    footer{background:var(--dark);color:#cfcabd;padding:32px 0;font-size:14px}
+    footer a{color:#d4aa61}
+    @media(max-width:620px){.wrap{padding:0 18px}.hero{padding-top:100px}.switcher{top:8px;right:8px}nav .wrap{gap:14px}section{padding:26px 0}}
+  </style>
+</head>
+<body data-language-en="../supply-chain-en/CSCP%20Logistics%20KPI.html" data-language-id="kpi-logistik.html">
+  <nav class="site-language-switcher" aria-label="Bahasa">
+    <a href="../supply-chain-en/CSCP%20Logistics%20KPI.html">EN</a><span aria-hidden="true">|</span>
+    <a href="kpi-logistik.html" aria-current="page">ID</a>
+  </nav>
+  <header class="hero">
+    <div class="wrap">
+      <div class="kicker">CSCP Learning System 2024 · Kinerja logistik</div>
+      <h1>KPI Logistik, Dijelaskan Secara Praktis</h1>
+      <p class="lead">Panduan untuk memahami apa yang diukur KPI logistik, cara menghitung metrik utamanya, dan cara menyeimbangkan tingkat layanan dengan biaya total.</p>
+      <div class="meta">
+        <span><b>Sumber:</b> APICS/ASCM CSCP Learning System 2024 (v5.2), Modul 2, 4, 5, dan 6</span>
+        <span><b>Bahasa:</b> Indonesia</span>
+      </div>
+      <div class="actions">
+        <a class="action" href="../supply-chain.html?lang=id">← Kembali ke Supply Chain</a>
+        <a class="action secondary" href="../index-id.html">Beranda</a>
+      </div>
+    </div>
+  </header>
+  <nav aria-label="Daftar isi"><div class="wrap">
+    <a href="#ringkasan">Ringkasan</a><a href="#kerangka">Kerangka KPI</a><a href="#layanan">Keandalan layanan</a>
+    <a href="#kecepatan">Kecepatan</a><a href="#persediaan">Persediaan</a><a href="#gudang">Gudang</a>
+    <a href="#transportasi">Transportasi</a><a href="#perdagangan">Perdagangan</a><a href="#balik">Logistik balik</a>
+    <a href="#tata-kelola">Tata kelola</a><a href="#simulasi">Simulasi</a>
+  </div></nav>
+  <main class="wrap">
+    <section id="ringkasan">
+      <div class="kicker">Ringkasan</div>
+      <h2>Enam prinsip untuk membaca KPI logistik</h2>
+      <div class="grid">
+        <article class="card"><b>Layanan dan biaya total.</b> Tujuan logistik adalah memenuhi kebutuhan pelanggan dengan biaya total serendah mungkin. Layanan dan biaya merupakan dua sisi dari nilai yang ditawarkan.</article>
+        <article class="card"><b>Satu janji, beberapa ukuran.</b> Ketepatan waktu, OTIF, fill rate, dan perfect order mengukur aspek berbeda dari pemenuhan janji kepada pelanggan.</article>
+        <article class="card"><b>Definisi mengubah hasil.</b> OTIF tidak otomatis menetapkan toleransi keterlambatan atau jumlah. Aturan yang berbeda dapat memberi skor berbeda pada pesanan yang sama.</article>
+        <article class="card"><b>Konsistensi sama pentingnya dengan kecepatan.</b> Variasi waktu siklus membuat pelanggan perlu menyimpan safety stock; besar variabilitas memengaruhi jumlahnya.</article>
+        <article class="card"><b>Setiap keputusan memiliki trade-off.</b> Moda lebih cepat, gudang tambahan, muatan penuh, dan otomasi mengubah kombinasi biaya, persediaan, kapasitas, dan layanan.</article>
+        <article class="card"><b>Gunakan sedikit KPI lintas fungsi.</b> Hubungkan ukuran dengan strategi dan hindari metrik yang hanya mengoptimalkan satu bagian organisasi.</article>
+      </div>
+      <div class="callout">Contoh dalam panduan dan kalkulator merupakan angka ilustratif, bukan tolok ukur industri atau data perusahaan. Rujukan halaman mengacu pada nomor halaman PDF dalam materi CSCP yang digunakan.</div>
+    </section>
+    <section id="kerangka">
+      <div class="kicker">01 · Kerangka</div>
+      <h2>Untuk apa KPI logistik digunakan?</h2>
+      <p>Logistik perlu dikelola secara terpadu agar kepuasan pelanggan tercapai dengan biaya total terendah. Pesanan yang lengkap, tidak rusak, tepat waktu, dan konsisten membutuhkan sumber daya; setiap tingkat layanan dapat dicapai jika manfaatnya sepadan dengan biaya.</p>
+      <p>Gunakan konsep <b>biaya total</b>: jika dua pilihan memberikan tingkat layanan setara, pilih yang meminimalkan gabungan seluruh biaya logistik. Jangan mengambil keputusan hanya dari penghematan satu pos, misalnya tarif angkutan yang lebih rendah, tanpa menghitung dampaknya pada persediaan, pergudangan, penanganan, dan layanan.</p>
+      <h3>Enam aturan memilih KPI</h3>
+      <ol>
+        <li>Hubungkan tiap KPI dengan strategi dan proposisi nilai pelanggan; gunakan kelompok ukuran yang ringkas.</li>
+        <li>Ukur layanan dan biaya secara bersamaan agar pengurangan biaya tidak diam-diam menurunkan layanan.</li>
+        <li>Sepakati definisi, cakupan, satuan, periode, sumber data, serta toleransi sebelum membandingkan hasil.</li>
+        <li>Ukur hasil yang dapat ditindaklanjuti, bukan sekadar angka yang mudah dikumpulkan.</li>
+        <li>Periksa dampak lintas fungsi dan mitra agar optimasi lokal tidak menaikkan biaya total.</li>
+        <li>Tinjau tren dan penyebabnya; KPI merupakan sinyal untuk bertindak, bukan tujuan akhir.</li>
+      </ol>
+      <p>Istilah perusahaan seperti DIFOT, RIFOT, atau PIFOT tidak selalu memiliki padanan langsung dalam modul CSCP. Petakan label internal ke definisi yang benar-benar digunakan, seperti OTIF, on-time delivery, perfect customer order fulfillment, atau days payables outstanding.</p>
+    </section>
+    <section id="layanan">
+      <div class="kicker">02 · Keandalan pengiriman</div>
+      <h2>Apakah janji kepada pelanggan atau pemasok terpenuhi?</h2>
+      <div class="scroll"><table>
+        <thead><tr><th>Ukuran</th><th>Makna / perhitungan</th><th>Catatan definisi</th></tr></thead>
+        <tbody>
+          <tr><td>On-time delivery</td><td>Pengiriman yang tiba tepat waktu ÷ seluruh pengiriman.</td><td>Tetapkan tanggal acuan: tanggal permintaan, komitmen, atau penerimaan.</td></tr>
+          <tr><td>OTIF (tepat waktu dan lengkap)</td><td>Pengiriman yang memenuhi kedua syarat ÷ seluruh pengiriman.</td><td>Tentukan toleransi tanggal dan kuantitas secara eksplisit.</td></tr>
+          <tr><td>Fill rate</td><td>Jumlah unit, item baris, atau nilai pesanan yang dipenuhi sesuai jadwal ÷ jumlah yang seharusnya dipenuhi.</td><td>Unit, line-item, dan nilai uang menghasilkan ukuran yang berbeda.</td></tr>
+          <tr><td>Perfect order fulfillment</td><td>Pesanan sempurna ÷ seluruh pesanan.</td><td>Evaluasi pemenuhan penuh, tanggal komitmen, dokumen, dan kondisi barang.</td></tr>
+          <tr><td>Kinerja pemasok</td><td>Bandingkan jadwal PO dengan tanggal dan kuantitas penerimaan aktual.</td><td>Pisahkan keterlambatan, pengiriman terlalu awal, kekurangan, penolakan, dan kerusakan.</td></tr>
+        </tbody>
+      </table></div>
+      <p><b>Contoh dampak toleransi:</b> tiga baris PO dapat memperoleh hasil 0% jika harus tepat tanggal dan kuantitas. Dengan toleransi keterlambatan dua hari dan kuantitas ±1%, baris yang sama dapat mencapai 100%. Karena itu, bandingkan skor hanya setelah aturan disepakati.</p>
+    </section>
+    <section id="kecepatan">
+      <div class="kicker">03 · Kecepatan dan konsistensi</div>
+      <h2>Seberapa cepat dan seberapa dapat diprediksi?</h2>
+      <p><b>Waktu siklus pesanan pelanggan</b> adalah waktu dari pemesanan sampai produk diterima dan siap digunakan. Laporkan rata-rata bersama sebaran atau variasinya; rata-rata saja dapat menyembunyikan keterlambatan ekstrem. <b>Waktu siklus supply chain</b> menjumlahkan lead time terpanjang pada tiap tahap, sebagai gambaran waktu pemenuhan jika persediaan tidak tersedia.</p>
+      <p>Ukuran pelengkap meliputi variasi lead time, persentase pengiriman dalam lead time yang dijanjikan, tingkat pengiriman terlalu awal, waktu memproses perubahan permintaan pelanggan, waktu merespons pertanyaan, waktu pemulihan gangguan, dan akurasi status pesanan. Pengiriman terlalu awal juga dapat menjadi masalah jika pelanggan belum siap menerima barang.</p>
+      <div class="callout">Konsistensi dapat lebih bernilai daripada kecepatan maksimum. Jika waktu siklus berubah-ubah, pelanggan harus melindungi diri dengan persediaan tambahan.</div>
+    </section>
+    <section id="persediaan">
+      <div class="kicker">04 · Ketersediaan</div>
+      <h2>Apakah persediaan tersedia saat diperlukan?</h2>
+      <p>Pantau frekuensi dan nilai stockout, umur rata-rata stockout, waktu pemulihan, jumlah dan umur backorder, serta keluhan pelanggan. Keluhan berguna sebagai sinyal, tetapi merupakan proksi yang lemah: tidak semua pelanggan menyampaikan masalah.</p>
+      <p>Gunakan fill rate bersama ukuran ketersediaan. Persediaan yang tinggi belum tentu berarti pelanggan mendapatkan item yang tepat, sementara tingkat layanan yang tinggi dapat dicapai dengan biaya penyimpanan berlebih. Kaitkan ukuran dengan kebijakan persediaan, permintaan, dan tingkat layanan yang dijanjikan.</p>
+    </section>
+    <section id="gudang">
+      <div class="kicker">05 · Pergudangan</div>
+      <h2>Apakah ruang, aliran, dan pekerjaan gudang efektif?</h2>
+      <p>Ukuran gudang dapat mencakup kebutuhan kapasitas puncak, pemanfaatan kubik, aksesibilitas lokasi, selisih penerimaan terhadap PO, akurasi picking dan pengiriman, frekuensi kerusakan, produktivitas tenaga kerja, serta fill rate dan pengiriman tepat waktu pada gudang pihak ketiga.</p>
+      <p>Kebutuhan ruang perlu memperhitungkan volume puncak, volume per palet, faktor area dan pergerakan, jumlah tingkat rak, serta target utilisasi. Target utilisasi di bawah 100% menyediakan ruang untuk variasi dan kapasitas tambahan; angka target sebaiknya mengikuti kebijakan, strategi, dan analisis risiko.</p>
+      <p>Rasio sederhana yang dapat diturunkan dari definisi operasional, misalnya:</p>
+      <ul><li><code>Akurasi = pekerjaan yang benar ÷ seluruh pekerjaan</code></li><li><code>Aksesibilitas = palet yang dapat dijangkau langsung ÷ palet tersimpan</code></li><li><code>Produktivitas = output ÷ input</code>, misalnya unit terkirim per jam kerja.</li></ul>
+    </section>
+    <section id="transportasi">
+      <div class="kicker">06 · Transportasi dan biaya</div>
+      <h2>Berapa biaya memindahkan barang untuk tingkat layanan tertentu?</h2>
+      <p>Ukur biaya total logistik dan biaya transportasi per unit atau per ton-kilometer. Periksa utilisasi kapasitas muatan, jarak tempuh kosong, persediaan dalam perjalanan, biaya demurrage dan detention, efisiensi bahan bakar, emisi, pembelian kapasitas di pasar spot, serta rasio klaim kerusakan atau kehilangan.</p>
+      <div class="grid">
+        <div class="card"><b>Biaya per ton-km</b><br>Biaya transportasi ÷ (tonase × jarak).</div>
+        <div class="card"><b>Utilisasi muatan</b><br>Berat atau volume aktual ÷ kapasitas kendaraan.</div>
+        <div class="card"><b>Perjalanan kosong</b><br>Jarak kosong ÷ seluruh jarak tempuh; muatan balik dapat menguranginya.</div>
+        <div class="card"><b>Persediaan dalam perjalanan</b><br>Permintaan tahunan × hari transit ÷ 365.</div>
+      </div>
+      <p>Muatan penuh biasanya menekan biaya per unit, tetapi konsolidasi dapat menambah waktu tunggu dan persediaan. Moda cepat dapat mengurangi waktu transit tetapi menaikkan ongkos. Bandingkan skenario berdasarkan biaya total dan layanan, bukan tarif angkutan saja.</p>
+    </section>
+    <section id="perdagangan">
+      <div class="kicker">07 · Perdagangan lintas batas</div>
+      <h2>Apakah barang melintasi perbatasan dengan biaya dan waktu yang dapat diprediksi?</h2>
+      <p>Biaya perdagangan dapat meliputi bea masuk, pajak pertambahan nilai impor, broker, dokumen, dan biaya kepatuhan. Tarif bea umumnya diterapkan pada basis nilai pabean yang berlaku (misalnya CIF atau FOB, sesuai aturan negara); PPN impor dapat dihitung atas nilai barang ditambah bea. Pastikan basis dan aturan yang dipakai telah diverifikasi untuk tiap yurisdiksi.</p>
+      <p>Ukur waktu penyelesaian kepabeanan, tingkat kesalahan dokumen, serta kesenjangan kepatuhan. Untuk tanggung jawab sosial, indikator dapat mencakup pemasok yang diaudit dan insiden ketenagakerjaan yang ditemukan. Pisahkan temuan, cakupan audit, dan tindakan korektif agar satu rasio tidak menutupi tingkat risikonya.</p>
+    </section>
+    <section id="balik">
+      <div class="kicker">08 · Logistik balik</div>
+      <h2>Berapa biaya pengembalian dan nilai yang berhasil dipulihkan?</h2>
+      <p><b>Tingkat retur</b> adalah unit yang dikembalikan ÷ unit yang terjual. Tingkatnya bergantung pada kanal dan kategori; contoh CSCP mencatat kisaran 8–10% untuk toko dan 20–30% atau lebih untuk penjualan daring. Jangan bandingkan perusahaan tanpa menyamakan kategori, periode, serta definisi retur.</p>
+      <p>Kelompokkan hasil inspeksi: dijual kembali, diperbaiki atau diperbarui, diproduksi ulang, didaur ulang, disumbangkan, atau dibuang. Ukur biaya penanganan dan transportasi serta nilai pemulihan. Tingkat retur yang sama dapat memiliki dampak keuangan berbeda berdasarkan kondisi barang dan jalur disposisinya.</p>
+      <p>Analisis skenario sebaiknya memperhitungkan unit retur, pendapatan yang dikembalikan, biaya penanganan dan angkut, nilai yang dipulihkan, serta biaya bersih per unit retur dan sebagai persentase penjualan.</p>
+    </section>
+    <section id="tata-kelola">
+      <div class="kicker">09 · Tata kelola</div>
+      <h2>Pastikan metrik mendorong perilaku yang tepat</h2>
+      <p>Untuk penyedia logistik 3PL/4PL, tetapkan KPI kontrak yang mencerminkan prioritas layanan dan tindakan jika kinerja menyimpang. Scorecard pemasok dapat menggabungkan ukuran kuantitatif dan kualitatif, kinerja historis dan terkini, serta indikator prediktif. Tinjau pemasok strategis secara berkala dan sepakati perbaikan bersama.</p>
+      <p>Sebelum menerbitkan KPI, dokumentasikan pemilik metrik, sumber data, frekuensi, cakupan pesanan, pengecualian, target, dan cara menangani data yang hilang. Definisi yang stabil membuat tren dapat dipercaya serta mencegah perubahan aturan mengubah skor tanpa perubahan kinerja.</p>
+    </section>
+    <section id="simulasi">
+      <div class="kicker">10 · Simulasi</div>
+      <h2>Uji skenario sebelum mengubah operasi</h2>
+      <p>Ubah satu atau beberapa asumsi—aturan OTIF, lead time dan variasinya, persediaan, kebutuhan ruang, utilisasi muatan, biaya transportasi, biaya kepabeanan, atau tingkat retur—lalu periksa pengaruhnya pada layanan dan biaya total. Gunakan nilai awal hanya sebagai ilustrasi dan ganti dengan data tervalidasi sebelum mengambil keputusan.</p>
+      <div class="callout"><b>Kalkulator interaktif:</b> versi bahasa Inggris menyediakan tujuh kalkulator what-if untuk OTIF, pengiriman, persediaan, kapasitas gudang, transportasi, perdagangan, dan retur. <a href="../supply-chain-en/CSCP%20Logistics%20KPI.html#lab">Buka laboratorium simulasi (bahasa Inggris)</a>.</div>
+      <h3>Catatan penggunaan sumber</h3>
+      <p>Label CSCP menunjukkan konsep yang dinyatakan dalam modul; beberapa rasio operasional merupakan turunan dari definisi CSCP dan bukan formula resmi yang ditetapkan modul. Periksa sumber PDF sebelum memakai rumus turunan atau rumus yang direkonstruksi dalam pelaporan formal.</p>
+    </section>
+  </main>
+  <footer><div class="wrap">Ringkasan belajar berbasis CSCP · <a href="../supply-chain.html?lang=id">Arsip Supply Chain</a></div></footer>
+  <script src="../assets/language-switcher.js"></script>
+</body>
+</html>

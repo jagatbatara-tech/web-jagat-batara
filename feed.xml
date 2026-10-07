@@ -4,9 +4,9 @@
   <title>Jagat Batara — Knowledge Sharing</title>
   <link>https://jagatbatara-tech.github.io/web-jagat-batara</link>
   <description>Artikel terbaru dari Jagat Batara: studi kasus, supply chain, data storytelling, automation, dan lainnya.</description>
-  <lastBuildDate>Wed, 07 Oct 2026 01:05:42 GMT</lastBuildDate>
+  <lastBuildDate>Wed, 07 Oct 2026 01:06:10 GMT</lastBuildDate>
   <item>
-    <title>Desain &amp; Optimalisasi Supply Chain: Ringkasan CSCP Modul 2, Bagian A</title>
+    <title>Desain &amp; Optimalisasi Supply Chain</title>
     <link>https://jagatbatara-tech.github.io/web-jagat-batara/supply-chain.html?post=2026-10-06-desain-dan-optimalisasi-rantai-pasok.md</link>
     <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/supply-chain.html?post=2026-10-06-desain-dan-optimalisasi-rantai-pasok.md</guid>
     <pubDate>Tue, 06 Oct 2026 00:00:00 GMT</pubDate>
@@ -32,13 +32,6 @@
     <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/ai.html?post=2026-10-03-microsoft-ai-work-context.md</guid>
     <pubDate>Sat, 03 Oct 2026 00:00:00 GMT</pubDate>
     <description>Perbedaan antara Microsoft 365 Copilot, GitHub Copilot, Copilot Studio, dan Azure AI Foundry bukan sekadar model yang digunakan, melainkan konteks kerja yang mereka pahami.</description>
-  </item>
-  <item>
-    <title>Ship-to-Shore Crane: Optimasi Kinerja Terminal Peti Kemas dari Perspektif Operasional</title>
-    <link>https://jagatbatara-tech.github.io/web-jagat-batara/supply-chain.html?post=2026-10-01-ship-to-shore-crane-optimasi-kinerja-terminal.md</link>
-    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/supply-chain.html?post=2026-10-01-ship-to-shore-crane-optimasi-kinerja-terminal.md</guid>
-    <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
-    <description>Pengalaman 15 tahun di industri logistik dan operasional pertambangan mengajarkan saya bahwa mayoritas terminal peti kemas belum mengoptimalkan potensi Ship-to-Shore Crane (STS) secara maksimal. Artikel ini berbagi insight tentang fundamental STS, KPI yang perlu dipantau, bottleneck operasional yang sering terjadi, dan framework data-driven untuk continuous improvement.</description>
   </item>
   <item>
     <title>Otomasi Data Quality Check: Transformasi Validasi Data Operasional</title>

@@ -1,5 +1,6 @@
 ---
 title: "How Much Warehouse Space Do You Need? Warehouse Capacity Forecasting"
+archive_url: "supply-chain-en/CSCP%20Module%205%20Warehouse%20Capacity%20Forecasting.html"
 kicker: Case Study · Warehouse Capacity Forecasting
 date: 2026-10-07T00:00:00.000Z
 summary: >

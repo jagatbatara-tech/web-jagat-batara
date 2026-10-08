@@ -194,6 +194,17 @@
         .catch(function(){ document.getElementById('loading-single').innerText = currentLang === 'id' ? 'Gagal memuat artikel.' : 'Failed to load article.'; });
 
     } else {
+      if (currentLang === 'en') {
+        const card = document.createElement('a');
+        card.href = 'studi-kasus-en/consulting_market_entry_case_study.html';
+        card.className = 'archive-card';
+        card.innerHTML =
+          '<div class="archive-kicker">Market Entry · Heavy Equipment</div>' +
+          '<div class="archive-title">How Can a New Entrant Compete in Indonesia’s Heavy-Equipment Wet-Leasing Market?</div>' +
+          '<div class="archive-excerpt">Sector choice, market sizing, customer behavior, competitor economics, and entry modes.</div>';
+        document.getElementById('archive-container').appendChild(card);
+      }
+
       fetch(listUrl)
         .then(function(res){ if (res.status === 404) return []; if (!res.ok) throw new Error('Failed to load archive'); return res.json(); })
         .then(async function(files){

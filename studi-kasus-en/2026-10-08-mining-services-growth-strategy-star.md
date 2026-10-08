@@ -1,34 +1,32 @@
 ---
-title: "Mining Services Growth Strategy: An Executive STAR Case Study"
-kicker: "Executive Consulting Case Study · STAR + Evidence · Indonesia"
+title: Where Should a Mining Contractor Grow When the Core Market Is Under Pressure?
+kicker: Executive Consulting Case Study · STAR + Evidence · Indonesia
 date: 2026-10-08T00:00:00.000Z
-summary: >
-  How an integrated fact base, primary research, operating benchmarks, customer-access
-  logic, and capability-adjacency analysis shaped a sequenced growth portfolio for
-  an Indonesian mining-services contractor.
+summary: How an integrated fact base, primary research, operating benchmarks, customer-access logic, and capability-adjacency analysis shaped a sequenced growth portfolio for an Indonesian mining-services contractor.
 tags:
   - Growth Strategy
   - Mining Services
   - Operational Excellence
   - Portfolio Diversification
 hero_stats:
-  - value: "12 weeks"
-    label: "Research, analysis, workshops, and recommendations"
-  - value: "50+"
-    label: "Stakeholders consulted"
-  - value: "6"
-    label: "Prioritized growth pathways"
-  - value: "3"
-    label: "Transformation horizons"
-disclaimer: >
-  This is an anonymized reconstruction of a management-consulting engagement in
-  Indonesia's mining-services sector. Client identity, named targets, contacts,
-  tender details, exact cost benchmarks, and confidential financial assumptions
-  are excluded. Market and production figures reflect the original project period,
-  not current forecasts. Documented outcomes are strategic outputs, not realized
-  post-implementation revenue or savings.
-archive_url: studi-kasus-en/mining_services_growth_strategy_STAR_professional.html
+  - value: 12 weeks
+    label: Research, analysis, workshops, and recommendations
+  - value: 50+
+    label: Stakeholders consulted
+  - value: '6'
+    label: Prioritized growth pathways
+  - value: '3'
+    label: Transformation horizons
+thumbnail: ''
+architecture_image: ''
+architecture_caption: ''
+dashboard_image: ''
+dashboard_caption: ''
+tech_stack: []
+impact_summary: []
+disclaimer: This is an anonymized reconstruction of a management-consulting engagement in Indonesia's mining-services sector. Client identity, named targets, contacts, tender details, exact cost benchmarks, and confidential financial assumptions are excluded. Market and production figures reflect the original project period, not current forecasts. Documented outcomes are strategic outputs, not realized post-implementation revenue or savings.
 id_link: studi-kasus/2026-10-08-strategi-pertumbuhan-jasa-pertambangan-star
+archive_url: studi-kasus-en/mining_services_growth_strategy_STAR_professional.html
 ---
 
 ## Executive Summary

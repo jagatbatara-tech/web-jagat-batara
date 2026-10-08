@@ -27,6 +27,7 @@ disclaimer: >
   are excluded. Market and production figures reflect the original project period,
   not current forecasts. Documented outcomes are strategic outputs, not realized
   post-implementation revenue or savings.
+archive_url: studi-kasus-en/mining_services_growth_strategy_STAR_professional.html
 id_link: studi-kasus/2026-10-08-strategi-pertumbuhan-jasa-pertambangan-star
 ---
 

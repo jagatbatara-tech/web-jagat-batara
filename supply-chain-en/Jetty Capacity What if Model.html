@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>When Does Jetty Congestion Constrain Capacity? A General What-If Model (v2: berth phases, windows, schedule)</title>
-<meta name="description" content="A general what-if model for jetty occupancy versus arriving vessels: berth phases, pilot and tide windows, additional jetties, ship-to-ship (STS) transfer, and a berth-schedule Gantt that shows snowball delays.">
+<title>When Does Jetty Congestion Constrain Capacity?</title>
+<meta name="description" content="An interactive what-if model showing how berth occupancy, vessel service time, operating windows, added jetties, and berth schedules affect jetty congestion and delays.">
 <style>
 :root{--bg:#F4F2ED;--ink:#151B1D;--muted:#5B6568;--line:#DDD8CC;--copper:#B77A2B;--gold:#C59B43;--dark:#1C2526;--green:#3E745A;--teal:#2E6E73;--amber:#D49A3A;--red:#B64D42;--card:#FFFFFF}
 *{box-sizing:border-box}
@@ -22,6 +22,7 @@ a{color:var(--teal)}
 .kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12.5px;color:var(--gold);font-weight:700}
 .hero h1{color:#fff;font-size:clamp(32px,5.4vw,58px);margin:14px 0 16px;max-width:920px}
 .hero p.lead{font-size:clamp(17px,2vw,20px);max-width:830px;color:#E8E4DA;margin:0 0 22px}
+.page-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.page-action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border:1px solid var(--copper);border-radius:6px;background:var(--copper);color:#fff;text-decoration:none;font-size:14px;font-weight:700}.page-action:hover,.page-action:focus-visible{background:var(--dark);border-color:#fff;outline:2px solid var(--gold);outline-offset:2px}.page-action.secondary{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.55)}
 .meta{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:13.5px;color:#CFCABD;border-top:1px solid rgba(255,255,255,.25);padding-top:16px}
 .meta b{color:#fff}
 .cta{display:inline-block;background:var(--copper);color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:10px 18px;border-radius:4px;margin:0 10px 22px 0}
@@ -161,6 +162,7 @@ footer b{color:#fff}
     <div class="kicker">General what-if model &middot; Version 2</div>
     <h1>When Does Jetty Congestion Constrain Capacity?</h1>
     <p class="lead">A berth is not full at 100%. Vessels start queueing long before that, and every call blocks the berth for more than the cargo operation. This page explains the method, gives every formula, takes a full set of parameters, and shows what an additional jetty, ship-to-ship (STS) transfer, or a better berth schedule can do about it.</p>
+    <div class="page-actions"><a class="page-action" href="../studi-kasus.html">Back to Case Studies</a><a class="page-action secondary" href="../index.html">Home</a></div>
     <a class="cta" href="#setup">Go to parameter setup</a><a class="cta alt" href="#method">Read the method first</a>
     <div class="meta"><span><b>Scope:</b> any jetty or quay, any cargo mix</span><span><b>Inputs:</b> editable, generic example loaded</span><span><b>Runs:</b> in your browser, nothing is stored or sent</span></div>
   </div>

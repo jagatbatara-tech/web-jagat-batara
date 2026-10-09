@@ -9,7 +9,7 @@
 (function (global) {
   const REPO = 'jagatbatara-tech/web-jagat-batara';
   const BRANCH = 'main';
-  const CACHE_KEY = 'jb-search-index-v1';
+  const CACHE_KEY = 'jb-search-index-v2';
   const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
   // base -> { page, folderId, folderEn, labelId, labelEn }
@@ -45,23 +45,49 @@
       if (!Array.isArray(files)) return [];
     } catch (e) { return []; }
 
-    const mdFiles = files.filter(function (f) { return f.name && f.name.endsWith('.md'); });
+    const articleFiles = files.filter(function (f) {
+      return f.name && /\.(md|html)$/i.test(f.name);
+    });
     const entries = [];
-    await Promise.all(mdFiles.map(async function (file) {
+    await Promise.all(articleFiles.map(async function (file) {
       try {
         const raw = await (await fetch(file.download_url)).text();
-        const parsed = parsePost(raw);
-        const fm = parsed.fm || {};
-        entries.push({
-          title: fm.title || file.name,
-          summary: fm.summary || '',
-          tags: (fm.tags || []).join(' '),
-          kicker: fm.kicker || '',
-          body: stripMarkdown(parsed.body).slice(0, 4000),
-          date: fm.date || '',
-          collectionLabel: lang === 'en' ? collection.labelEn : collection.labelId,
-          url: collection.page + '?post=' + encodeURIComponent(file.name) + (lang === 'id' ? '&lang=id' : '')
-        });
+        const isMarkdown = /\.md$/i.test(file.name);
+        let entry;
+
+        if (isMarkdown) {
+          const parsed = parsePost(raw);
+          const fm = parsed.fm || {};
+          entry = {
+            title: fm.title || file.name,
+            summary: fm.summary || '',
+            tags: (fm.tags || []).join(' '),
+            kicker: fm.kicker || '',
+            body: stripMarkdown(parsed.body).slice(0, 4000),
+            date: fm.date || '',
+            url: collection.page + '?post=' + encodeURIComponent(file.name) + (lang === 'id' ? '&lang=id' : '')
+          };
+        } else {
+          const doc = new DOMParser().parseFromString(raw, 'text/html');
+          const content = (doc.querySelector('main, article') || doc.body).cloneNode(true);
+          content.querySelectorAll('script, style, noscript, nav, footer').forEach(function (node) {
+            node.remove();
+          });
+          const heading = content.querySelector('h1');
+          const description = doc.querySelector('meta[name="description"]');
+          entry = {
+            title: (heading && heading.textContent.trim()) || doc.title || file.name,
+            summary: (description && description.content) || '',
+            tags: '',
+            kicker: '',
+            body: content.textContent.replace(/\s+/g, ' ').trim().slice(0, 4000),
+            date: '',
+            url: folder + '/' + encodeURIComponent(file.name)
+          };
+        }
+
+        entry.collectionLabel = lang === 'en' ? collection.labelEn : collection.labelId;
+        entries.push(entry);
       } catch (e) { /* skip unreadable file */ }
     }));
     return entries;

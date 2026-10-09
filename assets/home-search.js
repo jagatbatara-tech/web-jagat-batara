@@ -4,18 +4,6 @@
   const results = document.getElementById('article-search-results');
   if (!input || !status || !results || !window.JBSearch) return;
 
-  const searchBox = input.closest('.home-search');
-  const header = document.querySelector('.navin');
-  const menu = header && header.querySelector('.menu');
-  if (searchBox && header && menu) {
-    const popover = document.createElement('div');
-    popover.className = 'home-search-popover';
-    popover.append(status, results);
-    searchBox.appendChild(popover);
-    searchBox.classList.remove('intro', 'd4');
-    header.insertBefore(searchBox, menu);
-  }
-
   let entries = [];
 
   function render() {

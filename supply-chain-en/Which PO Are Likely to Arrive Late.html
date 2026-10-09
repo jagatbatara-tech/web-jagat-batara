@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Which purchase orders are likely to arrive late?</title>
+<style>
+:root{--bg:#F4F2ED;--ink:#151B1D;--muted:#5B6568;--line:#DDD8CC;--copper:#B77A2B;--gold:#C59B43;--dark:#1C2526;--green:#3E745A;--teal:#2E6E73;--amber:#D49A3A;--red:#B64D42;--card:#fff;--soft:#EEE9DD}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Calibri,Arial,sans-serif;line-height:1.55;font-size:16px}
+a{color:var(--teal)}
+.wrap{max-width:1220px;margin:0 auto;padding:0 22px}
+h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;color:var(--dark);line-height:1.2}
+h2{font-size:30px;margin:0 0 6px}
+h3{font-size:21px;margin:26px 0 8px}
+h4{font-size:16px;margin:18px 0 6px;font-family:"Segoe UI",sans-serif;letter-spacing:.02em}
+p{margin:8px 0}
+.lab{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--copper)}
+.small{font-size:13px;color:var(--muted)}
+.lead{font-size:18px;color:var(--muted);max-width:860px}
+/* hero */
+.hero{background:var(--dark);color:#EDEAE1;padding:46px 0 38px;border-bottom:6px solid var(--copper)}
+.hero h1{color:#fff;font-size:44px;margin:8px 0 12px;max-width:900px}
+.hero p{color:#CFCABC;font-size:18px;max-width:860px}
+.hero .meta{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px;font-size:14px;color:#BDB8AA}
+.hero .meta b{color:#F2D9A0}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-block;background:var(--copper);color:#fff;text-decoration:none;font-weight:700;padding:11px 20px;border-radius:6px;border:0;cursor:pointer;font-size:15px;font-family:inherit}
+.btn.alt{background:transparent;border:2px solid #8A8472;color:#EDEAE1}
+.btn.sm{padding:6px 12px;font-size:13px;border-radius:5px}
+.btn.line{background:#fff;color:var(--dark);border:1px solid var(--line)}
+.btn.on{background:var(--dark);color:#fff}
+/* nav */
+nav.toc{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;white-space:nowrap;padding:0 22px}
+nav.toc a{display:block;padding:12px 11px;font-size:13.5px;text-decoration:none;color:var(--muted);font-weight:600;border-bottom:3px solid transparent}
+nav.toc a:hover{color:var(--dark);border-bottom-color:var(--copper)}
+section{padding:46px 0 10px;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+.num{display:inline-block;background:var(--copper);color:#fff;border-radius:50%;width:34px;height:34px;line-height:34px;text-align:center;font-family:Georgia,serif;font-size:17px;margin-right:10px;vertical-align:3px}
+/* cards */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:14px}
+.card{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--copper);border-radius:8px;padding:14px 18px}
+.card h4{margin-top:0}
+.card .n{font-family:Georgia,serif;font-size:26px;color:var(--copper);font-weight:700}
+.note{background:#FFFBF1;border:1px dashed var(--amber);border-radius:8px;padding:10px 14px;font-size:14px;margin:14px 0}
+.note b{color:#8A5A12}
+.callout{background:#EAF3F3;border-left:5px solid var(--teal);border-radius:6px;padding:10px 14px;margin:14px 0;font-size:15px}
+.warnbox{background:#FBEDEB;border:1px solid #EBC8C3;border-left:5px solid var(--red);border-radius:6px;padding:10px 16px;margin:14px 0;font-size:14px}
+/* tables */
+.tw{overflow-x:auto;margin:10px 0;border:1px solid var(--line);border-radius:6px;background:#fff}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{background:var(--dark);color:#fff;text-align:left;padding:7px 9px;font-weight:600;vertical-align:bottom;white-space:nowrap}
+td{padding:6px 9px;border-top:1px solid var(--line);vertical-align:top}
+td.r,th.r{text-align:right}
+td.c{text-align:center}
+tr.grp td{background:var(--soft);font-weight:700}
+.k{font-weight:700}
+/* formulas */
+.eq{font-family:Consolas,"Courier New",monospace;font-size:14px;background:var(--dark);color:#EDEAE1;border-radius:6px;padding:10px 14px;margin:8px 0;overflow-x:auto;line-height:1.7}
+.eq b{color:#F2D9A0}
+.eq .c{color:#8FB3B5}
+code{font-family:Consolas,monospace;background:#EDE8DA;padding:1px 5px;border-radius:3px;font-size:13.5px}
+/* status chips */
+.stp{display:inline-block;color:#fff;font-weight:700;border-radius:12px;padding:2px 10px;font-size:12.5px;white-space:nowrap}
+.s-Ontime{background:var(--green)}
+.s-ProbablyOntime{background:#7BA38D;color:#12301F}
+.s-ProbablyLate{background:var(--amber);color:#1C2526}
+.s-Late{background:var(--red)}
+.s-gray{background:#9AA3A6}
+.s-Received{background:#6E7A7C}
+/* flow */
+.flowbox{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px;margin:14px 0;overflow-x:auto}
+.flowbox svg{min-width:900px;width:100%;height:auto;display:block}
+.seg{display:flex;gap:8px;margin:12px 0}
+.seg .btn{flex:0 0 auto}
+.own{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:6px 0}
+.own i,.leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:8px 0}
+/* params */
+.ph{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.fld label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:3px}
+.fld .h{font-size:12px;color:var(--muted);margin-top:2px}
+input[type=text],input[type=number],input[type=date],select{font:inherit;font-size:13.5px;border:1px solid #CFC9BB;border-radius:5px;padding:5px 7px;background:#FFF8E1;color:#0000CC;width:100%;min-width:0}
+td input,td select{min-width:70px}
+td select{min-width:96px}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--copper)}
+.lv{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 16px}
+.lvg{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.lv label{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--dark)}
+.lv label span{color:var(--copper)}
+.lv input[type=range]{width:100%;accent-color:var(--copper)}
+/* results */
+.kp{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:12px 0}
+.kp div{background:#fff;border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:6px;padding:10px 12px}
+.kp div.bad{border-left-color:var(--red)}
+.kp b{display:block;font-family:Georgia,serif;font-size:26px;color:var(--dark);line-height:1.1}
+.kp span{font-size:12.5px;color:var(--muted)}
+.res li{margin:4px 0}
+.chart{background:#fff;border:1px solid var(--line);border-radius:8px;overflow-x:auto;margin:10px 0}
+.chart svg{display:block;min-width:900px;width:100%;height:auto}
+.up{color:var(--green);font-weight:700}.dn{color:var(--red);font-weight:700}
+td.ok{background:#E9F2EC}td.ck{background:#F8D9D5}
+.mx{display:grid;grid-template-columns:130px 1fr 1fr;gap:6px;font-size:13.5px;margin:10px 0}
+.mx div{border-radius:6px;padding:9px 11px}
+.mx .h{background:var(--dark);color:#fff;font-weight:700;text-align:center}
+.mx .rh{background:var(--dark);color:#fff;font-weight:700}
+.ok{background:#E9F2EC}.w1{background:#FBF1DE}.w2{background:#FBEDEB}
+/* literature map */
+.lit{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;margin-top:14px;align-items:start}
+.ladder{display:grid;gap:10px}
+.rung{background:#fff;border:1px solid var(--line);border-left:8px solid var(--copper);border-radius:8px;padding:11px 14px}
+.rung b{font-family:Georgia,serif;font-size:16px;color:var(--dark)}
+.rung .small{display:block;margin-top:2px}
+.pp{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+.pl{font-style:normal;font-size:11.5px;font-weight:700;color:#fff;border-radius:11px;padding:1px 9px}
+.p1{background:var(--teal)}.p2{background:var(--copper)}.p3{background:var(--green)}
+.rung.cur{border-left-color:var(--dark);background:#F7F4EC}
+.paper{background:#fff;border:1px solid var(--line);border-top:5px solid var(--teal);border-radius:8px;padding:12px 16px;margin-bottom:12px}
+.paper.b{border-top-color:var(--copper)}.paper.c{border-top-color:var(--green)}
+.paper h4{margin:0 0 4px;font-family:Georgia,serif;font-size:16px}
+.paper .map{font-size:13.5px;margin-top:6px}
+.paper .map b{display:inline-block;background:var(--dark);color:#fff;border-radius:4px;padding:0 6px;margin-right:4px;font-size:12px}
+footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px}
+@media(max-width:900px){.grid3,.grid2,.lit{grid-template-columns:1fr}.ph{grid-template-columns:repeat(2,1fr)}.lvg{grid-template-columns:repeat(2,1fr)}.kp{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:32px}h2{font-size:25px}}
+@media(max-width:520px){.ph,.lvg{grid-template-columns:1fr}.mx{grid-template-columns:90px 1fr 1fr}.wrap{padding:0 14px}}
+
+</style></head><body>
+<header class="hero"><div class="wrap">
+  <div class="lab" style="color:#F2D9A0">Logistics education &middot; Interactive what-if model</div>
+  <h1>Which purchase orders are likely to arrive late?</h1>
+  <p>A purchase order does not become late on its due date. It becomes late earlier, at a hub, while the goods are still waiting for a container or a vessel. This page walks through the physical flow, the KPI at each step, and a forecast model that tells you which orders are drifting late while you can still act.</p>
+  <div class="meta"><span><b>Scope:</b> inbound materials and outbound products</span><span><b>Inputs:</b> editable, generic example loaded</span><span><b>Runs:</b> in your browser, nothing is stored or sent</span></div>
+  <div class="btns"><a class="btn" href="#s6">Go to parameter setup</a><a class="btn alt" href="#s2">Read the business flow first</a></div>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#sum">Summary</a><a href="#s1">1 &middot; The question</a><a href="#s2">2 &middot; Business flow</a><a href="#s3">3 &middot; KPIs</a><a href="#s4">4 &middot; Method</a><a href="#s5">5 &middot; Formulas</a><a href="#s6">6 &middot; Parameters</a><a href="#s7">7 &middot; Results &amp; what-if</a><a href="#s8">8 &middot; Reading results</a><a href="#s9">9 &middot; Literature map</a><a href="#s10">10 &middot; Perfecting the model</a><a href="#s11">11 &middot; Limits</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="sum">
+  <div class="lab">The short version</div>
+  <h2>Seven ideas behind this model</h2>
+  <div class="grid3">
+    <div class="card"><div class="n">01</div><h4>Late is decided at the hub</h4><p>Once goods are on the water there is little left to do. The useful warning comes while goods sit at the hub, or before the supplier has even delivered.</p></div>
+    <div class="card"><div class="n">02</div><h4>One forecast, two judgements</h4><p>The same forecast arrival date is compared with the site due date (did the need get met?) and with the freight standard (did logistics do its job?).</p></div>
+    <div class="card"><div class="n">03</div><h4>The clock depends on the stage</h4><p>Before the hub, the supplier's promise date drives the forecast. At the hub, the standard consolidation. On the water, the actual departure.</p></div>
+    <div class="card"><div class="n">04</div><h4>Tolerance is an escalation window</h4><p>Each hub has a band of days in which a late-looking order can still be recovered by pushing the departure. Past the band it is late even at standard sailing time.</p></div>
+    <div class="card"><div class="n">05</div><h4>Raw data is per delivery, the order is per line</h4><p>Each receipt (RTN) is judged on its own for logistics. Quantities are then summed per PO line to decide in full and the site status.</p></div>
+    <div class="card"><div class="n">06</div><h4>The same engine runs outbound</h4><p>Products leaving the site follow the mirror image: ready date, hub, consolidation, sailing, customer receipt. Only the labels change.</p></div>
+    <div class="card"><div class="n">07</div><h4>Every number is yours</h4><p>All example values are generic placeholders. Replace them with your own lead times, standards and tolerances before drawing conclusions.</p></div>
+  </div>
+</section>
+
+<section id="s1">
+  <h2><span class="num">1</span>The question</h2>
+  <p class="lead">Which open orders will miss their due date if nothing changes, and which of them can still be saved?</p>
+  <p>A status such as "Ontime" or "Late" printed after delivery explains the past. A planner needs the opposite: a ranked list of orders that are heading late, a reason, and a date by which action still works. The model on this page builds that list from only five dates per delivery: the supplier promise date, the goods receipt at the hub (GR Offsite), the shipment start, the receipt at site (GR Onsite), and today.</p>
+  <div class="callout"><b>Three questions the page answers.</b> (1) Where in the flow is each order now, and is it drifting? (2) Is the cause the supplier, the hub, or the sailing? (3) If the supplier slips, the hub holds goods longer, or the sailing runs long, how many orders turn late, and which?</div>
+</section>
+
+<section id="s2">
+  <h2><span class="num">2</span>The business flow, end to end</h2>
+  <p class="lead">Every shipment passes the same four phases. Each phase has an owner and a KPI. The model measures lateness along this chain.</p>
+  <div class="seg"><button class="btn sm on" data-flow="in">Inbound materials</button><button class="btn sm line" data-flow="out">Outbound products</button></div>
+  <div class="flowbox" id="flowsvg"></div>
+  <div class="own"><span><i style="background:#B77A2B"></i>Supplier or plant</span><span><i style="background:#4F9A9E"></i>3PL at the hub</span><span><i style="background:#2E6E73"></i>Hub consolidation</span><span><i style="background:#27403F"></i>Carrier, customs, inland</span></div>
+  <div id="flowtxt"></div>
+  <h3>Inbound and outbound are mirror images</h3>
+  <div class="tw"><table><thead><tr><th>Concept</th><th>Inbound (materials)</th><th>Outbound (products)</th></tr></thead><tbody>
+    <tr><td class="k">Order</td><td>Purchase order line</td><td>Sales or delivery order line</td></tr>
+    <tr><td class="k">Starting promise</td><td>PO Delivery Date: supplier delivers to the hub</td><td>Ready-to-ship date: plant hands over to the hub</td></tr>
+    <tr><td class="k">Hub receipt</td><td>GR Offsite posted by the 3PL</td><td>Hub receipt posted by the 3PL</td></tr>
+    <tr><td class="k">Consolidation</td><td>Combine supplier lots into a container or vessel</td><td>Stuff the container and wait for the vessel cut-off</td></tr>
+    <tr><td class="k">Sailing</td><td>Shipment start to arrival, clearance, inland leg</td><td>Vessel departure to arrival, clearance, last mile</td></tr>
+    <tr><td class="k">End point</td><td>GR Onsite at the site</td><td>Proof of delivery at the customer</td></tr>
+    <tr><td class="k">Final target</td><td>Due Site Date = PO Delivery Date + Lead Time</td><td>Customer due date = Ready date + Lead Time</td></tr>
+    <tr><td class="k">First KPI</td><td>RIFOT: supplier received in full and on time at the hub</td><td>OTIF at origin: product ready in full and on time</td></tr>
+  </tbody></table></div>
+  <h3>Typical causes of delay, by phase (general experience, not company data)</h3>
+  <div class="grid2">
+    <div class="card"><h4>Supplier or plant phase</h4><p class="small">Production or procurement slips, partial lots, documents not ready, supplier not confirming the date. The order is late before any logistics work starts.</p></div>
+    <div class="card" style="border-top-color:var(--teal)"><h4>Hub posting phase</h4><p class="small">Goods stand in the yard or dock waiting for inspection, labelling, or a posting action. The supplier looks late in the system although the goods were physically there.</p></div>
+    <div class="card" style="border-top-color:var(--teal)"><h4>Consolidation phase</h4><p class="small">Waiting for other lots to complete a container, for booking space, or for the next sailing. This is the phase where escalation still changes the outcome.</p></div>
+    <div class="card" style="border-top-color:var(--dark)"><h4>Sailing, clearance and inland phase</h4><p class="small">Port congestion, transhipment, inspection, customs release, trucking. Little can be recovered once the vessel has left.</p></div>
+  </div>
+</section>
+
+<section id="s3">
+  <h2><span class="num">3</span>KPIs along the flow</h2>
+  <p class="lead">Each KPI answers one question about one phase. Together they show who owns a delay.</p>
+  <div class="tw"><table><thead><tr><th>KPI</th><th>Question</th><th>From</th><th>To</th><th>Compared with</th><th>Owner</th></tr></thead><tbody>
+    <tr><td class="k">RIFOT</td><td>Did the supplier deliver in full and on time to the hub?</td><td>PO Delivery Date</td><td>GR Offsite (in full)</td><td>PO Delivery Date</td><td>Supplier, procurement</td></tr>
+    <tr><td class="k">On-time GR</td><td>How long from physical receipt at the 3PL to the GR posting?</td><td>3PL physical receipt</td><td>GR Offsite posting</td><td>GR KPI (days)</td><td>3PL</td></tr>
+    <tr><td class="k">Consolidation KPI</td><td>How long did goods stay at the hub before shipment started?</td><td>GR Offsite</td><td>Shipment Start</td><td>Standard consolidation days per hub</td><td>3PL, logistics</td></tr>
+    <tr><td class="k">Sailing standard</td><td>Did the sailing, clearance and inland leg meet the freight table?</td><td>Shipment Start</td><td>GR Onsite</td><td>Lead Time &minus; standard consolidation</td><td>Carrier, forwarder</td></tr>
+    <tr><td class="k">Logistics on-time</td><td>Did logistics as a whole meet the freight table?</td><td>GR Offsite</td><td>GR Onsite</td><td>GR Offsite + Lead Time</td><td>Logistics</td></tr>
+    <tr><td class="k">DIFOT</td><td>Did the full quantity reach the site by the due date?</td><td>PO Delivery Date</td><td>GR Onsite (in full)</td><td>Due Site Date</td><td>Supply chain as a whole</td></tr>
+  </tbody></table></div>
+  <div class="callout"><b>Why the GR posting step matters.</b> If the supplier delivered on time but the 3PL posted the receipt two days later, a hub-based RIFOT shows the supplier as late. Capturing the physical receipt date separates the two. The model accepts that date as an optional column and splits the delay accordingly.</div>
+  <div class="mx"><div></div><div class="h">Logistics on-time</div><div class="h">Logistics late</div>
+    <div class="rh">Site on time</div><div class="ok"><b>Healthy.</b> Nothing to do.</div><div class="w1"><b>Hidden logistics problem.</b> The site is protected by an early supplier. Fix the process, not urgent.</div>
+    <div class="rh">Site late</div><div class="w1"><b>Supplier cause.</b> Escalate to procurement.</div><div class="w2"><b>Logistics cause.</b> Highest priority.</div></div>
+</section>
+
+<section id="s4">
+  <h2><span class="num">4</span>Method</h2>
+  <p class="lead">A rule-based forecast, in four steps, applied to every PO line and every receipt.</p>
+  <h3>Step 1. Group the raw data</h3>
+  <p>Raw data has one row per receipt (RTN). If the same PO line appears more than once with different RTNs, the line was delivered in parts. The model keeps both grains.</p>
+  <ul><li><b>RTN grain</b> carries the logistics assessment, because each delivery has its own dates.</li><li><b>PO line grain</b> carries the in-full decision and the site assessment, because quantity is ordered per line.</li></ul>
+  <h3>Step 2. Decide the stage of each PO line</h3>
+  <p>Only events dated on or before the as-of date count. Quantities from all receipts of the line are summed.</p>
+  <div class="tw"><table><thead><tr><th>Stage</th><th>Test (checked from the bottom up)</th></tr></thead><tbody>
+    <tr><td class="k">Received</td><td>Quantity at site &ge; PO quantity</td></tr>
+    <tr><td class="k">On water</td><td>Quantity with a shipment start &ge; PO quantity</td></tr>
+    <tr><td class="k">At hub</td><td>Quantity posted at the hub &ge; PO quantity (in full at hub)</td></tr>
+    <tr><td class="k">Vendor</td><td>Otherwise, including partially delivered lines</td></tr>
+  </tbody></table></div>
+  <h3>Step 3. Forecast the arrival</h3>
+  <div class="tw"><table><thead><tr><th>Stage</th><th>Forecast arrival</th><th>Logic</th></tr></thead><tbody>
+    <tr><td class="k">Vendor</td><td>MAX(as-of, PO Delivery Date) + Lead Time</td><td>Assume the supplier delivers on its promise date. Once that date has passed, the earliest possible delivery is today.</td></tr>
+    <tr><td class="k">At hub</td><td>As-of + (Lead Time &minus; Std Consolidation)</td><td>Best case: the goods leave the hub today. The standard consolidation is already behind them.</td></tr>
+    <tr><td class="k">On water</td><td>Shipment Start + (Lead Time &minus; Std Consolidation)</td><td>The departure date is a fact. Only the standard sailing remains.</td></tr>
+    <tr><td class="k">Received</td><td>Actual GR Onsite</td><td>Final.</td></tr>
+  </tbody></table></div>
+  <div class="note"><b>Assumption.</b> Lead Time already includes the standard consolidation at the hub. Due Site Date = PO Delivery Date + Lead Time, and it must not be moved when a supplier delivers early.</div>
+  <h3>Step 4. Compare with the target, then apply the bands</h3>
+  <div class="grid2">
+    <div class="card"><h4>Assessment 1: site status (per PO line)</h4><p class="small">Target is the Due Site Date. It includes the supplier, so it answers whether the need is met. Only final when the line is in full.</p></div>
+    <div class="card" style="border-top-color:var(--teal)"><h4>Assessment 2: logistics status (per RTN)</h4><p class="small">Target is GR Offsite + Lead Time. The clock starts when the goods enter the hub, so the supplier is excluded and each delivery is judged alone.</p></div>
+  </div>
+  <div class="tw"><table><thead><tr><th>Slack (target &minus; forecast)</th><th>Status</th><th>Meaning for action</th></tr></thead><tbody>
+    <tr><td>&gt; tolerance</td><td><span class="stp s-Ontime">Ontime</span></td><td>No action</td></tr>
+    <tr><td>0 to tolerance</td><td><span class="stp s-ProbablyOntime">Probably Ontime</span></td><td>Inside the escalation window: act now to keep it on time</td></tr>
+    <tr><td>&minus;tolerance to &minus;1</td><td><span class="stp s-ProbablyLate">Probably Late</span></td><td>Late by up to the tolerance unless the departure or sailing is accelerated</td></tr>
+    <tr><td>&lt; &minus;tolerance</td><td><span class="stp s-Late">Late</span></td><td>Late even at standard sailing time</td></tr>
+    <tr><td>Tolerance = 0 (direct routes)</td><td><span class="stp s-Ontime">Ontime</span> / <span class="stp s-Late">Late</span></td><td>No hub buffer, so no "Probably" classes</td></tr>
+  </tbody></table></div>
+  <p class="small">The tolerance before shipment is used for the vendor and hub stages; the tolerance after shipment is used on the water. Both are variables per hub, separately for the site and the logistics assessment.</p>
+</section>
+
+<section id="s5">
+  <h2><span class="num">5</span>Formulas</h2>
+  <h4>Dates and standards</h4>
+  <div class="eq">Due Site Date          = <b>PO Delivery Date</b> + LT
+Logistics Target       = <b>GR Offsite (this RTN)</b> + LT
+Remaining LT after hub = LT &minus; Std Consolidation
+Last departure date    = Due Site Date &minus; (LT &minus; Std Consolidation)</div>
+  <h4>Quantities per PO line (events on or before the as-of date)</h4>
+  <div class="eq">Qty at hub   = &Sigma; RTN qty with GR Offsite &le; as-of      In full at hub = (Qty at hub &ge; PO qty)
+Qty shipped  = &Sigma; RTN qty with Shipment Start &le; as-of
+Qty at site  = &Sigma; RTN qty with GR Onsite &le; as-of
+DIFOT        = 1 if received in full and latest GR Onsite &le; Due Site Date, else 0</div>
+  <h4>Forecast, slack and status</h4>
+  <div class="eq">Forecast(Vendor)   = MAX(as-of, PO Delivery Date) + LT
+Forecast(At hub)   = as-of + (LT &minus; Std)
+Forecast(On water) = Shipment Start + (LT &minus; Std)
+Slack              = Target &minus; Forecast        <span class="c">(positive = early)</span>
+Status             = band(Slack, tolerance)</div>
+  <h4>Where the days go: exact split of a late arrival</h4>
+  <p>For a received delivery, the days late against the Due Site Date split exactly into four parts, because the Lead Time is the sum of the standard consolidation and the remaining standard:</p>
+  <div class="eq">Arrival &minus; Due Site Date =
+   (3PL receipt &minus; PO Delivery Date)                 <span class="c">supplier</span>
+ + (GR Offsite &minus; 3PL receipt)                        <span class="c">GR posting</span>
+ + (Shipment Start &minus; GR Offsite &minus; Std Consolidation)   <span class="c">hub dwell vs KPI</span>
+ + (GR Onsite &minus; Shipment Start &minus; (LT &minus; Std))      <span class="c">sailing vs standard</span></div>
+  <h4>Worked example, computed live from the hub table</h4>
+  <div class="card" id="worked"></div>
+  <h4>Probability layer (extension, section 10)</h4>
+  <div class="eq">P(late) = share of N simulations with  Forecast + hub overrun + supplier slip + transit noise  &gt;  Due Site Date
+hub overrun, supplier slip = MAX(0, Normal(0, sd))        transit noise = Normal(0, sd)</div>
+</section>
+
+<section id="s6">
+  <h2><span class="num">6</span>Parameter setup</h2>
+  <p class="lead">Fill in this section before reading the results. A generic example is loaded.</p>
+  <div class="seg"><button class="btn sm on" data-dir="in">Inbound materials</button><button class="btn sm line" data-dir="out">Outbound products</button></div>
+  <div class="small" id="dirnote"></div>
+
+  <h3>6.1 General</h3>
+  <div class="card"><div class="ph">
+    <div class="fld"><label>Use today's date as the as-of date</label><select data-p="useToday" data-type="bool"><option value="false">No, use the fixed date</option><option value="true">Yes, use today</option></select></div>
+    <div class="fld"><label>Fixed as-of date</label><input type="date" data-p="asof"><div class="h">Events after this date are ignored</div></div>
+    <div class="fld"><label>On-time GR KPI (days)</label><input type="number" step="any" data-p="grKpi"><div class="h">3PL receipt to GR posting</div></div>
+    <div class="fld"><label>Present data set</label><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm line" id="b_port">Example portfolio</button><button class="btn sm line" id="b_test">Test set</button><button class="btn sm line" id="b_blank">Blank</button></div><div class="h">Test set = 19 lines used to check against the Excel model</div></div>
+  </div></div>
+
+  <h3>6.2 Hub parameter table</h3>
+  <p class="small">One row per route. Std consolidation is the number of days goods are normally held at the hub; it is part of the Lead Time. Tolerances are the escalation window in days. Set 0 for a direct route.</p>
+  <div class="tw"><table id="t_hub"></table></div>
+  <div class="note"><b>Placeholders.</b> Every number here is a generic example. Logistics tolerances are set equal to the site tolerances until you decide otherwise.</div>
+
+  <h3>6.3 Deliveries (one row per RTN)</h3>
+  <p class="small" id="rtnnote"></p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0"><button class="btn sm line" id="b_add">Add row</button><button class="btn sm line" id="b_del">Delete last row</button></div>
+  <div class="tw"><table id="t_rtn"></table></div>
+  <p class="small">PO-level fields (hub, PO quantity, promise date, lead time, cancelled flag, as-of override) are read from the first row of each PO line. Keep them identical on all rows of the same line. Cancelled = X removes the whole line. Leaving the as-of override empty uses the general date.</p>
+
+  <h3>6.4 Probability layer settings (illustrative)</h3>
+  <div class="card"><div class="ph">
+    <div class="fld"><label>Supplier slip, sd (days)</label><input type="number" step="any" data-p="mc.sdVendor"><div class="h">Vendor stage only</div></div>
+    <div class="fld"><label>Hub overrun, sd (days)</label><input type="number" step="any" data-p="mc.sdHub"><div class="h">Vendor and hub stages</div></div>
+    <div class="fld"><label>Transit noise, sd (days)</label><input type="number" step="any" data-p="mc.sdTransit"><div class="h">All open lines</div></div>
+    <div class="fld"><label>Simulations per line</label><input type="number" step="100" data-p="mc.sims"><div class="h">200 to 10,000</div></div>
+  </div></div>
+  <div class="note"><b>Placeholders.</b> These spreads are not estimated from data. In practice they come from the history of each supplier and lane (section 10).</div>
+</section>
+
+<section id="s7">
+  <h2><span class="num">7</span>Results and what-if</h2>
+  <p class="lead">Move the levers to see which orders change status, and why. All results recalculate instantly.</p>
+
+  <h3>7.1 What-if levers</h3>
+  <div class="lv"><div class="lvg">
+    <div><label>Look-ahead if nothing is done <span id="o_hor">0 d</span></label><input type="range" id="l_hor" min="0" max="30" step="1" value="0"><div class="small">Clock moves forward, no new events</div></div>
+    <div><label>Supplier slips by <span id="o_ven">0 d</span></label><input type="range" id="l_ven" min="0" max="30" step="1" value="0"><div class="small">Vendor-stage lines only</div></div>
+    <div><label>Hub holds goods longer by <span id="o_hub">0 d</span></label><input type="range" id="l_hub" min="0" max="30" step="1" value="0"><div class="small">Vendor and hub lines. 0 = depart today</div></div>
+    <div><label>Sailing runs long by <span id="o_tr">0 d</span></label><input type="range" id="l_tr" min="-10" max="30" step="1" value="0"><div class="small">All open lines. Negative = faster</div></div>
+  </div><div style="margin-top:10px"><button class="btn sm line" id="b_lvreset">Reset levers</button></div></div>
+
+  <h3>7.2 Headline</h3>
+  <div id="r_head" class="callout"></div>
+  <div class="kp" id="r_kpis"></div>
+
+  <h3>7.3 Which orders are likely to arrive late</h3>
+  <p class="small">Ranked by probability of arriving late, then by slack. The status columns come from the rule-based model; the probability column is the extension in section 10.</p>
+  <div class="tw"><table id="t_rank"></table></div>
+
+  <h3>7.4 Timeline of open and closed lines</h3>
+  <div class="seg"><button class="btn sm on" data-view="wi">What-if</button><button class="btn sm line" data-view="base">Base</button></div>
+  <div class="chart" id="c_time"></div>
+  <div class="leg" id="c_time_leg"></div>
+
+  <h3>7.5 Status counts, base against what-if</h3>
+  <div class="tw"><table id="t_dist"></table></div>
+
+  <h3>7.6 Logistics assessment per delivery, and where the days go</h3>
+  <p class="small">Columns on the right split the days against the freight table into supplier, GR posting, hub dwell against the KPI, and sailing against the standard. Negative = better than standard. A dash means the phase has not happened yet.</p>
+  <div class="tw"><table id="t_rtn_res"></table></div>
+
+  <h3>7.7 KPI chain from the data (not affected by the levers)</h3>
+  <div class="tw"><table id="t_kpi"></table></div>
+  <div class="small">Percentages from the generic example only prove the formulas work. They are not performance figures.</div>
+
+  <h3>7.8 Self-check against the Excel model</h3>
+  <div id="selfcheck" class="callout"></div>
+  <div id="r_warn" class="warnbox"></div>
+</section>
+
+<section id="s8">
+  <h2><span class="num">8</span>Reading the results</h2>
+  <div class="grid2">
+    <div class="card"><h4>Do not read "Probably Ontime" as safe</h4><p>It means the order sits inside the escalation window. With the best-case assumption (depart today), a line with zero slack has no room for any variation. The probability column shows this: lines at zero slack often carry a high probability of late once variation is allowed.</p></div>
+    <div class="card" style="border-top-color:var(--teal)"><h4>Act on hub lines first</h4><p>Vendor lines depend on a promise you cannot move. Water lines cannot be changed. Hub lines carry both a date and a lever, so they are the first call for escalation.</p></div>
+    <div class="card" style="border-top-color:var(--green)"><h4>Read both statuses together</h4><p>A line that is late on the site status and on time on logistics is a supplier problem. A line on time at the site but late on logistics is a hidden problem protected by an early supplier.</p></div>
+    <div class="card" style="border-top-color:var(--red)"><h4>Test the levers one at a time</h4><p>A hub hold of seven days and a sailing delay of seven days both add seven days to the arrival of a hub line. They differ in who owns the fix and when you can still act.</p></div>
+  </div>
+</section>
+
+<section id="s9">
+  <h2><span class="num">9</span>Literature map</h2>
+  <p class="lead">The rule-based model is the transparent baseline that recent research starts from. This map shows where three papers extend it.</p>
+  <div class="lit">
+    <div>
+      <h4>Maturity ladder of the forecast</h4>
+      <div class="ladder">
+        <div class="rung cur"><b>Level 0 &middot; Rule-based bands (this model)</b><span class="small">Fixed lead time per route, fixed tolerance per hub, four labels. Transparent, easy to audit.</span><div class="pp"><i class="pl p1">Paper 1 baseline</i><i class="pl p2">Paper 2 baseline</i></div></div>
+        <div class="rung"><b>Level 1 &middot; Probability of late</b><span class="small">Replace the single date with a distribution built from history, so each order carries a probability and an interval.</span><div class="pp"><i class="pl p2">Paper 2</i><i class="pl p3">Paper 3</i></div></div>
+        <div class="rung"><b>Level 2 &middot; Days late, not just a label</b><span class="small">First classify late or not, then predict the number of days late. This is the "predicted days late" the model still lacks.</span><div class="pp"><i class="pl p3">Paper 3</i></div></div>
+        <div class="rung"><b>Level 3 &middot; Adaptive thresholds</b><span class="small">Tolerances that move with observed variability per route, instead of one fixed band per hub.</span><div class="pp"><i class="pl p1">Paper 1</i></div></div>
+        <div class="rung"><b>Level 4 &middot; Decision rules</b><span class="small">Turn probabilities into actions with a cost rule: expedite, warn the site, or accept.</span><div class="pp"><i class="pl p2">Paper 2</i></div></div>
+      </div>
+      <div class="note"><b>Where each model part comes from.</b> <b>H1</b> fixed tolerance bands &rarr; Paper 1 baseline. <b>H2</b> static freight-table lead time &rarr; Paper 2 baseline. <b>H3</b> four labels without days late &rarr; Paper 3. <b>H4</b> "vendor delivers on time" assumption &rarr; probability layer (Papers 2 and 3).</div>
+    </div>
+    <div>
+      <div class="paper"><h4>Paper 1 &middot; Intelligent Early Warning System for Supplier Delays</h4><p class="small">Dynamic IoT-calibrated probabilistic modelling in engineer-to-order supply chains.</p><div class="map"><b>Idea</b>Compares a fixed-threshold warning system with an adaptive one. Fixed thresholds keep false alarms low in stable conditions; adaptive thresholds detect better in high-risk conditions.</div><div class="map"><b>Mapping</b>Our tolerance per hub is the fixed-threshold baseline. The next step is to set it from observed variability of each lane.</div></div>
+      <div class="paper b"><h4>Paper 2 &middot; Conformal Predictive Distributions for Order Fulfillment Time Forecasting</h4><p class="small">Forecasting the distribution of fulfilment time, with a cost rule for decisions.</p><div class="map"><b>Idea</b>Static table-based rules fail to capture uncertainty. A predicted distribution identifies late shipments better and feeds a cost-based decision rule.</div><div class="map"><b>Mapping</b>Our freight table is the static baseline. The probability layer in this page is a simple stand-in for a predicted distribution.</div></div>
+      <div class="paper c"><h4>Paper 3 &middot; Uncertainty-Aware Delivery Delay Duration Prediction via Multi-Task Deep Learning</h4><p class="small">Classify delay first, then predict its duration.</p><div class="map"><b>Idea</b>Predicting how long a delivery is late, not only whether it is, supports probabilistic forecasting.</div><div class="map"><b>Mapping</b>Our four labels correspond to the classification step. The days-late column in section 7 is the duration step in rule-based form.</div></div>
+      <div class="small">Reading note: only the abstracts and introductions of these papers were reviewed, and two of them are preprints. Their datasets (engineer-to-order manufacturing, e-commerce, industrial delivery) differ from import purchase orders, so their reported accuracy figures do not transfer to your data.</div>
+    </div>
+  </div>
+</section>
+
+<section id="s10">
+  <h2><span class="num">10</span>How to perfect the model</h2>
+  <p class="lead">Nine gaps, what closes each one, and whether this page already shows it.</p>
+  <div class="tw"><table><thead><tr><th>#</th><th>Gap in the rule-based model</th><th>Upgrade</th><th>On this page</th><th>Data needed</th></tr></thead><tbody>
+    <tr><td>1</td><td class="k">"Vendor on time" assumption makes the vendor stage look safe</td><td>Probability of late from supplier and lane history, plus the supplier's confirmed date</td><td><span class="stp s-ProbablyOntime">Live (placeholder spreads)</span></td><td>Confirmed date, acknowledgement, reschedule count</td></tr>
+    <tr><td>2</td><td class="k">Fixed tolerance for every supplier and lane</td><td>Derive the band from a percentile of historical lead time per route</td><td><span class="stp s-Received">Roadmap</span></td><td>20 to 30 completed deliveries per route</td></tr>
+    <tr><td>3</td><td class="k">Hub forecast assumes departure today</td><td>Use the planned consolidation or cut-off date; test hub-hold scenarios</td><td><span class="stp s-ProbablyOntime">Lever live</span></td><td>Booking and vessel schedule per route</td></tr>
+    <tr><td>4</td><td class="k">GR posting lag hidden inside supplier delay</td><td>Capture the physical 3PL receipt date and split the delay</td><td><span class="stp s-ProbablyOntime">Live (optional column)</span></td><td>3PL physical receipt date</td></tr>
+    <tr><td>5</td><td class="k">Partial deliveries judged as one lump</td><td>Judge logistics per receipt, in full per line</td><td><span class="stp s-ProbablyOntime">Live</span></td><td>Receipt-level quantity and dates</td></tr>
+    <tr><td>6</td><td class="k">Standard sailing time, no vessel signal</td><td>Feed vessel ETA and port events once the shipment is on the water</td><td><span class="stp s-Received">Roadmap</span></td><td>Carrier or tracking feed</td></tr>
+    <tr><td>7</td><td class="k">No feedback loop</td><td>Daily snapshot of status per line, then hit rate, bias and tracking signal of the ETA error</td><td><span class="stp s-Received">Roadmap</span></td><td>Snapshot table in the dataflow</td></tr>
+    <tr><td>8</td><td class="k">Only a label, no priority</td><td>Add days late, value, criticality and need date; rank by risk</td><td><span class="stp s-ProbablyOntime">Days and probability live</span></td><td>Need date, value, criticality</td></tr>
+    <tr><td>9</td><td class="k">Outbound not measured the same way</td><td>Run the same engine on shipments leaving the site</td><td><span class="stp s-ProbablyOntime">Live (direction switch)</span></td><td>Ready date, hub receipt, vessel departure, customer receipt</td></tr>
+  </tbody></table></div>
+  <h3>Back-test routine for upgrade 7</h3>
+  <p>Store one row per PO line per day with its status. When a line closes, compare its status at day T&minus;14 with the outcome:</p>
+  <div class="eq">Hit rate (Probably Late)   = lines labelled Probably Late or Late at T&minus;14 that arrived late  &divide;  lines labelled so
+Missed late               = lines that arrived late but were Ontime or Probably Ontime at T&minus;14
+Bias of ETA error         = average of (actual arrival &minus; forecast arrival)
+Tracking signal           = cumulative ETA error &divide; MAD      <span class="c">investigate when it passes &plusmn;4</span></div>
+  <p>Recalibrate each tolerance when the hit rate drifts. A lower tolerance raises the share of Late labels and lowers the share of missed late lines; the right value balances false alarms against missed warnings for your business.</p>
+  <h3>Suggested build order</h3>
+  <ol><li>Capture the 3PL physical receipt date and the supplier's confirmed date (small data change, large attribution gain).</li><li>Start the daily snapshot now; it takes months to fill and every later upgrade depends on it.</li><li>Estimate spreads per route from history and replace the placeholder spreads.</li><li>Add the planned departure date at the hub, then vessel ETA.</li><li>Rank open lines by risk, value and need date.</li></ol>
+</section>
+
+<section id="s11">
+  <h2><span class="num">11</span>Limits and sources</h2>
+  <div class="warnbox"><b>Limits.</b>
+  <ul style="margin:6px 0 0 18px">
+    <li>All example values (lead times, hubs, tolerances, dates) are generic placeholders, not company data.</li>
+    <li>The forecast is rule-based with fixed standard lead times. It has no vessel ETA, no supplier confirmation date and no lead-time history.</li>
+    <li>The probability layer uses spreads you type in. It is an illustration of the idea, not a calibrated model.</li>
+    <li>A line counts as in full only when the summed quantity reaches the PO quantity. Over-delivery counts as in full; units must match.</li>
+    <li>Latest GR Offsite is used as the in-full date. If an extra receipt arrives after the line is in full, the date moves.</li>
+    <li>Logistics tolerances are placeholders. Not validated on live data.</li>
+  </ul></div>
+  <h4>Sources</h4>
+  <ul class="small"><li>Intelligent Early Warning System for Supplier Delays Using Dynamic IoT-Calibrated Probabilistic Modeling in Smart Engineer-to-Order Supply Chains (journal).</li><li>Conformal Predictive Distributions for Order Fulfillment Time Forecasting (arXiv preprint).</li><li>Uncertainty-Aware Delivery Delay Duration Prediction via Multi-Task Deep Learning (arXiv preprint).</li><li>Forecast error measures (bias, MAD, tracking signal) and dependability metrics follow common supply chain management practice.</li></ul>
+</section>
+</main>
+<footer><div class="wrap">Generic educational model. No company data. All calculations run locally in your browser.</div></footer>
+
+<script>
+/* ===== ENGINE: PO arrival forecast (pure functions, no DOM) ===== */
+const DAY = 86400000, MONN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function pd(s) { if (!s) return null; const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(s)); if (!m) return null; return Math.round(Date.UTC(+m[1], +m[2] - 1, +m[3]) / DAY); }
+function fd(n) { if (n === null || n === undefined || !isFinite(n)) return '\u2014'; const d = new Date(n * DAY); return (d.getUTCDate() < 10 ? '0' : '') + d.getUTCDate() + ' ' + MONN[d.getUTCMonth()] + ' ' + String(d.getUTCFullYear()).slice(2); }
+function num(x) { const v = parseFloat(x); return isFinite(v) ? v : 0; }
+function hasN(x) { return x !== '' && x !== null && x !== undefined && isFinite(parseFloat(x)); }
+
+/* status band: slack = target - forecast (days); tol = tolerance (days). tol = 0 -> direct regions, no "Probably" classes */
+function band(s, t) {
+  if (t === 0) return s >= 0 ? 'Ontime' : 'Late';
+  if (s > t) return 'Ontime';
+  if (s >= 0) return 'Probably Ontime';
+  if (s >= -t) return 'Probably Late';
+  return 'Late';
+}
+const ORDER = { 'Late': 0, 'Probably Late': 1, 'Probably Ontime': 2, 'Ontime': 3 };
+
+function findHub(P, name) { for (let i = 0; i < P.hubs.length; i++) if (P.hubs[i].n === name) return P.hubs[i]; return null; }
+
+/* compute everything for a given set of levers.
+   lev = { vendorSlip, hubHold, transitSlip, horizon } (all days, default 0) */
+function compute(P, lev, todayN) {
+  lev = Object.assign({ vendorSlip: 0, hubHold: 0, transitSlip: 0, horizon: 0 }, lev || {});
+  const base = P.useToday ? todayN : pd(P.asof);
+  const map = {}, order = [];
+  P.rtns.forEach((r, i) => {
+    if (!r.po && !r.line) return;
+    const k = (r.po || '') + '-' + (r.line || '');
+    if (!map[k]) { map[k] = { key: k, rows: [], idx: [] }; order.push(k); }
+    map[k].rows.push(r); map[k].idx.push(i);
+  });
+  const lines = [], rtnOut = [];
+  order.forEach((k, li) => {
+    const g = map[k], f = g.rows[0], L = { key: k, n: li + 1, first: f, rows: g.rows, err: '', stage: '', status: '' };
+    L.hub = findHub(P, f.hub); L.poQty = num(f.poQty); L.poDate = pd(f.poDate); L.lt = num(f.lt);
+    const ov = g.rows.map(r => pd(r.asof)).filter(x => x !== null);
+    L.cutoff = ov.length ? Math.max.apply(null, ov) : base; L.evalDay = L.cutoff + lev.horizon;
+    if (!L.hub) L.err = 'Hub not defined';
+    else if (!(L.poQty > 0)) L.err = 'PO Qty missing';
+    else if (L.poDate === null) L.err = 'PO Delivery Date missing';
+    else if (!(L.lt > 0)) L.err = 'Incoterm LT missing';
+    L.cancel = g.rows.some(r => String(r.cancel || '').toUpperCase() === 'X');
+    L.nR = g.rows.length;
+    L.qHub = 0; L.qShip = 0; L.qSite = 0; L.groL = null; L.shipL = null; L.siteL = null;
+    g.rows.forEach(r => {
+      const q = num(r.qty), a = pd(r.gro), b = pd(r.ship), c = pd(r.onsite);
+      if (a !== null && a <= L.cutoff) { L.qHub += q; if (L.groL === null || a > L.groL) L.groL = a; }
+      if (b !== null && b <= L.cutoff) { L.qShip += q; if (L.shipL === null || b > L.shipL) L.shipL = b; }
+      if (c !== null && c <= L.cutoff) { L.qSite += q; if (L.siteL === null || c > L.siteL) L.siteL = c; }
+    });
+    if (L.err) { L.stage = 'Error'; L.status = 'Check input'; lines.push(L); }
+    else {
+      L.due = L.poDate + L.lt; L.std = L.hub.std; L.rem = L.lt - L.std; L.latestDep = L.due - L.rem;
+      L.inFullHub = L.qHub >= L.poQty;
+      if (L.cancel) { L.stage = 'Excluded'; L.status = 'Excluded'; }
+      else if (L.qSite >= L.poQty) { L.stage = 'Received'; L.difot = L.siteL <= L.due ? 1 : 0; L.status = L.difot ? 'Ontime' : 'Late'; L.fc = L.siteL; L.slack = L.due - L.siteL; }
+      else {
+        if (L.qShip >= L.poQty) { L.stage = 'On water'; L.fc = L.shipL + L.rem + lev.transitSlip; L.tol = L.hub.sA; }
+        else if (L.inFullHub) { L.stage = 'At hub'; L.fc = L.evalDay + L.rem + lev.hubHold + lev.transitSlip; L.tol = L.hub.sB; }
+        else { L.stage = 'Vendor'; L.fc = Math.max(L.evalDay, L.poDate + lev.vendorSlip) + L.lt + lev.hubHold + lev.transitSlip; L.tol = L.hub.sB; }
+        L.slack = L.due - L.fc; L.status = band(L.slack, L.tol);
+      }
+      lines.push(L);
+    }
+    /* logistics per RTN */
+    g.rows.forEach((r, j) => {
+      const o = { row: r, i: g.idx[j], line: L, rcv: pd(r.rcv), gro: pd(r.gro), ship: pd(r.ship), onsite: pd(r.onsite) };
+      if (L.err) { o.stage = 'Check input'; o.status = 'Check input'; rtnOut.push(o); return; }
+      if (L.cancel) { o.stage = 'Excluded'; o.status = 'Excluded'; rtnOut.push(o); return; }
+      if (o.gro === null || o.gro > L.cutoff) { o.stage = 'Vendor stage'; o.status = 'Vendor stage'; rtnOut.push(o); return; }
+      o.target = o.gro + L.lt;
+      const rc = (o.rcv !== null && o.rcv <= o.gro) ? o.rcv : o.gro;
+      o.vendorD = rc - L.poDate; o.grLag = o.gro - rc;
+      if (o.onsite !== null && o.onsite <= L.cutoff) {
+        o.stage = 'Received'; o.fc = o.onsite; o.slack = o.target - o.onsite; o.status = o.onsite <= o.target ? 'Ontime' : 'Late';
+        const sh = (o.ship !== null && o.ship <= L.cutoff) ? o.ship : o.gro;
+        o.hubD = sh - o.gro - L.std; o.sailD = o.onsite - sh - L.rem;
+      } else if (o.ship !== null && o.ship <= L.cutoff) {
+        o.stage = 'On water'; o.fc = o.ship + L.rem + lev.transitSlip; o.tol = L.hub.lA; o.slack = o.target - o.fc; o.status = band(o.slack, o.tol);
+        o.hubD = o.ship - o.gro - L.std; o.sailD = null;
+      } else {
+        o.stage = 'At hub'; o.fc = L.evalDay + L.rem + lev.hubHold + lev.transitSlip; o.tol = L.hub.lB; o.slack = o.target - o.fc; o.status = band(o.slack, o.tol);
+        o.hubD = L.evalDay + lev.hubHold - o.gro - L.std; o.sailD = null;
+      }
+      rtnOut.push(o);
+    });
+  });
+  return { lines: lines, rtns: rtnOut, base: base, lev: lev };
+}
+
+/* -------- KPI chain from actual events (not affected by what-if levers) -------- */
+function kpis(res, P) {
+  const k = { rifotN: 0, rifotOK: 0, grN: 0, grOK: 0, conN: 0, conOK: 0, saN: 0, saOK: 0, logN: 0, logOK: 0, difN: 0, difOK: 0 };
+  res.lines.forEach(L => {
+    if (L.err || L.cancel) return;
+    if (L.inFullHub && L.groL !== null) { k.rifotN++; if (L.groL <= L.poDate) k.rifotOK++; }
+    if (L.stage === 'Received') { k.difN++; if (L.difot) k.difOK++; }
+  });
+  res.rtns.forEach(o => {
+    const L = o.line; if (L.err || L.cancel || o.gro === null || o.gro > L.cutoff) return;
+    const rc = (o.rcv !== null && o.rcv <= o.gro) ? o.rcv : o.gro;
+    k.grN++; if (o.gro - rc <= P.grKpi) k.grOK++;
+    if (o.ship !== null && o.ship <= L.cutoff) { k.conN++; if (o.ship - o.gro <= L.std) k.conOK++; }
+    if (o.stage === 'Received') { k.saN++; if (o.onsite - o.ship <= L.rem) k.saOK++; k.logN++; if (o.status === 'Ontime') k.logOK++; }
+  });
+  return k;
+}
+
+/* -------- Monte Carlo extension (illustrative): probability that a PO line arrives after its due date -------- */
+function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function mcLine(L, M, lev) {
+  if (L.err || L.stage === 'Excluded') return null;
+  if (L.stage === 'Received') return L.difot ? 0 : 1;
+  const rnd = mulberry((M.seed | 0) + L.n * 7919);
+  function nrm() { let u = 0, v = 0; while (u === 0) u = rnd(); v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  let late = 0; const S = M.sims;
+  for (let s = 0; s < S; s++) {
+    let extra = 0;
+    if (L.stage === 'Vendor') extra += Math.max(0, M.sdVendor * nrm());
+    if (L.stage === 'Vendor' || L.stage === 'At hub') extra += Math.max(0, M.sdHub * nrm());
+    extra += M.sdTransit * nrm();
+    if (L.fc + extra > L.due + 1e-9) late++;
+  }
+  return late / S;
+}
+
+/* -------- suggested action for one PO line -------- */
+function actionFor(L, lev) {
+  if (L.err) return L.err;
+  if (L.stage === 'Excluded') return 'Cancelled line, excluded';
+  if (L.stage === 'Received') return L.difot ? 'Closed: delivered on time and in full' : 'Closed: late by ' + (-L.slack) + ' d';
+  if (L.stage === 'Vendor') {
+    const d = L.poDate + (lev.vendorSlip || 0) - L.evalDay;
+    return d >= 0 ? 'Vendor promise date in ' + d + ' d: confirm date and quantity' : 'Vendor ' + (-d) + ' d past promise: escalate, each day moves arrival by a day';
+  }
+  if (L.stage === 'At hub') {
+    const left = L.latestDep - L.evalDay - (lev.hubHold || 0);
+    return left >= 0 ? 'Must depart by ' + fd(L.latestDep) + ' (' + left + ' d left): escalate consolidation' : 'Past last departure by ' + (-left) + ' d: expedite sailing or warn site';
+  }
+  return L.slack >= 0 ? 'On water: monitor' : 'On water: no lever left, expect ' + (-L.slack) + ' d late';
+}
+
+if (false) module.exports = { pd, fd, band, compute, kpis, mcLine, actionFor, findHub, ORDER };
+
+/* ===== PRESETS: generic example data (no company data) ===== */
+const HUBS = [
+  { n: 'Hub A', std: 21, sB: 7, sA: 3, lB: 7, lA: 3 },
+  { n: 'Hub B', std: 14, sB: 7, sA: 3, lB: 7, lA: 3 },
+  { n: 'Hub C', std: 7, sB: 2, sA: 3, lB: 2, lA: 3 },
+  { n: 'Direct', std: 0, sB: 0, sA: 3, lB: 0, lA: 3 },
+  { n: '', std: 0, sB: 0, sA: 3, lB: 0, lA: 3 },
+  { n: '', std: 0, sB: 0, sA: 3, lB: 0, lA: 3 }
+];
+function R(o) { return Object.assign({ scen: '', po: '', line: 10, rtn: 'R1', hub: 'Hub A', poQty: 100, poDate: '', lt: 71, qty: 100, rcv: '', gro: '', ship: '', onsite: '', cancel: '', asof: '', expSite: '', expLog: '' }, o); }
+
+/* ---- Example portfolio: one as-of date (9 Oct 2026), mixed stages ---- */
+const PORTFOLIO = [
+  R({ scen: 'Vendor promise date not reached yet', po: 2001, poDate: '2026-10-20' }),
+  R({ scen: 'Vendor 4 days past promise', po: 2002, poDate: '2026-10-05' }),
+  R({ scen: 'Vendor 11 days past promise', po: 2003, poDate: '2026-09-28' }),
+  R({ scen: 'At hub, vendor on time, 17 days in hub', po: 2004, poDate: '2026-09-20', rcv: '2026-09-18', gro: '2026-09-22' }),
+  R({ scen: 'At hub 29 days, past last departure', po: 2005, poDate: '2026-09-10', rcv: '2026-09-10', gro: '2026-09-10' }),
+  R({ scen: 'At hub, just past last departure', po: 2006, poDate: '2026-09-15', rcv: '2026-09-17', gro: '2026-09-18' }),
+  R({ scen: 'Partial: RTN1 sailing, RTN2 at hub', po: 2007, poDate: '2026-09-20', qty: 60, rcv: '2026-09-20', gro: '2026-09-20', ship: '2026-10-08' }),
+  R({ scen: '   RTN2 of the same line', po: 2007, rtn: 'R2', qty: 40, poDate: '2026-09-20', rcv: '2026-10-05', gro: '2026-10-06' }),
+  R({ scen: 'On water, departed on time', po: 2008, poDate: '2026-09-01', rcv: '2026-09-01', gro: '2026-09-01', ship: '2026-09-20' }),
+  R({ scen: 'On water, departed late', po: 2009, poDate: '2026-09-01', rcv: '2026-09-02', gro: '2026-09-03', ship: '2026-09-27' }),
+  R({ scen: 'Hub B, vendor 2 days late', po: 2010, hub: 'Hub B', lt: 58, poDate: '2026-10-01', rcv: '2026-10-03', gro: '2026-10-03' }),
+  R({ scen: 'Received late; logistics on time (vendor cause)', po: 2011, hub: 'Hub B', lt: 58, poDate: '2026-08-01', rcv: '2026-08-04', gro: '2026-08-05', ship: '2026-08-19', onsite: '2026-09-30' }),
+  R({ scen: 'Received on time', po: 2012, hub: 'Hub B', lt: 58, poDate: '2026-08-10', rcv: '2026-08-10', gro: '2026-08-10', ship: '2026-08-24', onsite: '2026-09-28' }),
+  R({ scen: 'Hub C, sailing one day behind', po: 2013, hub: 'Hub C', lt: 45, poDate: '2026-09-25', rcv: '2026-09-25', gro: '2026-09-25', ship: '2026-10-03' }),
+  R({ scen: 'Vendor 50 days early, long hub stay', po: 2014, hub: 'Hub C', lt: 45, poDate: '2026-11-05', rcv: '2026-09-14', gro: '2026-09-15' }),
+  R({ scen: 'Direct route, due soon', po: 2015, hub: 'Direct', lt: 20, poDate: '2026-10-12' }),
+  R({ scen: 'Direct route, vendor 5 days late', po: 2016, hub: 'Direct', lt: 20, poDate: '2026-10-04' }),
+  R({ scen: 'Cancelled line', po: 2017, poDate: '2026-10-01', gro: '2026-10-01', cancel: 'X' })
+];
+
+/* ---- Outbound example (same engine, mirrored vocabulary) ---- */
+const PORTFOLIO_OUT = [
+  R({ scen: 'Product batch not ready yet', po: 3001, hub: 'Hub A', lt: 55, poDate: '2026-10-18' }),
+  R({ scen: 'Plant 6 days past ready date', po: 3002, hub: 'Hub A', lt: 55, poDate: '2026-10-03' }),
+  R({ scen: 'At hub, stuffing waits for vessel', po: 3003, hub: 'Hub A', lt: 55, poDate: '2026-09-18', rcv: '2026-09-17', gro: '2026-09-19' }),
+  R({ scen: 'At hub, within consolidation KPI', po: 3004, hub: 'Hub B', lt: 45, poDate: '2026-09-30', rcv: '2026-09-30', gro: '2026-10-01' }),
+  R({ scen: 'Sailing, vessel left late', po: 3005, hub: 'Hub B', lt: 45, poDate: '2026-09-05', rcv: '2026-09-06', gro: '2026-09-07', ship: '2026-09-30' }),
+  R({ scen: 'Delivered to customer on time', po: 3006, hub: 'Hub C', lt: 40, poDate: '2026-08-15', rcv: '2026-08-15', gro: '2026-08-16', ship: '2026-08-22', onsite: '2026-09-24' }),
+  R({ scen: 'Delivered late, hub dwell overrun', po: 3007, hub: 'Hub C', lt: 40, poDate: '2026-08-15', rcv: '2026-08-15', gro: '2026-08-16', ship: '2026-09-08', onsite: '2026-10-08' }),
+  R({ scen: 'Direct route, ready on time', po: 3008, hub: 'Direct', lt: 18, poDate: '2026-10-10' })
+];
+
+/* ---- Test set: identical to the 19 PO lines / 22 RTNs of the Excel model v3 check. Expected statuses from that workbook ---- */
+function T(id, scen, po, rtn, poQty, qty, gro, ship, onsite, cancel, asof, expSite, expLog, hub, lt) {
+  return R({ scen: id + ' ' + scen, po: po, rtn: rtn, hub: hub || 'Hub A', lt: lt === undefined ? 71 : lt, poQty: poQty, qty: qty, poDate: '2026-10-01', gro: gro || '', ship: ship || '', onsite: onsite || '', cancel: cancel || '', asof: asof || '', expSite: expSite || '', expLog: expLog || '' });
+}
+const TESTSET = [
+  T('V1', 'Vendor not yet due', 1001, 'R1', 100, 100, '', '', '', '', '2026-09-20', 'Probably Ontime', 'Vendor stage'),
+  T('V2', 'Vendor 4 days late', 1002, 'R1', 100, 100, '', '', '', '', '2026-10-05', 'Probably Late', 'Vendor stage'),
+  T('V3', 'Vendor 11 days late', 1003, 'R1', 100, 100, '', '', '', '', '2026-10-12', 'Late', 'Vendor stage'),
+  T('H1', 'Full at hub 1 Oct, day 8', 1004, 'R1', 100, 100, '2026-10-01', '', '', '', '2026-10-09', 'Ontime', 'Ontime'),
+  T('H3', 'Full at hub 1 Oct, day 24', 1005, 'R1', 100, 100, '2026-10-01', '', '', '', '2026-10-25', 'Probably Late', 'Probably Late'),
+  T('H5', 'Vendor 9 days late, hub 10 Oct', 1006, 'R1', 100, 100, '2026-10-10', '', '', '', '2026-10-24', 'Probably Late', 'Probably Ontime'),
+  T('H6', 'Vendor 30 days early, 44 days at hub', 1007, 'R1', 100, 100, '2026-09-01', '', '', '', '2026-10-15', 'Probably Ontime', 'Late'),
+  T('W1', 'Departed 22 Oct', 1008, 'R1', 100, 100, '2026-10-01', '2026-10-22', '', '', '2026-10-25', 'Probably Ontime', 'Probably Ontime'),
+  T('W2', 'Departed 30 Oct', 1009, 'R1', 100, 100, '2026-10-01', '2026-10-30', '', '', '2026-11-02', 'Late', 'Late'),
+  T('R1', 'Received 10 Dec (due 11 Dec)', 1010, 'R1', 100, 100, '2026-10-01', '2026-10-22', '2026-12-10', '', '2026-12-12', 'Ontime', 'Ontime'),
+  T('R2', 'Received 15 Dec (due 11 Dec)', 1011, 'R1', 100, 100, '2026-10-01', '2026-10-30', '2026-12-15', '', '2026-12-20', 'Late', 'Late'),
+  T('P1', 'Partial 60/100 at hub, rest not delivered', 1012, 'R1', 100, 60, '2026-10-05', '', '', '', '2026-10-10', 'Late', 'Ontime'),
+  T('P2a', 'Two RTNs, full at hub 15 Oct, RTN1 on water', 1013, 'R1', 100, 60, '2026-10-01', '2026-10-22', '', '', '2026-10-25', 'Probably Late', 'Probably Ontime'),
+  T('P2b', 'RTN2 at hub', 1013, 'R2', 100, 40, '2026-10-15', '', '', '', '', '', 'Ontime'),
+  T('P3a', 'Two RTNs both received; vendor late on RTN2', 1014, 'R1', 100, 60, '2026-10-01', '2026-10-22', '2026-12-10', '', '2026-12-26', 'Late', 'Ontime'),
+  T('P3b', 'RTN2 received 24 Dec', 1014, 'R2', 100, 40, '2026-10-15', '2026-11-05', '2026-12-24', '', '', '', 'Ontime'),
+  T('T1a', 'As P2 but as-of 10 Oct (RTN2 not yet at hub)', 1015, 'R1', 100, 60, '2026-10-01', '2026-10-22', '', '', '2026-10-10', 'Late', 'Ontime'),
+  T('T1b', 'RTN2 GR Offsite after as-of, ignored', 1015, 'R2', 100, 40, '2026-10-15', '', '', '', '', '', 'Vendor stage'),
+  T('O1', 'Over-delivery 105 vs 100', 1016, 'R1', 100, 105, '2026-10-01', '', '', '', '2026-10-09', 'Ontime', 'Ontime'),
+  T('C1', 'Cancelled line', 1017, 'R1', 100, 100, '2026-10-01', '', '', 'X', '2026-10-09', 'Excluded', 'Excluded'),
+  T('D1', 'Direct route, vendor due today', 1018, 'R1', 100, 100, '', '', '', '', '2026-10-01', 'Ontime', 'Vendor stage', 'Direct', 20),
+  T('D2', 'Direct route, vendor 2 days late', 1019, 'R1', 100, 100, '', '', '', '', '2026-10-03', 'Late', 'Vendor stage', 'Direct', 20)
+];
+if (false) module.exports = { HUBS, PORTFOLIO, PORTFOLIO_OUT, TESTSET };
+
+/* ===================== UI ===================== */
+function $(id) { return document.getElementById(id); }
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function esc(s) { return String(s === undefined || s === null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function setH(id, h) { const e = $(id); if (e) e.innerHTML = h; }
+function setT(id, t) { const e = $(id); if (e) e.textContent = t; }
+function getPath(o, p) { return p.split('.').reduce((a, k) => (a === undefined || a === null) ? undefined : a[k], o); }
+function setPath(o, p, v) { const ks = p.split('.'); let a = o; for (let i = 0; i < ks.length - 1; i++) a = a[ks[i]]; a[ks[ks.length - 1]] = v; }
+function f1(x, d) { if (!isFinite(x)) return '\u2014'; return x.toLocaleString('en-US', { maximumFractionDigits: d === undefined ? 0 : d, minimumFractionDigits: d === undefined ? 0 : d }); }
+function sg(n) { return n === null || n === undefined || !isFinite(n) ? '\u2014' : (n > 0 ? '+' + n : String(n)); }
+function pc(x, d) { return isFinite(x) ? (x * 100).toFixed(d === undefined ? 0 : d) + '%' : '\u2014'; }
+function chip(s) { const c = { 'Ontime': 's-Ontime', 'Probably Ontime': 's-ProbablyOntime', 'Probably Late': 's-ProbablyLate', 'Late': 's-Late', 'Received': 's-Received' }[s] || 's-gray'; return '<span class="stp ' + c + '">' + esc(s) + '</span>'; }
+const SC = { 'Ontime': '#3E745A', 'Probably Ontime': '#7BA38D', 'Probably Late': '#D49A3A', 'Late': '#B64D42' };
+
+const LAB = {
+  in: { order: 'PO', po: 'PO', line: 'Line', rtn: 'RTN', poDate: 'PO Delivery Date', gro: 'GR Offsite', ship: 'Shipment Start', onsite: 'GR Onsite', rcv: '3PL physical receipt', qty: 'RTN qty', poQty: 'PO qty', due: 'Due Site Date', cancel: 'Cancelled (X)',
+    note: 'One row per RTN (goods receipt). A PO line that appears on several rows with different RTNs was delivered in parts.' },
+  out: { order: 'Order', po: 'Order', line: 'Line', rtn: 'Delivery', poDate: 'Ready-to-ship date', gro: 'Hub receipt', ship: 'Vessel departure', onsite: 'Customer receipt (POD)', rcv: '3PL physical receipt', qty: 'Delivery qty', poQty: 'Order qty', due: 'Customer due date', cancel: 'Cancelled (X)',
+    note: 'One row per delivery handed to the hub. An order line that appears on several rows was shipped in parts. Labels are mirrored; the calculation is identical.' }
+};
+let P = { dir: 'in', useToday: false, asof: '2026-10-09', grKpi: 2, hubs: clone(HUBS), rtns: clone(PORTFOLIO), mc: { sims: 2000, sdVendor: 3, sdHub: 4, sdTransit: 3, seed: 7 } };
+let LEV = { horizon: 0, vendorSlip: 0, hubHold: 0, transitSlip: 0 }, VIEW = 'wi', FLOW = 'in';
+const NUMF = { hubs: ['std', 'sB', 'sA', 'lB', 'lA'] };
+
+/* ---------- flow diagram ---------- */
+function flowSvg(dir) {
+  const L = dir === 'in' ?
+    { m: [['PO Delivery Date', '(supplier promise)'], ['3PL physical', 'receipt'], ['GR Offsite', 'posted at hub'], ['Shipment', 'Start'], ['GR Onsite', 'at site']], ph: ['Supplier lead time', 'GR posting', 'Consolidation at hub', 'Sailing, clearance, inland'], k: [['RIFOT', 'arrives by PO date, in full'], ['On-time GR', '\u2264 GR KPI days'], ['Consolidation KPI', '\u2264 std days per hub'], ['Sailing standard', '= LT \u2212 std consolidation']],
+      b: ['RIFOT: hub receipt vs PO Delivery Date, in full', 'Logistics on-time (Assessment 2): target = GR Offsite + LT', 'DIFOT / site status (Assessment 1): target = Due Site Date = PO Delivery Date + LT'] } :
+    { m: [['Ready-to-ship date', '(plant promise)'], ['3PL physical', 'receipt'], ['Hub receipt', 'posted'], ['Vessel', 'departure'], ['Customer receipt', '(POD)']], ph: ['Plant lead time', 'Receipt posting', 'Stuffing and cut-off', 'Sailing, clearance, last mile'], k: [['OTIF at origin', 'ready by promise, in full'], ['On-time posting', '\u2264 GR KPI days'], ['Consolidation KPI', '\u2264 std days per hub'], ['Sailing standard', '= LT \u2212 std consolidation']],
+      b: ['OTIF at origin: hub receipt vs ready-to-ship date, in full', 'Logistics on-time (Assessment 2): target = hub receipt + LT', 'OTIF to customer (Assessment 1): target = customer due date = ready date + LT'] };
+  const X = [70, 330, 505, 790, 1110], col = ['#B77A2B', '#4F9A9E', '#2E6E73', '#27403F'], W = 1180, H = 318;
+  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Business flow with KPIs" font-family="Segoe UI,Arial"><rect width="' + W + '" height="' + H + '" fill="#fff"/>';
+  for (let i = 0; i < 4; i++) {
+    s += '<rect x="' + X[i] + '" y="84" width="' + (X[i + 1] - X[i]) + '" height="30" fill="' + col[i] + '"/>';
+    s += '<text x="' + ((X[i] + X[i + 1]) / 2) + '" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">' + L.ph[i] + '</text>';
+    s += '<text x="' + ((X[i] + X[i + 1]) / 2) + '" y="140" text-anchor="middle" font-size="13.5" font-weight="700" fill="' + col[i] + '">' + L.k[i][0] + '</text>';
+    s += '<text x="' + ((X[i] + X[i + 1]) / 2) + '" y="157" text-anchor="middle" font-size="12" fill="#5B6568">' + L.k[i][1] + '</text>';
+  }
+  for (let j = 0; j < 5; j++) {
+    const an = j === 0 ? 'start' : (j === 4 ? 'end' : 'middle'), tx = j === 0 ? 18 : (j === 4 ? 1162 : X[j]);
+    s += '<line x1="' + X[j] + '" x2="' + X[j] + '" y1="58" y2="84" stroke="#151B1D" stroke-width="1.4"/><circle cx="' + X[j] + '" cy="99" r="8" fill="#fff" stroke="#151B1D" stroke-width="2.4"/>';
+    s += '<text x="' + tx + '" y="30" text-anchor="' + an + '" font-size="13.5" font-weight="700" fill="#151B1D">' + L.m[j][0] + '</text><text x="' + tx + '" y="47" text-anchor="' + an + '" font-size="12" fill="#5B6568">' + L.m[j][1] + '</text>';
+  }
+  const br = [[X[0], X[2], 200, '#B77A2B', L.b[0]], [X[2], X[4], 240, '#2E6E73', L.b[1]], [X[0], X[4], 280, '#1C2526', L.b[2]]];
+  br.forEach(b => { s += '<path d="M' + b[0] + ' ' + (b[2] - 8) + ' V' + b[2] + ' H' + b[1] + ' V' + (b[2] - 8) + '" fill="none" stroke="' + b[3] + '" stroke-width="2.4"/><text x="' + ((b[0] + b[1]) / 2) + '" y="' + (b[2] + 19) + '" text-anchor="middle" font-size="13" font-weight="700" fill="' + b[3] + '">' + b[4] + '</text>'; });
+  return s + '</svg>';
+}
+function flowTxt(dir) {
+  const a = dir === 'in' ? [
+    ['Supplier lead time', 'The supplier delivers to the 3PL hub by the PO Delivery Date. RIFOT asks whether the full quantity arrived on time.'],
+    ['GR posting', 'The 3PL receives the goods and posts the goods receipt (GR Offsite). The On-time GR KPI limits the days between the two.'],
+    ['Consolidation at hub', 'Lots are combined and booked on a container or vessel. Each hub has a standard number of days. The consolidation KPI checks that goods do not stay longer.'],
+    ['Sailing, clearance, inland', 'The shipment sails, clears customs and moves inland to the site, where GR Onsite is posted. The standard is the lead time minus the consolidation days.']] : [
+    ['Plant lead time', 'The plant produces and releases the batch to the 3PL by the ready-to-ship date. OTIF at origin asks whether it was ready in full and on time.'],
+    ['Receipt posting', 'The 3PL receives the product and posts the hub receipt. The same GR KPI limits the delay between physical receipt and posting.'],
+    ['Stuffing and cut-off', 'Product is stuffed into containers and held for the vessel cut-off. The hub standard days are the consolidation KPI.'],
+    ['Sailing, clearance, last mile', 'The vessel sails, the cargo clears and is delivered to the customer. Proof of delivery closes the order against the customer due date.']];
+  return '<div class="grid2">' + a.map((x, i) => '<div class="card" style="border-top-color:' + ['#B77A2B', '#4F9A9E', '#2E6E73', '#27403F'][i] + '"><h4>Phase ' + (i + 1) + ' &middot; ' + x[0] + '</h4><p class="small">' + x[1] + '</p></div>').join('') + '</div>';
+}
+
+/* ---------- tables for parameters ---------- */
+function tin(path, v, type, w) { return '<td><input data-p="' + path + '" type="' + (type || 'text') + '"' + (type === 'number' ? ' step="any"' : '') + ' value="' + esc(v) + '"' + (w ? ' style="min-width:' + w + 'px"' : '') + '></td>'; }
+function buildHubs() {
+  let h = '<thead><tr><th>Hub / route</th><th>Std consolidation (days)</th><th>Site tol. before shipment</th><th>Site tol. after shipment</th><th>Logistics tol. before shipment</th><th>Logistics tol. after shipment</th></tr></thead><tbody>';
+  P.hubs.forEach((x, i) => { const b = 'hubs.' + i + '.'; h += '<tr>' + tin(b + 'n', x.n, 'text', 120) + tin(b + 'std', x.std, 'number') + tin(b + 'sB', x.sB, 'number') + tin(b + 'sA', x.sA, 'number') + tin(b + 'lB', x.lB, 'number') + tin(b + 'lA', x.lA, 'number') + '</tr>'; });
+  setH('t_hub', h + '</tbody>');
+}
+function buildRtns() {
+  const Lb = LAB[P.dir], names = P.hubs.map(x => x.n).filter(Boolean);
+  let h = '<thead><tr><th>Scenario / note</th><th>' + Lb.po + '</th><th>' + Lb.line + '</th><th>' + Lb.rtn + '</th><th>Hub</th><th>' + Lb.poQty + '</th><th>' + Lb.poDate + '</th><th>Lead time (days)</th><th>' + Lb.qty + '</th><th>' + Lb.rcv + ' (optional)</th><th>' + Lb.gro + '</th><th>' + Lb.ship + '</th><th>' + Lb.onsite + '</th><th>' + Lb.cancel + '</th><th>As-of override</th><th>Expected site</th><th>Expected logistics</th></tr></thead><tbody>';
+  P.rtns.forEach((r, i) => {
+    const b = 'rtns.' + i + '.'; let opt = names.map(n => '<option' + (n === r.hub ? ' selected' : '') + '>' + esc(n) + '</option>').join('');
+    if (r.hub && names.indexOf(r.hub) < 0) opt = '<option selected>' + esc(r.hub) + '</option>' + opt;
+    h += '<tr>' + tin(b + 'scen', r.scen, 'text', 230) + tin(b + 'po', r.po, 'text', 64) + tin(b + 'line', r.line, 'text', 52) + tin(b + 'rtn', r.rtn, 'text', 56) + '<td><select data-p="' + b + 'hub">' + opt + '</select></td>' + tin(b + 'poQty', r.poQty, 'number', 70) + tin(b + 'poDate', r.poDate, 'date', 130) + tin(b + 'lt', r.lt, 'number', 64) + tin(b + 'qty', r.qty, 'number', 70) + tin(b + 'rcv', r.rcv, 'date', 130) + tin(b + 'gro', r.gro, 'date', 130) + tin(b + 'ship', r.ship, 'date', 130) + tin(b + 'onsite', r.onsite, 'date', 130) + tin(b + 'cancel', r.cancel, 'text', 44) + tin(b + 'asof', r.asof, 'date', 130) + tin(b + 'expSite', r.expSite, 'text', 110) + tin(b + 'expLog', r.expLog, 'text', 110) + '</tr>';
+  });
+  setH('t_rtn', h + '</tbody>'); setT('rtnnote', Lb.note);
+}
+function syncStatic() { document.querySelectorAll('[data-p]').forEach(el => { if (el.closest('#t_hub,#t_rtn')) return; const v = getPath(P, el.dataset.p); el.value = el.dataset.type === 'bool' ? (v ? 'true' : 'false') : (v === undefined || v === null ? '' : v); }); }
+
+/* ---------- worked example ---------- */
+function renderWorked() {
+  const h = P.hubs.find(x => x.n && x.std > 0) || P.hubs[0]; if (!h) { setH('worked', ''); return; }
+  const po = pd('2026-10-01'), lt = 71, asof = pd('2026-10-09'), due = po + lt, rem = lt - h.std, fc = asof + rem, slack = due - fc, st = band(slack, h.sB);
+  setH('worked', '<b>' + esc(h.n) + ' &middot; goods posted at the hub on ' + fd(po) + ', not yet shipped, as-of ' + fd(asof) + ', lead time ' + lt + ' days, std consolidation ' + h.std + ' days</b>' +
+    '<div class="eq">Due Site Date     = ' + fd(po) + ' + ' + lt + ' = <b>' + fd(due) + '</b>\nRemaining LT      = ' + lt + ' &minus; ' + h.std + ' = ' + rem + ' days\nForecast (hub)    = ' + fd(asof) + ' + ' + rem + ' = <b>' + fd(fc) + '</b>\nSlack             = ' + fd(due) + ' &minus; ' + fd(fc) + ' = <b>' + sg(slack) + ' days</b>   (tolerance ' + h.sB + ')\nStatus            = <b>' + st + '</b></div>' +
+    '<p class="small">Change the hub table in section 6.2 and this example updates. The last departure date for this line is ' + fd(due - rem) + '.</p>');
+}
+
+/* ---------- results ---------- */
+function todayN() { const d = new Date(); return Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / DAY); }
+function isOpen(L) { return L.stage === 'Vendor' || L.stage === 'At hub' || L.stage === 'On water'; }
+function drawTimeline(wi, base, order) {
+  const Ls = order.filter(L => !L.err && L.stage !== 'Excluded').slice(0, 40); if (!Ls.length) { setH('c_time', '<p class="small" style="padding:16px">No lines to show.</p>'); return; }
+  const bm = {}; base.lines.forEach(L => { bm[L.key] = L; });
+  let lo = Infinity, hi = -Infinity; const upd = v => { if (v !== null && v !== undefined && isFinite(v)) { if (v < lo) lo = v; if (v > hi) hi = v; } };
+  Ls.forEach(L => { upd(L.poDate); upd(L.groL); upd(L.shipL); upd(L.siteL); upd(L.due); upd(L.fc); upd(L.evalDay); const b = bm[L.key]; if (b) upd(b.fc); });
+  lo -= 3; hi += 3; const W = 1180, LW = 230, RW = 14, PW = W - LW - RW, RH = 24, TOP = 40, H = TOP + Ls.length * RH + 14, X = v => LW + (v - lo) / (hi - lo) * PW;
+  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" font-family="Segoe UI,Arial"><rect width="' + W + '" height="' + H + '" fill="#fff"/>';
+  const span = hi - lo, step = span > 160 ? 28 : span > 90 ? 14 : 7;
+  for (let t = Math.ceil(lo / step) * step; t <= hi; t += step) s += '<line x1="' + X(t) + '" x2="' + X(t) + '" y1="' + (TOP - 8) + '" y2="' + (H - 8) + '" stroke="#ECE8DD"/><text x="' + X(t) + '" y="' + (TOP - 14) + '" text-anchor="middle" font-size="11" fill="#5B6568">' + fd(t).slice(0, 6) + '</text>';
+  Ls.forEach((L, i) => {
+    const y = TOP + i * RH, cy = y + RH / 2, hh = 11, y0 = cy - hh / 2, b = bm[L.key];
+    const col = SC[L.status] || '#6E7A7C';
+    s += '<text x="8" y="' + (cy + 4) + '" font-size="11.5" fill="#151B1D"><tspan font-weight="700">' + esc(L.key) + '</tspan> ' + esc((L.first.scen || '').trim().slice(0, 26)) + '</text>';
+    const rect = (a, c, fill, ex) => { if (a === null || c === null || c <= a) return ''; return '<rect x="' + X(a).toFixed(1) + '" y="' + y0 + '" width="' + Math.max(1, X(c) - X(a)).toFixed(1) + '" height="' + hh + '" fill="' + fill + '"' + (ex || '') + '/>'; };
+    let g = '<title>' + esc(L.key + '  ' + L.stage + '  ' + L.status + '\nDue ' + fd(L.due) + (L.fc !== undefined ? '   Forecast ' + fd(L.fc) : '') + (L.slack !== undefined ? '   Slack ' + sg(L.slack) + ' d' : '')) + '</title>';
+    if (L.groL !== null) g += rect(L.groL, L.shipL !== null ? L.shipL : L.evalDay, '#2E6E73');
+    if (L.shipL !== null) g += rect(L.shipL, L.siteL !== null ? L.siteL : L.evalDay, '#27403F');
+    if (isOpen(L)) {
+      const st = (L.stage === 'Vendor' ? Math.max(L.evalDay, L.poDate) : L.evalDay);
+      g += rect(Math.min(st, L.fc), Math.max(st, L.fc), col, ' opacity=".5" stroke="' + col + '" stroke-dasharray="3 2"');
+      if (VIEW === 'wi' && b && b.fc !== undefined && Math.abs(b.fc - L.fc) > 0.01) g += '<path d="M' + X(b.fc).toFixed(1) + ' ' + (cy - 7) + ' l4 7 l-4 7 l-4 -7z" fill="#fff" stroke="#6B7477" stroke-width="1.4"/>';
+    }
+    g += '<path d="M' + X(L.poDate).toFixed(1) + ' ' + (cy - 5) + ' l4 5 l-4 5 l-4 -5z" fill="#B77A2B"/>';
+    g += '<line x1="' + X(L.due).toFixed(1) + '" x2="' + X(L.due).toFixed(1) + '" y1="' + (y + 2) + '" y2="' + (y + RH - 2) + '" stroke="#151B1D" stroke-width="2.2"/>';
+    if (isOpen(L)) g += '<line x1="' + X(L.evalDay).toFixed(1) + '" x2="' + X(L.evalDay).toFixed(1) + '" y1="' + (y + 3) + '" y2="' + (y + RH - 3) + '" stroke="#B64D42" stroke-width="1.2" stroke-dasharray="2 2"/>';
+    s += g;
+  });
+  setH('c_time', s + '</svg>');
+  setH('c_time_leg', [['#2E6E73', 'At hub (actual)'], ['#27403F', 'On water (actual)'], ['#D49A3A', 'Forecast to arrival, coloured by status'], ['#B77A2B', 'Supplier promise date'], ['#151B1D', 'Due date'], ['#B64D42', 'As-of (dotted)']].map(x => '<span><i style="background:' + x[0] + '"></i>' + x[1] + '</span>').join('') + (VIEW === 'wi' ? '<span>&#9671; Base forecast arrival (when the what-if moves it)</span>' : ''));
+}
+function renderResults() {
+  const t = todayN(), base = compute(P, {}, t), wi = compute(P, LEV, t), Lb = LAB[P.dir];
+  const bm = {}; base.lines.forEach(L => { bm[L.key] = L; });
+  const lines = wi.lines; lines.forEach(L => { L.p = mcLine(L, P.mc, LEV); });
+  const open = lines.filter(isOpen);
+  const order = lines.slice().sort((a, b) => { const oa = isOpen(a) ? 0 : 1, ob = isOpen(b) ? 0 : 1; if (oa !== ob) return oa - ob; if (oa === 0) { const pa = a.p === null ? -1 : a.p, pb = b.p === null ? -1 : b.p; if (Math.abs(pb - pa) > 1e-9) return pb - pa; return (a.slack || 0) - (b.slack || 0); } return a.n - b.n; });
+  /* worst logistics per line */
+  const wrs = {}; wi.rtns.forEach(o => { if (!['Ontime', 'Probably Ontime', 'Probably Late', 'Late'].includes(o.status)) return; const k = o.line.key, c = wrs[k]; if (!c || ORDER[o.status] < ORDER[c]) wrs[k] = o.status; });
+  /* headline */
+  const late = open.filter(L => L.status === 'Late').length, pl = open.filter(L => L.status === 'Probably Late').length;
+  const lb = base.lines.filter(L => isOpen(L) && L.status === 'Late').length, plb = base.lines.filter(L => isOpen(L) && L.status === 'Probably Late').length;
+  const chg = lines.filter(L => bm[L.key] && bm[L.key].status !== L.status && isOpen(L)), expLate = open.reduce((s, L) => s + (L.p || 0), 0);
+  const hubL = open.filter(L => L.stage === 'At hub'), dueSoon = hubL.filter(L => { const left = L.latestDep - L.evalDay - LEV.hubHold; return left >= 0 && left <= 7; });
+  let hd = '<ul class="res" style="margin:0;padding-left:18px">';
+  hd += '<li><b>' + open.length + '</b> PO lines are open. <b>' + (late + pl) + '</b> are forecast Late or Probably Late (base: ' + (lb + plb) + '), of which <b>' + late + '</b> already Late even at standard sailing time (base: ' + lb + ').</li>';
+  const top = order.find(isOpen); if (top && top.p !== null) hd += '<li>Highest risk: <b>' + esc(top.key) + '</b>, ' + esc((top.first.scen || '').trim()) + ' (' + top.stage + ', ' + top.status + ', probability of late ' + pc(top.p) + '). ' + esc(actionFor(top, LEV)) + '.</li>';
+  hd += '<li><b>' + hubL.length + '</b> lines sit at a hub, where an escalation still moves the arrival; <b>' + dueSoon.length + '</b> of them must depart within 7 days.</li>';
+  if (chg.length) hd += '<li>Your what-if changes the status of <b>' + chg.length + '</b> open line' + (chg.length > 1 ? 's' : '') + ': ' + chg.slice(0, 6).map(L => esc(L.key) + ' (' + bm[L.key].status + ' \u2192 ' + L.status + ')').join(', ') + (chg.length > 6 ? ', ...' : '') + '.</li>';
+  hd += '</ul>'; setH('r_head', hd);
+  setH('r_kpis', '<div><b>' + open.length + '</b><span>Open PO lines</span></div><div class="' + (late > lb ? 'bad' : '') + '"><b>' + late + '</b><span>Late, what-if (base ' + lb + ')</span></div><div class="' + (pl > plb ? 'bad' : '') + '"><b>' + pl + '</b><span>Probably Late, what-if (base ' + plb + ')</span></div><div class="' + (chg.length ? 'bad' : '') + '"><b>' + chg.length + '</b><span>Open lines whose status changes vs base</span></div><div><b>' + f1(expLate, 1) + '</b><span>Expected late lines (probability layer)</span></div>');
+  /* ranking */
+  let rk = '<thead><tr><th class="r">#</th><th>' + Lb.po + ' - line</th><th>Scenario</th><th>Hub</th><th>Stage</th><th>' + Lb.due + '</th><th>Forecast / actual</th><th class="r">Slack (d)</th><th>Site status</th><th>Base</th><th>P(late)</th><th>Worst logistics</th><th>Suggested action</th></tr></thead><tbody>';
+  order.forEach((L, i) => {
+    if (L.err) { rk += '<tr><td class="r">' + (i + 1) + '</td><td class="k">' + esc(L.key) + '</td><td colspan="11"><span class="stp s-gray">Check input</span> ' + esc(L.err) + '</td></tr>'; return; }
+    const b = bm[L.key], ch = b && b.status !== L.status;
+    rk += '<tr><td class="r">' + (i + 1) + '</td><td class="k">' + esc(L.key) + '</td><td>' + esc((L.first.scen || '').trim()) + '</td><td>' + esc(L.hub.n) + '</td><td>' + L.stage + '</td><td>' + fd(L.due) + '</td><td>' + (L.fc !== undefined ? fd(L.fc) : '\u2014') + '</td><td class="r">' + (L.slack !== undefined ? sg(L.slack) : '\u2014') + '</td><td>' + chip(L.status) + '</td><td>' + (ch ? chip(b.status) : '<span class="small">same</span>') + '</td><td>' + (L.p === null ? '\u2014' : '<b>' + pc(L.p) + '</b>') + '</td><td>' + (wrs[L.key] ? chip(wrs[L.key]) : '<span class="small">n/a</span>') + '</td><td class="small">' + esc(actionFor(L, LEV)) + '</td></tr>';
+  });
+  setH('t_rank', rk + '</tbody>');
+  drawTimeline(wi, base, order);
+  /* distribution */
+  const ST = ['Ontime', 'Probably Ontime', 'Probably Late', 'Late'], cnt = (arr, f, s) => arr.filter(x => f(x) === s).length;
+  let dt = '<thead><tr><th>Status</th><th class="r">Site, base</th><th class="r">Site, what-if</th><th class="r">Change</th><th class="r">Logistics, base</th><th class="r">Logistics, what-if</th><th class="r">Change</th></tr></thead><tbody>';
+  ST.concat(['Vendor stage', 'Excluded']).forEach(s => {
+    const a = cnt(base.lines, L => L.status, s), b = cnt(wi.lines, L => L.status, s), c = cnt(base.rtns, o => o.status, s), d = cnt(wi.rtns, o => o.status, s), cl = (x) => x > 0 ? 'dn' : (x < 0 ? 'up' : '');
+    const bad = s === 'Late' || s === 'Probably Late';
+    dt += '<tr><td>' + (s === 'Vendor stage' ? '<span class="stp s-gray">Vendor stage (logistics not started)</span>' : chip(s)) + '</td><td class="r">' + (s === 'Vendor stage' ? '\u2014' : a) + '</td><td class="r">' + (s === 'Vendor stage' ? '\u2014' : b) + '</td><td class="r ' + (bad ? cl(b - a) : '') + '">' + (s === 'Vendor stage' ? '\u2014' : sg(b - a)) + '</td><td class="r">' + c + '</td><td class="r">' + d + '</td><td class="r ' + (bad ? cl(d - c) : '') + '">' + sg(d - c) + '</td></tr>';
+  });
+  setH('t_dist', dt + '</tbody>');
+  /* rtn table */
+  let rt = '<thead><tr><th>' + Lb.po + ' - line - ' + Lb.rtn + '</th><th>Hub</th><th>Stage</th><th>Logistics target</th><th>Forecast / actual</th><th class="r">Slack (d)</th><th>Status</th><th>Base</th><th class="r">Supplier vs promise</th><th class="r">Posting lag</th><th class="r">Hub dwell vs KPI</th><th class="r">Sailing vs standard</th></tr></thead><tbody>';
+  const bR = {}; base.rtns.forEach(o => { bR[o.i] = o; });
+  const cell = v => v === null || v === undefined ? '<td class="r small">\u2014</td>' : '<td class="r ' + (v > 0 ? 'dn' : (v < 0 ? 'up' : '')) + '">' + sg(v) + '</td>';
+  wi.rtns.forEach(o => {
+    const b = bR[o.i], L = o.line, ch = b && b.status !== o.status;
+    rt += '<tr><td class="k">' + esc(o.row.po + '-' + o.row.line + ' ' + o.row.rtn) + '</td><td>' + esc(o.row.hub) + '</td><td>' + o.stage + '</td><td>' + (o.target !== undefined ? fd(o.target) : '\u2014') + '</td><td>' + (o.fc !== undefined ? fd(o.fc) : '\u2014') + '</td><td class="r">' + (o.slack !== undefined ? sg(o.slack) : '\u2014') + '</td><td>' + (['Vendor stage', 'Excluded', 'Check input'].includes(o.status) ? '<span class="stp s-gray">' + o.status + '</span>' : chip(o.status)) + '</td><td>' + (ch ? chip(b.status) : '<span class="small">same</span>') + '</td>' + cell(o.vendorD) + (o.grLag === undefined ? '<td class="r small">\u2014</td>' : '<td class="r ' + (o.grLag > P.grKpi ? 'dn' : '') + '">' + o.grLag + '</td>') + cell(o.hubD) + cell(o.sailD) + '</tr>';
+  });
+  setH('t_rtn_res', rt + '</tbody>');
+  /* kpi chain */
+  const k = kpis(base, P), kr = (n, d, num, den) => '<tr><td class="k">' + n + '</td><td>' + d + '</td><td class="r">' + den + '</td><td class="r">' + num + '</td><td class="r"><b>' + (den ? pc(num / den) : '\u2014') + '</b></td></tr>';
+  setH('t_kpi', '<thead><tr><th>KPI</th><th>Definition used</th><th class="r">Measured</th><th class="r">Achieved</th><th class="r">Rate</th></tr></thead><tbody>' +
+    kr('RIFOT', 'Lines in full at the hub with latest ' + Lb.gro + ' on or before ' + Lb.poDate, k.rifotOK, k.rifotN) +
+    kr('On-time GR', 'Deliveries with ' + Lb.gro + ' minus physical receipt \u2264 ' + P.grKpi + ' d (blank receipt counts as 0)', k.grOK, k.grN) +
+    kr('Consolidation KPI', 'Shipped deliveries with ' + Lb.ship + ' minus ' + Lb.gro + ' \u2264 hub standard days', k.conOK, k.conN) +
+    kr('Sailing standard', 'Received deliveries with ' + Lb.onsite + ' minus ' + Lb.ship + ' \u2264 LT minus std', k.saOK, k.saN) +
+    kr('Logistics on-time', 'Received deliveries on or before ' + Lb.gro + ' + LT', k.logOK, k.logN) +
+    kr('DIFOT', 'Received lines in full on or before ' + Lb.due, k.difOK, k.difN) + '</tbody>');
+  /* self check */
+  let sOK = 0, sN = 0, lOK = 0, lN = 0, mis = [];
+  base.lines.forEach(L => { const e = L.first.expSite; if (e) { sN++; if (e === L.status) sOK++; else mis.push(L.key + ' site: ' + L.status + ' vs ' + e); } });
+  base.rtns.forEach(o => { const e = o.row.expLog; if (e) { lN++; if (e === o.status) lOK++; else mis.push(o.row.scen + ' logistics: ' + o.status + ' vs ' + e); } });
+  setH('selfcheck', sN + lN === 0 ? 'No expected statuses in the current data. Load the <b>Test set</b> in section 6.1 to compare this page with the Excel model (19 PO lines, 22 deliveries).' :
+    '<b>Site status: ' + sOK + ' of ' + sN + ' match. Logistics status: ' + lOK + ' of ' + lN + ' match.</b> The expected values are the hand-worked results of the Excel model. A match proves the page follows the same rules; it does not prove the rules are right.' + (mis.length ? '<br>Mismatches: ' + esc(mis.slice(0, 8).join('; ')) : ''));
+  /* warnings */
+  const W = []; const names = P.hubs.map(x => x.n).filter(Boolean);
+  if (new Set(names).size !== names.length) W.push('Two hubs have the same name; the first one is used.');
+  lines.forEach(L => { if (L.err) W.push('Line ' + L.key + ': ' + L.err + '.'); const f0 = L.first; L.rows.forEach(r => { if (r.hub !== f0.hub || String(r.poQty) !== String(f0.poQty) || r.poDate !== f0.poDate || String(r.lt) !== String(f0.lt)) { if (!L._w) { W.push('Line ' + L.key + ': hub, quantity, promise date or lead time differ between rows; only the first row is used.'); L._w = 1; } } }); });
+  P.rtns.forEach((r, i) => { const a = pd(r.gro), b = pd(r.ship), c = pd(r.onsite), d = pd(r.rcv); if (a !== null && b !== null && b < a) W.push('Row ' + (i + 1) + ': ' + Lb.ship + ' is before ' + Lb.gro + '.'); if (b !== null && c !== null && c < b) W.push('Row ' + (i + 1) + ': ' + Lb.onsite + ' is before ' + Lb.ship + '.'); if (d !== null && a !== null && d > a) W.push('Row ' + (i + 1) + ': physical receipt is after ' + Lb.gro + '; the receipt date is ignored for that row.'); });
+  if (LEV.horizon > 0) W.push('Look-ahead is ' + LEV.horizon + ' days: events dated after the as-of date are still ignored; only the clock moves.');
+  if (!P.useToday && P.rtns.some(r => r.asof)) W.push('Some rows carry their own as-of override (as in the test set). The general date applies only to rows without one.');
+  setH('r_warn', W.length ? '<ul style="margin:0;padding-left:18px">' + W.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' : '<span style="color:#3E745A"><b>No input warnings.</b></span>');
+  renderWorked();
+}
+
+/* ---------- events ---------- */
+let pend = false; function run() { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; try { renderResults(); } catch (e) { if (window.console) console.error(e); setH('r_warn', 'Calculation error: ' + esc(e.message)); } }); }
+function onEdit(e) {
+  const t = e.target, p = t.dataset && t.dataset.p; if (!p) return;
+  let v = t.value; if (t.dataset.type === 'bool') v = (v === 'true');
+  else if (/^hubs\.\d+\.(std|sB|sA|lB|lA)$/.test(p)) { v = parseFloat(v); if (!isFinite(v)) v = 0; }
+  else if (p === 'grKpi') { v = parseFloat(v); if (!isFinite(v)) v = 0; }
+  else if (/^mc\./.test(p)) { v = parseFloat(v); if (!isFinite(v)) v = 0; if (p === 'mc.sims') v = Math.min(10000, Math.max(200, Math.round(v) || 2000)); }
+  setPath(P, p, v);
+  if (e.type === 'change' && /^hubs\.\d+\.n$/.test(p)) buildRtns();
+  run();
+}
+function setDir(d, load) {
+  P.dir = d; document.querySelectorAll('[data-dir]').forEach(b => { b.classList.toggle('on', b.dataset.dir === d); b.classList.toggle('line', b.dataset.dir !== d); });
+  if (load) { P.rtns = clone(d === 'in' ? PORTFOLIO : PORTFOLIO_OUT); P.asof = '2026-10-09'; }
+  setT('dirnote', d === 'in' ? 'Inbound: purchase orders from suppliers to the site. Example portfolio loaded.' : 'Outbound: products from the site to customers, same engine with mirrored labels. Example outbound portfolio loaded.');
+  buildRtns(); syncStatic(); run();
+}
+function lev() {
+  LEV = { horizon: +$('l_hor').value, vendorSlip: +$('l_ven').value, hubHold: +$('l_hub').value, transitSlip: +$('l_tr').value };
+  setT('o_hor', LEV.horizon + ' d'); setT('o_ven', LEV.vendorSlip + ' d'); setT('o_hub', LEV.hubHold + ' d'); setT('o_tr', (LEV.transitSlip > 0 ? '+' : '') + LEV.transitSlip + ' d'); run();
+}
+function setFlow(d) { FLOW = d; document.querySelectorAll('[data-flow]').forEach(b => { b.classList.toggle('on', b.dataset.flow === d); b.classList.toggle('line', b.dataset.flow !== d); }); setH('flowsvg', flowSvg(d)); setH('flowtxt', flowTxt(d)); }
+function init() {
+  setH('flowsvg', flowSvg('in')); setH('flowtxt', flowTxt('in'));
+  buildHubs(); buildRtns(); syncStatic();
+  document.addEventListener('input', onEdit); document.addEventListener('change', onEdit);
+  ['l_hor', 'l_ven', 'l_hub', 'l_tr'].forEach(id => $(id).addEventListener('input', lev));
+  $('b_lvreset').addEventListener('click', () => { ['l_hor', 'l_ven', 'l_hub', 'l_tr'].forEach(id => { $(id).value = 0; }); lev(); });
+  document.querySelectorAll('[data-flow]').forEach(b => b.addEventListener('click', () => setFlow(b.dataset.flow)));
+  document.querySelectorAll('[data-dir]').forEach(b => b.addEventListener('click', () => setDir(b.dataset.dir, true)));
+  document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => { VIEW = b.dataset.view; document.querySelectorAll('[data-view]').forEach(x => { x.classList.toggle('on', x === b); x.classList.toggle('line', x !== b); }); run(); }));
+  $('b_port').addEventListener('click', () => { P.rtns = clone(P.dir === 'in' ? PORTFOLIO : PORTFOLIO_OUT); P.asof = '2026-10-09'; buildRtns(); syncStatic(); run(); });
+  $('b_test').addEventListener('click', () => { P.dir = 'in'; P.hubs = clone(HUBS); P.rtns = clone(TESTSET); P.asof = '2026-10-09'; P.useToday = false; setDir('in', false); buildHubs(); syncStatic(); });
+  $('b_blank').addEventListener('click', () => { P.rtns = [R({})]; buildRtns(); run(); });
+  $('b_add').addEventListener('click', () => { if (P.rtns.length < 60) { P.rtns.push(R({ hub: (P.hubs[0] || {}).n || '' })); buildRtns(); run(); } });
+  $('b_del').addEventListener('click', () => { if (P.rtns.length > 1) { P.rtns.pop(); buildRtns(); run(); } });
+  setDir('in', false);
+}
+if (typeof document !== 'undefined') { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init(); }
+
+
+</script></body></html>

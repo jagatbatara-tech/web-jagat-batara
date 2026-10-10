@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chart Advisor — Upload your data, see the best chart for the story</title>
+<meta name="description" content="Upload an Excel or CSV file, confirm the columns, and get two chart recommendations drawn with your own data, with the reasoning and an action title. Runs entirely in your browser. Rules follow Storytelling with Data.">
+<style>
+:root{--bg:#F4F2ED;--ink:#151B1D;--muted:#5B6568;--line:#DDD8CC;--copper:#B77A2B;--gold:#C59B43;--dark:#1C2526;--green:#3E745A;--teal:#2E6E73;--amber:#D49A3A;--red:#B64D42;--card:#FFFFFF}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Calibri,Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.65;font-size:17px;overflow-x:hidden}
+h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;line-height:1.2;color:var(--dark);margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+@media(max-width:600px){.wrap{padding:0 18px}body{font-size:16px}}
+a{color:var(--teal)}
+/* HERO */
+.hero{position:relative;overflow:hidden;color:#fff;min-height:430px;display:flex;align-items:flex-end;background:linear-gradient(135deg,#0F1415 0%,#1C2526 58%,#27312F 100%)}
+.hero .wrap{position:relative;padding-bottom:50px;padding-top:110px}
+.kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12.5px;color:var(--gold);font-weight:700}
+.hero h1{color:#fff;font-size:clamp(32px,5.2vw,56px);margin:14px 0 16px;max-width:820px}
+.hero p.lead{font-size:clamp(17px,2vw,20px);max-width:760px;color:#E8E4DA;margin:0 0 24px}
+.meta{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:13.5px;color:#CFCABD;border-top:1px solid rgba(255,255,255,.25);padding-top:16px}
+.meta b{color:#fff}
+/* NAV */
+nav.toc{position:sticky;top:0;z-index:20;background:rgba(28,37,38,.96);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:0;padding-bottom:0}
+nav.toc a{color:#D9D4C7;text-decoration:none;font-size:13.5px;padding:14px 14px;white-space:nowrap;border-bottom:3px solid transparent}
+nav.toc a:hover{color:#fff;border-bottom-color:var(--copper)}
+/* SECTIONS */
+section{padding:60px 0 8px;scroll-margin-top:56px}
+.sec-label{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.sec-num{font-family:Georgia,serif;font-size:54px;color:var(--copper);line-height:1;font-weight:700}
+.sec-label span.t{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h2{font-size:clamp(26px,3.6vw,40px);margin-bottom:8px}
+.takeaway{font-family:Georgia,serif;font-size:clamp(18px,2vw,21px);line-height:1.45;color:var(--dark);border-left:5px solid var(--copper);padding:6px 0 6px 20px;margin:18px 0 26px;max-width:900px}
+p{margin:0 0 14px}
+h3{font-size:22px;margin:30px 0 10px}
+h4{font-size:17px;margin:0 0 6px;font-family:"Segoe UI",Roboto,Arial,sans-serif;color:var(--dark)}
+.small{font-size:14px;color:var(--muted)}
+.mt{margin-top:20px}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
+.grid>*{min-width:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:20px 22px}
+.card.top{border-top:4px solid var(--teal)}.card.copper{border-top:4px solid var(--copper)}.card.green{border-top:4px solid var(--green)}.card.red{border-top:4px solid var(--red)}
+.card p:last-child{margin-bottom:0}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--copper);color:#fff;font-weight:700;font-size:14px;margin-bottom:10px}
+ul.tight{margin:6px 0 0;padding-left:20px}ul.tight li{margin:4px 0}
+.callout{background:#FBF6EA;border:1px solid #E7D9B3;border-left:5px solid var(--gold);padding:14px 18px;border-radius:4px;margin:18px 0}
+.callout.teal{background:#EAF3F3;border-color:#C5DDDD;border-left-color:var(--teal)}
+.callout.red{background:#FBEDEB;border-color:#EBC8C3;border-left-color:var(--red)}
+.callout.green{background:#EEF6F1;border-color:#C9DFD2;border-left-color:var(--green)}
+.callout b.h{display:block;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px;color:var(--muted)}
+.callout p:last-child{margin-bottom:0}
+.tbl{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px 0}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);font-size:15px;min-width:520px}
+th{background:var(--dark);color:#fff;text-align:left;padding:10px 12px;font-weight:600}
+td{padding:9px 12px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#FAF8F3}
+td.k{font-weight:700;color:var(--dark)}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.05em;padding:2px 9px;border-radius:20px;color:#fff;background:var(--teal)}
+.tag.c{background:var(--copper)}.tag.g{background:var(--green)}.tag.r{background:var(--red)}.tag.a{background:var(--amber);color:#1C2526}.tag.d{background:var(--dark)}
+/* FORM CONTROLS */
+.calc{background:#fff;border:1px solid var(--line);border-top:5px solid var(--copper);border-radius:6px;padding:22px;margin:18px 0}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:14px 18px}
+.ctl>*{min-width:0}
+label.f{display:block;font-size:13.5px;font-weight:600;color:var(--dark)}
+label.f small{display:block;font-weight:400;color:var(--muted);font-size:12px;line-height:1.35}
+label.f input[type=number],label.f input[type=text],label.f select,select.role,.sel{width:100%;margin-top:4px;padding:8px 10px;border:1px solid #C9C3B4;border-radius:4px;font-size:15px;font-family:inherit;background:#FDFCFA;color:var(--ink)}
+select.role{margin-top:0;padding:5px 6px;font-size:13.5px}
+input:focus,select:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+.chkline{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:600;margin-top:24px}
+.chkline input{accent-color:var(--copper)}
+button,.btn{background:var(--dark);color:#fff;border:0;border-radius:4px;padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+button:hover{background:var(--teal)}
+button.alt{background:#fff;color:var(--dark);border:1px solid #C9C3B4}button.alt:hover{background:#F4F2ED;color:var(--dark)}
+button.cu{background:var(--copper)}button.cu:hover{background:#9C6620}
+button:disabled{opacity:.45;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px}
+.seg{display:inline-flex;border:1px solid #C9C3B4;border-radius:6px;overflow:hidden;background:#fff}
+.seg button{border-radius:0;background:#fff;color:var(--dark);padding:7px 14px;border:0}
+.seg button:hover{background:#F4F2ED;color:var(--dark)}
+.seg button.on{background:var(--dark);color:#fff}.seg button.on.after{background:var(--copper)}
+.msg{font-size:14px;color:var(--red);font-weight:600}
+/* UPLOAD */
+.drop{display:block;border:2px dashed #C9C3B4;border-radius:8px;background:#fff;padding:36px 20px;text-align:center;cursor:pointer;transition:.15s}
+.drop:hover,.drop.over{border-color:var(--copper);background:#FBF6EA}
+.drop b{font-family:Georgia,serif;font-size:21px;display:block;margin-bottom:4px;color:var(--dark)}
+.drop input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.status{margin-top:12px;font-size:14.5px}
+.status.ok{color:var(--green);font-weight:600}.status.err{color:var(--red);font-weight:600}
+/* PREVIEW */
+.prev{overflow:auto;max-height:430px;border:1px solid var(--line);border-radius:6px;background:#fff}
+.prev table{min-width:0;font-size:12.5px;border:0;width:auto}
+.prev td,.prev th{padding:4px 9px;border-top:1px solid #ECE8DD;white-space:nowrap;max-width:210px;overflow:hidden;text-overflow:ellipsis}
+.prev th{position:sticky;top:0;background:var(--dark);color:#fff;z-index:1}
+.prev tr.hdr td{background:#FBF1C7!important;font-weight:700}
+.prev tr.tot td{background:#FBEDEB!important;color:var(--red)}
+.prev tr.pick{cursor:pointer}.prev tr.pick:hover td{background:#EAF3F3!important}
+.prev td.rn{color:var(--muted);background:#F4F2ED!important;position:sticky;left:0;text-align:right}
+.q{display:flex;gap:8px;align-items:flex-start;font-size:14.5px;margin:6px 0}
+.q i{font-style:normal;font-weight:700;flex:0 0 auto;width:20px;text-align:center}
+.q.warn i{color:var(--amber)}.q.bad i{color:var(--red)}.q.ok i{color:var(--green)}.q.info i{color:var(--teal)}
+.hidden{display:none!important}
+.ex{font-size:12.5px;color:var(--muted);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cnt{font-variant-numeric:tabular-nums;white-space:nowrap}
+.dead{opacity:.5}
+/* RESULTS */
+.rcard{background:#fff;border:1px solid var(--line);border-top:5px solid var(--copper);border-radius:6px;padding:22px;margin:24px 0}
+.rcard.second{border-top-color:var(--teal)}
+.rhead{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:6px}
+.rhead h3{margin:0;font-size:24px}
+.stage{background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px;overflow:hidden}
+.stage svg{display:block;width:100%;height:auto}
+.hl-edit{margin-top:12px}
+.hl-edit input{width:100%;padding:8px 10px;border:1px solid #C9C3B4;border-radius:4px;font-size:15px;font-family:inherit;margin-top:4px}
+.sw{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.stat-ok{color:var(--green);font-weight:700}.stat-no{color:var(--muted)}.stat-never{color:var(--red);font-weight:700}
+footer{background:var(--dark);color:#CFCABD;padding:40px 0;margin-top:70px;font-size:14px}
+footer b{color:#fff}footer p{margin:0 0 10px}
+@media(max-width:700px){.stage{overflow-x:auto}.stage svg{min-width:560px}}
+@media print{nav.toc{display:none}button,.btns,.seg,.drop{display:none}section{page-break-inside:avoid}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap">
+  <div class="kicker">Chart Advisor · MVP</div>
+  <h1>Upload your data. See the chart that tells the story.</h1>
+  <p class="lead">Drop in an Excel or CSV file, confirm what each column means, and get two chart recommendations drawn with your own numbers, with the reasoning, an action title and a "before vs after" view.</p>
+  <div class="meta">
+    <span><b>Runs in your browser:</b> files are never uploaded</span>
+    <span><b>No AI:</b> transparent rules from <i>Storytelling with Data</i></span>
+    <span><b>Reads:</b> .xlsx · .csv</span>
+  </div>
+</div></header>
+
+<nav class="toc" aria-label="Steps"><div class="wrap">
+  <a href="#s1">1 Upload</a><a href="#s2" class="wk-l">2 Prepare</a><a href="#s3" class="wk-l">3 Columns</a><a href="#s4" class="wk-l">4 Focus</a><a href="#s5" class="wk-l">5 Charts</a><a href="#s6">How it decides</a>
+</div></nav>
+
+<section id="s1"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">1</div><span class="t">Upload</span></div>
+  <h2>Start with a file or a sample</h2>
+  <div class="takeaway">Any number of columns is fine. You confirm the few things a program cannot know for sure.</div>
+  <label class="drop" id="drop"><b>Drop an .xlsx or .csv file here, or click to choose</b><span class="small">Up to a few hundred thousand cells works comfortably. Larger files should be summarised first.</span><input type="file" id="file" accept=".xlsx,.xlsm,.csv,.tsv,.txt"></label>
+  <div class="btns"><span class="small"><b>No file handy?</b> Try a fictional sample:</span>
+    <button class="alt" data-sample="po">PO delivery lines</button>
+    <button class="alt" data-sample="wh">Warehouse daily log</button>
+    <button class="alt" data-sample="wide">Messy monthly report</button></div>
+  <div class="status" id="status" role="status"></div>
+  <div class="callout teal"><b class="h">Privacy and limits</b>
+    <p>Everything runs on your computer in this page. Nothing is sent anywhere or saved. Formula cells are read as the last value Excel saved, so a file that was never recalculated can show empty cells. Old .xls and .xlsb files, password-protected files and pivot-table reports are not supported; save the data as .xlsx or .csv first.</p></div>
+</div></section>
+
+<div id="work" class="hidden">
+<section id="s2"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">2</div><span class="t">Prepare</span></div>
+  <h2>Check that the table was read correctly</h2>
+  <div class="takeaway">The most common reason for a wrong chart is a wrong table. Confirm the header row, then look at what was excluded.</div>
+  <div class="calc">
+    <div class="ctl">
+      <label class="f">Sheet<select id="p_sheet"></select></label>
+      <label class="f">Header rows<small>How many rows hold the column names</small><select id="p_hrows"><option value="1">1 row</option><option value="2">2 rows</option><option value="3">3 rows</option></select></label>
+      <label class="f">Last data row<small>Leave blank to read to the end</small><input type="number" id="p_last" min="1" placeholder="e.g. 5000"></label>
+      <label class="f">Numbers written as text<small>For example 1.234,5 or 1,234.5</small><select id="p_loc"><option value="auto">Detect automatically</option><option value="id">Indonesian: 1.234,5</option><option value="en">English: 1,234.5</option></select></label>
+      <label class="f">Dates written as text<small>For 05/03/2026</small><select id="p_ord"><option value="dmy">Day / month / year</option><option value="mdy">Month / day / year</option></select></label>
+      <label class="chkline"><input type="checkbox" id="p_tot" checked> Exclude total rows</label>
+    </div>
+    <p class="small mt"><b>Click a row in the preview</b> to mark it as the header row (highlighted yellow). Red rows were excluded as totals or repeated headers.</p>
+    <div class="prev" id="p_prev"></div>
+    <div id="p_notes" class="mt"></div>
+    <div id="p_wide"></div>
+  </div>
+</div></section>
+
+<section id="s3"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">3</div><span class="t">Columns</span></div>
+  <h2>Confirm what each column is</h2>
+  <div class="takeaway">The types below are guesses. Fix any that are wrong; the recommendations follow your choices.</div>
+  <div class="tbl"><table id="c_tbl"></table></div>
+  <p class="small"><b>Date</b> = a point in time · <b>Period</b> = an ordered label such as Jan, Feb or a year · <b>Number</b> = something you add up or average · <b>Yes/No flag</b> = an event you count as a rate · <b>Category</b> = a group · <b>ID / text</b> = not used for grouping · <b>Ignore</b>.</p>
+</div></section>
+
+<section id="s4"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">4</div><span class="t">Focus</span></div>
+  <h2>What do you want the chart to say?</h2>
+  <div class="takeaway">Pick the measure, then optionally a grouping, a time column and a target. The grey/accent story is built from these choices.</div>
+  <div class="calc">
+    <div class="ctl">
+      <label class="f">Measure<small>What you want to show</small><select id="f_metric"></select></label>
+      <label class="f">How to summarise it<small id="f_aggh"></small><select id="f_agg"></select></label>
+      <label class="f">Group by<small>One bar or line per value</small><select id="f_dim"></select></label>
+      <label class="f">Over time<small>Date or period column</small><select id="f_time"></select></label>
+      <label class="f">Group time by<small>Only for date columns</small><select id="f_grain"><option value="auto">Automatic</option><option value="day">Day</option><option value="week">Week</option><option value="month">Month</option><option value="quarter">Quarter</option><option value="year">Year</option></select></label>
+      <label class="f">Compare with a second number<small>Draws a scatterplot (optional)</small><select id="f_m2"></select></label>
+      <label class="f">Target<small>In the same unit as the result, e.g. 85 for 85%</small><input type="number" id="f_target" step="any" placeholder="optional"></label>
+      <label class="f">Which direction is good?<select id="f_dir"><option value="higher">Higher is better</option><option value="lower">Lower is better</option></select></label>
+      <label class="f">Show top N groups<small>The rest are combined as "Other"</small><input type="number" id="f_topn" min="3" max="30" value="12"></label>
+    </div>
+    <div class="btns"><button class="cu" id="f_go">Recommend charts</button><span class="msg" id="f_msg"></span></div>
+  </div>
+</div></section>
+
+<section id="s5"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">5</div><span class="t">Charts</span></div>
+  <h2>Your two best options</h2>
+  <div class="takeaway">Switch between a typical default chart and the recommended design. Edit the headline, then download the picture.</div>
+  <div id="results"><p class="small">Press "Recommend charts" in step 4.</p></div>
+  <h3>Chart types considered</h3>
+  <div class="tbl"><table id="considered"></table></div>
+</div></section>
+</div>
+
+<section id="s6"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">★</div><span class="t">Transparency</span></div>
+  <h2>How it decides, and where it can be wrong</h2>
+  <div class="takeaway">Every recommendation comes from a short list of rules. You can see them all, and none of them look at your business context.</div>
+  <div class="tbl"><table>
+    <tr><th>If you chose…</th><th>You get</th><th>Rule behind it</th></tr>
+    <tr><td class="k">One group-by column</td><td>Sorted horizontal bars (and a dot plot if values are close together)</td><td>Compare categories on one zero baseline. Bars must start at zero; a dot plot may use a labelled tighter axis.</td></tr>
+    <tr><td class="k">A time column</td><td>A line chart (or columns for a few periods)</td><td>Lines show direction and pace. An incomplete last period is drawn dashed and left out of the headline.</td></tr>
+    <tr><td class="k">Time + group by</td><td>Lines with one highlighted, or a heatmap</td><td>Many coloured lines become spaghetti. Grey for context, one accent for the point.</td></tr>
+    <tr><td class="k">Two numeric columns</td><td>Scatterplot with the 3 biggest outliers labelled</td><td>Shows relationship and exceptions; correlation is not causation.</td></tr>
+    <tr><td class="k">Nothing else</td><td>One big number with its target</td><td>One value is better stated than charted.</td></tr>
+    <tr><td class="k">A target</td><td>Target line; groups that miss it are accented</td><td>A number without a benchmark cannot be judged.</td></tr>
+  </table></div>
+  <div class="grid g2 mt">
+    <div class="card red"><h4>What it cannot do</h4>
+      <ul class="tight"><li>It does not know your audience or decision, so edit the headline before using it.</li><li>It cannot tell whether a column was entered correctly or what a code means.</li><li>Headlines state facts about the numbers; they do not explain causes.</li><li>It does not fix pivot-table reports, several tables on one sheet, or a mix of units in one column.</li></ul></div>
+    <div class="card green"><h4>Good habits</h4>
+      <ul class="tight"><li>Check the preview and the column types every time; a confident chart on a misread table is still wrong.</li><li>Keep the notes under each chart with the chart when you share it.</li><li>When groups have few rows, treat their values with care.</li><li>All rules come from <i>Storytelling with Data</i> (Knaflic, 2015); this page is an independent tool, not affiliated with the author.</li></ul></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <p><b>Chart Advisor (MVP)</b> · an original tool for self-learning and quick chart decisions.</p>
+  <p>Rule thresholds (for example 60% concentration, 15% closeness for dot plots, 10 rows minimum per group) are practical heuristics set for this tool, not figures from the book. Sample data is fictional.</p>
+</div></footer>
+<script>
+(function(){
+"use strict";
+/* ===== SHARED HELPERS ===== */
+const $ = id => document.getElementById(id);
+const C = {bg:'#F4F2ED',ink:'#151B1D',muted:'#5B6568',line:'#DDD8CC',copper:'#B77A2B',gold:'#C59B43',dark:'#1C2526',green:'#3E745A',teal:'#2E6E73',amber:'#D49A3A',red:'#B64D42',grey:'#B9B5AA',mgrey:'#8C8A82',lgrey:'#D9D5CA'};
+const XL = ['#4472C4','#ED7D31','#A5A5A5','#FFC000','#5B9BD5','#70AD47','#264478','#9E480E','#636363','#997300'];
+const SER = "Georgia,'Times New Roman',serif", SAN = "'Segoe UI',Arial,sans-serif";
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONF = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const lin = (d0,d1,r0,r1) => v => d1===d0 ? (r0+r1)/2 : r0 + (v-d0)*(r1-r0)/(d1-d0);
+const sum = a => a.reduce((x,y)=>x+y,0);
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const trunc = (s,n) => { s=String(s); return s.length>n ? s.slice(0,n-1)+'…' : s; };
+function T(x,y,s,o){o=o||{};return '<text x="'+(+x).toFixed(1)+'" y="'+(+y).toFixed(1)+'" font-size="'+(o.size||12)+'" fill="'+(o.fill||C.ink)+'" text-anchor="'+(o.anchor||'start')+'" font-weight="'+(o.weight||400)+'" font-family="'+(o.font||SAN)+'"'+(o.rot?' transform="rotate('+o.rot+' '+(+x).toFixed(1)+' '+(+y).toFixed(1)+')"':'')+'>'+esc(s)+'</text>';}
+function Ln(x1,y1,x2,y2,stroke,w,dash){return '<line x1="'+(+x1).toFixed(1)+'" y1="'+(+y1).toFixed(1)+'" x2="'+(+x2).toFixed(1)+'" y2="'+(+y2).toFixed(1)+'" stroke="'+(stroke||C.line)+'" stroke-width="'+(w||1)+'"'+(dash?' stroke-dasharray="'+dash+'"':'')+'/>';}
+function Rc(x,y,w,h,fill,extra){return '<rect x="'+(+x).toFixed(1)+'" y="'+(+y).toFixed(1)+'" width="'+Math.max(0,w).toFixed(1)+'" height="'+Math.max(0,h).toFixed(1)+'" fill="'+fill+'" '+(extra||'')+'/>';}
+function Cr(x,y,r,fill,extra){return '<circle cx="'+(+x).toFixed(1)+'" cy="'+(+y).toFixed(1)+'" r="'+r+'" fill="'+fill+'" '+(extra||'')+'/>';}
+function Pl(pts,stroke,w,extra){return '<polyline fill="none" stroke="'+stroke+'" stroke-width="'+w+'" stroke-linejoin="round" stroke-linecap="round" points="'+pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')+'" '+(extra||'')+'/>';}
+function SV(w,h,body,label){return '<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+esc(label||'Chart')+'">'+body+'</svg>';}
+function wrapTxt(s,n){const w=String(s).split(' ');const out=[];let cur='';w.forEach(x=>{if((cur+' '+x).trim().length>n){out.push(cur.trim());cur=x;}else cur=(cur+' '+x);});if(cur.trim())out.push(cur.trim());return out;}
+/* left-aligned action title + grey subtitle; returns {s, y} = first free y below the header */
+function AT(title,sub,n,color,subcolor){const lines=wrapTxt(title,n||66);let s='',y=28;lines.forEach(l=>{s+=T(24,y,l,{size:17,weight:700,font:SER,fill:color||C.dark});y+=22;});if(sub){wrapTxt(sub,100).forEach(l=>{s+=T(24,y-4,l,{size:12,fill:subcolor||C.muted});y+=15;});y-=4;}return {s:s,y:y+12};}
+function niceTicks(mn,mx,cnt){cnt=cnt||5;if(mn===mx){mx=mn+1;}const span=mx-mn,raw=span/cnt,mag=Math.pow(10,Math.floor(Math.log10(raw))),n=raw/mag,step=(n<=1?1:n<=2?2:n<=2.5?2.5:n<=5?5:10)*mag;const out=[];for(let v=Math.ceil(mn/step-1e-9)*step;v<=mx+step*1e-9;v+=step)out.push(+v.toFixed(10));return out;}
+/* number formatting */
+function fv(v,unit){if(v==null||isNaN(v))return '–';const a=Math.abs(v);let s;if(a>=1e9)s=(v/1e9).toFixed(2).replace(/\.?0+$/,'')+'B';else if(a>=1e6)s=(v/1e6).toFixed(2).replace(/\.?0+$/,'')+'M';else if(a>=1000)s=Math.round(v).toLocaleString('en-US');else if(a>=100)s=(+v.toFixed(1)).toString();else if(a>=10)s=(+v.toFixed(1)).toString();else if(a===0)s='0';else s=(+v.toFixed(2)).toString();return unit==='%'?s+'%':s;}
+function fvAx(v,unit){const a=Math.abs(v);let s;if(a>=1e6)s=(v/1e6)+'M';else if(a>=1e4)s=(v/1e3)+'K';else s=(+v.toFixed(2)).toLocaleString('en-US');return unit==='%'?s+'%':s;}
+function pluralize(n,w){return n+' '+w+(n===1?'':'s');}
+
+/* ===== FILE READERS: .xlsx (zip + XML, no library) and .csv ===== */
+async function inflateRaw(u8){
+  if(typeof DecompressionStream==='undefined') throw new Error('This browser cannot unzip .xlsx files directly. Use a current Edge, Chrome, Firefox or Safari, or save the sheet as .csv.');
+  const ds=new DecompressionStream('deflate-raw');
+  const buf=await new Response(new Blob([u8]).stream().pipeThrough(ds)).arrayBuffer();
+  return new Uint8Array(buf);
+}
+async function unzip(buf){
+  const dv=new DataView(buf),u8=new Uint8Array(buf);let e=-1;
+  for(let i=u8.length-22;i>=Math.max(0,u8.length-65557);i--){if(dv.getUint32(i,true)===0x06054b50){e=i;break;}}
+  if(e<0) throw new Error('This does not look like a valid .xlsx file (not a zip archive).');
+  const n=dv.getUint16(e+10,true),cd=dv.getUint32(e+16,true);
+  if(cd===0xFFFFFFFF) throw new Error('Zip64 archives are not supported. Save the workbook again as a normal .xlsx.');
+  let p=cd;const files={};
+  for(let i=0;i<n;i++){
+    if(dv.getUint32(p,true)!==0x02014b50) break;
+    const method=dv.getUint16(p+10,true),csize=dv.getUint32(p+20,true),nl=dv.getUint16(p+28,true),el=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true);
+    files[new TextDecoder().decode(u8.subarray(p+46,p+46+nl))]={method:method,csize:csize,lo:lo};
+    p+=46+nl+el+cl;
+  }
+  return {files:files,async read(name){
+    const f=files[name];if(!f)return null;
+    const lnl=dv.getUint16(f.lo+26,true),lel=dv.getUint16(f.lo+28,true),st=f.lo+30+lnl+lel,data=u8.subarray(st,st+f.csize);
+    let out;if(f.method===0)out=data;else if(f.method===8)out=await inflateRaw(data);else throw new Error('Unsupported zip compression method.');
+    return new TextDecoder('utf-8').decode(out);
+  }};
+}
+function xmlUnesc(s){return s.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&#(\d+);/g,(m,d)=>String.fromCodePoint(+d)).replace(/&#x([0-9a-f]+);/gi,(m,h)=>String.fromCodePoint(parseInt(h,16))).replace(/&amp;/g,'&');}
+function colIdx(l){let n=0;for(let i=0;i<l.length;i++)n=n*26+l.charCodeAt(i)-64;return n-1;}
+function colLetter(i){let s='';i++;while(i>0){const m=(i-1)%26;s=String.fromCharCode(65+m)+s;i=Math.floor((i-1)/26);}return s;}
+function serialToDate(n,d1904){return new Date(Math.round((n-(d1904?24107:25569))*864e5));}
+function fmtKind(id,code){
+  if((id>=14&&id<=22)||(id>=27&&id<=36)||(id>=45&&id<=47)||(id>=50&&id<=58)) return 'd';
+  if(id===9||id===10) return 'p';
+  if(code){
+    let c=code.replace(/"[^"]*"/g,'').replace(/\[[^\]]*\]/g,'').replace(/\\./g,'').replace(/_./g,'').replace(/\*./g,'').replace(/General/gi,'');
+    if(/%/.test(c)) return 'p';
+    if(/[dmyhs]/i.test(c) && !/^[#0.,?\s()+\-$€£E]*$/i.test(c)) return 'd';
+  }
+  return null;
+}
+async function readXlsx(buf){
+  const z=await unzip(buf);
+  const wbx=await z.read('xl/workbook.xml');
+  if(!wbx) throw new Error('This .xlsx has no workbook part. The file may be damaged or password-protected.');
+  const rels=(await z.read('xl/_rels/workbook.xml.rels'))||'';
+  const relMap={};
+  rels.replace(/<Relationship\b([^>]*)>/g,(m,a)=>{const id=/\bId="([^"]*)"/.exec(a),t=/\bTarget="([^"]*)"/.exec(a);if(id&&t)relMap[id[1]]=t[1];return '';});
+  const d1904=/<workbookPr[^>]*date1904="(1|true)"/.test(wbx);
+  const metas=[];
+  wbx.replace(/<sheet\b([^>]*)>/g,(m,a)=>{const nm=/\bname="([^"]*)"/.exec(a),rid=/\br:id="([^"]*)"/.exec(a),st=/\bstate="([^"]*)"/.exec(a);if(nm)metas.push({name:xmlUnesc(nm[1]),rid:rid&&rid[1],hidden:!!st&&st[1]!=='visible'});return '';});
+  const sst=await z.read('xl/sharedStrings.xml'),ss=[];
+  if(sst) sst.replace(/<si\b[^>]*>([\s\S]*?)<\/si>/g,(m,b)=>{b=b.replace(/<rPh\b[\s\S]*?<\/rPh>/g,'');let t='';b.replace(/<t\b[^>]*>([\s\S]*?)<\/t>/g,(mm,x)=>{t+=xmlUnesc(x);return '';});ss.push(t);return '';});
+  const sty=await z.read('xl/styles.xml'),xfKind=[];
+  if(sty){
+    const custom={};
+    sty.replace(/<numFmt\b([^>]*)>/g,(m,a)=>{const id=/numFmtId="(\d+)"/.exec(a),fc=/formatCode="([^"]*)"/.exec(a);if(id&&fc)custom[id[1]]=xmlUnesc(fc[1]);return '';});
+    const cx=/<cellXfs\b[^>]*>([\s\S]*?)<\/cellXfs>/.exec(sty);
+    if(cx) cx[1].replace(/<xf\b([^>]*?)(?:\/>|>)/g,(m,a)=>{const id=+((/numFmtId="(\d+)"/.exec(a)||[0,0])[1]);xfKind.push(fmtKind(id,custom[id]));return '';});
+  }
+  return metas.map((meta,k)=>{
+    let target=relMap[meta.rid]||('worksheets/sheet'+(k+1)+'.xml');
+    target=target.replace(/^\/?(xl\/)?/,'');
+    const sheet={name:meta.name,hidden:meta.hidden,rows:null,pct:{},warn:{},
+      async ensure(){ if(this.rows) return; const xml=await z.read('xl/'+target); if(!xml) throw new Error('Sheet "'+meta.name+'" could not be read.'); Object.assign(this,parseSheet(xml,ss,xfKind,d1904)); }};
+    return sheet;
+  });
+}
+function parseSheet(xml,ss,xfKind,d1904){
+  const rows=[],pv={},nc={};let formulaNoCache=0,maxR=0;
+  const re=/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g;let m;
+  while((m=re.exec(xml))){
+    const a=m[1],body=m[2]||'',rm=/\br="([A-Z]+)(\d+)"/.exec(a);if(!rm)continue;
+    const ci=colIdx(rm[1]),ri=+rm[2]-1,t=(/\bt="([^"]*)"/.exec(a)||[])[1],s=(/\bs="(\d+)"/.exec(a)||[])[1];
+    let v=null;const vm=/<v>([\s\S]*?)<\/v>/.exec(body);
+    if(t==='inlineStr'){let x='';body.replace(/<t\b[^>]*>([\s\S]*?)<\/t>/g,(q,y)=>{x+=xmlUnesc(y);return '';});v=x;}
+    else if(vm&&vm[1]===''){ if(/<f\b/.test(body)) formulaNoCache++; }
+    else if(vm){
+      const raw=vm[1];
+      if(t==='s')v=ss[+raw];else if(t==='str')v=xmlUnesc(raw);else if(t==='b')v=raw==='1';else if(t==='e')v=null;
+      else{const num=parseFloat(raw),k=s!=null?xfKind[+s]:null;if(k==='d')v=serialToDate(num,d1904);else if(k==='p'){v=+(num*100).toPrecision(12);pv[ci]=(pv[ci]||0)+1;nc[ci]=(nc[ci]||0)+1;}else{v=num;nc[ci]=(nc[ci]||0)+1;}}
+    } else if(/<f\b/.test(body)) formulaNoCache++;
+    if(v===null||v==='')continue;
+    (rows[ri]||(rows[ri]=[]))[ci]=v;if(ri>maxR)maxR=ri;
+  }
+  const mc=/<mergeCell\b[^>]*ref="([A-Z]+)(\d+):([A-Z]+)(\d+)"/g;let q;
+  while((q=mc.exec(xml))){
+    const c1=colIdx(q[1]),r1=+q[2]-1,c2=colIdx(q[3]),r2=+q[4]-1;
+    if((c2-c1+1)*(r2-r1+1)>2000)continue;
+    const v=rows[r1]&&rows[r1][c1];if(v==null)continue;
+    for(let r=r1;r<=r2;r++)for(let c=c1;c<=c2;c++){const row=rows[r]||(rows[r]=[]);if(row[c]==null)row[c]=v;}
+    if(r2>maxR)maxR=r2;
+  }
+  const out=[];for(let r=0;r<=maxR;r++)out.push(rows[r]||[]);
+  const pct={};for(const c in pv)if(pv[c]>0.5*(nc[c]||1))pct[c]=true;
+  return {rows:out,pct:pct,warn:{formulaNoCache:formulaNoCache}};
+}
+function parseCSV(text){
+  if(text.charCodeAt(0)===0xFEFF)text=text.slice(1);
+  const head=text.split(/\r?\n/).slice(0,6).join('\n');let best=',',bc=-1;
+  [',',';','\t','|'].forEach(d=>{let c=0;for(const ch of head)if(ch===d)c++;if(c>bc){bc=c;best=d;}});
+  const rows=[];let row=[],cur='',q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i];
+    if(q){if(ch==='"'){if(text[i+1]==='"'){cur+='"';i++;}else q=false;}else cur+=ch;}
+    else if(ch==='"')q=true;
+    else if(ch===best){row.push(cur);cur='';}
+    else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(cur);cur='';rows.push(row);row=[];}
+    else cur+=ch;
+  }
+  if(cur!==''||row.length){row.push(cur);rows.push(row);}
+  return rows.map(r=>r.map(x=>x===''?null:x));
+}
+async function readFile(file){
+  const name=file.name,ext=(name.split('.').pop()||'').toLowerCase();
+  if(ext==='xlsx'||ext==='xlsm') return {name:name,sheets:await readXlsx(await file.arrayBuffer())};
+  if(ext==='csv'||ext==='tsv'||ext==='txt'){const rows=parseCSV(await file.text());return {name:name,sheets:[{name:'CSV',hidden:false,rows:rows,pct:{},warn:{},async ensure(){}}]};}
+  if(ext==='xls'||ext==='xlsb') throw new Error('.'+ext+' files are not supported. Open it in Excel and save as .xlsx or .csv.');
+  throw new Error('Unsupported file type ".'+ext+'". Please upload .xlsx or .csv.');
+}
+/* ===== STATE ===== */
+const S = {file:null,sheet:null,rows:[],o:{hdr:0,hdrRows:1,last:'',numLoc:'auto',dateOrd:'dmy',skipTot:true,unpivot:false},TB:null,F:{},wide:null};
+const isEmpty = v => v==null || (typeof v==='string' && v.trim()==='');
+
+/* ===== VALUE PARSERS ===== */
+const MONS={jan:0,feb:1,mar:2,apr:3,may:4,mei:4,jun:5,jul:6,aug:7,agu:7,agt:7,ags:7,sep:8,oct:9,okt:9,nov:10,nop:10,dec:11,des:11};
+function mkDate(y,mo,d){if(mo<0||mo>11||d<1||d>31||y<1900||y>2200)return null;const dt=new Date(Date.UTC(y,mo,d));return dt.getUTCMonth()===mo?dt:null;}
+function isAmbDate(s){const m=/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})/.exec(String(s).trim());return !!m&&+m[1]<=12&&+m[2]<=12&&+m[1]!==+m[2];}
+function parseDateText(s,order){
+  const t=String(s).trim();let m;
+  if((m=/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})(?:[T\s].*)?$/.exec(t)))return mkDate(+m[1],+m[2]-1,+m[3]);
+  if((m=/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{2,4})(?:\s.*)?$/.exec(t))){let a=+m[1],b=+m[2],y=+m[3],d,mo;if(y<100)y+=2000;if(a>12){d=a;mo=b;}else if(b>12){mo=a;d=b;}else if(order==='mdy'){mo=a;d=b;}else{d=a;mo=b;}return mkDate(y,mo-1,d);}
+  if((m=/^(\d{1,2})[-\/ ]([A-Za-z]{3,9})\.?[-\/ ,]*(\d{2,4})$/.exec(t))){const mo=MONS[m[2].slice(0,3).toLowerCase()];if(mo==null)return null;let y=+m[3];if(y<100)y+=2000;return mkDate(y,mo,+m[1]);}
+  if((m=/^([A-Za-z]{3,9})\.?[-\/ ,']*(\d{2,4})$/.exec(t))){const mo=MONS[m[1].slice(0,3).toLowerCase()];if(mo==null)return null;let y=+m[2];if(y<100)y+=2000;return mkDate(y,mo,1);}
+  return null;
+}
+function isAmbNum(s){return /^[^\d]*\d{1,3}[.,]\d{3}[^\d.,]*$/.test(String(s).trim());}
+function parseNumText(s,loc){
+  if(typeof s==='number')return s;
+  if(typeof s!=='string')return null;
+  let t=s.trim();if(!t)return null;
+  let neg=false;if(/^\(.*\)$/.test(t)){neg=true;t=t.slice(1,-1);}
+  t=t.replace(/^(rp\.?|idr|usd|us\$|\$|€|£)\s*/i,'').replace(/\s*(%|rp|idr|usd)$/i,'').replace(/\s/g,'');
+  if(t[0]==='-'){neg=!neg;t=t.slice(1);}else if(t[0]==='+')t=t.slice(1);
+  if(!/^[0-9.,]+$/.test(t))return null;
+  if(/^0\d+$/.test(t))return null;
+  const dot=(t.match(/\./g)||[]).length,com=(t.match(/,/g)||[]).length;let out;
+  if(dot&&com){const ld=t.lastIndexOf('.'),lc=t.lastIndexOf(',');const dec=ld>lc?'.':',',th=dec==='.'?',':'.';out=t.split(th).join('').replace(dec,'.');}
+  else if(dot||com){
+    const sep=dot?'.':',',cnt=dot||com,parts=t.split(sep),last=parts[parts.length-1];let isDec;
+    if(cnt>1)isDec=false;else if(loc==='id')isDec=(sep===',');else if(loc==='en')isDec=(sep==='.');else isDec=(last.length!==3);
+    out=isDec?t.replace(sep,'.'):t.split(sep).join('');
+  } else out=t;
+  const n=Number(out);if(!isFinite(n))return null;
+  return neg?-n:n;
+}
+
+/* ===== HEADER / TABLE ===== */
+const TOTRE=/^(grand\s*total|sub\s*-?\s*total|total(\s+keseluruhan)?|jumlah(\s+total)?|overall\s*total|total\s*all)\s*:?$/i;
+const isoDate=d=>d.toISOString().slice(0,10);
+function guessHeader(rows){
+  const lim=Math.min(rows.length,25);let maxW=0;
+  for(let i=0;i<lim;i++)maxW=Math.max(maxW,(rows[i]||[]).filter(x=>!isEmpty(x)).length);
+  for(let i=0;i<lim;i++){
+    const r=rows[i]||[],ne=r.filter(x=>!isEmpty(x)).length;
+    if(ne<Math.max(2,0.6*maxW))continue;
+    const strs=r.filter(x=>typeof x==='string'&&x.trim()!=='').length;
+    if(strs/ne>=0.7)return i;
+  }
+  return 0;
+}
+function guessHeaderRows(rows,h){
+  const strRatio=r=>{const x=(rows[r]||[]).filter(v=>!isEmpty(v));return x.length?x.filter(v=>typeof v==='string').length/x.length:0;};
+  const cnt=r=>(rows[r]||[]).filter(v=>!isEmpty(v)).length;
+  const hasNum=r=>(rows[r]||[]).some(v=>typeof v==='number'||v instanceof Date);
+  if(h+2<rows.length&&strRatio(h+1)>=0.7&&cnt(h+1)>=Math.max(2,0.6*cnt(h))&&hasNum(h+2)&&!hasNum(h+1)){
+    // second header row confirmed only if the row after it holds numbers and the two header rows differ
+    return 2;
+  }
+  return 1;
+}
+function buildTable(){
+  const rows=S.rows,o=S.o,h=o.hdr,k=o.hdrRows,sd=h+k;
+  let ed=rows.length-1;if(o.last!==''&&+o.last>0)ed=Math.min(ed,+o.last-1);
+  let maxC=0;for(let r=h;r<=ed;r++){const row=rows[r];if(row&&row.length>maxC)maxC=row.length;}
+  const names=[],src=[];
+  for(let c=0;c<maxC;c++){
+    const parts=[];
+    for(let r=h;r<h+k;r++){const v=rows[r]&&rows[r][c];if(!isEmpty(v)){const t=String(v instanceof Date?isoDate(v):v).trim();if(parts[parts.length-1]!==t)parts.push(t);}}
+    let has=false;for(let r=sd;r<=ed&&!has;r++){const row=rows[r];if(row&&!isEmpty(row[c]))has=true;}
+    if(!parts.length&&!has)continue;
+    names.push(parts.join(' · ')||('Column '+colLetter(c)));src.push(c);
+  }
+  const seen={};for(let i=0;i<names.length;i++){const key=names[i].toLowerCase();if(seen[key]){seen[key]++;names[i]=names[i]+' ('+seen[key]+')';}else seen[key]=1;}
+  const cols=names.map(()=>[]),rowNum=[],flags={total:new Set(),rep:new Set()};let blank=0;
+  const hdrSet=new Set(names.map(x=>x.toLowerCase()));
+  for(let r=sd;r<=ed;r++){
+    const row=rows[r]||[];let any=false;
+    for(let q=0;q<src.length;q++)if(!isEmpty(row[src[q]])){any=true;break;}
+    if(!any){blank++;continue;}
+    const i=rowNum.length;rowNum.push(r+1);
+    let sc=0,hh=0,tot=false;
+    for(let q=0;q<src.length;q++){
+      const v=row[src[q]];cols[q].push(isEmpty(v)?null:v);
+      if(typeof v==='string'&&v.trim()){sc++;const t=v.trim();if(hdrSet.has(t.toLowerCase()))hh++;if(TOTRE.test(t))tot=true;}
+    }
+    if(tot)flags.total.add(i);else if(sc>=2&&hh/sc>=0.6)flags.rep.add(i);
+  }
+  const n=rowNum.length,keep=new Uint8Array(n).fill(1);
+  if(o.skipTot){flags.total.forEach(i=>{keep[i]=0;});flags.rep.forEach(i=>{keep[i]=0;});}
+  return {names:names,cols:cols,n:n,rowNum:rowNum,flags:flags,blank:blank,keep:keep,pct:src.map(c=>!!(S.sheet.pct&&S.sheet.pct[c])),src:src,force:{},cache:{},roles:[],info:[],flagOn:[]};
+}
+
+/* ===== WIDE (months as columns) DETECTION + UNPIVOT ===== */
+const PERIODRE=[/^(jan|feb|mar|apr|mei|may|jun|jul|agu|aug|agt|sep|okt|oct|nov|des|dec)[a-z]*\.?([\s\-'\/]*\d{2,4})?$/i,/^\d{4}[-\/]\d{1,2}(-\d{1,2})?$/,/^(w|wk|week|minggu)\s*-?\s*\d{1,2}$/i,/^q[1-4]([\s\-']?\d{2,4})?$/i];
+function detectWide(tb){
+  const cols=[];
+  tb.names.forEach((nm,j)=>{
+    const nmT=nm.trim();if(!(PERIODRE.some(re=>re.test(nmT))||parseDateText(nmT,'dmy')))return;
+    let ok=0,tot=0;for(let i=0;i<tb.n&&tot<200;i++){if(!tb.keep[i])continue;const v=tb.cols[j][i];if(isEmpty(v))continue;tot++;if(typeof v==='number'||parseNumText(v,'auto')!=null)ok++;}
+    if(tot>0&&ok/tot>=0.7)cols.push(j);
+  });
+  return cols.length>=3?cols:null;
+}
+function unpivot(tb,w){
+  const idc=tb.names.map((_,j)=>j).filter(j=>!w.includes(j));
+  const names=idc.map(j=>tb.names[j]).concat(['Period','Value']);
+  const cols=names.map(()=>[]),rowNum=[];
+  const pv=w.map(j=>tb.names[j].trim()),pd=pv.map(p=>parseDateText(p,'dmy')),allDates=pd.every(Boolean);
+  for(let i=0;i<tb.n;i++){
+    if(!tb.keep[i])continue;
+    w.forEach((j,pi)=>{
+      const v=tb.cols[j][i];if(isEmpty(v))return;
+      idc.forEach((c,q)=>cols[q].push(tb.cols[c][i]));
+      cols[idc.length].push(allDates?pd[pi]:pv[pi]);cols[idc.length+1].push(v);rowNum.push(tb.rowNum[i]);
+    });
+  }
+  const n=rowNum.length;
+  return {names:names,cols:cols,n:n,rowNum:rowNum,flags:{total:new Set(),rep:new Set()},blank:tb.blank,keep:new Uint8Array(n).fill(1),
+    pct:idc.map(c=>tb.pct[c]).concat([false,w.every(j=>tb.pct[j])]),src:[],force:{Period:allDates?'date':'period'},cache:{},roles:[],info:[],flagOn:[],
+    periodOrder:allDates?null:pv,unpivoted:true,droppedTotals:tb.flags.total.size};
+}
+
+/* ===== COLUMN TYPE INFERENCE ===== */
+const YESRE=/^(y|yes|ya|true|t|x|late|delay(ed)?|fail(ed)?|reject(ed)?|cancel(l)?ed|miss(ed)?|overdue|terlambat|telat|ng)$/i;
+const NORE=/^(n|no|tidak|false|f|ok|on[\s-]?time|ontime|pass(ed)?|good|complete[d]?|tepat waktu)$/i;
+const NEGEVENT=/^(late|delay(ed)?|fail(ed)?|reject(ed)?|cancel(l)?ed|miss(ed)?|overdue|terlambat|telat|ng|damage[d]?|defect(ive)?|error|incident)$/i;
+function inferCol(name,vals,o,pctCol){
+  const ne=vals.filter(v=>!isEmpty(v)),n=ne.length;
+  const info={nonEmpty:n,total:vals.length,uniq:0,ambigNum:0,ambigDate:0,unit:'',flagOn:null,dead:null,role:'ignore'};
+  if(n===0){info.dead='empty';return info;}
+  const us=new Map();ne.forEach(v=>{const k=v instanceof Date?v.getTime():String(v).trim().toLowerCase();us.set(k,(us.get(k)||0)+1);});
+  info.uniq=us.size;
+  if(us.size===1&&n>1){info.dead='constant';return info;}
+  let nd=0,amb=0;
+  ne.forEach(v=>{if(v instanceof Date)nd++;else if(typeof v==='string'){const d=parseDateText(v,o.dateOrd);if(d){nd++;if(isAmbDate(v))amb++;}}});
+  if(nd/n>=0.9){info.role='date';info.ambigDate=amb;return info;}
+  let nn=0,pc=0,am=0,bin=true,ints=true,has0=false,has1=false,mnv=Infinity,mxv=-Infinity;
+  ne.forEach(v=>{
+    let x=null;
+    if(typeof v==='number')x=v;
+    else if(typeof v==='string'){x=parseNumText(v,o.numLoc);if(x!=null){if(/%\s*$/.test(v))pc++;if(isAmbNum(v))am++;}}
+    if(x!=null){nn++;if(x<mnv)mnv=x;if(x>mxv)mxv=x;if(x!==0&&x!==1)bin=false;if(x===0)has0=true;if(x===1)has1=true;if(!Number.isInteger(x))ints=false;}
+  });
+  if(nn/n>=0.9){
+    info.ambigNum=am;info.unit=(pctCol||pc>0.5*nn||(/%|percent|pct|persen/i.test(name)&&mnv>=0&&mxv<=100))?'%':'';
+    if(bin&&has0&&has1){info.role='flag';info.flagOn='1';return info;}
+    if(/^(year|tahun)$/i.test(name)||/^(week|minggu|wk)$/i.test(name)||(/^(month|bulan)$/i.test(name)&&ints)){info.role='period';return info;}
+    if(ints&&info.uniq<=12&&info.uniq/n<0.05&&/tier|level|zone|class|grade|priority|rank|shift|quarter|kuartal|category|kategori/i.test(name)){info.role='category';return info;}
+    info.role='number';return info;
+  }
+  const keys=[...us.keys()];
+  if(us.size===2){
+    const yes=keys.filter(k=>YESRE.test(k)),no=keys.filter(k=>NORE.test(k));
+    if(yes.length||no.length){
+      let ev;
+      if(yes.length===1)ev=yes[0];
+      else if(no.length===1)ev=keys.find(k=>k!==no[0]);
+      else ev=keys.slice().sort((a,b)=>us.get(a)-us.get(b))[0];
+      const orig=ne.find(v=>String(v).trim().toLowerCase()===ev);
+      info.role='flag';info.flagOn=String(orig).trim();return info;
+    }
+  }
+  const u=us.size/n,avgLen=sum(ne.slice(0,200).map(v=>String(v).length))/Math.min(ne.length,200);
+  if((u>=0.9&&n>=10)||us.size>500||avgLen>45){info.role='id';return info;}
+  info.role='category';return info;
+}
+function inferAll(tb){
+  const kept=[];
+  tb.names.forEach((nm,j)=>{
+    const vals=[];for(let i=0;i<tb.n;i++)if(tb.keep[i])vals.push(tb.cols[j][i]);
+    const inf=inferCol(nm,vals,S.o,tb.pct[j]);
+    if(tb.force[nm]&&!inf.dead)inf.role=tb.force[nm];
+    if(tb.force[nm]==='period'||tb.force[nm]==='date'){inf.dead=null;inf.role=tb.force[nm];}
+    tb.info[j]=inf;tb.roles[j]=inf.role;tb.flagOn[j]=inf.flagOn;
+  });
+  tb.cache={};
+}
+
+/* ===== TYPED COLUMN ACCESS ===== */
+function typedCol(j){
+  const tb=S.TB,role=tb.roles[j],key=j+'|'+role+'|'+S.o.numLoc+'|'+S.o.dateOrd+'|'+(tb.flagOn[j]||'');
+  if(tb.cache[key])return tb.cache[key];
+  const raw=tb.cols[j],n=tb.n;let out=new Array(n);
+  if(role==='date'){
+    for(let i=0;i<n;i++){const v=raw[i];out[i]=v instanceof Date?v.getTime():typeof v==='string'?(()=>{const d=parseDateText(v,S.o.dateOrd);return d?d.getTime():null;})():(typeof v==='number'&&v>20000&&v<80000?serialToDate(v).getTime():null);}
+  } else if(role==='number'){
+    for(let i=0;i<n;i++){const v=raw[i];out[i]=typeof v==='number'?v:(typeof v==='string'?parseNumText(v,S.o.numLoc):null);}
+  } else if(role==='flag'){
+    const on=String(tb.flagOn[j]==null?'1':tb.flagOn[j]).trim().toLowerCase();
+    for(let i=0;i<n;i++){const v=raw[i];out[i]=isEmpty(v)?null:(String(v).trim().toLowerCase()===on?1:0);}
+  } else if(role==='category'||role==='period'){
+    const cnt=new Map();
+    for(let i=0;i<n;i++){const v=raw[i];if(isEmpty(v)){out[i]=null;continue;}const s=(v instanceof Date?isoDate(v):String(v)).trim().replace(/\s+/g,' ');out[i]=s;const k=s.toLowerCase();let m=cnt.get(k);if(!m){m=new Map();cnt.set(k,m);}m.set(s,(m.get(s)||0)+1);}
+    const disp=new Map();let merged=0;
+    cnt.forEach((m,k)=>{let best=null,bc=-1;m.forEach((c,s)=>{if(c>bc){bc=c;best=s;}});disp.set(k,best);if(m.size>1)merged++;});
+    for(let i=0;i<n;i++)if(out[i]!=null)out[i]=disp.get(out[i].toLowerCase());
+    out.merged=merged;
+  } else {for(let i=0;i<n;i++){const v=raw[i];out[i]=isEmpty(v)?null:String(v);}}
+  tb.cache[key]=out;return out;
+}
+
+/* ===== AGGREGATION ===== */
+const newAcc=()=>({n:0,cnt:0,sum:0,min:Infinity,max:-Infinity,vals:null});
+function addAcc(a,v,nv){a.n++;if(v!=null&&!isNaN(v)){a.cnt++;a.sum+=v;if(v<a.min)a.min=v;if(v>a.max)a.max=v;if(nv)(a.vals||(a.vals=[])).push(v);}}
+function finAcc(a,agg){
+  if(!a||a.cnt===0)return null;
+  switch(agg){
+    case 'sum':return a.sum;case 'mean':return a.sum/a.cnt;case 'rate':return 100*a.sum/a.cnt;case 'max':return a.max;case 'min':return a.min;case 'count':return a.cnt;
+    case 'median':{const s=a.vals.slice().sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2;}
+  }
+  return null;
+}
+function metricInfo(){
+  const tb=S.TB,F=S.F,n=tb.n;
+  if(F.metric<0||F.metric==null){const val=new Array(n).fill(1);return {kind:'rows',val:val,agg:'sum',unit:'',label:'Number of rows',noun:'rows',needVals:false,col:-1};}
+  const j=F.metric,role=tb.roles[j],name=tb.names[j],val=typedCol(j);
+  if(role==='flag'){
+    const on=String(tb.flagOn[j]==null?'1':tb.flagOn[j]);
+    if(F.agg==='count')return {kind:'flagcount',val:val,agg:'sum',unit:'',label:name+' = '+on+' (count)',noun:name,needVals:false,col:j};
+    const generic=/^(1|true|yes|y|ya)$/i.test(on);
+    return {kind:'rate',val:val,agg:'rate',unit:'%',label:generic?name+' rate':on+' rate',noun:name,needVals:false,col:j,on:on};
+  }
+  const agg=F.agg||'sum',unit=tb.info[j].unit||'';
+  const lab={sum:name,mean:'Average '+name,median:'Median '+name,max:'Max '+name,min:'Min '+name,count:'Count of '+name}[agg]||name;
+  return {kind:'number',val:val,agg:agg,unit:unit,label:lab,noun:name,needVals:agg==='median',col:j};
+}
+
+/* ===== TIME AXIS ===== */
+function autoGrain(span){return span<=45?'day':span<=180?'week':span<=1460?'month':span<=3650?'quarter':'year';}
+function bucketStart(ms,g){
+  const d=new Date(ms),y=d.getUTCFullYear(),m=d.getUTCMonth();
+  if(g==='day')return Date.UTC(y,m,d.getUTCDate());
+  if(g==='week'){const day=Date.UTC(y,m,d.getUTCDate()),dow=(d.getUTCDay()+6)%7;return day-dow*864e5;}
+  if(g==='month')return Date.UTC(y,m,1);
+  if(g==='quarter')return Date.UTC(y,Math.floor(m/3)*3,1);
+  return Date.UTC(y,0,1);
+}
+function nextBucket(ms,g){
+  const d=new Date(ms),y=d.getUTCFullYear(),m=d.getUTCMonth();
+  if(g==='day')return ms+864e5;if(g==='week')return ms+7*864e5;
+  if(g==='month')return Date.UTC(y,m+1,1);if(g==='quarter')return Date.UTC(y,m+3,1);return Date.UTC(y+1,0,1);
+}
+function timeAxis(j,gsel){
+  const tb=S.TB,role=tb.roles[j],tc=typedCol(j);
+  if(role==='period'){
+    let order;
+    if(tb.periodOrder)order=tb.periodOrder.map(String);
+    else{const seen=[],set=new Set();for(let i=0;i<tb.n;i++)if(tb.keep[i]&&tc[i]!=null&&!set.has(tc[i])){set.add(tc[i]);seen.push(tc[i]);}const allNum=seen.every(x=>/^-?\d+(\.\d+)?$/.test(x));order=allNum?seen.slice().sort((a,b)=>a-b):seen;}
+    return {kind:'period',keys:order,keyOf:i=>tc[i],label:k=>k,long:k=>k,grain:'period',unitName:'period',partial:false,minMs:null,maxMs:null};
+  }
+  let mn=Infinity,mx=-Infinity;
+  for(let i=0;i<tb.n;i++){if(!tb.keep[i])continue;const v=tc[i];if(v==null)continue;if(v<mn)mn=v;if(v>mx)mx=v;}
+  if(!isFinite(mn))return null;
+  const grain=(!gsel||gsel==='auto')?autoGrain((mx-mn)/864e5):gsel;
+  const keys=[],endKey=bucketStart(mx,grain);let cur=bucketStart(mn,grain),guard=0;
+  while(cur<=endKey&&guard++<6000){keys.push(cur);cur=nextBucket(cur,grain);}
+  const multi=new Date(mn).getUTCFullYear()!==new Date(mx).getUTCFullYear();
+  const yy=d=>String(d.getUTCFullYear()).slice(2);
+  const label=k=>{const d=new Date(k),m=d.getUTCMonth();
+    if(grain==='day'||grain==='week')return d.getUTCDate()+' '+MON[m]+(multi?' '+yy(d):'');
+    if(grain==='month')return MON[m]+(multi?' '+yy(d):'');
+    if(grain==='quarter')return 'Q'+(Math.floor(m/3)+1)+(multi?' '+yy(d):'');
+    return String(d.getUTCFullYear());};
+  const long=k=>{const d=new Date(k),m=d.getUTCMonth(),y=d.getUTCFullYear();
+    if(grain==='day')return d.getUTCDate()+' '+MON[m]+' '+y;if(grain==='week')return 'week of '+d.getUTCDate()+' '+MON[m]+' '+y;
+    if(grain==='month')return MON[m]+' '+y;if(grain==='quarter')return 'Q'+(Math.floor(m/3)+1)+' '+y;return String(y);};
+  const lastEnd=nextBucket(endKey,grain)-864e5;
+  const partial=grain!=='day'&&mx<lastEnd;
+  return {kind:'date',keys:keys,keyOf:i=>tc[i]==null?null:bucketStart(tc[i],grain),label:label,long:long,grain:grain,unitName:grain==='quarter'?'quarter':grain,partial:partial,minMs:mn,maxMs:mx};
+}
+
+/* ===== DIMENSION TOP-N + OTHER ===== */
+function dimMapper(j,M,topN){
+  const dc=typedCol(j),tb=S.TB,acc=new Map();let blank=0;
+  for(let i=0;i<tb.n;i++){if(!tb.keep[i])continue;const d=dc[i];if(d==null){blank++;continue;}let a=acc.get(d);if(!a){a=newAcc();acc.set(d,a);}addAcc(a,M.val[i],M.needVals);}
+  const names=[...acc.keys()],byValue=(M.agg==='sum'||M.agg==='max'||M.agg==='min');
+  const score=nm=>{const a=acc.get(nm);return byValue?(finAcc(a,M.agg)||0):a.n;};
+  names.sort((a,b)=>score(b)-score(a));
+  const map=new Map();let other=0;
+  if(names.length<=topN){names.forEach(nm=>map.set(nm,nm));}
+  else{other=names.length-topN;const lab='Other ('+other+')';names.forEach((nm,i)=>map.set(nm,i<topN?nm:lab));}
+  return {map:map,total:names.length,other:other,blank:blank,shown:Math.min(names.length,topN),rankBy:byValue?'value':'row count'};
+}
+/* ===== MODELS: aggregate the data, find the story, write the headline ===== */
+const poss = n => /s$/i.test(n) ? n+"'" : n+"'s";
+const labT = M => M.kind==='rows' ? 'Row count' : M.label;
+const labOf = M => M.kind==='rows' ? 'rows' : M.label;
+const GR = {day:'day',week:'week',month:'month',quarter:'quarter',year:'year',period:'period'};
+function sortOther(items,cmp){const core=items.filter(x=>!x.other).sort(cmp),oth=items.filter(x=>x.other);return core.concat(oth);}
+function chgText(first,last,unit){
+  if(unit==='%'){const d=last-first;return {abs:Math.abs(d),txt:Math.abs(d).toFixed(1)+' pts',dir:d>0?1:d<0?-1:0,flat:Math.abs(d)<1};}
+  if(first===0)return {abs:Infinity,txt:'n/a',dir:last>0?1:0,flat:last===0};
+  const r=(last-first)/Math.abs(first);return {abs:Math.abs(r),txt:Math.round(Math.abs(r)*100)+'%',dir:r>0?1:r<0?-1:0,flat:Math.abs(r)<0.03};
+}
+function lowSample(items,M){
+  if(!(M.agg==='mean'||M.agg==='rate'||M.agg==='median'))return null;
+  const k=items.filter(x=>x.n<10).length;return k>0?k+' of '+items.length+' groups have fewer than 10 rows, so their values can swing a lot. Read them with care.':null;
+}
+
+function modelBar(M,kind){
+  const F=S.F,tb=S.TB,dimName=tb.names[F.dim],dc=typedCol(F.dim);
+  const dm=dimMapper(F.dim,M,F.topN),acc=new Map(),ov=newAcc();
+  for(let i=0;i<tb.n;i++){if(!tb.keep[i])continue;const d=dm.map.get(dc[i]);if(d==null)continue;let a=acc.get(d);if(!a){a=newAcc();acc.set(d,a);}addAcc(a,M.val[i],M.needVals);addAcc(ov,M.val[i],M.needVals);}
+  const otherLab='Other ('+dm.other+')';
+  let items=[...acc].map(([name,a])=>({name:name,v:finAcc(a,M.agg),n:a.n,other:dm.other>0&&name===otherLab})).filter(x=>x.v!=null);
+  if(!items.length)return null;
+  const tgt=F.target,dir=F.dir,ovv=finAcc(ov,M.agg),lab=labOf(M),notes=[];let title,sortNote;
+  const core=items.filter(x=>!x.other);
+  if(tgt!=null){
+    items=sortOther(items,(a,b)=>dir==='higher'?a.v-b.v:b.v-a.v);
+    const miss=items.filter(x=>dir==='higher'?x.v<tgt:x.v>tgt);miss.forEach(x=>{x.hl=true;});
+    const worst=items.filter(x=>!x.other)[0]||items[0];
+    title=miss.length?miss.length+' of '+items.length+' '+dimName+' groups miss the '+fv(tgt,M.unit)+' target; '+worst.name+' is furthest off at '+fv(worst.v,M.unit)
+      :'All '+items.length+' '+dimName+' groups meet the '+fv(tgt,M.unit)+' target; the weakest is '+worst.name+' at '+fv(worst.v,M.unit);
+    sortNote='Sorted worst first.';
+  } else if((M.agg==='sum'||M.agg==='count')&&items.every(x=>x.v>=0)&&core.length>=4){
+    items=sortOther(items,(a,b)=>b.v-a.v);
+    const total=sum(items.map(x=>x.v));let cum=0,k=0;
+    for(const it of items.filter(x=>!x.other)){cum+=it.v;k++;if(cum/total>=0.6)break;}
+    if(k<=Math.min(5,Math.ceil(core.length/2))&&cum/total>=0.6){
+      items.slice(0,k).forEach(x=>{x.hl=true;});
+      title=k+' of '+core.length+' '+dimName+' groups account for '+Math.round(100*cum/total)+'% of '+lab;
+    } else {
+      items[0].hl=true;
+      title='No single '+dimName+' dominates: the largest, '+items[0].name+', holds '+Math.round(100*items[0].v/total)+'% of '+lab;
+    }
+    sortNote='Sorted from largest to smallest.';
+  } else {
+    items=sortOther(items,(a,b)=>b.v-a.v);
+    const c2=items.filter(x=>!x.other),hi=c2[0],lo=c2[c2.length-1],worstIsHigh=(dir==='lower');
+    const w=worstIsHigh?hi:lo;
+    const spread=hi.v-lo.v,tiny=c2.length>=2&&(M.unit==='%'?spread<2:spread<0.05*Math.max(Math.abs(hi.v),Math.abs(lo.v),1e-9));
+    if(!tiny)w.hl=true;
+    if(tiny){
+      title=lab+' is almost the same across all '+c2.length+' '+dimName+' groups ('+fv(lo.v,M.unit)+' to '+fv(hi.v,M.unit)+')';
+      notes.push('The differences between groups are too small to rank. Consider whether this comparison is worth showing, or look at a different measure or grouping.');
+    } else if(c2.length>=2){
+      title=w.name+' has the '+(worstIsHigh?'highest':'lowest')+' '+lab+' ('+fv(w.v,M.unit)+')'+(ovv!=null&&M.agg!=='sum'&&M.agg!=='count'?', against '+fv(ovv,M.unit)+' overall':'');
+    } else title=lab+' by '+dimName;
+    sortNote='Sorted from highest to lowest; the group that looks worst for the chosen direction is highlighted.';
+  }
+  notes.push(sortNote);
+  if((M.agg==='sum'||M.agg==='count')&&dm.other>0){
+    const oi=items.find(x=>x.other);
+    if(oi){items=items.filter(x=>!x.other);const tot=sum(items.map(x=>x.v))+oi.v;notes.push('The other '+dm.other+' '+dimName+' groups together total '+fv(oi.v,M.unit)+' ('+Math.round(100*oi.v/tot)+'% of all). They are not drawn as one bar, because a combined bar cannot be compared fairly with a single group.');}
+  }
+  const ls=lowSample(items,M);if(ls)notes.push(ls);
+  if(dm.other>0)notes.push('Showing the top '+dm.shown+' '+dimName+' groups (ranked by '+dm.rankBy+'). Change "Show top N" to see more.');
+  if(dm.blank>0)notes.push(dm.blank+' rows have no '+dimName+' and are not shown.');
+  const mg=dc.merged;if(mg>0)notes.push(mg+' '+dimName+' values differed only by capital letters or spaces and were merged.');
+  if(M.agg==='sum'&&M.unit==='%')notes.push('You are summing a percentage column, which is rarely meaningful. Consider "Average" instead.');
+  return {type:kind||'bar',title:title,sub:labT(M)+' by '+dimName+' · based on '+ov.n.toLocaleString('en-US')+' rows',stdTitle:labT(M)+' by '+dimName,items:items,unit:M.unit,target:tgt,dir:dir,notes:notes,source:ov.n,ovv:ovv,agg:M.agg,label:lab,dimName:dimName};
+}
+
+function smoothChange(vals,idx,unit){
+  const k=clamp(Math.floor(idx.length/4),1,3),av=ix=>sum(ix.map(i=>vals[i]))/ix.length;
+  const first=av(idx.slice(0,k)),last=av(idx.slice(idx.length-k));
+  return Object.assign({first:first,last:last,k:k},chgText(first,last,unit));
+}
+function seriesInsight(vals,partialIdx){
+  let idx=[];vals.forEach((v,i)=>{if(v!=null&&i!==partialIdx)idx.push(i);});
+  if(idx.length<3&&partialIdx>=0&&vals[partialIdx]!=null){idx=[];vals.forEach((v,i)=>{if(v!=null)idx.push(i);});}
+  return idx;
+}
+function modelLine(M,kind){
+  const F=S.F,tb=S.TB,ax=timeAxis(F.time,F.grain);if(!ax)return null;
+  const tname=tb.names[F.time],acc=new Map(),ov=newAcc();let blankT=0;
+  for(let i=0;i<tb.n;i++){if(!tb.keep[i])continue;const k=ax.keyOf(i);if(k==null){blankT++;continue;}let a=acc.get(k);if(!a){a=newAcc();acc.set(k,a);}addAcc(a,M.val[i],M.needVals);addAcc(ov,M.val[i],M.needVals);}
+  const vals=ax.keys.map(k=>finAcc(acc.get(k),M.agg));
+  const partialIdx=(ax.partial&&vals[vals.length-1]!=null)?vals.length-1:-1;
+  const idx=seriesInsight(vals,partialIdx);if(idx.length<2)return null;
+  const fi=idx[0],li=idx[idx.length-1],first=vals[fi],last=vals[li],lab=labT(M),gn=ax.unitName,tgt=S.F.target,dir=S.F.dir,notes=[];
+  let streak=0,sgn=0;
+  for(let q=idx.length-1;q>0;q--){const d=vals[idx[q]]-vals[idx[q-1]];const s=d>0?1:d<0?-1:0;if(s===0)break;if(sgn===0)sgn=s;if(s!==sgn)break;streak++;}
+  const sm=smoothChange(vals,idx,M.unit),ch=sm;let title;
+  const early=sm.k>1?'the first '+sm.k+' '+gn+'s':ax.long(ax.keys[fi]),recent=sm.k>1?'the last '+sm.k+' '+gn+'s':ax.long(ax.keys[li]);
+  if(streak>=3&&sgn!==0)title=lab+' has '+(sgn>0?'risen':'fallen')+' for '+streak+' '+gn+'s in a row, reaching '+fv(last,M.unit);
+  else if(ch.flat)title=lab+' is broadly flat: '+fv(sm.last,M.unit)+' in '+recent+' vs '+fv(sm.first,M.unit)+' in '+early;
+  else title=lab+' '+(ch.dir>0?'rose':'fell')+' '+ch.txt+' between '+early+' and '+recent+' ('+fv(sm.first,M.unit)+' → '+fv(sm.last,M.unit)+')';
+  let breach=0;
+  if(tgt!=null){idx.forEach(i=>{if(dir==='higher'?vals[i]<tgt:vals[i]>tgt)breach++;});if(breach>0)title+='; '+breach+' of '+idx.length+' '+gn+'s miss the '+fv(tgt,M.unit)+' target';else title+='; every '+gn+' meets the '+fv(tgt,M.unit)+' target';}
+  let gaps=0;for(let i=fi;i<=li;i++)if(vals[i]==null)gaps++;
+  if(partialIdx>=0)notes.push('The last '+gn+' ('+ax.long(ax.keys[partialIdx])+') is incomplete, so it is drawn dashed and left out of the headline.');
+  if(sm.k>1)notes.push('The change compares the average of the first '+sm.k+' and the last '+sm.k+' '+gn+'s, which is steadier than comparing two single points.');
+  if(gaps>0)notes.push(gaps+' '+gn+'s in the middle have no data; the line is broken there instead of drawing a false trend.');
+  if(blankT>0)notes.push(blankT+' rows have no valid '+tname+' and are not shown.');
+  if(S.TB.info[F.time].ambigDate>0&&tb.roles[F.time]==='date')notes.push(S.TB.info[F.time].ambigDate+' dates such as 05/03/2026 could be read as day/month or month/day. Currently read as '+(S.o.dateOrd==='dmy'?'day/month':'month/day')+'. Change this in step 2 if wrong.');
+  if(ax.keys.length>=2&&gn!=='period')notes.push('Grouped by '+gn+' ('+ax.keys.length+' points). Change "Group time by" to see another level of detail.');
+  if(M.agg==='sum'&&M.unit==='%')notes.push('You are summing a percentage column, which is rarely meaningful. Consider "Average" instead.');
+  return {type:kind||'line',title:title,sub:lab+' by '+gn+' · based on '+ov.n.toLocaleString('en-US')+' rows',stdTitle:lab+' by '+tname,labels:ax.keys.map(ax.label),longs:ax.keys.map(ax.long),vals:vals,partialIdx:partialIdx,idx:idx,unit:M.unit,target:tgt,dir:dir,notes:notes,source:ov.n,label:lab,grain:gn,streak:streak};
+}
+
+function modelMulti(M){
+  const F=S.F,tb=S.TB,ax=timeAxis(F.time,F.grain);if(!ax)return null;
+  const dimName=tb.names[F.dim],dc=typedCol(F.dim),dm=dimMapper(F.dim,M,Math.min(F.topN,9)),ser=new Map(),ov=newAcc();let blankT=0;
+  for(let i=0;i<tb.n;i++){
+    if(!tb.keep[i])continue;const d=dm.map.get(dc[i]),k=ax.keyOf(i);if(d==null)continue;if(k==null){blankT++;continue;}
+    let m=ser.get(d);if(!m){m=new Map();ser.set(d,m);}let a=m.get(k);if(!a){a=newAcc();m.set(k,a);}addAcc(a,M.val[i],M.needVals);addAcc(ov,M.val[i],M.needVals);
+  }
+  const otherLab='Other ('+dm.other+')';
+  const names=[...ser.keys()].sort((a,b)=>{if(dm.other>0){if(a===otherLab)return 1;if(b===otherLab)return -1;}const sa=[...ser.get(a).values()].reduce((s,x)=>s+x.n,0),sb=[...ser.get(b).values()].reduce((s,x)=>s+x.n,0);return sb-sa;});
+  const series=names.map(nm=>({name:nm,vals:ax.keys.map(k=>finAcc(ser.get(nm).get(k),M.agg)),other:dm.other>0&&nm===otherLab}));
+  const lastReal=ax.keys.length-1,partialIdx=ax.partial?lastReal:-1;
+  if(series.length<2)return null;
+  series.forEach(s=>{const idx=seriesInsight(s.vals,partialIdx);s.idx=idx;if(idx.length>=2){const sm=smoothChange(s.vals,idx,M.unit);s.first=sm.first;s.last=sm.last;s.k=sm.k;s.ch=sm;s.lastRaw=s.vals[idx[idx.length-1]];}});
+  const valid=series.filter(s=>s.ch&&!s.other),lab=labT(M),tgt=F.target,dir=F.dir,notes=[];let title,hl=-1;
+  if(!valid.length)return null;
+  if(tgt!=null){
+    const bad=valid.filter(s=>dir==='higher'?s.lastRaw<tgt:s.lastRaw>tgt);
+    const worst=valid.slice().sort((a,b)=>dir==='higher'?a.lastRaw-b.lastRaw:b.lastRaw-a.lastRaw)[0];hl=series.indexOf(worst);
+    const lastLab=ax.long(ax.keys[worst.idx[worst.idx.length-1]]);
+    title=bad.length?bad.length+' of '+valid.length+' '+dimName+' groups miss the '+fv(tgt,M.unit)+' target in '+lastLab+'; '+worst.name+' is furthest off at '+fv(worst.lastRaw,M.unit):'All '+valid.length+' '+dimName+' groups meet the '+fv(tgt,M.unit)+' target in '+lastLab+'; the weakest is '+worst.name+' at '+fv(worst.lastRaw,M.unit);
+  } else {
+    const ranked=valid.slice().sort((a,b)=>(b.ch.abs===Infinity?1e9:b.ch.abs)-(a.ch.abs===Infinity?1e9:a.ch.abs));
+    const top=ranked[0],second=ranked[1],sec=second?(second.ch.abs===Infinity?1e9:second.ch.abs):0,tv=top.ch.abs===Infinity?1e9:top.ch.abs;
+    const bigEnough=M.unit==='%'?tv>=5:tv>=0.15;
+    if(bigEnough&&(tv>=1.5*sec||!second)){
+      hl=series.indexOf(top);
+      const others=valid.filter(s=>s!==top),signed=s=>M.unit==='%'?s.last-s.first:(s.first===0?0:(s.last-s.first)/Math.abs(s.first));
+      const lo=Math.min.apply(null,others.map(signed)),hi=Math.max.apply(null,others.map(signed));
+      const fmtc=x=>M.unit==='%'?(x>=0?'+':'−')+Math.abs(x).toFixed(1)+' pts':(x>=0?'+':'−')+Math.round(Math.abs(x)*100)+'%';
+      const calm=Math.max(Math.abs(lo),Math.abs(hi))<(M.unit==='%'?3:0.1);
+      title=poss(top.name)+' '+lab+' '+(top.ch.dir>0?'rose':'fell')+' '+top.ch.txt+', from '+fv(top.first,M.unit)+(top.k>1?' early on':'')+' to '+fv(top.last,M.unit)+(top.k>1?' recently':'')+', while '+(calm?'the other '+others.length+' groups stayed roughly flat':'the other '+others.length+' groups moved between '+fmtc(lo)+' and '+fmtc(hi));
+    } else {
+      const byLast=valid.slice().sort((a,b)=>b.lastRaw-a.lastRaw);const pick=dir==='lower'?byLast[0]:byLast[byLast.length-1];hl=series.indexOf(pick);
+      title='No '+dimName+' group stands out in how it changed; '+pick.name+' ends '+(dir==='lower'?'highest':'lowest')+' on '+lab+' at '+fv(pick.lastRaw,M.unit);
+    }
+  }
+  if(partialIdx>=0)notes.push('The last '+ax.unitName+' ('+ax.long(ax.keys[partialIdx])+') is incomplete, so it is left out of the headline and the change figures.');
+  const kk=Math.max.apply(null,valid.map(s=>s.k||1));if(kk>1)notes.push('Changes compare the average of the first and last '+kk+' '+ax.unitName+'s per line, which is steadier than comparing two single points.');
+  if(dm.other>0)notes.push('Showing the top '+Math.min(F.topN,9)+' '+dimName+' groups; the other '+dm.other+' are combined as "Other". Too many lines make a "spaghetti" chart, so the count is capped.');
+  if(blankT>0)notes.push(blankT+' rows have no valid date and are not shown.');
+  const ls=series.filter(s=>[...ser.get(s.name).values()].some(a=>a.n<5)).length;
+  if((M.agg==='mean'||M.agg==='rate')&&ls>0)notes.push(ls+' groups have periods with fewer than 5 rows. Their lines can jump around because of small samples.');
+  if(dc.merged>0)notes.push(dc.merged+' '+dimName+' values differed only by capital letters or spaces and were merged.');
+  return {type:'multi',title:title,sub:lab+' by '+ax.unitName+' and '+dimName+' · based on '+ov.n.toLocaleString('en-US')+' rows',stdTitle:lab+' by '+tb.names[F.time]+' and '+dimName,labels:ax.keys.map(ax.label),longs:ax.keys.map(ax.long),series:series,hl:hl,partialIdx:partialIdx,unit:M.unit,target:tgt,dir:dir,notes:notes,source:ov.n,label:lab};
+}
+
+function modelHeat(M){
+  const F=S.F,tb=S.TB,ax=timeAxis(F.time,F.grain);if(!ax)return null;
+  const dimName=tb.names[F.dim],dc=typedCol(F.dim),dm=dimMapper(F.dim,M,Math.min(F.topN,20)),ser=new Map(),ov=newAcc();
+  for(let i=0;i<tb.n;i++){
+    if(!tb.keep[i])continue;const d=dm.map.get(dc[i]),k=ax.keyOf(i);if(d==null||k==null)continue;
+    let m=ser.get(d);if(!m){m=new Map();ser.set(d,m);}let a=m.get(k);if(!a){a=newAcc();m.set(k,a);}addAcc(a,M.val[i],M.needVals);addAcc(ov,M.val[i],M.needVals);
+  }
+  let keys=ax.keys,notes=[];if(keys.length>24){keys=keys.slice(-24);notes.push('Showing only the latest 24 '+ax.unitName+'s.');}
+  const otherLab='Other ('+dm.other+')';
+  const names=[...ser.keys()].sort((a,b)=>{if(dm.other>0){if(a===otherLab)return 1;if(b===otherLab)return -1;}return [...ser.get(b).values()].reduce((s,x)=>s+x.n,0)-[...ser.get(a).values()].reduce((s,x)=>s+x.n,0);});
+  const cells=names.map(nm=>keys.map(k=>finAcc(ser.get(nm).get(k),M.agg)));
+  const ns=names.map(nm=>keys.map(k=>{const a=ser.get(nm).get(k);return a?a.n:0;}));
+  const lastCol=(ax.partial&&keys[keys.length-1]===ax.keys[ax.keys.length-1]&&keys.length>3)?keys.length-2:keys.length-1;
+  let mx=-Infinity,mn=Infinity,mr=0,mc=0,nr=0,nc=0,cnt=0,small=0;
+  cells.forEach((row,r)=>row.forEach((v,c)=>{if(v==null)return;if(ns[r][c]<5)small++;if(c>lastCol)return;cnt++;if(v>mx){mx=v;mr=r;mc=c;}if(v<mn){mn=v;nr=r;nc=c;}}));
+  if(!cnt)return null;
+  const lab=labT(M),tgt=F.target,dir=F.dir;let title,miss=0;
+  if(tgt!=null){cells.forEach(row=>row.forEach((v,c)=>{if(v!=null&&c<=lastCol&&(dir==='higher'?v<tgt:v>tgt))miss++;}));title=miss+' of '+cnt+' '+dimName+' × '+ax.unitName+' cells miss the '+fv(tgt,M.unit)+' target';}
+  else title='The highest '+lab+' is '+fv(mx,M.unit)+', for '+names[mr]+' in '+ax.long(keys[mc])+'; the lowest is '+fv(mn,M.unit)+' ('+names[nr]+', '+ax.long(keys[nc])+')';
+  if(dm.other>0)notes.push('Showing the top '+Math.min(F.topN,20)+' '+dimName+' groups; the rest are combined as "Other".');
+  notes.push('Darker cells mean higher values. A heatmap shows where to look; read the numbers in the cells for exact values.');
+  if(ax.partial&&lastCol<keys.length-1)notes.push('The last '+ax.unitName+' is incomplete, so it is left out of the headline and the outlined cell.');
+  if((M.agg==='mean'||M.agg==='rate')&&small>0)notes.push(small+' cells are based on fewer than 5 rows. Extreme values (such as 0% or 100%) there are often just small-sample noise.');
+  return {type:'heat',title:title,sub:lab+' by '+dimName+' and '+ax.unitName+' · based on '+ov.n.toLocaleString('en-US')+' rows',stdTitle:lab+' by '+dimName+' and '+tb.names[F.time],rows:names,cols:keys.map(ax.label),cells:cells,mx:mx,mn:mn,mr:mr,mc:mc,unit:M.unit,target:tgt,dir:dir,notes:notes,source:ov.n,label:lab};
+}
+
+function modelScatter(M){
+  const F=S.F,tb=S.TB;if(!(M.kind==='number')||F.m2==null||F.m2<0)return null;
+  const xv=typedCol(F.metric),yv=typedCol(F.m2),xn=tb.names[F.metric],yn=tb.names[F.m2];
+  const dc=F.dim>=0?typedCol(F.dim):null;let pts=[];
+  for(let i=0;i<tb.n;i++){if(!tb.keep[i])continue;const x=xv[i],y=yv[i];if(x==null||y==null)continue;pts.push({x:x,y:y,lab:dc&&dc[i]!=null?dc[i]:'row '+tb.rowNum[i]});}
+  if(pts.length<5)return null;
+  const total=pts.length;let sampled=false;
+  if(pts.length>3000){const st=Math.ceil(pts.length/3000);pts=pts.filter((p,i)=>i%st===0);sampled=true;}
+  const r=pearson(pts.map(p=>p.x),pts.map(p=>p.y)),n=pts.length;
+  const mx=sum(pts.map(p=>p.x))/n,my=sum(pts.map(p=>p.y))/n;let sxy=0,sxx=0;pts.forEach(p=>{sxy+=(p.x-mx)*(p.y-my);sxx+=(p.x-mx)**2;});
+  const b=sxx?sxy/sxx:0,a0=my-b*mx;pts.forEach(p=>{p.res=p.y-(a0+b*p.x);});
+  const out=pts.slice().sort((p,q)=>Math.abs(q.res)-Math.abs(p.res)).slice(0,3);out.forEach(p=>{p.out=true;});
+  const ar=Math.abs(r);let title;
+  if(isNaN(r))title='The relationship between '+xn+' and '+yn+' cannot be measured: one of them does not vary';
+  else if(ar>=0.7)title=yn+' and '+xn+' '+(r>0?'rise together':'move in opposite directions')+' (r = '+r.toFixed(2).replace('-','−')+')';
+  else if(ar>=0.4)title=yn+' and '+xn+' show a moderate '+(r>0?'positive':'negative')+' link (r = '+r.toFixed(2).replace('-','−')+')';
+  else if(ar>=0.2)title=yn+' and '+xn+' have only a weak link (r = '+r.toFixed(2).replace('-','−')+')';
+  else title='No clear linear link between '+yn+' and '+xn+' (r = '+r.toFixed(2).replace('-','−')+')';
+  const notes=['A strong link does not prove that one causes the other.'];
+  if(sampled)notes.push('Showing every '+Math.ceil(total/3000)+'th point ('+n.toLocaleString('en-US')+' of '+total.toLocaleString('en-US')+') to keep the chart readable. The correlation is calculated from the points shown.');
+  notes.push('The 3 points furthest from the trend are labelled'+(dc?' by '+tb.names[F.dim]:' by row number')+'. Check whether they are real or data errors.');
+  return {type:'scatter',title:title,sub:yn+' against '+xn+' · '+total.toLocaleString('en-US')+' rows with both values',stdTitle:yn+' vs '+xn,pts:pts,xn:xn,yn:yn,a:a0,b:b,r:r,notes:notes,source:total,unitX:tb.info[F.metric].unit,unitY:tb.info[F.m2].unit,label:yn+' vs '+xn};
+}
+
+function modelBig(M){
+  const tb=S.TB,F=S.F,ov=newAcc();
+  for(let i=0;i<tb.n;i++){if(tb.keep[i])addAcc(ov,M.val[i],M.needVals);}
+  const v=finAcc(ov,M.agg);if(v==null)return null;
+  const lab=labT(M),tgt=F.target,dir=F.dir,notes=[];let title;
+  if(tgt!=null){const ok=dir==='higher'?v>=tgt:v<=tgt;title=lab+' is '+fv(v,M.unit)+', '+(ok?'meeting':'missing')+' the '+fv(tgt,M.unit)+' target by '+(M.unit==='%'?Math.abs(v-tgt).toFixed(1)+' pts':fv(Math.abs(v-tgt),M.unit));}
+  else title=lab+' is '+fv(v,M.unit);
+  notes.push('With no time column or grouping selected, a single number is the clearest display. Add "Group by" or "Time" in step 4 to see a chart.');
+  return {type:'big',title:title,sub:'Based on '+ov.n.toLocaleString('en-US')+' rows',stdTitle:lab,value:v,unit:M.unit,target:tgt,dir:dir,notes:notes,source:ov.n,label:lab};
+}
+
+/* ===== RECOMMENDER: rules only, no AI ===== */
+function recommend(){
+  const F=S.F,tb=S.TB,M=metricInfo(),hasT=F.time>=0,hasD=F.dim>=0,hasM2=F.m2!=null&&F.m2>=0&&M.kind==='number';
+  const cands=[],considered=[];
+  const add=(id,score,name,reasons,build)=>cands.push({id:id,score:score,name:name,reasons:reasons,build:build});
+  if(!hasT&&!hasD&&!hasM2)add('big',100,'Single number',['You picked no grouping and no time column, so there is one value to communicate.','One number plus its target beats any chart.'],()=>modelBig(M));
+  if(hasM2)add('scatter',92,'Scatterplot',['You picked two numeric columns, and a scatterplot shows how one relates to the other.','Each dot is one row, so clusters and outliers are visible.'],()=>modelScatter(M));
+  if(hasT&&hasD){
+    add('multi',90,'Line chart, one line highlighted',['Time + category: lines show change over time.','Every line is grey except the one with the clearest story, which avoids a "spaghetti" chart.'],()=>modelMulti(M));
+    add('heat',(tb.info[F.dim].uniq>6?72:56),'Heatmap',['Many groups across time are easier to scan as colour intensity than as many lines.','The numbers stay visible in the cells.'],()=>modelHeat(M));
+    add('line',60,'Line chart of the overall trend',['Ignores the grouping and shows one overall line, the simplest view of the trend.'],()=>modelLine(M,'line'));
+  } else if(hasT){
+    add('line',85,'Line chart',['Time + a measure: a line shows direction and pace of change.','The latest value and any target are labelled directly.'],()=>modelLine(M,'line'));
+    add('col',64,'Columns by period',['Few time periods can also be shown as columns, which makes each period easy to compare.'],()=>modelLine(M,'col'));
+  } else if(hasD){
+    const narrow=(()=>{if(!(M.agg==='mean'||M.agg==='median'||M.agg==='rate'))return false;const m=modelBar(M);if(!m)return false;const v=m.items.map(x=>x.v),mx=Math.max.apply(null,v),mn=Math.min.apply(null,v);return mx>0&&(mx-mn)/mx<0.15;})();
+    add('bar',85,'Horizontal bars, sorted',['Category + a measure: bars on one zero baseline are the easiest to compare.','Sorted so the ranking is obvious, with one accent colour on the point.'],()=>modelBar(M,'bar'));
+    add('dot',narrow?88:58,'Dot plot',narrow?['The values are close together (within 15% of the highest). Bars must start at zero, which would make real differences look tiny.','A dot plot may use a tighter axis honestly, as long as the axis is labelled.']:['A dot plot is a lighter alternative to bars when you care about position rather than size.'],()=>modelBar(M,'dot'));
+  }
+  cands.sort((a,b)=>b.score-a.score);
+  const shown=[];for(const c of cands){const mod=c.build();if(mod){shown.push({id:c.id,name:c.name,reasons:c.reasons,model:mod,score:c.score});}if(shown.length===2)break;}
+  const has=id=>shown.some(s=>s.id===id),cand=id=>cands.some(c=>c.id===id);
+  const st=(id,okNeed,why)=>{if(has(id))return ['Recommended',''];if(cand(id))return ['Possible','Available but ranked lower for your selection.'];return ['Not available',why];};
+  [['bar','Horizontal bars','Needs a group-by column and no time column.'],['dot','Dot plot','Needs a group-by column and no time column.'],['line','Line chart','Needs a time column.'],['multi','Line chart, one highlighted','Needs both a time column and a group-by column.'],['col','Columns by period','Needs a time column and no grouping.'],['heat','Heatmap','Needs both a time column and a group-by column.'],['scatter','Scatterplot','Needs a second numeric column (and a numeric main measure).'],['big','Single number','Used only when no grouping, time or second column is chosen.']].forEach(r=>{const s=st(r[0],0,r[2]);considered.push({name:r[1],status:s[0],why:s[1]});});
+  considered.push({name:'Pie / donut',status:'Never used',why:'Angles and areas are hard to compare; bars do it better.'});
+  considered.push({name:'3D charts',status:'Never used',why:'3D distorts values and adds clutter.'});
+  considered.push({name:'Secondary y-axis',status:'Never used',why:'Use two aligned panels or direct labels instead.'});
+  return {M:M,shown:shown,considered:considered};
+}
+function pearson(x,y){const n=x.length;let mx=0,my=0;for(let i=0;i<n;i++){mx+=x[i];my+=y[i];}mx/=n;my/=n;let sxy=0,sxx=0,syy=0;for(let i=0;i<n;i++){sxy+=(x[i]-mx)*(y[i]-my);sxx+=(x[i]-mx)**2;syy+=(y[i]-my)**2;}return sxy/Math.sqrt(sxx*syy);}
+
+/* ===== STANDARD ("typical default") FRAMES ===== */
+function stdFrame(W,H,title){return Rc(1.5,1.5,W-3,H-3,'#fff','stroke="#777" stroke-width="3"')+T(W/2,28,trunc(title,70),{anchor:'middle',weight:700,size:15,fill:'#000'});}
+function stdLegend(items,W,y){let tw=0;const ws=items.map(it=>it.name.length*6.5+34);tw=sum(ws);let x=(W-tw)/2,s='';items.forEach((it,i)=>{s+=Rc(x,y-10,12,12,it.color)+T(x+18,y,trunc(it.name,26),{size:11.5});x+=ws[i];});return s;}
+function stdColumns(m,W){
+  const items=m.items,n=items.length,H=420,x0=70,x1=W-30,y0=56,y1=290;
+  const vmin=Math.min(0,Math.min.apply(null,items.map(i=>i.v))),vmax=Math.max.apply(null,items.map(i=>i.v));
+  const tk=niceTicks(vmin,vmax,6),lo=Math.min(vmin,tk[0]),hi=Math.max(vmax,tk[tk.length-1]),yy=lin(lo,hi,y1,y0),band=(x1-x0)/n;
+  let s=stdFrame(W,H,m.stdTitle);
+  tk.forEach(v=>{s+=Ln(x0,yy(v),x1,yy(v),'#666',1)+T(x0-6,yy(v)+4,v.toFixed(2),{anchor:'end',size:10});});
+  items.forEach((it,i)=>{const x=x0+i*band+band*.2,y=Math.min(yy(0),yy(it.v));s+=Rc(x,y,band*.6,Math.abs(yy(it.v)-yy(0)),'#4472C4','stroke="#000" stroke-width=".5"');s+=T(x0+i*band+band/2+4,y1+14,trunc(it.name,22),{anchor:'end',size:10,rot:-45});});
+  s+=stdLegend([{name:m.label||m.stdTitle,color:'#4472C4'}],W,H-18);
+  return {svg:SV(W,H,s,'Standard column chart'),W:W,H:H};
+}
+
+/* ===== BAR / DOT (RECOMMENDED) ===== */
+function rBar(m,rec,title){
+  const W=720;
+  if(!rec)return stdColumns(m,W);
+  const items=m.items,n=items.length,h=AT(title,m.sub,66);
+  const maxLen=Math.max.apply(null,items.map(i=>Math.min(i.name.length,28))),lw=clamp(maxLen*6.6+10,80,230);
+  const lab=items.map(i=>fv(i.v,m.unit)),labW=Math.max.apply(null,lab.map(s=>s.length))*7.6+14;
+  const x0=24,pw=W-x0-lw-labW-16;
+  const vmin=Math.min(0,Math.min.apply(null,items.map(i=>i.v))),vmax=Math.max(0,Math.max.apply(null,items.map(i=>i.v)),m.target!=null?m.target:-Infinity)||1;
+  const sx=lin(vmin,vmax*1.02,0,pw),zero=x0+lw+sx(0);
+  const bh=clamp(Math.floor(330/n)-8,14,30),gap=Math.max(6,Math.round(bh*.45)),y0=h.y+(m.target!=null?28:8);
+  let s='';const tx=m.target!=null?x0+lw+sx(m.target):null;
+  items.forEach((it,i)=>{
+    const y=y0+i*(bh+gap),xv=x0+lw+sx(it.v),col=it.other?C.lgrey:(it.hl?C.copper:C.grey),bold=it.hl;
+    s+=T(x0+lw-8,y+bh/2+4,trunc(it.name,28),{anchor:'end',size:12.5,fill:bold?C.dark:C.muted,weight:bold?700:400});
+    s+=Rc(Math.min(zero,xv),y,Math.abs(xv-zero),bh,col);
+    let lx=it.v>=0?xv+6:xv-6;if(tx!=null&&it.v>=0&&lx<tx+6&&lx+lab[i].length*7.2>tx-2)lx=tx+8;
+    s+=T(lx,y+bh/2+4,lab[i],{anchor:it.v>=0?'start':'end',size:12.5,fill:bold?C.dark:C.muted,weight:bold?700:400});
+  });
+  const yEnd=y0+n*(bh+gap)-gap,H=yEnd+34;
+  if(tx!=null)s+=Ln(tx,h.y+14,tx,yEnd+4,C.dark,1.2,'5 4')+T(tx,h.y+10,'Target '+fv(m.target,m.unit),{anchor:'middle',size:11,weight:700,fill:C.dark});
+  if(vmin<0)s+=Ln(zero,y0-4,zero,yEnd+4,C.mgrey,1);
+  s+=T(24,H-10,'Bars start at zero · '+m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Sorted horizontal bar chart'),W:W,H:H};
+}
+function rDot(m,rec,title){
+  const W=720;if(!rec)return stdColumns(m,W);
+  const items=m.items,n=items.length,h=AT(title,m.sub,66),vals=items.map(i=>i.v),mx=Math.max.apply(null,vals),mn=Math.min.apply(null,vals);
+  let lo=mn,hi=mx;if(m.target!=null){lo=Math.min(lo,m.target);hi=Math.max(hi,m.target);}
+  const pad=(hi-lo)*0.15||1;lo-=pad;hi+=pad;
+  const maxLen=Math.max.apply(null,items.map(i=>Math.min(i.name.length,28))),lw=clamp(maxLen*6.6+10,80,230),x0=24,px0=x0+lw,px1=W-90,sx=lin(lo,hi,px0,px1),rh=26,y0=h.y+(m.target!=null?30:14);
+  let s='';const tk=niceTicks(lo,hi,4);
+  items.forEach((it,i)=>{const y=y0+i*rh+rh/2;s+=Ln(px0,y,px1,y,'#E6E1D4',1)+T(x0+lw-8,y+4,trunc(it.name,28),{anchor:'end',size:12.5,fill:it.hl?C.dark:C.muted,weight:it.hl?700:400})+Cr(sx(it.v),y,it.hl?7:5.5,it.hl?C.copper:C.mgrey)+T(sx(it.v)+12,y+4,fv(it.v,m.unit),{size:12,fill:it.hl?C.dark:C.muted,weight:it.hl?700:400});});
+  const yE=y0+n*rh;
+  if(m.target!=null){const tx=sx(m.target);s+=Ln(tx,h.y+16,tx,yE,C.dark,1.2,'5 4')+T(tx,h.y+12,'Target '+fv(m.target,m.unit),{anchor:'middle',size:11,weight:700,fill:C.dark});}
+  tk.forEach(v=>{if(v>=lo&&v<=hi)s+=Ln(sx(v),yE+2,sx(v),yE+7,C.mgrey,1)+T(sx(v),yE+20,fvAx(v,m.unit),{anchor:'middle',size:10.5,fill:C.muted});});
+  s+=Ln(px0,yE+2,px1,yE+2,C.mgrey,1);
+  const H=yE+52;s+=T(24,H-10,'Axis does not start at zero (dot plot) · '+m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Dot plot'),W:W,H:H};
+}
+
+/* ===== LINE / COLUMNS BY PERIOD ===== */
+function xLabels(labels,x,y,plotW,rec,anchor){let s='';const step=Math.max(1,Math.ceil(labels.length/Math.max(2,Math.floor(plotW/62))));labels.forEach((l,i)=>{if(i%step===0||i===labels.length-1){if(i===labels.length-1&&(labels.length-1)%step!==0&&(labels.length-1-Math.floor((labels.length-1)/step)*step)<step*0.6)return;s+=T(x(i),y,l,{anchor:'middle',size:10.5,fill:rec?C.muted:'#000'});}});return s;}
+function yDomain(vals,target,zeroOk){
+  const v=vals.filter(x=>x!=null);let lo=Math.min.apply(null,v),hi=Math.max.apply(null,v);if(target!=null){lo=Math.min(lo,target);hi=Math.max(hi,target);}
+  if(lo>=0&&(zeroOk||lo<0.6*hi))lo=0;else lo=lo-(hi-lo)*0.15;
+  hi=hi+(hi-lo)*0.12||1;return [lo,hi];
+}
+function rLine(m,rec,title){
+  const W=720,n=m.vals.length;
+  if(!rec){
+    const H=400,x0=70,x1=W-30,y0=56,y1=290,dom=yDomain(m.vals,null,true),tk=niceTicks(dom[0],dom[1],6),lo=Math.min(dom[0],tk[0]),hi=Math.max(dom[1],tk[tk.length-1]),yy=lin(lo,hi,y1,y0),xx=i=>x0+10+(n===1?0:i*(x1-x0-20)/(n-1));
+    let s=stdFrame(W,H,m.stdTitle);tk.forEach(v=>{s+=Ln(x0,yy(v),x1,yy(v),'#666',1)+T(x0-6,yy(v)+4,v.toFixed(2),{anchor:'end',size:10});});
+    const pts=[];m.vals.forEach((v,i)=>{if(v!=null)pts.push([xx(i),yy(v)]);});s+=Pl(pts,'#4472C4',2.25);pts.forEach(p=>{s+=Cr(p[0],p[1],3.5,'#4472C4');});
+    m.labels.forEach((l,i)=>{if(n<=14||i%Math.ceil(n/14)===0)s+=T(xx(i)+4,y1+14,trunc(l,12),{anchor:'end',size:10,rot:-45});});
+    s+=stdLegend([{name:m.label,color:'#4472C4'}],W,H-18);return {svg:SV(W,H,s,'Standard line chart'),W:W,H:H};
+  }
+  const h=AT(title,m.sub,66),x0=40,x1=W-110,y0=h.y+(m.target!=null?26:16),y1=y0+230,H=y1+52,dom=yDomain(m.vals,m.target,false),yy=lin(dom[0],dom[1],y1,y0),xx=i=>x0+(n===1?0:i*(x1-x0)/(n-1));
+  let s=Ln(x0,y1,x1,y1,C.mgrey,1);
+  if(m.target!=null)s+=Ln(x0,yy(m.target),x1,yy(m.target),C.dark,1.2,'5 4')+T(x1,yy(m.target)-6,'Target '+fv(m.target,m.unit),{anchor:'end',size:11,weight:700,fill:C.dark});
+  const lastSolid=m.partialIdx>=0?m.partialIdx-1:n-1;let seg=[];const segs=[];
+  m.vals.forEach((v,i)=>{if(v!=null&&i<=lastSolid)seg.push([xx(i),yy(v)]);else{if(seg.length)segs.push(seg);seg=[];}});if(seg.length)segs.push(seg);
+  segs.forEach(sg=>{if(sg.length>1)s+=Pl(sg,C.copper,3.5);else s+=Cr(sg[0][0],sg[0][1],3.5,C.copper);});
+  if(m.partialIdx>=0&&m.vals[m.partialIdx]!=null){let p=m.partialIdx-1;while(p>=0&&m.vals[p]==null)p--;if(p>=0)s+=Pl([[xx(p),yy(m.vals[p])],[xx(m.partialIdx),yy(m.vals[m.partialIdx])]],C.grey,2.5,'stroke-dasharray="5 4"');s+=Cr(xx(m.partialIdx),yy(m.vals[m.partialIdx]),4.5,'#fff','stroke="'+C.grey+'" stroke-width="2"')+T(xx(m.partialIdx),yy(m.vals[m.partialIdx])-10,'incomplete',{anchor:'middle',size:10.5,fill:C.muted});}
+  const idx=m.idx,fi=idx[0],li=idx[idx.length-1];let pk=fi,tr=fi;idx.forEach(i=>{if(m.vals[i]>m.vals[pk])pk=i;if(m.vals[i]<m.vals[tr])tr=i;});
+  const lab=new Set([fi,li]);if(pk!==fi&&pk!==li)lab.add(pk);if(tr!==fi&&tr!==li&&(m.vals[pk]-m.vals[tr])>0.15*(dom[1]-dom[0]))lab.add(tr);
+  lab.forEach(i=>{s+=Cr(xx(i),yy(m.vals[i]),i===li?5.5:4.5,C.copper)+T(i===li?xx(i)+10:xx(i),i===li?yy(m.vals[i])+4:yy(m.vals[i])-11,fv(m.vals[i],m.unit),{anchor:i===li?'start':'middle',size:12,weight:700,fill:C.dark});});
+  s+=xLabels(m.labels,xx,y1+18,x1-x0,true);
+  s+=T(24,H-10,m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Line chart'),W:W,H:H};
+}
+function rCol(m,rec,title){
+  const W=720,n=m.vals.length;
+  if(!rec){const items=m.vals.map((v,i)=>({name:m.labels[i],v:v==null?0:v}));return stdColumns({items:items,stdTitle:m.stdTitle,label:m.label},W);}
+  const h=AT(title,m.sub,66),x0=30,x1=W-30,y0=h.y+(m.target!=null?26:20),y1=y0+220,H=y1+52,dom=yDomain(m.vals,m.target,true),yy=lin(dom[0],dom[1],y1,y0),band=(x1-x0)/n;
+  let s=Ln(x0,y1,x1,y1,C.mgrey,1);
+  const worst=m.target!=null?(i=>m.vals[i]!=null&&(m.dir==='higher'?m.vals[i]<m.target:m.vals[i]>m.target)):(i=>i===m.idx[m.idx.length-1]);
+  m.vals.forEach((v,i)=>{if(v==null)return;const x=x0+i*band+band*.15,y=yy(v),hl=worst(i);s+=Rc(x,Math.min(y,yy(0)),band*.7,Math.abs(yy(0)-y),i===m.partialIdx?C.lgrey:(hl?C.copper:C.grey));if(n<=16)s+=T(x+band*.35,y-6,fv(v,m.unit),{anchor:'middle',size:11,weight:hl?700:400,fill:hl?C.dark:C.muted});});
+  if(m.target!=null)s+=Ln(x0,yy(m.target),x1,yy(m.target),C.dark,1.2,'5 4')+T(x1,yy(m.target)-6,'Target '+fv(m.target,m.unit),{anchor:'end',size:11,weight:700,fill:C.dark});
+  s+=xLabels(m.labels,i=>x0+i*band+band/2,y1+18,x1-x0,true);
+  s+=T(24,H-10,'Columns start at zero · '+m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Column chart by period'),W:W,H:H};
+}
+
+/* ===== MULTI-LINE ===== */
+function dodge(labels,minGap,lo,hi){labels.sort((a,b)=>a.y-b.y);for(let i=1;i<labels.length;i++)if(labels[i].y-labels[i-1].y<minGap)labels[i].y=labels[i-1].y+minGap;const over=labels.length?labels[labels.length-1].y-hi:0;if(over>0)for(let i=labels.length-1;i>=0;i--){labels[i].y-=over;if(i>0&&labels[i].y-labels[i-1].y>=minGap)break;}return labels;}
+function rMulti(m,rec,title){
+  const W=720,n=m.labels.length,all=[];m.series.forEach(s=>s.vals.forEach(v=>{if(v!=null)all.push(v);}));
+  if(!rec){
+    const H=380,x0=70,x1=W-150,y0=56,y1=280,dom=yDomain(all,null,true),tk=niceTicks(dom[0],dom[1],6),lo=Math.min(dom[0],tk[0]),hi=Math.max(dom[1],tk[tk.length-1]),yy=lin(lo,hi,y1,y0),xx=i=>x0+8+(n===1?0:i*(x1-x0-16)/(n-1));
+    let s=stdFrame(W,H,m.stdTitle);tk.forEach(v=>{s+=Ln(x0,yy(v),x1,yy(v),'#666',1)+T(x0-6,yy(v)+4,v.toFixed(2),{anchor:'end',size:10});});
+    m.series.forEach((sr,k)=>{const col=XL[k%XL.length],pts=[];sr.vals.forEach((v,i)=>{if(v!=null)pts.push([xx(i),yy(v)]);});s+=Pl(pts,col,2.25);pts.forEach(p=>{s+=Cr(p[0],p[1],3,col);});s+=Rc(x1+18,y0+k*22,12,12,col)+T(x1+36,y0+k*22+11,trunc(sr.name,18),{size:11.5});});
+    m.labels.forEach((l,i)=>{if(n<=14||i%Math.ceil(n/14)===0)s+=T(xx(i)+4,y1+14,trunc(l,12),{anchor:'end',size:10,rot:-45});});
+    return {svg:SV(W,H,s,'Standard multi-line chart'),W:W,H:H};
+  }
+  const h=AT(title,m.sub,66),x0=40,x1=W-170,y0=h.y+(m.target!=null?26:16),y1=y0+240,H=y1+52,dom=yDomain(all,m.target,false),yy=lin(dom[0],dom[1],y1,y0),xx=i=>x0+(n===1?0:i*(x1-x0)/(n-1));
+  let s=Ln(x0,y1,x1,y1,C.mgrey,1);
+  if(m.target!=null)s+=Ln(x0,yy(m.target),x1,yy(m.target),C.dark,1.2,'5 4')+T(x0+4,yy(m.target)-6,'Target '+fv(m.target,m.unit),{size:11,weight:700,fill:C.dark});
+  const solidUpTo=m.partialIdx>=0?m.partialIdx-1:n-1,labs=[];
+  const draw=(sr,k,hl)=>{
+    const pts=[];sr.vals.forEach((v,i)=>{if(v!=null&&i<=solidUpTo)pts.push([xx(i),yy(v)]);});
+    if(pts.length>1)s+=Pl(pts,hl?C.copper:(sr.other?C.lgrey:C.grey),hl?4:1.8);
+    let li=-1;for(let i=solidUpTo;i>=0;i--)if(sr.vals[i]!=null){li=i;break;}
+    if(m.partialIdx>=0&&sr.vals[m.partialIdx]!=null&&li>=0)s+=Pl([[xx(li),yy(sr.vals[li])],[xx(m.partialIdx),yy(sr.vals[m.partialIdx])]],hl?C.copper:C.grey,hl?2.5:1.2,'stroke-dasharray="4 4"');
+    if(li>=0)labs.push({y:yy(sr.vals[li]),x:xx(m.partialIdx>=0&&sr.vals[m.partialIdx]!=null?m.partialIdx:li),name:sr.name,v:sr.vals[li],hl:hl});
+    if(hl&&pts.length){const f=sr.idx[0];s+=Cr(xx(f),yy(sr.vals[f]),4.5,C.copper)+T(xx(f),yy(sr.vals[f])-10,fv(sr.vals[f],m.unit),{anchor:'middle',size:11.5,weight:700,fill:C.dark});if(li>=0)s+=Cr(xx(li),yy(sr.vals[li]),5.5,C.copper);}
+  };
+  m.series.forEach((sr,k)=>{if(k!==m.hl)draw(sr,k,false);});if(m.hl>=0)draw(m.series[m.hl],m.hl,true);
+  const placed=dodge(labs.map(l=>Object.assign({},l)),13,y0-2,y1+4);
+  placed.forEach(l=>{s+=T(x1+12,l.y+4,trunc(l.name,16)+(l.hl?'  '+fv(l.v,m.unit):''),{size:l.hl?12.5:11,weight:l.hl?700:400,fill:l.hl?C.copper:C.muted});});
+  s+=xLabels(m.labels,xx,y1+18,x1-x0,true);
+  s+=T(24,H-10,m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Multi-line chart with one highlighted line'),W:W,H:H};
+}
+
+/* ===== HEATMAP ===== */
+function mixHex(a,b,t){const pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16),ch=sh=>Math.round(((pa>>sh)&255)*(1-t)+((pb>>sh)&255)*t);return '#'+[16,8,0].map(sh=>('0'+ch(sh).toString(16)).slice(-2)).join('');}
+function rHeat(m,rec,title){
+  const W=720,nr=m.rows.length,nc=m.cols.length,maxLen=Math.max.apply(null,m.rows.map(r=>Math.min(r.length,26))),lw=clamp(maxLen*6.6+12,80,200),x0=24,cw=Math.min(56,Math.floor((W-x0-lw-20)/nc)),ch=nr>14?20:26;
+  const t=v=>m.mx===m.mn?0.5:(v-m.mn)/(m.mx-m.mn),showNum=cw>=34;
+  const h=rec?AT(title,m.sub,66):{s:T(W/2,28,trunc(m.stdTitle,70),{anchor:'middle',weight:700,size:15,fill:'#000'}),y:44};
+  const y0=h.y+22;let s='';
+  m.cols.forEach((c,j)=>{if(nc<=12||j%Math.ceil(nc/12)===0)s+=T(x0+lw+j*cw+cw/2,y0-6,c,{anchor:'middle',size:10.5,fill:rec?C.muted:'#000'});});
+  m.rows.forEach((r,i)=>{
+    s+=T(x0+lw-8,y0+i*ch+ch/2+4,trunc(r,26),{anchor:'end',size:12,fill:rec?C.muted:'#000'});
+    m.cells[i].forEach((v,j)=>{
+      const x=x0+lw+j*cw,y=y0+i*ch;
+      if(v==null){s+=Rc(x,y,cw,ch,'#fff','stroke="#EEE"');return;}
+      const tt=t(v),rc=rec?mixHex('#F4EBDD','#8A5410',Math.pow(tt,0.9)):(tt<.5?mixHex('#F8696B','#FFEB84',tt*2):mixHex('#FFEB84','#63BE7B',(tt-.5)*2));
+      s+=Rc(x,y,cw,ch,rc,rec?'stroke="#fff" stroke-width="1"':'stroke="#000" stroke-width="1"');
+      if(showNum)s+=T(x+cw/2,y+ch/2+4,fv(v,m.unit),{anchor:'middle',size:cw<44?9.5:10.5,fill:rec?(tt>0.55?'#fff':C.dark):'#000'});
+    });
+  });
+  if(rec)s+=Rc(x0+lw+m.mc*cw-1,y0+m.mr*ch-1,cw+2,ch+2,'none','stroke="'+C.dark+'" stroke-width="2"');
+  const H=y0+nr*ch+(rec?64:50);
+  if(rec){const lx=x0+lw;s+=T(lx,H-34,'Lower',{size:10.5,fill:C.muted})+Rc(lx+40,H-44,100,10,'url(#hg)')+T(lx+148,H-34,'Higher',{size:10.5,fill:C.muted});s+=T(24,H-10,'Outlined cell = highest value · '+m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});}
+  const defs=rec?'<defs><linearGradient id="hg"><stop offset="0" stop-color="#F4EBDD"/><stop offset="1" stop-color="#8A5410"/></linearGradient></defs>':'';
+  const body=rec?Rc(0,0,W,H,'#fff')+defs+h.s+s:Rc(1.5,1.5,W-3,H-3,'#fff','stroke="#777" stroke-width="3"')+h.s+s;
+  return {svg:SV(W,H,body,'Heatmap'),W:W,H:H};
+}
+
+/* ===== SCATTER ===== */
+function rScatter(m,rec,title){
+  const W=720,pts=m.pts;let xl=Infinity,xh=-Infinity,yl=Infinity,yh=-Infinity;pts.forEach(p=>{if(p.x<xl)xl=p.x;if(p.x>xh)xh=p.x;if(p.y<yl)yl=p.y;if(p.y>yh)yh=p.y;});
+  const px=(xh-xl)*0.06||1,py=(yh-yl)*0.08||1,txk=niceTicks(xl-px,xh+px,6),tyk=niceTicks(yl-py,yh+py,5),xlo=Math.min(xl-px,txk[0]),xhi=Math.max(xh+px,txk[txk.length-1]),ylo=Math.min(yl-py,tyk[0]),yhi=Math.max(yh+py,tyk[tyk.length-1]);
+  if(!rec){
+    const H=420,x0=70,x1=W-30,y0=56,y1=330,xx=lin(xlo,xhi,x0,x1),yy=lin(ylo,yhi,y1,y0);let s=stdFrame(W,H,m.stdTitle);
+    tyk.forEach(v=>{s+=Ln(x0,yy(v),x1,yy(v),'#666',1)+T(x0-6,yy(v)+4,v.toFixed(2),{anchor:'end',size:10});});
+    txk.forEach(v=>{s+=T(xx(v),y1+14,v.toFixed(2),{anchor:'middle',size:10});});
+    pts.forEach(p=>{s+=Rc(xx(p.x)-3,yy(p.y)-3,6,6,'#4472C4','transform="rotate(45 '+xx(p.x).toFixed(1)+' '+yy(p.y).toFixed(1)+')"');});
+    s+=T((x0+x1)/2,y1+34,m.xn,{anchor:'middle',size:11,weight:700})+stdLegend([{name:m.yn,color:'#4472C4'}],W,H-14);
+    return {svg:SV(W,H,s,'Standard scatter plot'),W:W,H:H};
+  }
+  const h=AT(title,m.sub,66),x0=64,x1=W-40,y0=h.y+10,y1=y0+280,H=y1+60,xx=lin(xlo,xhi,x0,x1),yy=lin(ylo,yhi,y1,y0);let s='';
+  s+=Ln(x0,y1,x1,y1,C.mgrey,1)+Ln(x0,y0,x0,y1,C.mgrey,1);
+  tyk.forEach(v=>{s+=Ln(x0-4,yy(v),x0,yy(v),C.mgrey,1)+T(x0-8,yy(v)+4,fvAx(v,m.unitY),{anchor:'end',size:10.5,fill:C.muted});});
+  txk.forEach(v=>{s+=Ln(xx(v),y1,xx(v),y1+4,C.mgrey,1)+T(xx(v),y1+17,fvAx(v,m.unitX),{anchor:'middle',size:10.5,fill:C.muted});});
+  const op=pts.length>800?0.3:pts.length>200?0.45:0.7;
+  pts.forEach(p=>{if(!p.out)s+=Cr(xx(p.x),yy(p.y),3,C.grey,'fill-opacity="'+op+'"');});
+  if(!isNaN(m.r)){const xa=xl,xb=xh;s+=Ln(xx(xa),yy(m.a+m.b*xa),xx(xb),yy(m.a+m.b*xb),C.mgrey,1.5,'6 4');}
+  const boxes=[];
+  pts.filter(p=>p.out).forEach(p=>{
+    const cx=xx(p.x),cy=yy(p.y),txt=trunc(p.lab,22)+' ('+fv(p.x,m.unitX)+', '+fv(p.y,m.unitY)+')',w=txt.length*6.4;
+    s+=Cr(cx,cy,5,C.copper);
+    const right=cx+8+w<=x1+30,lx=right?cx+8:cx-8-w;let ly=cy-9;
+    for(let g=0;g<12&&boxes.some(b=>lx<b.x+b.w&&lx+w>b.x&&Math.abs(ly-b.y)<13);g++)ly-=13;
+    if(ly<y0)ly=y0+10;
+    boxes.push({x:lx,w:w,y:ly});
+    s+=T(right?cx+8:cx-8,ly+3,txt,{size:11,weight:700,fill:C.dark,anchor:right?'start':'end'});
+  });
+  s+=T((x0+x1)/2,y1+38,m.xn,{anchor:'middle',size:12,weight:700,fill:C.dark})+T(14,(y0+y1)/2,m.yn,{anchor:'middle',size:12,weight:700,fill:C.dark,rot:-90});
+  s+=T(24,H-10,'Dashed line = linear trend · '+m.source.toLocaleString('en-US')+' rows with both values',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Scatter plot with labelled outliers'),W:W,H:H};
+}
+
+/* ===== SINGLE NUMBER ===== */
+function rBig(m,rec,title){
+  const W=720;
+  if(!rec){const H=220;return {svg:SV(W,H,stdFrame(W,H,m.stdTitle)+T(W/2,130,fv(m.value,m.unit),{anchor:'middle',size:44,weight:700,fill:'#000'}),'Value'),W:W,H:H};}
+  const h=AT(title,m.sub,66),H=h.y+150;let s=T(24,h.y+66,fv(m.value,m.unit),{size:64,weight:700,font:SER,fill:C.copper});
+  if(m.target!=null){const ok=m.dir==='higher'?m.value>=m.target:m.value<=m.target;s+=T(24,h.y+98,'Target '+fv(m.target,m.unit)+' · '+(ok?'target met':'target missed'),{size:14,fill:ok?C.green:C.red,weight:700});}
+  s+=T(24,H-10,m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Single number'),W:W,H:H};
+}
+function renderModel(m,rec,title){
+  const t=title||m.title;
+  switch(m.type){case 'bar':return rBar(m,rec,t);case 'dot':return rDot(m,rec,t);case 'line':return rLine(m,rec,t);case 'col':return rCol(m,rec,t);case 'multi':return rMulti(m,rec,t);case 'heat':return rHeat(m,rec,t);case 'scatter':return rScatter(m,rec,t);default:return rBig(m,rec,t);}
+}
+/* ===== SAMPLE DATA (all fictional) ===== */
+function sheetObj(name,rows){return {name:name,hidden:false,rows:rows,pct:{},warn:{},async ensure(){}};}
+function sampleWorkbook(kind){
+  const D=(y,m,d)=>new Date(Date.UTC(y,m,d));
+  if(kind==='po'){
+    const r=mulberry32(7),rows=[['PO Line','Vendor','Hub','Due Site Date','Qty PO','Delay Days','On Time']];
+    const V=['Alpha Steel','Brightline Parts','Cobalt Tools','Delta Hydraulics','Echo Safety','Falcon Bearings','Gamma Filters','Horizon Lubes'],H=['Hub A','Hub B','Hub C','Hub D'];
+    const w=[16,14,15,9,12,11,8,7],tw=sum(w);let id=1;
+    for(let i=0;i<2100;i++){
+      let x=r()*tw,vi=0;while(x>w[vi]){x-=w[vi];vi++;}
+      const day=Math.floor(r()*262),dt=D(2026,0,5+day),mo=dt.getUTCMonth();
+      let p=[.08,.10,.09,.35,.07,.09,.08,.10][vi];if(vi===1)p=.10+.045*mo;
+      const late=r()<p;let name=V[vi];const q=r();if(q<.012)name=name.toLowerCase();else if(q<.022)name=name+' ';
+      rows.push(['PO'+String(id++).padStart(5,'0'),name,H[Math.floor(r()*4)],dt,Math.round(1+Math.pow(r(),2)*60),late?2+Math.floor(r()*13):0,late?'No':'Yes']);
+    }
+    return {name:'Sample - PO delivery lines (fictional).xlsx',sheets:[sheetObj('PO Lines',rows)]};
+  }
+  if(kind==='wh'){
+    const r=mulberry32(11),rows=[['Date','Zone','Inbound Pallets','Processed Pallets','Utilisation %']],Z=['Zone A','Zone B','Zone C','Zone D'];
+    for(let d=0;d<184;d++){const dt=D(2026,2,1+d);Z.forEach((z,zi)=>{
+      const inb=Math.round([180,120,150,90][zi]*(1+0.15*(r()-.5))*(zi===2?1+d/400:1)),slow=zi===2&&d>110?0.78:0.97;
+      let u=[62,55,70,48][zi]+(zi===2?d*0.13:d*0.02)+(r()-.5)*5;u=Math.min(99,u);
+      rows.push([dt,z,inb,Math.round(inb*slow*(1+0.04*(r()-.5))),Math.round(u*10)/10]);});}
+    return {name:'Sample - Warehouse daily log (fictional).xlsx',sheets:[sheetObj('Daily',rows)]};
+  }
+  const r=mulberry32(5),rows=[['AMNT Port Logistics - Monthly utilisation report (fictional)'],['Prepared for training; figures in %'],[],['Hub','Region','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug']];
+  const base=[[72,'East'],[64,'East'],[80,'West'],[58,'West'],[75,'North']],names=['Hub A','Hub B','Hub C','Hub D','Hub E'],tr=[0.4,0.3,0.5,0.2,-2.4];
+  const tx=v=>(Math.round(v*10)/10).toString().replace('.',',');
+  names.forEach((n,i)=>{const row=[n,base[i][1]];for(let m=0;m<8;m++)row.push(tx(Math.max(20,Math.min(99,base[i][0]+tr[i]*m+(r()-.5)*3))));rows.push(row);});
+  rows.push(['Total','','','','','','','','','']);
+  return {name:'Sample - Messy monthly report (fictional).xlsx',sheets:[sheetObj('Report',rows)]};
+}
+
+/* ===== LOADING ===== */
+function setStatus(msg,kind){const el=$('status');el.textContent=msg||'';el.className='status'+(kind?' '+kind:'');}
+async function openFile(fo){
+  S.file=fo;const vis=fo.sheets.filter(s=>!s.hidden),list=vis.length?vis:fo.sheets;S.sheetList=list;
+  $('p_sheet').innerHTML=list.map((s,i)=>'<option value="'+i+'">'+esc(s.name)+'</option>').join('');
+  await selectSheet(0);
+  $('work').classList.remove('hidden');
+  setStatus('Loaded "'+fo.name+'" — '+S.TB.n.toLocaleString('en-US')+' data rows, '+S.TB.names.length+' columns. Continue below.','ok');
+  $('s2').scrollIntoView({behavior:'smooth'});
+}
+async function selectSheet(i){
+  const sh=S.sheetList[i];await sh.ensure();
+  if(!sh.rows||sh.rows.length<2)throw new Error('Sheet "'+sh.name+'" has no data rows to chart.');
+  S.sheet=sh;S.rows=sh.rows;S.o.hdr=guessHeader(S.rows);S.o.hdrRows=guessHeaderRows(S.rows,S.o.hdr);S.o.last='';S.o.unpivot=false;
+  rebuild(true);
+}
+function rebuild(reset){
+  const base=buildTable();S.base=base;S.wide=detectWide(base);
+  S.TB=(S.o.unpivot&&S.wide)?unpivot(base,S.wide):base;
+  inferAll(S.TB);
+  renderPrep();renderCols();renderFocus(reset);
+  if(reset){S.ranOnce=false;$('results').innerHTML='<p class="small">Press "Recommend charts" in step 4.</p>';$('considered').innerHTML='';}
+  else if(S.ranOnce)runRecommend(true);
+}
+
+/* ===== STEP 2: PREPARE ===== */
+function cellText(v){if(v==null)return '';if(v instanceof Date)return isoDate(v);if(typeof v==='number')return String(+v.toPrecision(10));return String(v);}
+function qline(k,t){return '<div class="q '+k+'"><i>'+({ok:'✓',warn:'!',bad:'✗',info:'i'}[k])+'</i><span>'+t+'</span></div>';}
+function renderPrep(){
+  const o=S.o,b=S.base,tb=S.TB;
+  $('p_hrows').value=String(o.hdrRows);$('p_last').value=o.last;$('p_loc').value=o.numLoc;$('p_ord').value=o.dateOrd;$('p_tot').checked=o.skipTot;
+  const rows=S.rows,lim=Math.min(rows.length,Math.max(30,o.hdr+14),70);let maxC=0;for(let r=0;r<lim;r++)maxC=Math.max(maxC,(rows[r]||[]).length);maxC=Math.min(maxC,26);
+  const flagged=new Map();b.flags.total.forEach(i=>flagged.set(b.rowNum[i],'tot'));b.flags.rep.forEach(i=>flagged.set(b.rowNum[i],'tot'));
+  let h='<table><tr><th>#</th>'+Array.from({length:maxC},(_,c)=>'<th>'+colLetter(c)+'</th>').join('')+'</tr>';
+  for(let r=0;r<lim;r++){
+    const row=rows[r]||[],isH=r>=o.hdr&&r<o.hdr+o.hdrRows,fl=flagged.get(r+1)==='tot'&&o.skipTot;
+    h+='<tr class="pick'+(isH?' hdr':'')+(fl?' tot':'')+'" data-r="'+r+'"><td class="rn">'+(r+1)+'</td>'+Array.from({length:maxC},(_,c)=>'<td title="'+esc(cellText(row[c]))+'">'+esc(cellText(row[c]))+'</td>').join('')+'</tr>';
+  }
+  $('p_prev').innerHTML=h+'</table>';
+  const kept=b.n-(o.skipTot?b.flags.total.size+b.flags.rep.size:0),n=[];
+  n.push(qline('ok','Header at row '+(o.hdr+1)+(o.hdrRows>1?'–'+(o.hdr+o.hdrRows):'')+' · <b>'+b.names.length+'</b> columns · <b>'+kept.toLocaleString('en-US')+'</b> data rows used.'));
+  if(b.blank>0)n.push(qline('info',b.blank+' completely blank rows were skipped.'));
+  if(b.flags.total.size>0){const rn=[...b.flags.total].slice(0,6).map(i=>b.rowNum[i]).join(', ');n.push(o.skipTot?qline('warn',b.flags.total.size+' total/subtotal row(s) found (row '+rn+') and excluded, so they are not counted twice.'):qline('bad',b.flags.total.size+' total/subtotal row(s) (row '+rn+') are included and will be counted twice. Tick "Exclude total rows".'));}
+  if(b.flags.rep.size>0)n.push(qline('warn',b.flags.rep.size+' repeated header row(s) inside the data'+(o.skipTot?' were excluded.':'.')));
+  if(S.sheet.warn&&S.sheet.warn.formulaNoCache>0)n.push(qline('bad',S.sheet.warn.formulaNoCache+' formula cell(s) have no saved value (the file was never recalculated), so they read as empty. Open the file in Excel, save it, and upload again.'));
+  if(b.n>150000)n.push(qline('info','Large file ('+b.n.toLocaleString('en-US')+' rows): charts may take a moment.'));
+  const dead=tb.info.filter(x=>x.dead).length;if(dead>0)n.push(qline('info',dead+' column(s) are empty or hold a single value and are set to Ignore.'));
+  tb.names.forEach((nm,j)=>{const inf=tb.info[j];if(tb.roles[j]==='number'&&inf.ambigNum>0&&S.o.numLoc==='auto')n.push(qline('warn','"'+esc(nm)+'": '+inf.ambigNum+' values such as 1.234 could be 1,234 or 1.234. They are read as thousands. Choose the number format above if that is wrong.'));if(tb.roles[j]==='date'&&inf.ambigDate>0)n.push(qline('warn','"'+esc(nm)+'": '+inf.ambigDate+' dates such as 05/03/2026 are ambiguous. Read as '+(o.dateOrd==='dmy'?'day/month/year':'month/day/year')+'; change it above if wrong.'));});
+  $('p_notes').innerHTML=n.join('');
+  if(S.wide){
+    const nm=S.wide.map(j=>b.names[j]);
+    $('p_wide').innerHTML=o.unpivot?'<div class="callout green"><b class="h">Converted to long format</b><p>Each row is now one '+esc(b.names.filter((_,j)=>!S.wide.includes(j)).slice(0,2).join(' / '))+' × period, with columns <b>Period</b> and <b>Value</b>, so you can chart over time. '+tb.n.toLocaleString('en-US')+' rows.</p><button class="alt" id="p_undo">Undo conversion</button></div>'
+      :'<div class="callout"><b class="h">Wide table detected</b><p>Columns <b>'+esc(nm[0])+'</b> … <b>'+esc(nm[nm.length-1])+'</b> ('+nm.length+') look like periods. To chart a trend over time, convert them to long format (one row per item per period).</p><button class="cu" id="p_conv">Convert to long format</button></div>';
+  } else $('p_wide').innerHTML='';
+}
+
+/* ===== STEP 3: COLUMNS ===== */
+const ROLES=[['date','Date'],['period','Period (ordered label)'],['number','Number'],['flag','Yes/No flag'],['category','Category'],['id','ID / text'],['ignore','Ignore']];
+function renderCols(){
+  const tb=S.TB;let h='<tr><th>Column</th><th>Type</th><th>Filled</th><th>Unique</th><th>Examples</th><th>Notes</th></tr>';
+  tb.names.forEach((nm,j)=>{
+    const inf=tb.info[j],ex=[];const seen=new Set();for(let i=0;i<tb.n&&ex.length<3;i++){if(!tb.keep[i])continue;const v=tb.cols[j][i];if(isEmpty(v))continue;const t=cellText(v);if(!seen.has(t)){seen.add(t);ex.push(t);}}
+    let note='';
+    if(inf.dead)note=inf.dead==='empty'?'Empty column':'Same value in every row';
+    if(tb.roles[j]==='flag'){const u=[...new Set(tb.cols[j].filter((v,i)=>tb.keep[i]&&!isEmpty(v)).map(v=>cellText(v).trim()))].slice(0,12);note='Count as event when value is <select class="role" data-fl="'+j+'">'+u.map(x=>'<option'+(String(tb.flagOn[j]).trim().toLowerCase()===x.toLowerCase()?' selected':'')+'>'+esc(x)+'</option>').join('')+'</select>';}
+    if(tb.roles[j]==='number'&&inf.unit==='%')note+=(note?' · ':'')+'percent';
+    const fill=tb.n?Math.round(100*inf.nonEmpty/Math.max(1,inf.total)):0;
+    h+='<tr class="'+(inf.dead?'dead':'')+'"><td class="k">'+esc(nm)+'</td><td><select class="role" data-r="'+j+'">'+ROLES.map(r=>'<option value="'+r[0]+'"'+(tb.roles[j]===r[0]?' selected':'')+'>'+r[1]+'</option>').join('')+'</select></td><td class="cnt">'+fill+'%</td><td class="cnt">'+inf.uniq.toLocaleString('en-US')+'</td><td class="ex" title="'+esc(ex.join(' | '))+'">'+esc(ex.join(' · '))+'</td><td>'+note+'</td></tr>';
+  });
+  $('c_tbl').innerHTML=h;
+}
+
+/* ===== STEP 4: FOCUS ===== */
+const LOWER_RE=/late|delay|defect|damage|downtime|incident|error|backlog|cost|wait|lead\s?time|dwell|aging|\bage\b|demurrage|terlambat|telat|keterlambatan|rework|reject|stockout|overdue|biaya/i;
+const MEAN_RE=/rate|pct|percent|%|avg|average|days|time|score|delay|lead|age|price|util|hours per|persen/i;
+function opt(v,t,sel){return '<option value="'+v+'"'+(sel?' selected':'')+'>'+esc(t)+'</option>';}
+function aggOptions(){
+  const tb=S.TB,j=+$('f_metric').value,cur=$('f_agg').value;let list,def;
+  if(j<0){list=[['sum','Count rows']];def='sum';$('f_aggh').textContent='Counts the rows in each group.';}
+  else if(tb.roles[j]==='flag'){list=[['rate','Rate (% of rows with the event)'],['count','Count of events']];def='rate';$('f_aggh').textContent='Event = "'+tb.flagOn[j]+'".';}
+  else{list=[['sum','Total'],['mean','Average'],['median','Median'],['max','Maximum'],['min','Minimum'],['count','Count of filled cells']];def=(MEAN_RE.test(tb.names[j])||tb.info[j].unit==='%')?'mean':'sum';$('f_aggh').textContent='Sum adds values up; average suits rates and durations.';}
+  $('f_agg').innerHTML=list.map(x=>opt(x[0],x[1],x[0]===(list.some(y=>y[0]===cur)&&!S._resetAgg?cur:def))).join('');S._resetAgg=false;
+}
+function guessDir(){
+  const tb=S.TB,j=+$('f_metric').value;if(j<0)return 'higher';
+  if(tb.roles[j]==='flag'&&NEGEVENT.test(String(tb.flagOn[j]).trim()))return 'lower';
+  return LOWER_RE.test(tb.names[j])?'lower':'higher';
+}
+function renderFocus(reset){
+  const tb=S.TB,keepV={metric:$('f_metric').value,dim:$('f_dim').value,time:$('f_time').value,m2:$('f_m2').value};
+  const idxOf=roles=>tb.names.map((_,j)=>j).filter(j=>roles.includes(tb.roles[j]));
+  const mcols=idxOf(['number','flag']),dcols=idxOf(['category']),tcols=idxOf(['date','period']),ncols=idxOf(['number']);
+  let dMetric=-1;if(reset){const f=mcols.find(j=>tb.roles[j]==='flag');dMetric=f!=null?f:(mcols.length?mcols[0]:-1);}
+  const sel=(cur,valid,def)=>(!reset&&cur!==''&&valid.includes(+cur))||(!reset&&cur==='-1')?+cur:def;
+  const m=reset?dMetric:sel(keepV.metric,mcols,mcols.length?mcols[0]:-1);
+  $('f_metric').innerHTML=opt(-1,'Number of rows (count)',m===-1)+mcols.map(j=>opt(j,tb.names[j]+(tb.roles[j]==='flag'?'  (yes/no)':''),j===m)).join('');
+  if(reset)S._resetAgg=true;aggOptions();
+  let dDim=-1;if(reset){const g=dcols.find(j=>tb.info[j].uniq>=3&&tb.info[j].uniq<=30);dDim=g!=null?g:(dcols.length?dcols[0]:-1);}
+  const dm=reset?dDim:sel(keepV.dim,dcols,-1);
+  $('f_dim').innerHTML=opt(-1,'(none)',dm===-1)+dcols.map(j=>opt(j,tb.names[j],j===dm)).join('');
+  const dt=reset?(tcols.length?tcols[0]:-1):sel(keepV.time,tcols,-1);
+  $('f_time').innerHTML=opt(-1,'(none)',dt===-1)+tcols.map(j=>opt(j,tb.names[j]+(tb.roles[j]==='period'?'  (period)':''),j===dt)).join('');
+  const m2=reset?-1:sel(keepV.m2,ncols,-1);
+  $('f_m2').innerHTML=opt(-1,'(none)',m2===-1)+ncols.map(j=>opt(j,tb.names[j],j===m2)).join('');
+  if(reset){$('f_target').value='';$('f_dir').value=guessDir();$('f_grain').value='auto';}
+  $('f_msg').textContent='';
+}
+function readFocus(){
+  const g=id=>$(id).value,t=g('f_target');
+  S.F={metric:+g('f_metric'),agg:g('f_agg'),dim:+g('f_dim'),time:+g('f_time'),grain:g('f_grain'),m2:+g('f_m2'),target:t===''?null:+t,dir:g('f_dir'),topN:clamp(Math.round(+g('f_topn')||12),3,30)};
+}
+
+/* ===== STEP 5: RESULTS ===== */
+function svgToString(svgEl){const c=svgEl.cloneNode(true),vb=c.getAttribute('viewBox').split(' ');c.setAttribute('width',vb[2]);c.setAttribute('height',vb[3]);c.setAttribute('xmlns','http://www.w3.org/2000/svg');return new XMLSerializer().serializeToString(c);}
+function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+function exportCard(card,fmt,name){
+  const svg=card.querySelector('.stage svg');if(!svg)return;const str=svgToString(svg);
+  if(fmt==='svg'){download(new Blob([str],{type:'image/svg+xml'}),name+'.svg');return;}
+  const vb=svg.getAttribute('viewBox').split(' '),w=+vb[2],h=+vb[3],img=new Image();
+  img.onload=()=>{const cv=document.createElement('canvas');cv.width=w*2;cv.height=h*2;const ctx=cv.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);ctx.drawImage(img,0,0,cv.width,cv.height);cv.toBlob(b=>download(b,name+'.png'),'image/png');};
+  img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(str);
+}
+function runRecommend(silent){
+  readFocus();const F=S.F;$('f_msg').textContent='';
+  if(F.metric>=0&&F.m2===F.metric){$('f_msg').textContent='The second number must differ from the measure.';return;}
+  let r;try{r=recommend();}catch(e){$('f_msg').textContent='Could not build the charts: '+e.message;console.error(e);return;}
+  if(!r.shown.length){$('results').innerHTML='<div class="callout red"><b class="h">No chart could be built</b><p>These choices leave too little valid data (for example no valid dates, or fewer than 5 rows with both numbers). Check the column types in step 3.</p></div>';return;}
+  S.ranOnce=true;
+  const host=$('results');host.innerHTML='';
+  r.shown.forEach((c,idx)=>{
+    const card=document.createElement('div');card.className='rcard'+(idx?' second':'');
+    card.innerHTML='<div class="rhead"><span class="tag '+(idx?'g':'c')+'">Option '+(idx+1)+'</span><h3>'+esc(c.name)+'</h3></div>'
+      +'<ul class="tight">'+c.reasons.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'
+      +'<div class="btns"><div class="seg"><button class="on after" data-m="rec">Recommended design</button><button data-m="std">Typical default</button></div><button class="alt" data-x="svg">Download SVG</button><button class="alt" data-x="png">Download PNG</button></div>'
+      +'<div class="stage" style="margin-top:12px"></div>'
+      +'<label class="hl-edit"><span class="small"><b>Headline</b> — written from the numbers; edit it to fit your audience and decision.</span><input type="text"></label>'
+      +'<div class="mt"><h4>Read before sharing</h4><div class="nl"></div></div>';
+    host.appendChild(card);
+    const inp=card.querySelector('input'),stage=card.querySelector('.stage');inp.value=c.model.title;let mode='rec';
+    const draw=()=>{const o=renderModel(c.model,mode==='rec',inp.value.trim()||c.model.title);stage.innerHTML=o.svg;};
+    inp.addEventListener('input',()=>{if(mode==='rec')draw();});
+    card.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{mode=b.getAttribute('data-m');card.querySelectorAll('.seg button').forEach(x=>{x.classList.toggle('on',x===b);x.classList.toggle('after',x===b&&mode==='rec');});draw();}));
+    card.querySelectorAll('[data-x]').forEach(b=>b.addEventListener('click',()=>exportCard(card,b.getAttribute('data-x'),'chart_'+c.id+'_'+(mode==='rec'?'recommended':'default'))));
+    const nl=[];c.model.notes.forEach(n=>nl.push(qline(/incomplete|few|fewer|ambiguous|could be|summing|no valid|no data|cannot be/.test(n)?'warn':'info',esc(n))));
+    nl.push(qline('info','Headline logic is a fixed template filled with your numbers. It states facts about the data, not causes.'));
+    card.querySelector('.nl').innerHTML=nl.join('');
+    draw();
+  });
+  $('considered').innerHTML='<tr><th>Chart type</th><th>Status</th><th>Why</th></tr>'+r.considered.map(x=>'<tr><td class="k">'+esc(x.name)+'</td><td class="'+({Recommended:'stat-ok',Possible:'stat-no','Not available':'stat-no','Never used':'stat-never'}[x.status])+'">'+x.status+'</td><td>'+esc(x.why)+'</td></tr>').join('');
+  if(!silent)host.scrollIntoView({behavior:'smooth'});
+}
+
+/* ===== EVENTS ===== */
+async function handleFile(file){
+  setStatus('Reading "'+file.name+'"…');
+  try{const fo=await readFile(file);await openFile(fo);}
+  catch(e){console.warn(e);setStatus(e.message||String(e),'err');}
+}
+function init(){
+  $('file').addEventListener('change',e=>{if(e.target.files[0])handleFile(e.target.files[0]);e.target.value='';});
+  const dz=$('drop');
+  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('over');}));
+  ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove('over');}));
+  dz.addEventListener('drop',e=>{const f=e.dataTransfer&&e.dataTransfer.files[0];if(f)handleFile(f);});
+  document.querySelectorAll('[data-sample]').forEach(b=>b.addEventListener('click',async()=>{try{S.ranOnce=false;await openFile(sampleWorkbook(b.getAttribute('data-sample')));}catch(e){setStatus(e.message,'err');}}));
+  $('p_sheet').addEventListener('change',async e=>{try{S.ranOnce=false;await selectSheet(+e.target.value);}catch(err){setStatus(err.message,'err');}});
+  $('p_hrows').addEventListener('change',e=>{S.o.hdrRows=+e.target.value;S.o.unpivot=false;rebuild(true);});
+  $('p_last').addEventListener('change',e=>{S.o.last=e.target.value;rebuild(true);});
+  $('p_loc').addEventListener('change',e=>{S.o.numLoc=e.target.value;rebuild(false);});
+  $('p_ord').addEventListener('change',e=>{S.o.dateOrd=e.target.value;rebuild(false);});
+  $('p_tot').addEventListener('change',e=>{S.o.skipTot=e.target.checked;rebuild(true);});
+  $('p_prev').addEventListener('click',e=>{const tr=e.target.closest('tr.pick');if(!tr)return;S.o.hdr=+tr.getAttribute('data-r');S.o.unpivot=false;rebuild(true);});
+  $('p_wide').addEventListener('click',e=>{if(e.target.id==='p_conv'){S.o.unpivot=true;rebuild(true);}if(e.target.id==='p_undo'){S.o.unpivot=false;rebuild(true);}});
+  $('c_tbl').addEventListener('change',e=>{
+    const t=e.target;
+    if(t.hasAttribute('data-r')){const j=+t.getAttribute('data-r'),v=t.value;S.TB.roles[j]=v;if(v==='flag'&&S.TB.flagOn[j]==null){const u=[...new Set(S.TB.cols[j].filter((x,i)=>S.TB.keep[i]&&!isEmpty(x)).map(x=>cellText(x).trim()))];S.TB.flagOn[j]=u[0]||'1';}S.TB.cache={};renderCols();renderFocus(false);if(S.ranOnce)runRecommend(true);}
+    else if(t.hasAttribute('data-fl')){const j=+t.getAttribute('data-fl');S.TB.flagOn[j]=t.value;S.TB.cache={};renderFocus(false);if(S.ranOnce)runRecommend(true);}
+  });
+  $('f_metric').addEventListener('change',()=>{S._resetAgg=true;aggOptions();$('f_dir').value=guessDir();});
+  $('f_go').addEventListener('click',()=>runRecommend(false));
+  ['f_agg','f_dim','f_time','f_grain','f_m2','f_target','f_dir','f_topn'].forEach(id=>$(id).addEventListener('change',()=>{if(S.ranOnce)runRecommend(true);}));
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+</body>
+</html>

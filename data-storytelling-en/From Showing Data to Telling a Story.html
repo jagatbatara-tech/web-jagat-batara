@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From Showing Data to Telling a Story — A Hands-On Guide to Data Storytelling &amp; Dashboard Design</title>
+<meta name="description" content="A one-stop learning page on data storytelling and data visualization: six lessons, nine bad-dashboard makeovers, a what-if lab and seven exercises on choosing the right data for a dashboard. Based on Storytelling with Data by Cole Nussbaumer Knaflic.">
+<style>
+:root{
+  --bg:#F4F2ED; --ink:#151B1D; --muted:#5B6568; --line:#DDD8CC;
+  --copper:#B77A2B; --gold:#C59B43; --dark:#1C2526; --green:#3E745A;
+  --teal:#2E6E73; --amber:#D49A3A; --red:#B64D42; --card:#FFFFFF;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Calibri,Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.65;font-size:17px;overflow-x:hidden}
+h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;line-height:1.2;color:var(--dark);margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+@media(max-width:600px){.wrap{padding:0 18px}body{font-size:16px}}
+a{color:var(--teal)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;color:#fff;min-height:580px;display:flex;align-items:flex-end;background:linear-gradient(135deg,#0F1415 0%,#1C2526 58%,#27312F 100%)}
+.hero-art{position:absolute;right:-10px;top:80px;width:min(400px,32%);opacity:.9}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,21,22,.05) 0%,rgba(16,21,22,.72) 100%)}
+.hero .wrap{position:relative;padding-bottom:56px;padding-top:130px}
+@media(max-width:1100px){.hero-art{display:none}}
+@media(max-width:600px){.hero{min-height:500px}.hero .wrap{padding-top:90px;padding-bottom:36px}}
+.kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12.5px;color:var(--gold);font-weight:700}
+.hero h1{color:#fff;font-size:clamp(32px,5.4vw,58px);margin:14px 0 16px;max-width:760px}
+.hero p.lead{font-size:clamp(17px,2vw,20px);max-width:700px;color:#E8E4DA;margin:0 0 26px}
+.meta{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:13.5px;color:#CFCABD;border-top:1px solid rgba(255,255,255,.25);padding-top:16px}
+.meta b{color:#fff}
+
+/* NAV */
+nav.toc{position:sticky;top:0;z-index:20;background:rgba(28,37,38,.96);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:0;padding-bottom:0;-webkit-overflow-scrolling:touch}
+nav.toc a{color:#D9D4C7;text-decoration:none;font-size:13.5px;padding:14px 13px;white-space:nowrap;border-bottom:3px solid transparent}
+nav.toc a:hover{color:#fff;border-bottom-color:var(--copper)}
+
+/* SECTIONS */
+section{padding:64px 0 8px;scroll-margin-top:56px}
+@media(max-width:600px){section{padding:44px 0 4px}}
+.sec-label{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.sec-num{font-family:Georgia,serif;font-size:54px;color:var(--copper);line-height:1;font-weight:700}
+.sec-label span.t{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h2{font-size:clamp(26px,3.6vw,40px);margin-bottom:8px}
+.takeaway{font-family:Georgia,serif;font-size:clamp(18px,2vw,21px);line-height:1.45;color:var(--dark);border-left:5px solid var(--copper);padding:6px 0 6px 20px;margin:18px 0 26px;max-width:900px}
+p{margin:0 0 14px}
+h3{font-size:22px;margin:32px 0 10px}
+h4{font-size:17px;margin:0 0 6px;font-family:"Segoe UI",Roboto,Arial,sans-serif;color:var(--dark)}
+.small{font-size:14px;color:var(--muted)}
+.mt{margin-top:22px}
+
+/* EXEC */
+.exec{background:var(--dark);color:#EDEAE1;padding:56px 0}
+.exec h2{color:#fff}
+.exec .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+@media(max-width:820px){.exec .grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.exec .grid{grid-template-columns:1fr}}
+.exec .c{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-top:3px solid var(--copper);padding:18px;border-radius:4px}
+.exec .c b{display:block;color:var(--gold);font-family:Georgia,serif;font-size:28px;margin-bottom:6px}
+.exec .c em{display:block;font-style:normal;font-weight:700;color:#fff;font-size:15px;margin-bottom:4px}
+.exec .c p{margin:0;font-size:14.5px;color:#D9D4C7}
+.exec .lead2{max-width:820px;color:#D9D4C7}
+
+/* STATS / GRID / CARDS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:14px;margin:30px 0 0}
+.stat{background:#fff;border:1px solid var(--line);border-top:4px solid var(--copper);border-radius:6px;padding:16px 18px}
+.stat b{display:block;font-family:Georgia,serif;font-size:30px;color:var(--copper);line-height:1.1;margin-bottom:4px}
+.stat span{font-size:13.5px;color:var(--muted);line-height:1.4;display:block}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr))}
+.g3x{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){.g3x{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.g3x{grid-template-columns:1fr}}
+.g2x{grid-template-columns:repeat(2,1fr)}
+@media(max-width:640px){.g2x{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:20px 22px}
+.card.top{border-top:4px solid var(--teal)}
+.card.copper{border-top:4px solid var(--copper)}
+.card.green{border-top:4px solid var(--green)}
+.card.red{border-top:4px solid var(--red)}
+.card.amber{border-top:4px solid var(--amber)}
+.card p:last-child{margin-bottom:0}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--copper);color:#fff;font-weight:700;font-size:14px;margin-bottom:10px}
+ul.tight{margin:6px 0 0;padding-left:20px}
+ul.tight li{margin:4px 0}
+
+/* CALLOUT */
+.callout{background:#FBF6EA;border:1px solid #E7D9B3;border-left:5px solid var(--gold);padding:16px 20px;border-radius:4px;margin:22px 0}
+.callout.teal{background:#EAF3F3;border-color:#C5DDDD;border-left-color:var(--teal)}
+.callout.red{background:#FBEDEB;border-color:#EBC8C3;border-left-color:var(--red)}
+.callout.green{background:#EEF6F1;border-color:#C9DFD2;border-left-color:var(--green)}
+.callout b.h{display:block;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px;color:var(--muted)}
+.callout p:last-child{margin-bottom:0}
+
+/* FIGURE / SPLIT / SVG */
+figure{margin:26px 0}
+figure svg{display:block;max-width:100%;height:auto;width:100%}
+figcaption{font-size:13px;color:var(--muted);padding-top:8px}
+.split{display:grid;grid-template-columns:1.05fr 1fr;gap:34px;align-items:center}
+.split.rev{grid-template-columns:1fr 1.05fr}
+@media(max-width:820px){.split,.split.rev{grid-template-columns:1fr;gap:20px}}
+.svgbox{background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px}
+.svgbox svg{display:block;width:100%;height:auto}
+
+/* TABLE */
+.tbl{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px 0}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);font-size:15.5px;min-width:560px}
+th{background:var(--dark);color:#fff;text-align:left;padding:12px 14px;font-weight:600}
+td{padding:11px 14px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#FAF8F3}
+td.k{font-weight:700;color:var(--dark);width:24%}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.05em;padding:2px 9px;border-radius:20px;color:#fff;background:var(--teal)}
+.tag.c{background:var(--copper)}.tag.g{background:var(--green)}.tag.r{background:var(--red)}.tag.a{background:var(--amber);color:#1C2526}.tag.d{background:var(--dark)}
+.lt{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:2px 8px;border-radius:20px;background:var(--dark);color:#fff;margin:0 4px 4px 0;cursor:help}
+
+/* PHASE + STEPS (reused for "how it works") */
+.phase{display:flex;align-items:center;gap:12px;margin:34px 0 14px}
+.phase .p{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#fff;background:var(--dark);padding:5px 12px;border-radius:20px}
+.phase .p.b{background:var(--copper)}
+.phase h3{margin:0}
+.steps7{display:grid;gap:14px}
+.sc{display:grid;grid-template-columns:54px 1fr auto;gap:0 18px;align-items:center;background:#fff;border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:6px;padding:16px 20px}
+.sc.b{border-left-color:var(--copper)}
+.sc .n{font-family:Georgia,serif;font-size:38px;font-weight:700;color:var(--teal);line-height:1}
+.sc.b .n{color:var(--copper)}
+.sc h4{margin:0 0 2px}
+.sc p{margin:0;font-size:14.5px;color:var(--muted)}
+.sc .eq{font-family:Consolas,"Courier New",monospace;font-size:14px;background:#F4F2ED;border:1px solid var(--line);border-radius:4px;padding:3px 8px;display:inline-block;margin-top:6px;color:var(--dark)}
+.sc .res{text-align:right;min-width:120px}
+.sc .res b{display:block;font-family:Georgia,serif;font-size:26px;color:var(--dark);line-height:1.1}
+.sc .res span{font-size:12px;color:var(--muted)}
+@media(max-width:640px){.sc{grid-template-columns:40px 1fr;gap:6px 12px}.sc .res{grid-column:1 / -1;text-align:left;border-top:1px dashed var(--line);padding-top:8px}.sc .res b{display:inline;font-size:22px;margin-right:6px}.sc .n{font-size:30px}}
+
+/* FORMULA-STYLE DARK PANEL */
+.formula{background:var(--dark);color:#EDEAE1;border-radius:6px;padding:20px 24px;margin:22px 0}
+.formula .eqn{font-family:Georgia,serif;font-size:clamp(17px,2.2vw,22px);line-height:1.8;text-align:center;overflow-x:auto}
+.formula .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:6px 22px;margin-top:14px;font-size:14px;color:#CFCABD}
+.formula .legend b{color:#F2D9A0;font-family:Georgia,serif}
+
+/* CALCULATOR / LAB */
+.calc{background:#fff;border:1px solid var(--line);border-top:5px solid var(--copper);border-radius:6px;padding:24px;margin:20px 0}
+.calc h3{margin-top:0}
+.calc .inputs,.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:14px 18px}
+.calc label{display:block;font-size:13.5px;font-weight:600;color:var(--dark)}
+.calc label small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.calc input[type=number],.calc input[type=text],.calc select,.calc textarea{width:100%;margin-top:4px;padding:9px 10px;border:1px solid #C9C3B4;border-radius:4px;font-size:16px;font-family:inherit;background:#FDFCFA;color:var(--ink)}
+.calc textarea{min-height:76px;resize:vertical}
+.calc input:focus,.calc select:focus,.calc textarea:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+.calc input[type=range]{width:100%;accent-color:var(--copper);margin-top:8px}
+.calc .btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+button,.btn{background:var(--dark);color:#fff;border:0;border-radius:4px;padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+button:hover{background:var(--teal)}
+button.alt{background:#fff;color:var(--dark);border:1px solid #C9C3B4}
+button.alt:hover{background:#F4F2ED;color:var(--dark)}
+button.cu{background:var(--copper)}
+button.cu:hover{background:#9C6620}
+.calc .msg,.msg{font-size:13.5px;color:var(--red);font-weight:600}
+.calc .out{margin-top:20px}
+.big{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0}
+.big div{flex:1 1 190px;background:var(--dark);color:#fff;border-radius:6px;padding:14px 18px}
+.big b{display:block;font-family:Georgia,serif;font-size:30px;color:var(--gold);line-height:1.1}
+.big span{font-size:13px;color:#D9D4C7}
+.calc table{min-width:520px}
+.stage{background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px;overflow:hidden}
+.stage svg{display:block;width:100%;height:auto}
+.stage.dark{background:#0E1213;border-color:#0E1213}
+.grid>*,.case .row>*,.split>*,.ctl>*{min-width:0}
+.stage{max-width:100%}
+@media(max-width:700px){.stage{overflow-x:auto;-webkit-overflow-scrolling:touch}.stage svg[viewBox^="0 0 640"]{min-width:540px}}
+
+/* SEGMENTED TOGGLE */
+.seg{display:inline-flex;border:1px solid #C9C3B4;border-radius:6px;overflow:hidden;background:#fff}
+.seg button{border-radius:0;background:#fff;color:var(--dark);padding:8px 16px;border:0}
+.seg button:hover{background:#F4F2ED;color:var(--dark)}
+.seg button.on{background:var(--dark);color:#fff}
+.seg button.on.after{background:var(--copper)}
+
+/* CASES (BAD DASHBOARD CLINIC) */
+.case{background:#fff;border:1px solid var(--line);border-top:5px solid var(--copper);border-radius:6px;padding:22px;margin:28px 0}
+.case-h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;margin-bottom:8px}
+.case-n{font-family:Georgia,serif;font-size:44px;color:var(--copper);font-weight:700;line-height:1}
+.case h3{margin:0;font-size:24px}
+.case .ctx{color:var(--muted);font-size:15px;margin:0 0 14px}
+.case .row{display:grid;grid-template-columns:1.25fr 1fr;gap:24px;align-items:start}
+@media(max-width:900px){.case .row{grid-template-columns:1fr}}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:5px;background:#FDFCFA;margin:6px 0;cursor:pointer;font-size:14.5px;line-height:1.45}
+.chk input{margin-top:4px;accent-color:var(--copper);flex:0 0 auto}
+.chk.ok{border-color:var(--green);background:#EEF6F1}
+.chk.bad{border-color:var(--red);background:#FBEDEB}
+.chk.miss{border-color:var(--amber);background:#FFFBF1}
+.chk .why{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.fb{font-size:14.5px;margin-top:10px;padding:10px 14px;border-radius:5px;background:#F4F2ED;border:1px solid var(--line);display:none}
+.fb.show{display:block}
+.chg{display:none;margin-top:14px}
+.chg.show{display:block}
+.chg ul{margin:6px 0 0;padding-left:20px}
+.chg li{margin:4px 0;font-size:14.5px}
+
+/* WALL OF TILES + TABLES USED IN CASES */
+.wall{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px;background:#2a2a2a}
+.wall .tile{border-radius:4px;padding:10px 8px;text-align:center;color:#fff;font-weight:700;border:2px solid #fff;box-shadow:2px 2px 6px rgba(0,0,0,.5)}
+.wall .tile span{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:4px}
+.wall .tile b{display:block;font-family:Georgia,serif;font-size:24px}
+@media(max-width:560px){.wall{grid-template-columns:repeat(3,1fr)}.wall .tile b{font-size:18px}}
+.kpi3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:6px 4px 4px}
+.kpi3 .k{border-left:4px solid var(--grey,#B9B5AA);padding:4px 0 4px 12px}
+.kpi3 .k.hot{border-left-color:var(--copper)}
+.kpi3 .k small{display:block;color:var(--muted);font-size:12px;min-height:34px}
+.kpi3 .k b{display:block;font-family:Georgia,serif;font-size:36px;color:#8C8A82;line-height:1.1}
+.kpi3 .k.hot b{color:var(--copper)}
+.kpi3 .k i{font-style:normal;font-size:12px;color:var(--muted)}
+@media(max-width:560px){.kpi3{grid-template-columns:1fr}}
+.ttl{font-family:Georgia,serif;font-weight:700;font-size:19px;line-height:1.3;color:var(--dark);margin:6px 6px 2px}
+.sub{font-size:13px;color:var(--muted);margin:0 6px 8px}
+.srcn{font-size:11.5px;color:var(--muted);margin:8px 6px 2px}
+.tb-bad{border-collapse:collapse;min-width:0;width:100%;font-size:12.5px;border:3px solid #000;background:#fff}
+.tb-bad th{background:#4472C4;color:#fff;border:2px solid #000;padding:5px;text-align:center}
+.tb-bad td{border:2px solid #000;padding:5px;text-align:center;font-weight:700;background:#fff!important}
+.tb-good{border-collapse:collapse;min-width:0;width:100%;font-size:13.5px;border:0;background:#fff}
+.tb-good th{background:#fff;color:var(--muted);font-weight:600;border-bottom:1.5px solid #8C8A82;padding:6px 8px;text-align:right;font-size:12px}
+.tb-good th:first-child{text-align:left}
+.tb-good td{border:0;border-top:1px solid #ECE8DD;padding:6px 8px;text-align:right;color:#6E6C65;background:#fff!important}
+.tb-good td:first-child{text-align:left}
+.tb-good tr.hot td{color:var(--dark);font-weight:700;background:#FBF6EA!important}
+.tb-good tr.hot td.cu{color:var(--copper)}
+.tb-good tr.tot td{border-top:1.5px solid #8C8A82;color:var(--dark);font-weight:700}
+
+/* QUIZ */
+.quiz{background:#fff;border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:6px;padding:18px 22px;margin:28px 0 8px}
+.quiz h4{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.quiz .q{margin:0 0 16px;padding-bottom:14px;border-bottom:1px dashed var(--line)}
+.quiz .q:last-of-type{border-bottom:0;margin-bottom:6px}
+.quiz .qt{font-weight:700;margin-bottom:6px}
+.opt{display:block;padding:8px 12px;border:1px solid var(--line);border-radius:5px;margin:5px 0;cursor:pointer;font-size:15px;background:#FDFCFA}
+.opt:hover{border-color:var(--teal)}
+.opt.ok{border-color:var(--green);background:#EEF6F1}
+.opt.bad{border-color:var(--red);background:#FBEDEB}
+.opt[disabled]{cursor:default}
+.qwhy{display:none;font-size:14px;color:var(--muted);margin:6px 0 0;padding-left:2px}
+.qwhy.show{display:block}
+
+/* EXERCISE STUDIO */
+.score{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0 8px}
+.score .s{flex:1 1 170px;background:var(--dark);color:#fff;border-radius:6px;padding:14px 18px}
+.score .s b{display:block;font-family:Georgia,serif;font-size:32px;color:var(--gold);line-height:1.1}
+.score .s span{font-size:13px;color:#D9D4C7}
+.prog{height:10px;background:#E6E1D4;border-radius:6px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--copper);width:0;transition:width .4s}
+.sx{background:#fff;border:1px solid var(--line);border-top:5px solid var(--teal);border-radius:6px;padding:22px;margin:26px 0}
+.sx-h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-bottom:10px}
+.sx-n{font-family:Georgia,serif;font-size:40px;color:var(--teal);font-weight:700;line-height:1}
+.sx h3{margin:0;font-size:23px}
+.ctxgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:12px;margin:10px 0 16px}
+.ctxgrid div{background:#F4F2ED;border:1px solid var(--line);border-radius:5px;padding:10px 14px;font-size:14.5px}
+.ctxgrid div b{display:block;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.step-h{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--copper);font-weight:700;margin:18px 0 6px}
+.res-box{display:none;margin-top:16px;border:2px solid var(--teal);border-radius:6px;padding:16px 20px;background:#F6FAFA}
+.res-box.show{display:block}
+.res-box .tot{font-family:Georgia,serif;font-size:34px;color:var(--teal);font-weight:700}
+
+/* RULES / HYP */
+.rules{counter-reset:r;margin:0;padding:0;list-style:none}
+.rules li{counter-increment:r;background:#fff;border:1px solid var(--line);border-left:5px solid var(--copper);padding:14px 18px 14px 58px;margin:10px 0;border-radius:4px;position:relative}
+.rules li::before{content:counter(r);position:absolute;left:16px;top:10px;font-family:Georgia,serif;font-size:28px;color:var(--copper);font-weight:700}
+.hyp{border:2px dashed var(--amber);background:#FFFBF1;border-radius:6px;padding:20px 24px;margin-top:20px}
+.hyp .tag{background:var(--amber);color:#1C2526}
+
+/* PALETTE SWATCHES */
+.sw{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.sw div{width:96px;font-size:11.5px;color:var(--muted);text-align:center}
+.sw i{display:block;height:44px;border-radius:5px;border:1px solid rgba(0,0,0,.12);margin-bottom:4px}
+
+/* STICKY NOTES (storyboard) */
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:12px}
+.note{background:#FBF1C7;border:1px solid #E7D9B3;border-radius:2px;padding:12px 12px 14px;font-size:14px;box-shadow:2px 3px 0 rgba(0,0,0,.08);transform:rotate(-.6deg)}
+.note:nth-child(even){transform:rotate(.7deg);background:#F6E7B8}
+.note b{display:block;font-family:Georgia,serif;color:var(--copper);margin-bottom:2px}
+
+/* CHECKLIST */
+.cl{list-style:none;margin:0;padding:0}
+.cl li{margin:6px 0}
+.cl label{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:5px;padding:9px 12px;cursor:pointer;font-size:15px}
+.cl input{margin-top:4px;accent-color:var(--copper)}
+
+footer{background:var(--dark);color:#CFCABD;padding:40px 0;margin-top:70px;font-size:14px}
+footer b{color:#fff}
+footer p{margin:0 0 10px}
+
+@media print{
+  nav.toc{display:none}
+  .hero{min-height:360px}
+  section{page-break-inside:avoid}
+  button,.btns,.seg{display:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <svg class="hero-art" viewBox="0 0 560 340" aria-hidden="true" role="img">
+    <g fill="none" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" opacity=".55">
+      <polyline stroke="#E15759" points="10,210 50,150 90,230 130,120 170,200 210,140 250,190"/>
+      <polyline stroke="#4E79A7" points="10,120 50,200 90,100 130,180 170,90 210,170 250,110"/>
+      <polyline stroke="#59A14F" points="10,260 50,190 90,250 130,170 170,240 210,160 250,230"/>
+      <polyline stroke="#B07AA1" points="10,160 50,110 90,170 130,80 170,150 210,100 250,170"/>
+      <polyline stroke="#EDC948" points="10,90 50,140 90,70 130,150 170,60 210,130 250,80"/>
+    </g>
+    <g stroke="#3a4547" stroke-dasharray="4 5"><line x1="10" y1="40" x2="250" y2="40"/><line x1="10" y1="300" x2="250" y2="300"/></g>
+    <line x1="280" y1="30" x2="280" y2="310" stroke="#C59B43" stroke-width="1.5" stroke-dasharray="3 6"/>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline stroke="#6A7678" stroke-width="2.4" points="310,200 350,196 390,202 430,198 470,203 510,199 550,201"/>
+      <polyline stroke="#6A7678" stroke-width="2.4" points="310,150 350,155 390,148 430,153 470,150 510,154 550,151"/>
+      <polyline stroke="#B77A2B" stroke-width="5" points="310,230 350,222 390,205 430,170 470,120 510,80 550,52"/>
+    </g>
+    <circle cx="550" cy="52" r="7" fill="#C59B43"/>
+    <text x="316" y="268" font-family="Georgia,serif" font-size="15" fill="#F2D9A0">One thing to look at.</text>
+    <text x="316" y="288" font-family="Segoe UI,Arial" font-size="12" fill="#9FA9AB">Everything else stays quiet.</text>
+    <text x="14" y="334" font-family="Segoe UI,Arial" font-size="12" fill="#9FA9AB">Showing data</text>
+    <text x="316" y="334" font-family="Segoe UI,Arial" font-size="12" fill="#F2D9A0">Telling a story</text>
+  </svg>
+  <div class="hero-shade"></div>
+  <div class="wrap">
+    <div class="kicker">Data Storytelling &amp; Data Visualization · Self-study guide</div>
+    <h1>From Showing Data to Telling a Story</h1>
+    <p class="lead">Confused about what to put on a dashboard, which chart to pick, or why nobody acts on your reports? This page walks you from the basics to hands-on practice: six lessons, nine bad dashboards to fix, a what-if lab and seven exercises on choosing the right data.</p>
+    <div class="meta">
+      <span><b>Method:</b> <i>Storytelling with Data</i> — C. Nussbaumer Knaflic (Wiley, 2015)</span>
+      <span><b>Inside:</b> 6 lessons · 9 makeovers · 6 labs · 7 exercises</span>
+      <span><b>Data:</b> all examples are fictional</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Table of contents"><div class="wrap">
+  <a href="#overview">Overview</a><a href="#s0">Start here</a><a href="#s1">1 Context</a><a href="#s2">2 Visual</a><a href="#s3">3 Clutter</a><a href="#s4">4 Focus</a><a href="#s5">5 Design</a><a href="#s6">6 Story</a><a href="#s7">Clinic</a><a href="#s8">What-if Lab</a><a href="#s9">Exercises</a><a href="#s10">Toolkit</a>
+</div></nav>
+
+<div class="exec" id="overview"><div class="wrap">
+  <div class="kicker">The whole method on one screen</div>
+  <h2>Six lessons turn a chart into a decision</h2>
+  <p class="lead2">Your tools do not know your story. The analyst does. Follow the six lessons in order, because each one builds on the last.</p>
+  <div class="grid">
+    <div class="c"><b>1</b><em>Understand the context</em><p>Who decides? What should they do? Which data proves it?</p></div>
+    <div class="c"><b>2</b><em>Choose the right visual</em><p>A dozen visuals cover nearly everything. Retire pies, 3D and dual axes.</p></div>
+    <div class="c"><b>3</b><em>Eliminate clutter</em><p>Every element costs attention. Delete what carries no information.</p></div>
+    <div class="c"><b>4</b><em>Focus attention</em><p>Grey for context, one accent colour for the point.</p></div>
+    <div class="c"><b>5</b><em>Think like a designer</em><p>Make it obvious how to read it. Use words, align, leave white space.</p></div>
+    <div class="c"><b>6</b><em>Tell a story</em><p>Setup, conflict, resolution, then a clear call to action.</p></div>
+  </div>
+</div></div>
+
+<!-- ========== START ========== -->
+<section id="s0"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">0</div><span class="t">Start here</span></div>
+  <h2>How to use this page</h2>
+  <div class="takeaway">Read a lesson, check yourself, fix real bad dashboards, then practise choosing data under realistic constraints.</div>
+
+  <div class="stats">
+    <div class="stat"><b>6</b><span>lessons with rules of thumb and logistics examples</span></div>
+    <div class="stat"><b>9</b><span>bad dashboards to diagnose and rebuild, before and after</span></div>
+    <div class="stat"><b>6</b><span>what-if labs: change an input, watch the story change</span></div>
+    <div class="stat"><b>7</b><span>scenarios on picking data, visual and title, with scoring</span></div>
+  </div>
+
+  <h3>Pick a learning path</h3>
+  <div class="grid g3">
+    <div class="card copper"><span class="tag c">20 minutes</span><h4 style="margin-top:8px">Quick start</h4>
+      <ul class="tight"><li>Skim the six lesson cards above</li><li>Open 2 cases in the <a href="#s7">Clinic</a></li><li>Play the <a href="#lab-d">Declutter lab</a></li></ul></div>
+    <div class="card top"><span class="tag">90 minutes</span><h4 style="margin-top:8px">Standard</h4>
+      <ul class="tight"><li>Read Lessons 1–6 and take each quiz</li><li>Diagnose 4 Clinic cases before revealing</li><li>Complete 3 exercises in the <a href="#s9">Studio</a></li></ul></div>
+    <div class="card green"><span class="tag g">Half a day</span><h4 style="margin-top:8px">Full course</h4>
+      <ul class="tight"><li>Everything above, plus all 9 cases</li><li>All six labs and all seven exercises</li><li>Redesign one of your own dashboards with the <a href="#s10">Toolkit</a></li></ul></div>
+  </div>
+
+  <div class="callout teal"><b class="h">About the data and the sources</b>
+    <p>Every number, hub, vendor and zone on this page is <b>fictional</b> and made up for teaching. The method, concepts and rules come from <i>Storytelling with Data</i> by Cole Nussbaumer Knaflic (Wiley, 2015). This page is an original study guide, not a copy of the book, so buy the book for the full treatment and the original examples.</p>
+    <p>Two labels appear throughout. <span class="tag a">Application note</span> marks my own advice on applying the book to dashboards. <span class="tag a">Teaching heuristic</span> marks a simple scoring rule I made up for practice; it is not from the book.</p></div>
+</div></section>
+
+<!-- ========== LESSON 1 ========== -->
+<section id="s1"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">1</div><span class="t">Lesson 1 · Context</span></div>
+  <h2>Understand the context before you touch a chart</h2>
+  <div class="takeaway">Success starts before the visualization. Know who decides, what you want them to do, and which data proves it.</div>
+
+  <h3>Exploratory vs. explanatory analysis</h3>
+  <p>Exploratory work is how <i>you</i> find out what is interesting. Explanatory work is how you help <i>someone else</i> understand one thing you already know. The book's image: open 100 oysters to find two pearls, then show your audience the pearls, not the oysters.</p>
+  <div class="tbl"><table>
+    <tr><th></th><th>Exploratory</th><th>Explanatory</th></tr>
+    <tr><td class="k">Goal</td><td>Find out what might be interesting</td><td>Explain one specific point</td></tr>
+    <tr><td class="k">Audience</td><td>You and fellow analysts</td><td>A named decision maker</td></tr>
+    <tr><td class="k">Output</td><td>Many quick, rough views</td><td>One or two polished views with a message</td></tr>
+    <tr><td class="k">Typical mistake</td><td>Sending the rough views to the boss</td><td>Hiding the conclusion and making them re-discover it</td></tr>
+    <tr><td class="k">In logistics</td><td>A pivot table with 40 filters</td><td>A weekly page that opens with "what changed, what to do"</td></tr>
+  </table></div>
+
+  <h3>Who, What and How</h3>
+  <div class="grid g3">
+    <div class="card top"><div class="num">1</div><h4>Who</h4><p>Be specific about the audience. "Internal and external stakeholders" is not an audience; "the Operations Director who signs the lease" is. Name the decision maker, and think about whether they already trust you as an expert.</p></div>
+    <div class="card copper"><div class="num">2</div><h4>What</h4><p>State what they should <b>know or do</b>: approve, fund, stop, escalate, change. If you cannot name an action, ask whether you need to communicate at all. If you present only data, people say "interesting" and move on.</p></div>
+    <div class="card green"><div class="num">3</div><h4>How</h4><p>Only now ask which data supports the point. The data is evidence for the story, not the story. Do not hide evidence that cuts the other way; a sharp reader will find it and doubt everything else.</p></div>
+  </div>
+
+  <h3>Mechanism and tone</h3>
+  <div class="grid g3">
+    <div class="card"><span class="tag">Live talk</span><p style="margin-top:8px">You control pace and attention, and you are there to answer questions. Keep slides sparse and do not use them as a teleprompter.</p></div>
+    <div class="card"><span class="tag a">Slideument</span><p style="margin-top:8px">One file serving both a talk and a read-alone document. It satisfies neither fully; later lessons show ways around it.</p></div>
+    <div class="card"><span class="tag c">Written / dashboard</span><p style="margin-top:8px">The reader controls pace and nobody is there to explain, so titles, labels and notes must do the talking.</p></div>
+  </div>
+  <p class="mt">Also decide the <b>tone</b>: celebrating a win, lighting a fire, or reporting calmly. Tone drives later choices such as colour and layout.</p>
+  <div class="callout"><b class="h">Application note</b><p>A self-serve dashboard sits at the "written" end. Nobody is in the room, so each page needs a headline that says what to conclude, not just a topic label.</p></div>
+
+  <h3>The Big Idea and the 3-minute story</h3>
+  <div class="split">
+    <div>
+      <p>The <b>3-minute story</b> is what you would say if you only had three minutes. The <b>Big Idea</b> shrinks it to one sentence. Being short is harder than being long, and it frees you from depending on slides.</p>
+      <p>A Big Idea must (1) state your unique point of view, (2) say what is at stake, and (3) be a complete sentence.</p>
+    </div>
+    <div class="card copper">
+      <h4>Example (fictional)</h4>
+      <p><i>"Storage demand will outgrow our current warehouse by year 3. We recommend securing additional space now, because waiting puts projects at risk; please approve the lease study."</i></p>
+      <p class="small">Point of view: lease now. Stake: projects at risk. Complete sentence with an ask.</p>
+    </div>
+  </div>
+
+  <h3>Questions to ask whoever requested the work</h3>
+  <ul class="rules">
+    <li>What background information is essential?</li>
+    <li>Who is the audience or decision maker, and what do we know about them?</li>
+    <li>What biases might make them supportive of, or resistant to, the message?</li>
+    <li>What data would strengthen the case, and is it familiar to them?</li>
+    <li>Where are the risks that could weaken the case?</li>
+    <li>What does a successful outcome look like?</li>
+    <li>If you had one sentence, what would you say?</li>
+  </ul>
+
+  <h3>Storyboard on paper first</h3>
+  <p>Do not start in presentation software; it pulls you into slide-making mode and makes you attached to what you built. Use sticky notes or paper so ideas are cheap to move or bin. Here is a storyboard for the fictional warehouse case.</p>
+  <div class="notes">
+    <div class="note"><b>1 · Context</b>Why we forecast space: build or lease decisions are costly and hard to reverse.</div>
+    <div class="note"><b>2 · Problem</b>Forecast demand crosses current capacity in year 3.</div>
+    <div class="note"><b>3 · Evidence</b>One line chart: forecast vs capacity, gap shaded.</div>
+    <div class="note"><b>4 · Options</b>Lease now, build later, or raise utilization.</div>
+    <div class="note"><b>5 · Ask</b>Approve a lease study this quarter.</div>
+  </div>
+  <p class="small mt">Busy audience that already trusts you? Move note 5 to the front and lead with the ask.</p>
+
+  <div class="calc" id="canvasBox">
+    <h3>Try it: Context Canvas</h3>
+    <p class="small">Fill in what you know. The canvas drafts a Big Idea and a 3-minute story skeleton and tells you what is still missing. Nothing leaves your browser.</p>
+    <div class="inputs">
+      <label>Audience (the decision maker)<small>A named role, not "stakeholders"</small><input type="text" id="cv_aud" placeholder="e.g. Operations Director"></label>
+      <label>Action you want from them<small>Verb + object</small><input type="text" id="cv_act" placeholder="e.g. approve a lease study"></label>
+      <label>Evidence (the data)<small>The one or two facts that prove it</small><input type="text" id="cv_ev" placeholder="e.g. forecast demand exceeds capacity in year 3"></label>
+      <label>What is at stake?<small>What happens if nothing changes</small><input type="text" id="cv_stake" placeholder="e.g. projects stall and we pay peak rates"></label>
+      <label>How will you communicate?<select id="cv_mech"><option value="live">Live presentation</option><option value="read">Written / dashboard (read alone)</option><option value="both">Both (slideument)</option></select></label>
+      <label>Tone<select id="cv_tone"><option>Urgent, but calm</option><option>Celebratory</option><option>Serious and factual</option><option>Light and engaging</option></select></label>
+    </div>
+    <div class="btns"><button id="cv_go" class="cu">Draft my story</button><button id="cv_ex" class="alt">Fill with the example</button><span class="msg" id="cv_msg"></span></div>
+    <div class="out" id="cv_out"></div>
+  </div>
+
+  <div class="quiz" id="quiz-1"></div>
+</div></section>
+
+<!-- ========== LESSON 2 ========== -->
+<section id="s2"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">2</div><span class="t">Lesson 2 · Choose a visual</span></div>
+  <h2>Pick the chart your audience can read fastest</h2>
+  <div class="takeaway">A dozen visual types cover nearly every business need. The right one is whichever is easiest for your audience to read.</div>
+
+  <p>Tables interact with our <b>verbal</b> system: we read them. Graphs interact with our <b>visual</b> system, which is faster. That one idea explains most of the advice below.</p>
+
+  <h3>Choose by the message, not by the tool</h3>
+  <div class="tbl"><table id="pickTable"></table></div>
+
+  <div class="calc" id="pickBox">
+    <h3>Try it: Chart Picker</h3>
+    <p class="small">Choose what you want to say. The picker recommends a visual and tells you what to avoid.</p>
+    <label style="max-width:560px">My message is about…<select id="pk_sel"></select></label>
+    <div class="out" id="pk_out"></div>
+  </div>
+
+  <h3>Four visuals to retire</h3>
+  <div class="grid g4">
+    <div class="card red"><h4>Pie chart</h4><p>Eyes cannot judge angles and areas well. When slices are close, you cannot rank them at all.</p><p class="small"><b>Swap:</b> sorted horizontal bars. Try it in <a href="#lab-b">Lab B</a>.</p></div>
+    <div class="card red"><h4>Donut chart</h4><p>It asks readers to compare arc lengths, which is harder still than a pie.</p><p class="small"><b>Swap:</b> a bar, or just the number.</p></div>
+    <div class="card red"><h4>3D</h4><p>Use 3D only if you truly plot a third dimension. Otherwise it skews values; in the book a bar of 1 reads as about 0.8.</p><p class="small"><b>Swap:</b> flat 2D.</p></div>
+    <div class="card red"><h4>Secondary y-axis</h4><p>Readers must work out which axis each series uses, and the pairing implies a relationship that may not exist.</p><p class="small"><b>Swap:</b> direct labels or two panels sharing the x-axis. Try <a href="#lab-c">Lab C</a>.</p></div>
+  </div>
+  <div class="callout"><b class="h">If you still want a pie</b><p>Pause and ask why. If you can answer, label the values and keep it flat. It should never be the first chart you reach for.</p></div>
+
+  <h3>Rules for the two workhorses</h3>
+  <div class="grid g2">
+    <div class="card copper"><h4>Bar charts</h4>
+      <ul class="tight">
+        <li><b>Zero baseline, always.</b> Eyes compare bar ends, so a truncated axis fakes a difference. Test it in <a href="#lab-a">Lab A</a>.</li>
+        <li>Bars wider than the gap between them, but not so wide that readers compare areas.</li>
+        <li>Natural order if one exists (age bands, months); otherwise sort, biggest or most important first.</li>
+        <li>Horizontal bars when labels are long: text reads left to right and the label comes before the data.</li>
+        <li>Stacked bars: only the bottom segment shares a baseline, so put the series you care about there.</li>
+      </ul></div>
+    <div class="card top"><h4>Line charts</h4>
+      <ul class="tight">
+        <li>Use for continuous data, usually time. The line implies the points are connected.</li>
+        <li>Keep time steps even. Mixing decades and single years distorts the shape.</li>
+        <li>A non-zero baseline is allowed, but say so and avoid over-zooming tiny changes.</li>
+        <li>Show forecast as a thinner dotted line with light shading, never as the same solid line as actuals.</li>
+        <li>Label lines directly instead of using a legend.</li>
+      </ul></div>
+  </div>
+  <div class="grid g2 mt">
+    <div class="card"><h4>Tables</h4><p>Great for mixed audiences who each look up their own row, or when units differ. Let the data lead: light or no borders, right-aligned numbers, consistent decimals. In live talks, a table pulls attention away from you.</p></div>
+    <div class="card"><h4>Axis or data labels?</h4><p>If the big-picture trend matters, keep a light grey axis. If exact values matter, label the data points and drop the axis, because showing both is redundant.</p></div>
+  </div>
+  <div class="callout red"><b class="h">Ethics</b><p>Manipulating a scale because it supports your point is not acceptable, and it is risky: one discerning reader spots it and your credibility goes with it.</p></div>
+
+  <div class="quiz" id="quiz-2"></div>
+</div></section>
+
+<!-- ========== LESSON 3 ========== -->
+<section id="s3"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">3</div><span class="t">Lesson 3 · Clutter</span></div>
+  <h2>Clutter is your enemy</h2>
+  <div class="takeaway">Every element you add costs your audience brain power. Keep what carries information; delete what does not.</div>
+
+  <div class="grid g3">
+    <div class="card top"><h4>Cognitive load</h4><p>The mental effort needed to take in new information. Extraneous load is effort that does not help understanding.</p></div>
+    <div class="card copper"><h4>Perceived load</h4><p>What matters most is how hard your audience <i>believes</i> it will be. Decided in a glance, often unconsciously. If it looks hard, many will not try.</p></div>
+    <div class="card green"><h4>Signal vs. noise</h4><p>Signal is the message; noise is anything that does not add to it, or detracts. Maximize the share of ink spent on data.</p></div>
+  </div>
+
+  <h3>Gestalt principles: how people group what they see</h3>
+  <p>These six principles tell you what viewers will group together, and therefore which extra elements you can safely remove.</p>
+  <div class="grid g3x">
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Three clusters of dots"><g fill="#5B6568"><circle cx="20" cy="28" r="5"/><circle cx="36" cy="28" r="5"/><circle cx="52" cy="28" r="5"/><circle cx="20" cy="50" r="5"/><circle cx="36" cy="50" r="5"/><circle cx="52" cy="50" r="5"/><circle cx="90" cy="28" r="5"/><circle cx="106" cy="28" r="5"/><circle cx="122" cy="28" r="5"/><circle cx="90" cy="50" r="5"/><circle cx="106" cy="50" r="5"/><circle cx="122" cy="50" r="5"/><circle cx="160" cy="28" r="5"/><circle cx="176" cy="28" r="5"/><circle cx="160" cy="50" r="5"/><circle cx="176" cy="50" r="5"/></g></svg>
+      <h4>Proximity</h4><p>Things close together belong together. <b>Use:</b> group related KPIs; put labels next to the data they describe.</p></div>
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Rows of circles and squares"><g fill="#2E6E73"><circle cx="24" cy="18" r="6"/><circle cx="56" cy="18" r="6"/><circle cx="88" cy="18" r="6"/><circle cx="120" cy="18" r="6"/><circle cx="152" cy="18" r="6"/><circle cx="184" cy="18" r="6"/></g><g fill="#B9B5AA"><rect x="18" y="37" width="12" height="12"/><rect x="50" y="37" width="12" height="12"/><rect x="82" y="37" width="12" height="12"/><rect x="114" y="37" width="12" height="12"/><rect x="146" y="37" width="12" height="12"/><rect x="178" y="37" width="12" height="12"/></g><g fill="#2E6E73"><circle cx="24" cy="64" r="6"/><circle cx="56" cy="64" r="6"/><circle cx="88" cy="64" r="6"/><circle cx="120" cy="64" r="6"/><circle cx="152" cy="64" r="6"/><circle cx="184" cy="64" r="6"/></g></svg>
+      <h4>Similarity</h4><p>Same colour, shape or size means related. <b>Use:</b> colour a label like its line; no borders needed to show rows.</p></div>
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Dots with shaded area around the right three"><rect x="104" y="8" width="88" height="64" rx="6" fill="#EFE6CF"/><g fill="#5B6568"><circle cx="24" cy="40" r="6"/><circle cx="52" cy="40" r="6"/><circle cx="80" cy="40" r="6"/><circle cx="124" cy="40" r="6"/><circle cx="150" cy="40" r="6"/><circle cx="176" cy="40" r="6"/></g></svg>
+      <h4>Enclosure</h4><p>Things inside a boundary form a group, even a faint one. <b>Use:</b> light shading to separate forecast from actuals.</p></div>
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Dashed circle perceived as a whole"><circle cx="100" cy="40" r="28" fill="none" stroke="#B77A2B" stroke-width="7" stroke-dasharray="18 8"/></svg>
+      <h4>Closure</h4><p>We fill gaps to see a whole shape. <b>Use:</b> delete chart borders and background fills; the chart still looks complete.</p></div>
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Two dotted paths crossing"><g fill="#5B6568"><circle cx="20" cy="66" r="4"/><circle cx="46" cy="57" r="4"/><circle cx="73" cy="48" r="4"/><circle cx="100" cy="39" r="4"/><circle cx="126" cy="31" r="4"/><circle cx="153" cy="22" r="4"/><circle cx="180" cy="13" r="4"/></g><g fill="#B77A2B"><circle cx="20" cy="14" r="4"/><circle cx="46" cy="22" r="4"/><circle cx="73" cy="31" r="4"/><circle cx="126" cy="48" r="4"/><circle cx="153" cy="57" r="4"/><circle cx="180" cy="66" r="4"/></g></svg>
+      <h4>Continuity</h4><p>Eyes follow the smoothest path. <b>Use:</b> drop the vertical axis line; aligned labels and bars imply it.</p></div>
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Circles connected by lines"><g stroke="#B77A2B" stroke-width="2.5"><line x1="30" y1="22" x2="170" y2="22"/><line x1="30" y1="58" x2="170" y2="58"/></g><circle cx="30" cy="22" r="8" fill="#2E6E73"/><circle cx="170" cy="22" r="8" fill="#B9B5AA"/><circle cx="30" cy="58" r="8" fill="#B9B5AA"/><circle cx="170" cy="58" r="8" fill="#2E6E73"/></svg>
+      <h4>Connection</h4><p>Connected things are grouped, even across colours. <b>Use:</b> lines in a line chart link points into a series.</p></div>
+  </div>
+
+  <h3>Visual order: alignment, white space, contrast</h3>
+  <div class="grid g3">
+    <div class="card copper"><h4>Alignment</h4><p>Create clean lines. Left-align text; centre-aligned blocks leave ragged edges and look sloppy. Put the title, axis title and legend top-left so readers learn how to read before they see data. Avoid diagonal text: one study the book cites found 45° text about 52% slower to read and 90° text about 205% slower.</p></div>
+    <div class="card top"><h4>White space</h4><p>People fear empty space, but it works like a pause in a talk. Keep margins clear, do not stretch charts to fill the page, and never add data just because there is room. If one thing matters most, make it the only thing on the page.</p></div>
+    <div class="card green"><h4>Contrast</h4><p>It is easy to spot a hawk in a sky of pigeons, and hard when there are many kinds of birds. The more things you make different, the less any one stands out. Use contrast only for the point.</p></div>
+  </div>
+
+  <h3>Declutter in six moves</h3>
+  <div class="steps7">
+    <div class="sc"><div class="n">1</div><div><h4>Remove the chart border</h4><p>Closure: the chart still reads as a whole.</p></div><div class="res"><b>Delete</b><span>border</span></div></div>
+    <div class="sc"><div class="n">2</div><div><h4>Remove gridlines</h4><p>Or make them thin and light grey so they never compete.</p></div><div class="res"><b>Delete</b><span>gridlines</span></div></div>
+    <div class="sc"><div class="n">3</div><div><h4>Remove data markers</h4><p>The line already shows the data; use markers on purpose, not by default.</p></div><div class="res"><b>Delete</b><span>markers</span></div></div>
+    <div class="sc"><div class="n">4</div><div><h4>Clean up axis labels</h4><p>Trim trailing zeros, abbreviate months, keep text horizontal.</p></div><div class="res"><b>Trim</b><span>labels</span></div></div>
+    <div class="sc b"><div class="n">5</div><div><h4>Label data directly</h4><p>Proximity: put the name next to the line and drop the legend.</p></div><div class="res"><b>Label</b><span>directly</span></div></div>
+    <div class="sc b"><div class="n">6</div><div><h4>Use consistent colour</h4><p>Similarity: colour the label like its data.</p></div><div class="res"><b>Match</b><span>colours</span></div></div>
+  </div>
+  <div class="callout teal"><b class="h">Exception: redundancy that helps</b><p>Keep $, % and thousands separators on the numbers themselves. A chart titled "$ millions" with bare axis numbers forces the reader to remember the unit.</p></div>
+  <p><a href="#lab-d"><b>Play with all six moves in the Declutter lab →</b></a></p>
+
+  <div class="quiz" id="quiz-3"></div>
+</div></section>
+
+<!-- ========== LESSON 4 ========== -->
+<section id="s4"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">4</div><span class="t">Lesson 4 · Focus</span></div>
+  <h2>Focus your audience's attention</h2>
+  <div class="takeaway">Use size, colour and position sparingly so people look at what matters before they know they are looking.</div>
+
+  <h3>How people see and remember</h3>
+  <div class="grid g3">
+    <div class="card top"><h4>Iconic memory</h4><p>Lasts a fraction of a second and is tuned to <i>differences</i>. This is where preattentive attributes act.</p></div>
+    <div class="card copper"><h4>Short-term memory</h4><p>Holds about four chunks at once. Ten coloured series plus a legend overload it. Label directly and group information into larger chunks.</p></div>
+    <div class="card green"><h4>Long-term memory</h4><p>Pictures help recall words, and repetition helps things stick. Pair visuals with words.</p></div>
+  </div>
+
+  <h3>Preattentive attributes</h3>
+  <p>These are features the brain notices without effort. Some can encode <b>quantity</b>; others only separate <b>categories</b>.</p>
+  <div class="tbl"><table>
+    <tr><th>Attribute</th><th>Quantity or category?</th><th>Dashboard use</th></tr>
+    <tr><td class="k">Position, line length</td><td><span class="tag g">Quantity</span> can encode value</td><td>Why bars and lines are easy to read.</td></tr>
+    <tr><td class="k">Line width, size, colour intensity</td><td><span class="tag a">Quantity</span> to a limited extent</td><td>Size signals importance; saturation makes a heatmap.</td></tr>
+    <tr><td class="k">Colour hue, shape, orientation, curvature, enclosure</td><td><span class="tag d">Category</span></td><td>Separate series or highlight one; "which is greater, red or blue?" is meaningless.</td></tr>
+    <tr><td class="k">Added marks (labels, markers, underline)</td><td><span class="tag d">Category</span></td><td>"Look here" signals, for example a marker and label on the last point.</td></tr>
+    <tr><td class="k">Bold, italics, underline (text)</td><td><span class="tag d">Category</span></td><td>Bold is the cleanest; italics are mild; underline adds noise.</td></tr>
+    <tr><td class="k">Motion, blinking</td><td><span class="tag r">Avoid</span></td><td>Flashing is more annoying than helpful. In a live talk, a simple appear/disappear build can guide attention; avoid fly-ins and fades.</td></tr>
+  </table></div>
+
+  <h3>The recipe: everything grey, then one accent</h3>
+  <ol class="rules">
+    <li><b>Push everything to the background.</b> Grey axes, grey labels, grey context series.</li>
+    <li><b>Make the data stand out.</b> Data bolder and larger than axes and labels.</li>
+    <li><b>Choose the one thing.</b> One series, one bar or one quadrant carries the accent colour.</li>
+    <li><b>Add marks sparingly.</b> Label only the points that tell the story; labelling all of them creates a cluttered mess.</li>
+    <li><b>Say it in words.</b> Make the title name what to look at, and match its colour to the data it describes.</li>
+  </ol>
+  <div class="callout"><b class="h">The "where are your eyes drawn?" test</b><p>Finish the visual, look away, look back, and note where your eyes land first. Ask a colleague to talk you through it. If they land elsewhere, change the emphasis.</p></div>
+  <div class="callout red"><b class="h">Highlighting has a cost</b><p>Highlighting one point makes the others harder to see, so avoid it during exploration. Also keep highlighted elements to a small fraction of the design; the book cites a guideline of at most about 10%.</p></div>
+
+  <h3>Colour rules</h3>
+  <div class="grid g2">
+    <div class="card"><h4>Use sparingly and consistently</h4><p>A rainbow means nothing stands out. Keep one scheme across the whole communication so readers learn that, say, copper means "look here". Change colour only to signal a real change. If regions have colours, keep them the same everywhere.</p>
+      <div class="sw"><div><i style="background:#B9B5AA"></i>Grey base</div><div><i style="background:#B77A2B"></i>Accent</div><div><i style="background:#2E6E73"></i>Positive / info</div><div><i style="background:#B64D42"></i>Problem</div></div></div>
+    <div class="card"><h4>Design for colour blindness</h4><p>Roughly 8% of men and 0.5% of women have trouble with red and green. Avoid putting them side by side, or add a second cue such as bold, saturation, or a + / − sign. Blue and orange are a safe positive/negative pair.</p></div>
+    <div class="card"><h4>Mind the tone</h4><p>Colour sets the mood. A clinical report and a light feature need different palettes. Check cultural meanings of colours for international audiences.</p></div>
+    <div class="card"><h4>Brand colours</h4><p>Pick one or two brand colours as your "look here" cues and keep the rest grey. If the brand colour is too pale to stand out, use bold black or another colour that does not clash.</p></div>
+  </div>
+
+  <h3>Size and position</h3>
+  <div class="grid g2">
+    <div class="card copper"><h4>Size = importance</h4><p>Give equal-importance items equal size. The book recounts a dashboard where the data that happened to be available took about 60% of the space and nearly steered the decision. Make design a decision, not an accident.</p></div>
+    <div class="card top"><h4>Position = reading order</h4><p>Without cues, readers start top-left and zigzag in a "Z". Put the most important thing top-left, and do not fight habits such as negative on the left, positive on the right.</p></div>
+  </div>
+  <p class="mt"><a href="#lab-e"><b>Feel preattentive attributes yourself in the Count-the-3s lab →</b></a></p>
+
+  <div class="quiz" id="quiz-4"></div>
+</div></section>
+<!-- ========== LESSON 5 ========== -->
+<section id="s5"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">5</div><span class="t">Lesson 5 · Think like a designer</span></div>
+  <h2>Make it obvious how to read it</h2>
+  <div class="takeaway">Form follows function: decide what the audience must <i>do</i> with the data, then design so they can do it with ease.</div>
+
+  <h3>Affordances: the visual says how to use it</h3>
+  <p>A door handle shows you to pull. A good visual shows you where to look. Three moves create that.</p>
+  <div class="grid g3">
+    <div class="card copper"><div class="num">1</div><h4>Highlight the important stuff</h4><p>Layer size, colour and bold on the one thing that matters. Keep the highlighted share small.</p></div>
+    <div class="card red"><div class="num">2</div><h4>Eliminate distractions</h4><p>Ask of every item: <i>would removing this change anything?</i> If not, remove it. Summarize detail the audience does not need; move the rest to an appendix.</p></div>
+    <div class="card top"><div class="num">3</div><h4>Create a visual hierarchy</h4><p>Order things by importance with size, colour and position. Super-categories (for example Age / Region / Income) give readers a frame.</p></div>
+  </div>
+
+  <h3>Accessibility: usable by people with different skills</h3>
+  <div class="grid g2">
+    <div class="card"><h4>Do not overcomplicate</h4>
+      <p>Research the book cites found that instructions in a fussy font were judged harder, and people were less likely to try them. The more complicated it looks, the less likely people are to spend time on it.</p>
+      <ul class="tight"><li>Use one legible font and size.</li><li>Prefer simple words; spell out acronyms on first use.</li><li>When unsure, choose the simpler option.</li><li>If readers struggle, the design is at fault, not the reader.</li></ul></div>
+    <div class="card"><h4>Text is your friend</h4>
+      <p>Every chart needs a title and every axis needs a title. State the conclusion in words, because two people can read the same chart and conclude differently. Annotate to explain a spike, a policy change or an outage.</p>
+      <p class="small">Rare exception: when you want readers to focus on peaks and valleys rather than the exact metric, you may drop the vertical axis labels deliberately.</p></div>
+  </div>
+
+  <h3>Action titles beat topic labels</h3>
+  <p>The title is prime real estate. Use it for the conclusion or the ask.</p>
+  <div class="tbl"><table>
+    <tr><th>Descriptive (topic label)</th><th>Action title (conclusion)</th></tr>
+    <tr><td>Inbound OTIF by week</td><td>Inbound OTIF fell below the 90% target in 3 of the last 4 weeks</td></tr>
+    <tr><td>Warehouse utilization</td><td>Zones A and C exceed the 85% planning ceiling; B and D have room</td></tr>
+    <tr><td>Vessel waiting time, Q3</td><td>Vessel waiting time doubled in Q3, mostly because the berth was occupied</td></tr>
+    <tr><td>Spend by vendor</td><td>Three vendors take 60% of spend: consolidate before contracts renew</td></tr>
+    <tr><td>Incident trend</td><td>Incidents in Area 3 rose for four straight months; other areas are flat</td></tr>
+    <tr><td>Receiving team capacity</td><td>Receiving has trailed inbound volume since June; two backfills would close the gap</td></tr>
+  </table></div>
+
+  <div class="calc" id="ttlBox">
+    <h3>Try it: Action Title Checker</h3>
+    <div class="callout" style="margin:0 0 14px"><b class="h">Teaching heuristic</b><p>These checks are my own rules of thumb for practice. They cannot judge whether your title is <i>true</i> or useful.</p></div>
+    <label>Paste or type a slide or dashboard title<input type="text" id="tt_in" placeholder="e.g. Warehouse utilization"></label>
+    <div class="btns"><button id="tt_go" class="cu">Check my title</button><button id="tt_ex" class="alt">Load a weak example</button></div>
+    <div class="out" id="tt_out"></div>
+  </div>
+
+  <h3>Aesthetics: pretty is functional</h3>
+  <p>People rate attractive designs as easier to use, accept them more readily and tolerate their flaws. Three habits create it without being a designer: <b>use colour deliberately</b>, <b>align elements</b> on clean lines, and <b>use white space</b> on purpose. When you meet a chart you like, ask why, and keep a library to borrow from.</p>
+
+  <h3>Winning acceptance for a new design</h3>
+  <p>Familiarity breeds comfort, so even better designs meet resistance. Four tactics help.</p>
+  <div class="grid g4">
+    <div class="card"><h4>Explain the benefit</h4><p>Say why it will look different and what readers gain.</p></div>
+    <div class="card"><h4>Show side by side</h4><p>A before and after makes the improvement visible.</p></div>
+    <div class="card"><h4>Offer options</h4><p>Create two or three versions and ask for input.</p></div>
+    <div class="card"><h4>Recruit an ally</h4><p>Win over an influential reader one to one.</p></div>
+  </div>
+  <p class="small mt">If resistance persists, test with someone neutral: the problem may be your design, not their habits.</p>
+
+  <div class="quiz" id="quiz-5"></div>
+</div></section>
+
+<!-- ========== LESSON 6 ========== -->
+<section id="s6"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">6</div><span class="t">Lesson 6 · Tell a story</span></div>
+  <h2>Give the data a beginning, a middle and an end</h2>
+  <div class="takeaway">Stories stick in ways facts alone do not. Build tension between what <i>is</i> and what <i>could be</i>, then end with a clear call to action.</div>
+
+  <h3>The three-act structure applied to a data story</h3>
+  <div class="grid g3">
+    <div class="card top"><span class="tag">Beginning · Plot</span>
+      <p style="margin-top:8px">Set the stage and answer "why should I care?" Five questions help:</p>
+      <ul class="tight"><li>Setting: when and where?</li><li>Main character: your <b>audience</b></li><li>Imbalance: what changed?</li><li>Balance: what should happen?</li><li>Solution: how do we get there?</li></ul></div>
+    <div class="card copper"><span class="tag c">Middle · Twists</span>
+      <p style="margin-top:8px">Build the case for "what could be":</p>
+      <ul class="tight"><li>Background and external comparisons</li><li>Examples and data that show the problem</li><li>What happens if nothing changes</li><li>Options and the benefits of your pick</li><li>Why they are the right people to act</li></ul></div>
+    <div class="card green"><span class="tag g">End · Call to action</span>
+      <p style="margin-top:8px">Say exactly what you want them to <b>do</b>. A classic close ties back to the opening problem and restates the urgency.</p></div>
+  </div>
+  <div class="callout"><b class="h">Why bullets alone fail</b><p>A deck of bulleted facts persuades only intellectually, and the audience argues with you in their heads. A story joins an idea to an emotion and gives people a reason to act. If you think "I have no problem to frame", look again: conflict is what holds attention, and a story where all is well rarely moves anyone.</p></div>
+
+  <h3>Narrative flow: choose the order</h3>
+  <div class="tbl"><table>
+    <tr><th>Order</th><th>Works best when…</th><th>How</th></tr>
+    <tr><td class="k">Chronological</td><td>You must build credibility, or the audience cares about your method</td><td>Problem → data → analysis → finding → recommendation</td></tr>
+    <tr><td class="k">Lead with the ending</td><td>The audience already trusts you, is busy, or wants the "so what"</td><td>Start with the ask, then back up with the strongest evidence</td></tr>
+  </table></div>
+  <p class="small">Tell a live audience which structure you are using ("I will start with what I need from you"). In a written report, the words on each page must make the point on their own.</p>
+
+  <h3>Four tactics to check the story is clear</h3>
+  <div class="grid g2">
+    <div class="card top"><h4>Horizontal logic</h4><p>Read only the slide or section titles. Together they should tell the whole story. This needs action titles. An executive summary up front, mirrored by the titles that follow, makes the path visible.</p></div>
+    <div class="card copper"><h4>Vertical logic</h4><p>Everything on one page reinforces everything else: title supports visual, words support chart, nothing unrelated. Cutting or moving to an appendix is as important as adding.</p></div>
+    <div class="card green"><h4>Reverse storyboarding</h4><p>Flip through the finished deck and write the main point of each page. The list should look like your original storyboard. If not, move, add or remove pages.</p></div>
+    <div class="card"><h4>A fresh perspective</h4><p>Give it to someone with no context and ask what they notice, what matters and what is unclear. You are too close to see it as your audience does.</p></div>
+  </div>
+
+  <h3>Repetition: Bing, Bang, Bongo</h3>
+  <div class="grid g3">
+    <div class="card"><div class="num">1</div><h4>Bing</h4><p>Tell them what you are about to tell them: an executive summary.</p></div>
+    <div class="card"><div class="num">2</div><h4>Bang</h4><p>Tell them: the detailed content.</p></div>
+    <div class="card"><div class="num">3</div><h4>Bongo</h4><p>Tell them what you told them: recap, with the action you need.</p></div>
+  </div>
+  <p class="small mt">Short, repeatable sound bites help your message travel without you.</p>
+
+  <div class="calc" id="seqBox">
+    <h3>Try it: Story Sequencer</h3>
+    <p class="small">These six headlines belong to one deck, but they are shuffled. Click them in the order that makes the best story. Reading only the headlines is the horizontal-logic test.</p>
+    <div id="seq_pool" class="grid g2"></div>
+    <h4 style="margin-top:16px">Your sequence</h4>
+    <ol id="seq_mine" class="rules"></ol>
+    <div class="btns"><button id="seq_chk" class="cu">Check order</button><button id="seq_rst" class="alt">Reset</button></div>
+    <div class="out" id="seq_out"></div>
+  </div>
+
+  <div class="callout teal"><b class="h">Application note · dashboards are stories told in layers</b>
+    <p>A good dashboard page works like a short story you can read at three depths: a <b>headline</b> that states the conclusion, a few <b>supporting visuals</b> that show why, and <b>detail on demand</b> for those who want to check. The <a href="#s10">Toolkit</a> shows a page layout built this way.</p></div>
+
+  <div class="quiz" id="quiz-6"></div>
+</div></section>
+
+<!-- ========== CLINIC ========== -->
+<section id="s7"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">7</div><span class="t">Practice · Bad Dashboard Clinic</span></div>
+  <h2>Nine bad dashboards, diagnosed and rebuilt</h2>
+  <div class="takeaway">Bad visuals are everywhere, and nobody sets out to make one. Learn to spot the flaw, then fix it with the six lessons.</div>
+  <div class="grid g3">
+    <div class="card top"><div class="num">1</div><h4>Diagnose first</h4><p>Study the "before". Tick every flaw you can see. Be careful: some listed flaws are decoys.</p></div>
+    <div class="card copper"><div class="num">2</div><h4>Check your diagnosis</h4><p>Correct ticks go green, wrong ticks red, and missed flaws amber, each with a reason.</p></div>
+    <div class="card green"><div class="num">3</div><h4>Reveal the makeover</h4><p>Switch to "After" and read what changed. Each flaw is tagged with the lesson that fixes it.</p></div>
+  </div>
+  <div class="callout"><b class="h">Reminder</b><p>All data in the cases is fictional. Titles in the "after" views are computed from the data shown, so the claims match the chart.</p></div>
+  <div id="clinic"></div>
+  <h3>Nine patterns, one pattern language</h3>
+  <div class="tbl"><table id="clinicSummary"></table></div>
+</div></section>
+
+<!-- ========== WHAT-IF LAB ========== -->
+<section id="s8"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">8</div><span class="t">Practice · What-if Lab</span></div>
+  <h2>Change one thing and watch the story change</h2>
+  <div class="takeaway">The data stays the same in every lab. Only the design choices move, which shows how much power the designer holds, and the responsibility that comes with it.</div>
+
+  <div class="calc" id="lab-a">
+    <h3>Lab A · Where does the axis start? <span class="tag a">Lesson 2</span></h3>
+    <p class="small">Five hubs hit between 93.8% and 96.1% on-time delivery. Slide the baseline of the bar chart and compare what the eye sees with what the numbers say.</p>
+    <div class="ctl">
+      <label>Axis starts at <span id="la_v">93</span>%<input type="range" id="la_min" min="0" max="93" step="1" value="93"></label>
+      <label style="display:flex;align-items:center;gap:8px;margin-top:22px"><input type="checkbox" id="la_tgt" style="width:auto;margin:0"> Show the 95% target line</label>
+    </div>
+    <div class="stage" id="la_chart" style="margin-top:12px"></div>
+    <div class="big" id="la_big"></div>
+    <p class="small" id="la_msg"></p>
+  </div>
+
+  <div class="calc" id="lab-b">
+    <h3>Lab B · Pie or bar? <span class="tag a">Lesson 2</span></h3>
+    <p class="small">Enter the share of delays by cause (any numbers; they are converted to percentages). Try to rank the pie slices, then look at the bars.</p>
+    <div class="inputs" id="lb_in"></div>
+    <div class="btns"><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="lb_3d" style="width:auto;margin:0"> Add a 3D tilt</label><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="lb_pct" style="width:auto;margin:0"> Show % on the pie slices</label><button id="lb_rst" class="alt">Reset values</button></div>
+    <div class="grid g2" style="margin-top:12px"><div class="stage" id="lb_pie"></div><div class="stage" id="lb_bar"></div></div>
+    <div class="big" id="lb_big"></div>
+    <p class="small" id="lb_msg"></p>
+  </div>
+
+  <div class="calc" id="lab-c">
+    <h3>Lab C · Same data, two stories on a dual axis <span class="tag a">Lessons 2, 4</span></h3>
+    <p class="small">Monthly volume (bars, left axis) and on-time departures (line, right axis). Move the right axis range and the relationship appears to change. The numbers never do.</p>
+    <div class="ctl">
+      <label>Right axis minimum <span id="lc_v1">80</span><input type="range" id="lc_min" min="0" max="84" step="1" value="80"></label>
+      <label>Right axis maximum <span id="lc_v2">100</span><input type="range" id="lc_max" min="96" max="400" step="2" value="100"></label>
+    </div>
+    <div class="btns"><button class="alt" data-lc="honest">Reasonable range</button><button class="alt" data-lc="hide">Hide the dip</button><button class="alt" data-lc="exag">Exaggerate the dip</button><button class="cu" data-lc="split">Pull the panels apart (recommended)</button></div>
+    <div class="stage" id="lc_chart" style="margin-top:12px"></div>
+    <div class="big" id="lc_big"></div>
+    <p class="small" id="lc_msg"></p>
+  </div>
+
+  <div class="calc" id="lab-d">
+    <h3>Lab D · Declutter and focus <span class="tag a">Lessons 3, 4, 5</span></h3>
+    <p class="small">Inbound pallets received vs. processed per day, by month. Toggle clutter on and off, then add focus aids. Notice when the story becomes visible.</p>
+    <div class="grid g2">
+      <div><h4>Clutter</h4><div id="ld_clutter"></div></div>
+      <div><h4>Focus aids</h4><div id="ld_focus"></div></div>
+    </div>
+    <div class="btns"><button class="alt" id="ld_all">Clutter everything</button><button class="alt" id="ld_none">Declutter everything</button><button class="cu" id="ld_best">Declutter + focus</button></div>
+    <div class="stage" id="ld_chart" style="margin-top:12px"></div>
+    <div class="big" id="ld_big"></div>
+    <p class="small" id="ld_msg"></p>
+  </div>
+
+  <div class="calc" id="lab-e">
+    <h3>Lab E · Count the 3s <span class="tag a">Lesson 4</span></h3>
+    <p class="small">Two rounds, same task: count how many times the digit 3 appears. In round 2 one visual cue is added. Your own time is the data. Results vary by person and screen; this is a demonstration, not a study.</p>
+    <div class="btns"><button id="le_start" class="cu">Start round 1</button><span class="msg" id="le_msg" style="color:var(--muted)"></span></div>
+    <div class="stage" id="le_grid" style="margin-top:12px;display:none"></div>
+    <div id="le_ans" style="display:none;margin-top:12px" class="btns"><input type="number" id="le_in" min="0" max="99" placeholder="How many 3s?" style="padding:9px 10px;border:1px solid #C9C3B4;border-radius:4px;font-size:16px;width:170px"><button id="le_sub">Submit</button></div>
+    <div class="big" id="le_big"></div>
+    <p class="small" id="le_res"></p>
+  </div>
+
+  <div class="calc" id="lab-f">
+    <h3>Lab F · One dataset, three audiences <span class="tag a">Lessons 1, 5, 6</span></h3>
+    <p class="small">Late deliveries by hub over the last four weeks. Pick the audience: the data stays put, but the headline, the highlight and the ask change with the decision maker.</p>
+    <div class="seg" id="lf_seg" role="group" aria-label="Choose audience"></div>
+    <div class="stage" id="lf_chart" style="margin-top:12px"></div>
+    <div class="grid g2" style="margin-top:12px" id="lf_info"></div>
+  </div>
+</div></section>
+
+<!-- ========== EXERCISE STUDIO ========== -->
+<section id="s9"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">9</div><span class="t">Practice · Exercise Studio</span></div>
+  <h2>Which data actually belongs on the dashboard?</h2>
+  <div class="takeaway">For each scenario, choose what to show, pick the main visual, and pick the headline. The hardest part of a good dashboard is leaving things out.</div>
+
+  <div class="callout"><b class="h">How scoring works</b>
+    <p>Each exercise scores 100 points: 50 for the data you pick, 25 for the visual and 25 for the title. For data, each <b>core</b> item you include earns full credit, <b>supporting</b> items earn half credit, and <b>noise</b> or <b>misleading</b> items cost points. Missing a core item costs you the points that item would have earned.</p>
+    <p><span class="tag a">Teaching heuristic</span> This is my own scoring scheme for practice. In real projects, the right answer depends on your audience and decision, so use the explanations, not the number.</p></div>
+
+  <div class="score">
+    <div class="s"><b id="sc_done">0 / 7</b><span>exercises scored</span></div>
+    <div class="s"><b id="sc_avg">–</b><span>average score</span></div>
+    <div class="s"><b id="sc_best">–</b><span>best score</span></div>
+  </div>
+  <div class="prog" aria-hidden="true"><i id="sc_bar"></i></div>
+  <div id="ex"></div>
+</div></section>
+
+<!-- ========== TOOLKIT ========== -->
+<section id="s10"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">10</div><span class="t">Apply · Toolkit</span></div>
+  <h2>Take it back to your own dashboards</h2>
+  <div class="takeaway">Use a layout that tells the story in layers, run the pre-flight checklist, then storyboard on paper before you open your tool.</div>
+
+  <h3>Anatomy of a story-first dashboard page</h3>
+  <div class="split">
+    <div class="svgbox">
+      <svg viewBox="0 0 640 430" role="img" aria-label="Wireframe of a dashboard page with numbered reading order">
+        <rect x="0" y="0" width="640" height="430" fill="#fff"/>
+        <rect x="20" y="16" width="600" height="52" rx="4" fill="#F4F2ED" stroke="#DDD8CC"/>
+        <text x="34" y="38" font-family="Georgia,serif" font-size="15" font-weight="700" fill="#1C2526">Action title: the conclusion in one sentence, with a number</text>
+        <text x="34" y="57" font-family="Segoe UI,Arial" font-size="11.5" fill="#5B6568">Subtitle: scope, period, definition</text>
+        <circle cx="610" cy="30" r="12" fill="#B77A2B"/><text x="610" y="35" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="700" fill="#fff">1</text>
+        <g font-family="Segoe UI,Arial" font-size="11" fill="#5B6568">
+          <rect x="20" y="82" width="190" height="84" rx="4" fill="#fff" stroke="#DDD8CC"/><text x="32" y="102">KPI that missed target</text><text x="32" y="140" font-family="Georgia,serif" font-size="32" font-weight="700" fill="#B77A2B">82%</text><text x="32" y="156">vs target 85%</text>
+          <rect x="225" y="82" width="190" height="84" rx="4" fill="#fff" stroke="#DDD8CC"/><text x="237" y="102">Supporting KPI</text><text x="237" y="140" font-family="Georgia,serif" font-size="32" font-weight="700" fill="#8C8A82">92%</text><text x="237" y="156">vs target 90%</text>
+          <rect x="430" y="82" width="190" height="84" rx="4" fill="#fff" stroke="#DDD8CC"/><text x="442" y="102">Supporting KPI</text><text x="442" y="140" font-family="Georgia,serif" font-size="32" font-weight="700" fill="#8C8A82">96%</text><text x="442" y="156">vs target 95%</text>
+        </g>
+        <circle cx="198" cy="94" r="11" fill="#B77A2B"/><text x="198" y="99" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#fff">2</text>
+        <rect x="20" y="180" width="390" height="190" rx="4" fill="#fff" stroke="#DDD8CC"/>
+        <text x="32" y="200" font-family="Segoe UI,Arial" font-size="11.5" font-weight="700" fill="#1C2526">Main visual: shows WHY (one accent, grey context)</text>
+        <polyline fill="none" stroke="#B9B5AA" stroke-width="2" points="40,300 120,296 200,302 280,298 380,300"/>
+        <polyline fill="none" stroke="#B9B5AA" stroke-width="2" points="40,260 120,264 200,258 280,262 380,260"/>
+        <polyline fill="none" stroke="#B77A2B" stroke-width="4" points="40,320 120,312 200,296 280,250 380,212"/>
+        <circle cx="380" cy="212" r="5" fill="#B77A2B"/>
+        <text x="262" y="236" font-family="Segoe UI,Arial" font-size="11" fill="#B77A2B" font-weight="700">Annotation explains the cause</text>
+        <circle cx="398" cy="192" r="11" fill="#B77A2B"/><text x="398" y="197" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#fff">3</text>
+        <rect x="425" y="180" width="195" height="190" rx="4" fill="#fff" stroke="#DDD8CC"/>
+        <text x="437" y="200" font-family="Segoe UI,Arial" font-size="11.5" font-weight="700" fill="#1C2526">Secondary visual: where</text>
+        <g fill="#B9B5AA"><rect x="437" y="214" width="130" height="14"/><rect x="437" y="236" width="104" height="14"/><rect x="437" y="258" width="86" height="14"/><rect x="437" y="280" width="52" height="14"/></g><rect x="437" y="214" width="130" height="14" fill="#B77A2B"/>
+        <circle cx="608" cy="192" r="11" fill="#B77A2B"/><text x="608" y="197" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#fff">4</text>
+        <rect x="20" y="382" width="600" height="34" rx="4" fill="#fff" stroke="#DDD8CC" stroke-dasharray="4 4"/>
+        <text x="32" y="403" font-family="Segoe UI,Arial" font-size="11.5" fill="#5B6568">Detail on demand: drill-through table, definitions, data source and refresh time</text>
+        <circle cx="608" cy="399" r="11" fill="#B77A2B"/><text x="608" y="404" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#fff">5</text>
+      </svg>
+    </div>
+    <div>
+      <ol class="rules">
+        <li><b>Headline.</b> The conclusion or the ask, top-left, where eyes land first.</li>
+        <li><b>One to three KPIs</b> with a target and a trend. Only the one needing attention gets the accent colour.</li>
+        <li><b>Main visual.</b> Answers "why", with grey context and one highlighted series.</li>
+        <li><b>Secondary visual.</b> Answers "where" or "who".</li>
+        <li><b>Detail on demand.</b> Definitions, tables and filters for people who want to verify.</li>
+      </ol>
+      <p class="small"><span class="tag a">Application note</span> This layout is my application of the book's lessons to dashboards, not a template from the book.</p>
+    </div>
+  </div>
+
+  <h3>Pre-flight checklist</h3>
+  <div class="prog" aria-hidden="true"><i id="cl_bar"></i></div>
+  <p class="small" id="cl_txt">0 of 0 checks done</p>
+  <ul class="cl" id="cl_list"></ul>
+
+  <h3>Blank storyboard (print this)</h3>
+  <div class="notes">
+    <div class="note"><b>Audience</b><br><br><br></div><div class="note"><b>Big Idea (one sentence)</b><br><br><br></div><div class="note"><b>Setup</b><br><br><br></div>
+    <div class="note"><b>Conflict / evidence</b><br><br><br></div><div class="note"><b>Resolution / options</b><br><br><br></div><div class="note"><b>Call to action</b><br><br><br></div>
+  </div>
+
+  <h3>Glossary</h3>
+  <div class="tbl"><table>
+    <tr><th>Term</th><th>Meaning</th></tr>
+    <tr><td class="k">Explanatory analysis</td><td>Communicating one specific message to a specific audience.</td></tr>
+    <tr><td class="k">Big Idea</td><td>One complete sentence with your point of view and what is at stake.</td></tr>
+    <tr><td class="k">3-minute story</td><td>What you would say if you had three minutes.</td></tr>
+    <tr><td class="k">Storyboard</td><td>A visual outline of the communication, made on paper first.</td></tr>
+    <tr><td class="k">Slideument</td><td>One file that tries to be both a presentation and a document.</td></tr>
+    <tr><td class="k">Cognitive load</td><td>Mental effort needed to take in information.</td></tr>
+    <tr><td class="k">Signal-to-noise</td><td>Share of what you show that carries the message.</td></tr>
+    <tr><td class="k">Gestalt principles</td><td>How people group things: proximity, similarity, enclosure, closure, continuity, connection.</td></tr>
+    <tr><td class="k">Preattentive attributes</td><td>Features noticed before conscious thought, such as colour, size and position.</td></tr>
+    <tr><td class="k">Visual hierarchy</td><td>Ordering elements by importance so readers know where to look first.</td></tr>
+    <tr><td class="k">Affordance</td><td>A cue that shows how something is meant to be used.</td></tr>
+    <tr><td class="k">Action title</td><td>A title that states the conclusion or ask rather than the topic.</td></tr>
+    <tr><td class="k">Slopegraph</td><td>A line chart of two time points that shows direction and rate of change across categories.</td></tr>
+    <tr><td class="k">Small multiples</td><td>Several small charts with identical axes, placed side by side.</td></tr>
+    <tr><td class="k">Horizontal logic</td><td>Reading only the titles tells the story.</td></tr>
+    <tr><td class="k">Vertical logic</td><td>Everything on one page supports its title.</td></tr>
+    <tr><td class="k">Reverse storyboarding</td><td>Summarizing each page of the finished piece to compare with the plan.</td></tr>
+  </table></div>
+
+  <h3>Where to go next</h3>
+  <div class="grid g2">
+    <div class="card"><h4>Books the author recommends</h4>
+      <ul class="tight"><li><i>Resonate</i>, Nancy Duarte</li><li><i>Show Me the Numbers</i>, Stephen Few</li><li><i>The Visual Display of Quantitative Information</i>, Edward Tufte</li><li><i>Beyond Bullet Points</i>, Cliff Atkinson</li><li><i>The Functional Art</i>, Alberto Cairo</li><li><i>Data Points</i>, Nathan Yau</li></ul></div>
+    <div class="card"><h4>Blogs and sites the author lists</h4>
+      <ul class="tight"><li>storytellingwithdata.com</li><li>Eager Eyes · Flowing Data · The Functional Art</li><li>Junk Charts · Perceptual Edge · Visualising Data · VizWiz</li><li>HelpMeViz · Make a Powerful Point</li><li>FiveThirtyEight Data Lab · The Guardian Data Blog</li></ul></div>
+  </div>
+  <div class="callout green"><b class="h">Final challenge</b><p>Pick one dashboard you own. Write its Big Idea, run the checklist, rebuild the top page with a headline, one accent colour and no legend, then show it to someone who has never seen it. Where their eyes go first tells you whether it works.</p></div>
+</div></section>
+
+<footer><div class="wrap">
+  <p><b>From Showing Data to Telling a Story</b> · an original study guide for self-learning.</p>
+  <p>Concepts and method are drawn from <i>Storytelling with Data: A Data Visualization Guide for Business Professionals</i> by Cole Nussbaumer Knaflic (John Wiley &amp; Sons, 2015). This page is not affiliated with the author or publisher and is not a substitute for the book. Quotes are avoided and examples are original.</p>
+  <p>All scenarios, names and numbers are fictional. Scores and checkers are teaching heuristics. Everything runs in your browser; nothing is sent or stored.</p>
+</div></footer>
+<script>
+(function(){
+"use strict";
+/* ===== CORE HELPERS (all charts are inline SVG built from strings; no external libraries) ===== */
+const $ = id => document.getElementById(id);
+const C = {bg:'#F4F2ED',ink:'#151B1D',muted:'#5B6568',line:'#DDD8CC',copper:'#B77A2B',gold:'#C59B43',dark:'#1C2526',green:'#3E745A',teal:'#2E6E73',amber:'#D49A3A',red:'#B64D42',grey:'#B9B5AA',mgrey:'#8C8A82',lgrey:'#D9D5CA'};
+const RB = ['#E41A1C','#377EB8','#4DAF4A','#984EA3','#FF7F00','#F2E600','#A65628','#F781BF'];
+const SER = "Georgia,'Times New Roman',serif", SAN = "'Segoe UI',Arial,sans-serif";
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MONF = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const fmt = (n,d) => Number(n).toLocaleString('en-US',{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
+const lin = (d0,d1,r0,r1) => v => r0 + (v-d0)*(r1-r0)/(d1-d0);
+const sum = a => a.reduce((x,y)=>x+y,0);
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function dk(hex,f){const n=parseInt(hex.slice(1),16);const r=Math.round((n>>16)*f),g=Math.round(((n>>8)&255)*f),b=Math.round((n&255)*f);return '#'+[r,g,b].map(v=>('0'+clamp(v,0,255).toString(16)).slice(-2)).join('');}
+function pearson(x,y){const n=x.length,mx=sum(x)/n,my=sum(y)/n;let sxy=0,sxx=0,syy=0;for(let i=0;i<n;i++){sxy+=(x[i]-mx)*(y[i]-my);sxx+=(x[i]-mx)**2;syy+=(y[i]-my)**2;}return sxy/Math.sqrt(sxx*syy);}
+
+/* ----- SVG primitives ----- */
+function T(x,y,s,o){o=o||{};return '<text x="'+x+'" y="'+y+'" font-size="'+(o.size||12)+'" fill="'+(o.fill||C.ink)+'" text-anchor="'+(o.anchor||'start')+'" font-weight="'+(o.weight||400)+'" font-family="'+(o.font||SAN)+'"'+(o.rot?' transform="rotate('+o.rot+' '+x+' '+y+')"':'')+(o.italic?' font-style="italic"':'')+'>'+esc(s)+'</text>';}
+function Ln(x1,y1,x2,y2,stroke,w,dash){return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(stroke||C.line)+'" stroke-width="'+(w||1)+'"'+(dash?' stroke-dasharray="'+dash+'"':'')+'/>';}
+function Rc(x,y,w,h,fill,extra){return '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+Math.max(0,w).toFixed(1)+'" height="'+Math.max(0,h).toFixed(1)+'" fill="'+fill+'" '+(extra||'')+'/>';}
+function Cr(x,y,r,fill,extra){return '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r+'" fill="'+fill+'" '+(extra||'')+'/>';}
+function Pl(pts,stroke,w,extra){return '<polyline fill="none" stroke="'+stroke+'" stroke-width="'+w+'" stroke-linejoin="round" stroke-linecap="round" points="'+pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')+'" '+(extra||'')+'/>';}
+function SV(w,h,body,label){return '<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+esc(label||'Chart')+'">'+body+'</svg>';}
+function wrapTxt(s,n){const w=s.split(' ');const out=[];let cur='';w.forEach(x=>{if((cur+' '+x).trim().length>n){out.push(cur.trim());cur=x;}else cur=(cur+' '+x);});if(cur.trim())out.push(cur.trim());return out;}
+
+/* "After" frame: left-aligned action title + grey subtitle. Returns {s, y} where y is the first free y below the header. */
+function AT(title,sub,n,color,subcolor){const lines=wrapTxt(title,n||62);let s='',y=28;lines.forEach(l=>{s+=T(24,y,l,{size:17,weight:700,font:SER,fill:color||C.dark});y+=22;});if(sub)s+=T(24,y-4,sub,{size:12,fill:subcolor||C.muted});return {s:s,y:y+12};}
+/* "Before" frame: thick border, centred bold black title. */
+function BT(title,W,H){return Rc(1.5,1.5,W-3,H-3,'#fff','stroke="#777" stroke-width="3"')+T(W/2,26,title,{anchor:'middle',weight:700,size:15,fill:'#000'});}
+
+/* arc slice path for pies */
+function arc(cx,cy,r,a0,a1){const x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);const lg=(a1-a0)>Math.PI?1:0;return 'M'+cx+' '+cy+' L'+x0.toFixed(1)+' '+y0.toFixed(1)+' A'+r+' '+r+' 0 '+lg+' 1 '+x1.toFixed(1)+' '+y1.toFixed(1)+' Z';}
+
+/* generic horizontal bar block. items: [{l,v,c,bold,lab}] */
+function HB(items,o){let s='';const bw=o.w;items.forEach((it,i)=>{const y=o.y0+i*(o.bh+o.gap);const w=bw*it.v/o.max;const tf=it.bold?C.dark:C.muted;s+=T(o.x0+o.lw-8,y+o.bh/2+4,it.l,{anchor:'end',size:o.fs||12.5,fill:tf,weight:it.bold?700:400});s+=Rc(o.x0+o.lw,y,w,o.bh,it.c);s+=T(Math.max(o.x0+o.lw+w+6,o.minLx||0),y+o.bh/2+4,it.lab!=null?it.lab:fmt(it.v),{size:o.fs||12.5,fill:tf,weight:it.bold?700:400});});return s;}
+
+function spark(vals,color,w,h,mn,mx){const x=lin(0,vals.length-1,2,w-4),y=lin(mn,mx,h-3,3);return '<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" aria-hidden="true">'+Pl(vals.map((v,i)=>[x(i),y(v)]),color,2)+Cr(x(vals.length-1),y(vals[vals.length-1]),3,color)+'</svg>';}
+
+/* =================== CLINIC DATA (all fictional) =================== */
+const LT = {L1:'Lesson 1 · Understand the context',L2:'Lesson 2 · Choose a visual',L3:'Lesson 3 · Eliminate clutter',L4:'Lesson 4 · Focus attention',L5:'Lesson 5 · Think like a designer',L6:'Lesson 6 · Tell a story'};
+
+/* ---- Case 1: pie of delay causes ---- */
+const D1 = [['Customs clearance',24],['Vendor production delay',22],['Documentation errors',19],['Transport capacity',17],['Weather',10],['Other',8]];
+function c1Before(){const W=640,H=380,cx=190,cy=190,r=118,k=.56;let a=-Math.PI/2,side='',top='',lab='';
+  D1.forEach((d,i)=>{const a1=a+d[1]/100*2*Math.PI;side+='<path d="'+arc(cx,cy+30,r,a,a1)+'" fill="'+dk(RB[i],.55)+'" stroke="#000" stroke-width="1"/>';top+='<path d="'+arc(cx,cy,r,a,a1)+'" fill="'+RB[i]+'" stroke="#000" stroke-width="1"/>';const m=(a+a1)/2;lab+=T(cx+.62*r*Math.cos(m),cy*(1-k)+k*(cy+.62*r*Math.sin(m))+4,d[1]+'%',{anchor:'middle',size:11,weight:700,fill:'#fff'});a=a1;});
+  const g='<g transform="translate(0 '+(cy*(1-k)).toFixed(1)+') scale(1 '+k+')">'+side+top+'</g>';
+  let lg='';D1.forEach((d,i)=>{lg+=Rc(380,70+i*34,14,14,RB[i],'stroke="#000"')+T(402,82+i*34,d[0],{size:12.5});});
+  return SV(W,H,BT('Delay Causes',W,H)+g+lab+lg,'Three-dimensional rainbow pie chart of delay causes');}
+function c1After(){const W=640,H=380,top3=D1.slice(0,3),p=sum(top3.map(d=>d[1]));const h=AT('Three causes drive '+p+'% of delayed shipments: customs, vendor production and documentation','Share of delayed shipments by cause, last quarter',60);
+  const items=D1.map((d,i)=>({l:d[0],v:d[1],c:i<3?C.copper:C.grey,bold:i<3,lab:d[1]+'%'}));
+  return SV(W,H,Rc(0,0,W,H,'#fff')+h.s+HB(items,{x0:20,y0:h.y+14,lw:170,w:360,bh:28,gap:14,max:30})+T(24,H-12,'Source: shipment exception log (fictional data)',{size:10.5,fill:C.muted}),'Sorted horizontal bars with the top three causes highlighted');}
+
+/* ---- Case 2: dual axis ---- */
+const VOL=[1180,1240,1320,1410,1450,1520,1620,1560,1470,1390,1330,1270];
+const OTP=[95,94,93,91,90,87,84,85,89,92,93,94];
+function c2Before(){const W=640,H=390,x0=64,x1=578,y0=50,y1=290,st=(x1-x0)/12;const yl=lin(0,1800,y1,y0),yr=lin(80,100,y1,y0);let s=BT('Volume vs On Time',W,H);
+  for(let v=0;v<=1800;v+=300){s+=Ln(x0,yl(v),x1,yl(v),'#555',1)+T(x0-6,yl(v)+4,v.toFixed(2),{anchor:'end',size:10});}
+  for(let v=80;v<=100;v+=4){s+=T(x1+6,yr(v)+4,v.toFixed(2),{size:10});}
+  VOL.forEach((v,i)=>{const x=x0+i*st+st*.2;s+=Rc(x,yl(v),st*.6,y1-yl(v),'#4472C4','stroke="#000"');s+=T(x0+i*st+st*.6,y1+10,MONF[i],{anchor:'end',size:10,rot:-45});});
+  s+=Pl(OTP.map((v,i)=>[x0+i*st+st/2,yr(v)]),'#FF0000',3);OTP.forEach((v,i)=>{s+=Rc(x0+i*st+st/2-4,yr(v)-4,8,8,'#FF0000','stroke="#000"');});
+  s+=Rc(150,362,12,12,'#4472C4')+T(168,373,'Volume (TEU)',{size:11})+Rc(300,362,12,12,'#FF0000')+T(318,373,'On Time Departure %',{size:11});
+  return SV(W,H,s,'Dual-axis chart with bars and a line, heavy gridlines and rotated labels');}
+function c2After(){const W=640,H=380,x0=60,x1=600,st=(x1-x0)/12;const h=AT('On-time departures fell below 88% in each of the three months volume topped 1,500 TEU','Monthly volume (TEU, top) and on-time departures (%, bottom); shaded months exceed 1,500 TEU',62);
+  const t=h.y; const p1a=t+16,p1b=t+124,p2a=t+164,p2b=t+250;const yl=lin(0,1800,p1b,p1a),yr=lin(80,100,p2b,p2a);let s=Rc(0,0,W,H,'#fff')+h.s;
+  const bi=VOL.map((v,i)=>v>1500?i:-1).filter(i=>i>=0),b0=x0+bi[0]*st,b1=x0+(bi[bi.length-1]+1)*st;
+  s+=Rc(b0,p1a-6,b1-b0,p2b-p1a+16,'#F7EFDD');
+  s+=T(x0,p1a-8,'Monthly volume (TEU)',{size:11.5,weight:700,fill:C.dark})+T(x0,p2a-8,'On-time departures (%)',{size:11.5,weight:700,fill:C.dark});
+  s+=Ln(x0,yl(1500),x1,yl(1500),C.copper,1,'4 4')+T(x1+4,yl(1500)+4,'1,500',{size:10,fill:C.copper});
+  s+=Ln(x0,yr(88),x1,yr(88),C.copper,1,'4 4')+T(x1+4,yr(88)+4,'88%',{size:10,fill:C.copper});
+  VOL.forEach((v,i)=>{s+=Rc(x0+i*st+st*.18,yl(v),st*.64,p1b-yl(v),v>1500?C.copper:C.grey);});
+  const pts=OTP.map((v,i)=>[x0+i*st+st/2,yr(v)]);s+=Pl(pts,C.grey,2.5);
+  s+=Pl(pts.filter((p,i)=>VOL[i]>1500),C.copper,4);
+  pts.forEach((p,i)=>{if(VOL[i]>1500)s+=Cr(p[0],p[1],4.5,C.copper);});
+  const j=VOL.indexOf(Math.max.apply(null,VOL));s+=T(x0+j*st+st/2,yl(VOL[j])-5,fmt(VOL[j]),{anchor:'middle',size:11,weight:700,fill:C.dark})+T(pts[j][0],pts[j][1]+17,OTP[j]+'%',{anchor:'middle',size:11,weight:700,fill:C.dark});
+  MON.forEach((m,i)=>{s+=T(x0+i*st+st/2,p2b+18,m,{anchor:'middle',size:10.5,fill:C.muted});});
+  s+=T(24,H-10,'Source: port operations log (fictional data)',{size:10.5,fill:C.muted});
+  return SV(W,H,s,'Two stacked panels sharing a month axis with high-volume months highlighted');}
+
+/* ---- Case 3: truncated axis ---- */
+const D3=[['Hub A',96.1],['Hub B',95.4],['Hub C',95.0],['Hub D',94.2],['Hub E',93.8]];
+function c3Before(){const W=640,H=380,x0=70,x1=600,y0=50,y1=320,st=(x1-x0)/5,yv=lin(93,97,y1,y0);let s=BT('ON TIME DELIVERY % BY HUB!!!',W,H);
+  for(let v=93;v<=97;v++){s+=Ln(x0,yv(v),x1,yv(v),'#666',1)+T(x0-6,yv(v)+4,v.toFixed(2),{anchor:'end',size:10.5});}
+  D3.forEach((d,i)=>{const x=x0+i*st+st*.18;s+=Rc(x,yv(d[1]),st*.64,y1-yv(d[1]),RB[i],'stroke="#000" stroke-width="1.5"');s+=T(x+st*.32,yv(d[1])-6,d[1].toFixed(2)+'%',{anchor:'middle',size:11,weight:700});s+=T(x+st*.32,y1+16,d[0],{anchor:'middle',size:11});});
+  return SV(W,H,s,'Bar chart whose vertical axis starts at 93 percent so small differences look huge');}
+function c3After(){const W=640,H=380,miss=D3.filter(d=>d[1]<95),gaps=miss.map(d=>+(95-d[1]).toFixed(1));
+  const h=AT('Hubs '+miss.map(d=>d[0].replace('Hub ','')).join(' and ')+' miss the 95% on-time target, but only by '+Math.min.apply(null,gaps).toFixed(1)+'–'+Math.max.apply(null,gaps).toFixed(1)+' points','On-time delivery by hub, % (bars start at zero)',60);
+  const o={x0:20,y0:h.y+34,lw:70,w:420,bh:30,gap:14,max:100,minLx:20+70+420*.95+8};const items=D3.map(d=>({l:d[0],v:d[1],c:d[1]<95?C.copper:C.grey,bold:d[1]<95,lab:d[1].toFixed(1)+'%'+(d[1]<95?'  ('+(d[1]-95).toFixed(1)+' pts)':'')}));
+  const tx=o.x0+o.lw+o.w*.95;let s=Rc(0,0,W,H,'#fff')+h.s+HB(items,o)+Ln(tx,h.y+22,tx,o.y0+5*(o.bh+o.gap)-8,C.dark,1.2,'5 4')+T(tx,h.y+16,'Target 95%',{anchor:'middle',size:11,weight:700,fill:C.dark});
+  s+=T(24,H-10,'Source: delivery tracking (fictional data)',{size:10.5,fill:C.muted});return SV(W,H,s,'Horizontal bars from zero with a 95 percent target line and two hubs highlighted');}
+
+/* ---- Case 4: spaghetti line chart ---- */
+const HUBS=['Hub A','Hub B','Hub C','Hub D','Hub E','Hub F','Hub G'];
+const LEAD=(function(){const r=mulberry32(11),base=[7.4,8.2,7.8,8.6,0,7.6,8.0];return HUBS.map((h,i)=>h==='Hub E'?[8,8,8.5,9,9.5,10,10.5,11,12,12.5,13,14]:Array.from({length:12},()=>+(base[i]+(r()-.5)*1.1).toFixed(1)));})();
+function c4Before(){const W=640,H=380,x0=56,x1=500,y0=48,y1=300,yy=lin(0,16,y1,y0),xx=lin(0,11,x0+10,x1-10);let s=BT('Lead Time By Hub',W,H);
+  for(let v=0;v<=16;v+=2){s+=Ln(x0,yy(v),x1,yy(v),'#666',1)+T(x0-6,yy(v)+4,v.toFixed(1),{anchor:'end',size:10});}
+  LEAD.forEach((ser,i)=>{s+=Pl(ser.map((v,k)=>[xx(k),yy(v)]),RB[i],2);ser.forEach((v,k)=>{s+=Cr(xx(k),yy(v),3.2,RB[i]);});});
+  MONF.forEach((m,i)=>{s+=T(xx(i),y1+12,m,{anchor:'end',size:9.5,rot:-45});});
+  HUBS.forEach((h,i)=>{s+=Rc(520,76+i*26,12,12,RB[i])+T(538,87+i*26,h,{size:12});});
+  return SV(W,H,s,'Spaghetti line chart of seven hubs in seven colours with markers and a legend');}
+function c4After(){const W=640,H=380,E=LEAD[4],oth=LEAD.filter((s,i)=>i!==4),all=[].concat.apply([],oth);
+  const up=Math.round((E[11]/E[0]-1)*100);const h=AT('Hub E\'s lead time rose '+up+'% in 12 months while the other six hubs stayed flat','Average lead time by hub, days (Hub E in colour)',62);
+  const x0=40,x1=455,y0=h.y+12,y1=300,yy=lin(0,16,y1,y0),xx=lin(0,11,x0,x1);let s=Rc(0,0,W,H,'#fff')+h.s+Ln(x0,y1,x1,y1,C.line,1);
+  oth.forEach(ser=>{s+=Pl(ser.map((v,k)=>[xx(k),yy(v)]),C.grey,1.8);});
+  s+=Pl(E.map((v,k)=>[xx(k),yy(v)]),C.copper,4)+Cr(xx(0),yy(E[0]),5,C.copper)+Cr(xx(11),yy(E[11]),5.5,C.copper);
+  s+=T(xx(0)+4,yy(E[0])-10,E[0]+' days',{size:12,weight:700,fill:C.copper})+T(xx(11)+10,yy(E[11])+4,'Hub E: '+E[11]+' days',{size:13,weight:700,fill:C.copper});
+  const lo=Math.round(Math.min.apply(null,all)),hi=Math.round(Math.max.apply(null,all));s+=T(xx(11)+10,yy(sum(all)/all.length)+4,'Other six hubs: '+lo+'–'+hi+' days',{size:12,fill:C.muted});
+  MON.forEach((m,i)=>{s+=T(xx(i),y1+18,m,{anchor:'middle',size:10,fill:C.muted});});
+  s+=T(24,H-10,'Source: transport management system (fictional data)',{size:10.5,fill:C.muted});return SV(W,H,s,'Grey lines for six hubs and one highlighted line for Hub E');}
+
+/* ---- Case 5: wall of KPI tiles (HTML) ---- */
+const T5=[['Inbound OTIF','92%'],['Site OTIF','82%'],['PO placement','96%'],['Open PO lines','1,284'],['Avg lead time','11.3 d'],['Backorders','212'],['Inventory value','$48.2M'],['Stockouts','37'],['Dock-to-stock','2.6 h'],['Pick accuracy','99.2%'],['Damage rate','0.4%'],['Cost / pallet','$6.85']];
+const TC=['#e53935','#43a047','#fb8c00','#8e24aa','#1e88e5','#c9a800','#00acc1','#d81b60','#6d4c41','#7cb342','#3949ab','#f4511e'];
+const SITE=[88,87,85,84,83,82];
+function c5Before(){return '<div class="ttl" style="color:#000;text-align:center;font-family:Arial;font-size:18px">KPI DASHBOARD!!!</div><div class="wall">'+T5.map((t,i)=>'<div class="tile" style="background:linear-gradient(160deg,'+TC[i]+','+dk(TC[i],.65)+')"><span>'+esc(t[0])+'</span><b>'+esc(t[1])+'</b></div>').join('')+'</div>';}
+function c5After(){let down=0;for(let i=SITE.length-1;i>0&&SITE[i]<SITE[i-1];i--)down++;const words=['zero','one','two','three','four','five','six'];
+  return '<div class="ttl">Site delivery is the only KPI below target and has slipped '+words[down]+' weeks in a row: '+SITE[SITE.length-1]+'% vs 85%</div><p class="sub">Logistics scorecard, last six weeks · vital few only</p><div class="kpi3">'
+  +'<div class="k hot"><small>Site OTIF · target 85%</small><b>82%</b><i>'+spark(SITE,C.copper,120,34,80,92)+'<br>down from 88% six weeks ago</i></div>'
+  +'<div class="k"><small>Inbound OTIF · target 90%</small><b>92%</b><i>'+spark([91,92,91,92,93,92],C.mgrey,120,34,80,95)+'<br>on target</i></div>'
+  +'<div class="k"><small>PO placement · target 95%</small><b>96%</b><i>'+spark([95,96,96,95,96,96],C.mgrey,120,34,80,100)+'<br>on target</i></div></div>'
+  +'<p class="srcn">The other nine metrics moved to a drill-down page. Source: logistics scorecard (fictional data).</p>';}
+
+/* ---- Case 6: stacked downtime ---- */
+const M6=['Apr','May','Jun','Jul','Aug','Sep'];
+const S6=[{n:'Power outage',v:[12,14,20,28,34,38]},{n:'Mechanical',v:[40,38,36,35,33,31]},{n:'Software',v:[22,21,22,20,21,20]},{n:'Operator error',v:[18,17,16,17,15,15]},{n:'Weather',v:[10,12,9,11,10,12]}];
+function c6Before(){const W=640,H=380,x0=64,x1=470,y0=50,y1=300,st=(x1-x0)/6,yy=lin(0,120,y1,y0);let s=BT('Downtime Hours',W,H);
+  for(let v=0;v<=120;v+=20){s+=Ln(x0,yy(v),x1,yy(v),'#666',1)+T(x0-6,yy(v)+4,v.toFixed(2),{anchor:'end',size:10});}
+  M6.forEach((m,i)=>{let acc=0;S6.forEach((sr,k)=>{const v=sr.v[i];s+=Rc(x0+i*st+st*.15,yy(acc+v),st*.7,yy(acc)-yy(acc+v),RB[k],'stroke="#000"');acc+=v;});s+=T(x0+i*st+st/2,y1+16,m,{anchor:'middle',size:11});});
+  S6.forEach((sr,k)=>{s+=Rc(500,90+k*28,12,12,RB[k])+T(518,101+k*28,sr.n,{size:12});});
+  return SV(W,H,s,'Stacked columns of downtime hours in five rainbow colours with a legend');}
+function c6After(){const W=640,H=380,pw=S6[0].v,ratio=pw[5]/pw[0];const h=AT('Power-related downtime has '+(ratio>3?'more than tripled':'risen')+' since April; every other cause is flat or falling','Downtime hours per month by cause',60);
+  const x0=40,x1=470,y0=h.y+14,y1=312,st=(x1-x0)/6,yy=lin(0,120,y1,y0),cols=[C.copper,'#6E6C65','#8C8A82','#B0ACA1','#D2CEC3'];let s=Rc(0,0,W,H,'#fff')+h.s+Ln(x0,y1,x1,y1,C.line,1);
+  M6.forEach((m,i)=>{let acc=0;S6.forEach((sr,k)=>{const v=sr.v[i];s+=Rc(x0+i*st+st*.16,yy(acc+v),st*.68,yy(acc)-yy(acc+v),cols[k],'stroke="#fff" stroke-width="1"');if(k===0&&(i===0||i===5))s+=T(x0+i*st+st/2,yy(acc+v/2)+4,String(v),{anchor:'middle',size:12,weight:700,fill:'#fff'});acc+=v;});s+=T(x0+i*st+st/2,y1+17,m,{anchor:'middle',size:11,fill:C.muted});});
+  let acc=0;S6.forEach((sr,k)=>{const v=sr.v[5];s+=T(x1+8,yy(acc+v/2)+4,sr.n,{size:12,weight:k===0?700:400,fill:k===0?C.copper:C.muted});acc+=v;});
+  s+=T(24,H-10,'Source: maintenance log (fictional data)',{size:10.5,fill:C.muted});return SV(W,H,s,'Stacked columns with power outages at the base in colour and other causes in grey');}
+
+/* ---- Case 7: vendor table (HTML) ---- */
+const V7=[['Alpha Steel',120,6,3.1,410],['Brightline Parts',95,19,9.4,285],['Cobalt Tools',140,7,2.8,520],['Delta Hydraulics',60,14,11.2,190],['Echo Safety',110,4,1.9,330],['Falcon Bearings',85,5,3.5,240],['Gamma Filters',70,3,2.2,160],['Horizon Lubes',100,6,3.0,300]];
+function v7stats(){const L=sum(V7.map(v=>v[1])),Lt=sum(V7.map(v=>v[2])),pr=V7.slice().sort((a,b)=>b[2]/b[1]-a[2]/a[1]).slice(0,2);const l2=sum(pr.map(v=>v[1])),t2=sum(pr.map(v=>v[2]));return {L:L,Lt:Lt,pr:pr.map(v=>v[0]),pl:Math.round(100*l2/L),pt:Math.round(100*t2/Lt),wd:sum(V7.map(v=>v[2]*v[3]))/Lt};}
+function c7Before(){return '<div class="ttl" style="color:#000;text-align:center;font-family:Arial;font-size:16px">Vendor Data</div><div class="tbl" style="margin:4px"><table class="tb-bad"><tr><th>Vendor</th><th>Total Lines</th><th>Late Lines</th><th>Late %</th><th>Avg Delay Days</th><th>Spend $K</th></tr>'+V7.map(v=>'<tr><td>'+v[0]+'</td><td>'+v[1].toFixed(2)+'</td><td>'+v[2].toFixed(2)+'</td><td>'+(100*v[2]/v[1]).toFixed(2)+'</td><td>'+v[3].toFixed(2)+'</td><td>'+v[4].toFixed(2)+'</td></tr>').join('')+'</table></div>';}
+function c7After(){const st=v7stats(),rows=V7.slice().sort((a,b)=>b[2]/b[1]-a[2]/a[1]);
+  return '<div class="ttl">Two vendors supply '+st.pl+'% of PO lines but cause '+st.pt+'% of late lines</div><p class="sub">Vendor scorecard, last quarter · sorted by late %</p><div class="tbl" style="margin:0 4px"><table class="tb-good"><tr><th>Vendor</th><th>PO lines</th><th>Late lines</th><th>Late %</th><th>Avg delay (days)</th></tr>'
+  +rows.map((v,i)=>'<tr'+(i<2?' class="hot"':'')+'><td>'+v[0]+'</td><td>'+v[1]+'</td><td>'+v[2]+'</td><td class="cu">'+Math.round(100*v[2]/v[1])+'%</td><td>'+v[3].toFixed(1)+'</td></tr>').join('')
+  +'<tr class="tot"><td>All vendors</td><td>'+st.L+'</td><td>'+st.Lt+'</td><td>'+Math.round(100*st.Lt/st.L)+'%</td><td>'+st.wd.toFixed(1)+'</td></tr></table></div><p class="srcn">Average delay is weighted by late lines. Source: PO tracking (fictional data).</p>';}
+
+/* ---- Case 8: donut gauges ---- */
+const D8=[['Zone A',92],['Zone B',78],['Zone C',88],['Zone D',64]];
+function c8Before(){const W=640,H=380;let s=BT('Utilisation!',W,H);D8.forEach((d,i)=>{const cx=120+(i%2)*260+(i>1?0:0),cy=130+Math.floor(i/2)*130,r=46,circ=2*Math.PI*r;s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="#ddd" stroke-width="22"/><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+RB[(i*2+1)%8]+'" stroke-width="22" stroke-dasharray="'+(circ*d[1]/100).toFixed(1)+' '+circ.toFixed(1)+'" transform="rotate(-90 '+cx+' '+cy+')" stroke-linecap="round"/>'+T(cx,cy+6,d[1]+'%',{anchor:'middle',size:18,weight:700,fill:'#000'})+T(cx+68,cy+4,d[0],{size:14,weight:700});});return SV(W,H,s,'Four colourful donut gauges for warehouse zone utilisation');}
+function c8After(){const W=640,H=380,ceil=85,rows=D8.slice().sort((a,b)=>b[1]-a[1]),over=rows.filter(d=>d[1]>ceil).map(d=>d[0].replace('Zone ',''));const rest=rows.filter(d=>d[1]<=ceil).map(d=>d[0].replace('Zone ',''));
+  const h=AT('Zones '+over.join(' and ')+' exceed the '+ceil+'% utilisation ceiling; '+rest.join(' and ')+' still have room','Warehouse utilisation by zone, % of usable capacity',60);const o={x0:20,y0:h.y+40,lw:70,w:440,bh:34,gap:18,max:100,minLx:20+70+440*ceil/100+8};
+  const items=rows.map(d=>({l:d[0],v:d[1],c:d[1]>ceil?C.copper:C.grey,bold:d[1]>ceil,lab:d[1]+'%'}));const tx=o.x0+o.lw+o.w*ceil/100;
+  return SV(W,H,Rc(0,0,W,H,'#fff')+h.s+HB(items,o)+Ln(tx,h.y+24,tx,o.y0+4*(o.bh+o.gap)-10,C.dark,1.2,'5 4')+T(tx,h.y+18,ceil+'% planning ceiling',{anchor:'middle',size:11,weight:700,fill:C.dark})+T(24,H-10,'Source: warehouse management system (fictional data)',{size:10.5,fill:C.muted}),'Sorted bars of zone utilisation with an 85 percent ceiling line');}
+
+/* ---- Case 9: dark neon ---- */
+const FL=(function(){const r=mulberry32(5);const mk=b=>Array.from({length:14},()=>Math.round(b+(r()-.5)*6));return [{n:'Receiving',v:mk(100)},{n:'Putaway',v:mk(99)},{n:'Picking',v:mk(100)},{n:'Dispatch',v:[101,100,99,100,98,99,97,100,90,86,84,83,82,81]}];})();
+const NEON=['#39FF14','#FF2BD6','#FFF200','#00E5FF'];
+function c9Before(){const W=640,H=380,x0=56,x1=600,y0=60,y1=320,yy=lin(70,110,y1,y0),xx=lin(0,13,x0+10,x1-10);let s=Rc(0,0,W,H,'#000')+T(W/2,28,'THROUGHPUT %%',{anchor:'middle',size:16,weight:700,fill:'#00E5FF'});
+  for(let v=70;v<=110;v+=10){s+=Ln(x0,yy(v),x1,yy(v),'#8a8a8a',1)+T(x0-6,yy(v)+4,v+'.0',{anchor:'end',size:10,fill:'#fff'});}
+  FL.forEach((f,i)=>{s+=Pl(f.v.map((v,k)=>[xx(k),yy(v)]),NEON[i],7,'opacity=".25"')+Pl(f.v.map((v,k)=>[xx(k),yy(v)]),NEON[i],3);f.v.forEach((v,k)=>{s+=Cr(xx(k),yy(v),3.5,NEON[i]);});s+=Rc(70+i*130,340,12,12,NEON[i])+T(88+i*130,351,f.n,{size:12,fill:NEON[i]});});
+  for(let d=0;d<14;d+=1){s+=T(xx(d),y1+14,String(d+1),{anchor:'middle',size:10,fill:'#fff'});}
+  return SV(W,H,s,'Neon lines on a black background with bright gridlines and glow');}
+function c9After(){const W=640,H=380,BG='#0E1213',last=FL[3].v[13],oth=FL.slice(0,3).map(f=>f.v[13]);const h=AT('Dispatch has slipped to '+last+'% of plan while the other three flows hold near 100%','Daily throughput as % of plan, last 14 days',62,'#F2F0E8','#9FA9AB');
+  const x0=40,x1=455,y0=h.y+10,y1=300,yy=lin(70,110,y1,y0),xx=lin(0,13,x0,x1);let s=Rc(0,0,W,H,BG)+h.s+Ln(x0,yy(100),x1,yy(100),'#4A5456',1,'4 4')+T(x0,yy(100)-24,'Plan = 100%',{size:10.5,fill:'#8A9496'});
+  FL.slice(0,3).forEach(f=>{s+=Pl(f.v.map((v,k)=>[xx(k),yy(v)]),'#6A7678',1.8);});
+  s+=Pl(FL[3].v.map((v,k)=>[xx(k),yy(v)]),'#FFFFFF',4)+Cr(xx(13),yy(last),5.5,'#fff')+T(xx(13)+10,yy(last)+4,'Dispatch '+last+'%',{size:13,weight:700,fill:'#fff'})+T(xx(13)+10,yy(Math.round(sum(oth)/3))+2,'Receiving, putaway,',{size:11,fill:'#9FA9AB'})+T(xx(13)+10,yy(Math.round(sum(oth)/3))+16,'picking: ~100%',{size:11,fill:'#9FA9AB'});
+  [0,6,13].forEach(d=>{s+=T(xx(d),y1+18,'Day '+(d+1),{anchor:'middle',size:10.5,fill:'#9FA9AB'});});
+  s+=T(24,H-10,'Source: WMS throughput log (fictional data)',{size:10.5,fill:'#8A9496'});return SV(W,H,s,'Dark chart with grey lines and one white highlighted line');}
+
+/* =================== CASE DEFINITIONS =================== */
+const CASES = [
+ {n:1,name:'The rainbow 3D pie',ctx:'Monthly shipping review. The Logistics Manager must decide which delay causes to attack first.',kind:'svg',before:c1Before,after:c1After,sin:'Pie chart with six similar slices',fix:'Sorted horizontal bars, top three accented',tags:['L2','L3','L4','L5'],
+  issues:[{t:'Six rainbow colours with nothing emphasised',ok:1,L:'L4',w:'When everything is different, nothing stands out.'},{t:'The 3D tilt distorts slice sizes',ok:1,L:'L2',w:'Slices at the front look bigger than equal values at the back.'},{t:'A legend forces eyes to travel back and forth',ok:1,L:'L3',w:'Direct labels remove the lookup.'},{t:'Slices are close in size, so ranking is guesswork',ok:1,L:'L2',w:'Eyes cannot rank similar angles; bars on one baseline can be ranked at a glance.'},{t:'The title is a topic label, not a takeaway',ok:1,L:'L5',w:'"Delay Causes" does not say what to conclude.'},{t:'It needs more slices to show more detail',ok:0,w:'More slices make a pie worse, not better.'},{t:'The black outlines should be thicker',ok:0,w:'Heavier outlines are more noise.'}],
+  chg:[['Pie replaced by horizontal bars sorted from largest to smallest','L2'],['Legend removed; labels sit next to each bar','L3'],['Accent colour only on the top three causes; the rest grey','L4'],['Action title states the 65% finding computed from the data','L5']]},
+ {n:2,name:'Two units, one confusing axis',ctx:'Port operations review. Does higher volume hurt on-time departures? The Terminal Manager wants to know.',kind:'svg',before:c2Before,after:c2After,sin:'Secondary y-axis',fix:'Two stacked panels sharing the x-axis',tags:['L2','L3','L5','L6'],
+  issues:[{t:'A secondary axis makes readers decode which series uses which scale',ok:1,L:'L2',w:'They have to check axes before they can think about the message.'},{t:'Full month names rotated 45 degrees',ok:1,L:'L3',w:'Diagonal text is slow to read; abbreviate and keep it horizontal.'},{t:'Dark gridlines and a heavy border compete with the data',ok:1,L:'L3',w:'They add ink without adding information.'},{t:'No axis titles, and the legend sits far from the data',ok:1,L:'L5',w:'Every axis needs a title; direct labels beat a legend.'},{t:'The title "Volume vs On Time" gives no conclusion',ok:1,L:'L6',w:'The reader has to find the relationship alone.'},{t:'The bars should be 3D so volume stands out',ok:0,w:'3D skews values and adds nothing.'},{t:'A third series such as average delay would clarify it',ok:0,w:'More series add load; the message needs fewer things, not more.'}],
+  chg:[['Dual axis split into two panels with one shared month axis','L2'],['Grid, border and rotated labels removed; months abbreviated','L3'],['Months above 1,500 TEU shaded and coloured, linking both panels','L4'],['Panel titles and an action title replace the legend and the label','L5'],['Headline names the relationship, with the threshold computed from the data','L6']]},
+ {n:3,name:'The truncated bar axis',ctx:'Network review. Are the five hubs really that different on delivery performance?',kind:'svg',before:c3Before,after:c3After,sin:'Bars that do not start at zero',fix:'Zero baseline, target line, only misses highlighted',tags:['L2','L3','L4','L5'],
+  issues:[{t:'The axis starts at 93%, so small gaps look enormous',ok:1,L:'L2',w:'Eyes compare bar lengths, so bars must start at zero.'},{t:'Each bar is a different rainbow colour',ok:1,L:'L4',w:'Colour carries no meaning here.'},{t:'The 95% target is missing, so nobody can see who misses it',ok:1,L:'L1',w:'Without the benchmark readers cannot tell what is good or bad.'},{t:'The title is a shouty label with no message',ok:1,L:'L5',w:'State the conclusion instead.'},{t:'Two-decimal labels such as 96.10% add noise',ok:1,L:'L3',w:'The precision is not needed to make the point.'},{t:'It should be a pie chart',ok:0,w:'Pies are harder to read than bars.'},{t:'The axis should start even higher, at 95%',ok:0,w:'That would exaggerate the differences even more.'}],
+  chg:[['Bars start at zero and show honest lengths','L2'],['Bars turned horizontal, with the 95% target line added','L1'],['Only the two hubs below target use the accent colour','L4'],['Title says the misses are real but small, computed from the data','L5']]},
+ {n:4,name:'The spaghetti line chart',ctx:'Procurement review. Is lead time getting worse anywhere?',kind:'svg',before:c4Before,after:c4After,sin:'Seven crossing lines, seven colours',fix:'Grey context lines, one accent line, direct labels',tags:['L3','L4','L6'],
+  issues:[{t:'Seven crossing coloured lines make a spaghetti graph',ok:1,L:'L4',w:'Nobody can follow one line in the tangle.'},{t:'A seven-entry legend exceeds what short-term memory holds',ok:1,L:'L3',w:'Memory holds about four chunks; label directly instead.'},{t:'Markers on every data point',ok:1,L:'L3',w:'The line already shows the data.'},{t:'Heavy gridlines and a border',ok:1,L:'L3',w:'They compete with the lines.'},{t:'Nothing points to the one hub that changed',ok:1,L:'L6',w:'The finding is buried; highlight it and say it.'},{t:'It needs a secondary axis',ok:0,w:'All series share one unit; a second axis would only confuse.'},{t:'Smooth the lines so they look nicer',ok:0,w:'Smoothing hides real data points.'}],
+  chg:[['Six hubs pushed to light grey; one line in the accent colour','L4'],['Legend, markers, grid and border removed','L3'],['Direct labels at the ends and the first point','L3'],['Headline gives the 75% rise, computed from the data','L6']]},
+ {n:5,name:'The wall of KPI tiles',ctx:'Weekly logistics scorecard for the Operations Director, who has about two minutes.',kind:'html',before:c5Before,after:c5After,sin:'Twelve equal tiles with random colours',fix:'The vital few with target and trend; one accent',tags:['L1','L3','L4','L6'],
+  issues:[{t:'Twelve equal-size tiles; nothing is prioritised',ok:1,L:'L4',w:'Equal size says everything is equally important.'},{t:'Colours are random and carry no meaning',ok:1,L:'L4',w:'Colour should signal status or focus, not decorate.'},{t:'No targets, trends or comparisons next to the numbers',ok:1,L:'L1',w:'A number alone cannot say whether it is good.'},{t:'Gradients, borders and shadows decorate the tiles',ok:1,L:'L3',w:'Decoration is clutter.'},{t:'There is no headline and no ask',ok:1,L:'L6',w:'The director must guess what matters.'},{t:'It needs more KPI tiles to be complete',ok:0,w:'The problem is too many already.'},{t:'The numbers should be bigger',ok:0,w:'Everything bigger makes nothing stand out.'}],
+  chg:[['Twelve metrics cut to the vital three; the rest moved to a drill-down','L1'],['Targets and six-week trends added beside each number','L1'],['Grey for on-target, accent only for the KPI that needs attention','L4'],['Gradients and borders removed; whitespace and alignment added','L3'],['Action title states the issue and the size of the miss','L6']]},
+ {n:6,name:'The rainbow stacked column',ctx:'Reliability review. The Maintenance Manager must choose where to invest.',kind:'svg',before:c6Before,after:c6After,sin:'Five-colour stacks with a legend',fix:'Focus series at the baseline, others grey',tags:['L2','L3','L4','L6'],
+  issues:[{t:'Five rainbow segments in every column',ok:1,L:'L4',w:'Nothing stands out.'},{t:'Only the bottom segment shares a baseline, so middle series cannot be compared',ok:1,L:'L2',w:'Stacked bars make upper segments hard to compare across columns.'},{t:'A legend on the right',ok:1,L:'L3',w:'Direct labels are faster.'},{t:'Heavy gridlines and "20.00" style labels',ok:1,L:'L3',w:'Trailing zeros are pure noise.'},{t:'No story: which cause is growing?',ok:1,L:'L6',w:'The reader must work out the finding.'},{t:'The stacks should be 3D',ok:0,w:'3D distorts and adds nothing.'},{t:'It should be a separate pie per month',ok:0,w:'Six pies are harder than one stacked chart.'}],
+  chg:[['The growing series moved to the baseline and given the accent colour','L2'],['Other causes in quiet greys','L4'],['Legend, grid and borders removed; labels sit at the right of the last column','L3'],['Labels only on the first and last values of the focus series','L4'],['Headline reports the growth, computed from the data','L6']]},
+ {n:7,name:'The data dump table',ctx:'Procurement review. Which vendors need a conversation?',kind:'html',before:c7Before,after:c7After,sin:'Heavy-border table, everything bold',fix:'Light table, sorted, only outliers emphasised',tags:['L3','L4','L5','L6'],
+  issues:[{t:'Heavy black borders around every cell',ok:1,L:'L3',w:'Borders should fade into the background.'},{t:'Everything is bold, so nothing stands out',ok:1,L:'L4',w:'Emphasis only works when it is rare.'},{t:'Numbers centred with two decimals',ok:1,L:'L5',w:'Right-align and round so digits line up and compare easily.'},{t:'Rows are unsorted, so the worst vendors are hidden',ok:1,L:'L2',w:'Order by what matters.'},{t:'There is no conclusion in the title',ok:1,L:'L6',w:'"Vendor Data" is a label, not a message.'},{t:'More columns, such as contact and region, would help',ok:0,w:'Columns that do not serve the decision are clutter.'},{t:'A pie chart beside the table would help',ok:0,w:'It would repeat the data harder to read.'}],
+  chg:[['Borders removed, light rules only','L3'],['Sorted by late %; two outliers emphasised, the rest greyed','L4'],['Numbers right-aligned and rounded; unneeded column removed','L5'],['Totals row for context','L5'],['Action title with shares computed from the data','L6']]},
+ {n:8,name:'The donut gauge obsession',ctx:'Warehouse planning. Which zones are over the planning ceiling?',kind:'svg',before:c8Before,after:c8After,sin:'Donut gauges',fix:'Sorted bars with the ceiling as a reference line',tags:['L2','L4','L5'],
+  issues:[{t:'Donuts require comparing arc lengths',ok:1,L:'L2',w:'Bars on a common baseline are far easier.'},{t:'Four colours with no meaning',ok:1,L:'L4',w:'Colour should signal the problem zones.'},{t:'The 85% ceiling is not shown, so 88% has no context',ok:1,L:'L1',w:'The benchmark makes the number meaningful.'},{t:'Big rings waste space and are not sorted',ok:1,L:'L3',w:'Space is spent on decoration instead of comparison.'},{t:'The title is a single word',ok:1,L:'L5',w:'State the conclusion.'},{t:'Rings should be 3D',ok:0,w:'Never use 3D to show one dimension.'},{t:'Add a gauge needle',ok:0,w:'Decoration adds noise.'}],
+  chg:[['Donuts replaced by sorted horizontal bars','L2'],['Planning ceiling drawn as a dashed reference line','L1'],['Accent colour only on zones above the ceiling','L4'],['Action title lists which zones exceed it, computed from the data','L5']]},
+ {n:9,name:'Neon on black',ctx:'A control-room screen. The template has a dark background and the team insists on keeping it.',kind:'svg',dark:true,before:c9Before,after:c9After,sin:'Neon rainbow, glow and bright grid',fix:'Dark done right: grey base, one white accent',tags:['L3','L4','L6'],
+  issues:[{t:'Four neon colours shout at the same volume',ok:1,L:'L4',w:'Nothing leads the eye; on black, yellow and neon green are extremely loud.'},{t:'Glow and bright gridlines are louder than the data',ok:1,L:'L3',w:'Structure should recede.'},{t:'A legend sits apart from the lines',ok:1,L:'L3',w:'Direct labels are faster.'},{t:'No headline about the dispatch drop',ok:1,L:'L6',w:'The story is invisible.'},{t:'Dark backgrounds are never acceptable',ok:0,w:'If a brand or room demands it, flip the logic: grey is the base, white the accent.'},{t:'More neon colours would separate the lines',ok:0,w:'More colours reduce contrast.'}],
+  chg:[['Same dark background kept, but lines turned grey','L4'],['White becomes the attention colour (on black, white stands out most)','L4'],['Glow, bright grid and legend removed; plan shown as a faint dotted line','L3'],['Direct labels and an action title computed from the data','L6']]}
+];
+/* =================== QUIZZES =================== */
+const QZ = {
+1:[{q:'Which audience definition is the strongest?',o:['All internal and external stakeholders','The Operations Director, who decides on the lease','Anyone who might be interested'],a:1,w:'Specific beats general. A named decision maker lets you pick the message, data and call to action.'},
+   {q:'You explored 100 views of the PO data. For the review meeting you should…',o:['Show them all, as proof of the work','Pick the one or two findings that support the decision and explain them','Send the pivot table and let them explore'],a:1,w:'That is the difference between exploratory and explanatory work: show the pearls, not the oysters.'},
+   {q:'A dashboard that people open alone, without you, is closest to…',o:['A live presentation','A written document, so titles and notes must carry the message','Neither; context does not apply'],a:1,w:'Nobody is there to explain, so the page must be self-explanatory.'}],
+2:[{q:'Four supplier shares are 34%, 31%, 26% and 9%. Best visual?',o:['3D pie','Donut','Sorted horizontal bars','Stacked area'],a:2,w:'Bars on a common baseline make close values easy to rank and avoid 3D distortion.'},
+   {q:'A bar chart axis starts at 93% "to show the differences". What is wrong?',o:['Nothing, it makes the chart easier to read','Bar length no longer matches the value, so it exaggerates differences','The bars should be thinner'],a:1,w:'Eyes compare bar lengths, so bars need a zero baseline. A dot plot or line may use a non-zero baseline.'},
+   {q:'Volume (units) and on-time % (percent) share a month axis. Best alternative to a secondary axis?',o:['Colour the axis labels','Two panels stacked with a shared x-axis, or direct labels','A pie chart for each month'],a:1,w:'Pulling the series apart removes the guesswork about which axis each belongs to.'}],
+3:[{q:'Which removal is supported by the closure principle?',o:['Removing the chart border','Removing the data','Removing the title'],a:0,w:'People see the chart as complete without a border, and the data stands out more.'},
+   {q:'Which element should you usually keep, even if it seems redundant?',o:['$, % and thousands separators on numbers','Gridlines on every chart','3D shadows'],a:0,w:'Units and separators ease interpretation; the reader need not remember what the numbers mean.'},
+   {q:'A page has empty space at the bottom. What is the best response?',o:['Add another chart to fill it','Leave it, and use the space as a pause that focuses attention','Stretch the chart to fill it'],a:1,w:'White space works like a pause in speaking. Never add data just because there is room.'}],
+4:[{q:'A rank table uses ten colours, one per rank. What is the better approach?',o:['Keep it; more colours are clearer','One colour with varying saturation, so the leaders stand out','Replace it with a pie'],a:1,w:'When everything is different, nothing stands out. Saturation also implies "more".'},
+   {q:'Which pairing can cause trouble for about 8% of men?',o:['Red and green side by side','Blue and orange','Grey and copper'],a:0,w:'Avoid it, or add a second cue such as bold or a +/− sign. Blue and orange is a safe positive/negative pair.'},
+   {q:'About how many chunks of visual information can short-term memory hold?',o:['About 1','About 4','About 20'],a:1,w:'So avoid ten-series legends. Label directly and group information into larger chunks.'}],
+5:[{q:'Which is the best slide title?',o:['2026 Budget','Estimated 2026 spending is above budget','Budget overview'],a:1,w:'An action title delivers the conclusion in the most prominent place.'},
+   {q:'You skip axis titles because "it is obvious". What happens?',o:['Nothing; readers infer them','Readers stop to work out what they are looking at','The chart looks more modern'],a:1,w:'Titles remove doubt. Only in rare cases is dropping them a deliberate choice.'},
+   {q:'Stakeholders resist your new chart design. What is a good first step?',o:['Switch back silently','Show before and after side by side and explain the benefit','Add more colours'],a:1,w:'Transparency and a visible comparison help people accept change. Allies and options help too.'}],
+6:[{q:'A busy executive who already trusts you has ten minutes. Which order?',o:['Chronological: method first, finding last','Lead with the ask, then the strongest evidence','Appendix first'],a:1,w:'Trust already exists and time is short, so open with the "so what".'},
+   {q:'"Horizontal logic" means…',o:['Charts are laid out left to right','Reading only the slide titles tells the whole story','Every slide has the same layout'],a:1,w:'It needs action titles, not topic labels.'},
+   {q:'A deck is emailed with no presenter. What must each page contain?',o:['Words that make the "so what" clear: action titles and annotations','Only charts, to avoid clutter','As many bullets as possible'],a:0,w:'Without a voice-over, the written narrative must carry the message.'}]
+};
+function renderQuiz(id,qs){const box=$(id);if(!box)return;let done=0,score=0;let h='<h4>Check yourself</h4>';
+  qs.forEach((q,qi)=>{h+='<div class="q" data-q="'+qi+'"><div class="qt">'+(qi+1)+'. '+esc(q.q)+'</div>'+shuf(q.o.map((o,oi)=>oi),id.length*7+qi*13+5).map(oi=>'<label class="opt" data-o="'+oi+'">'+esc(q.o[oi])+'</label>').join('')+'<div class="qwhy">'+esc(q.w)+'</div></div>';});
+  h+='<div class="small" id="'+id+'-s"></div>';box.innerHTML=h;
+  box.querySelectorAll('.q').forEach(qe=>{const qi=+qe.getAttribute('data-q');qe.querySelectorAll('.opt').forEach(op=>{op.addEventListener('click',()=>{if(qe.getAttribute('data-d'))return;qe.setAttribute('data-d','1');const oi=+op.getAttribute('data-o');const ok=oi===qs[qi].a;qe.querySelectorAll('.opt').forEach(x=>{x.setAttribute('disabled','');if(+x.getAttribute('data-o')===qs[qi].a)x.classList.add('ok');});if(!ok)op.classList.add('bad');qe.querySelector('.qwhy').classList.add('show');done++;if(ok)score++;if(done===qs.length)$(id+'-s').textContent='Score: '+score+' of '+qs.length+(score===qs.length?'. Nice work.':'. Re-read the explanations above and try the labs.');});});});}
+
+/* =================== CHART PICKER =================== */
+const MSGS=[
+ {m:'One or two numbers are the whole point',best:'Simple text',why:'A big number with a few words beats a chart with one or two bars.',ex:'"82% of site deliveries were on time (target 85%)."',avoid:'A table or graph for a single figure.'},
+ {m:'Readers need to look up exact values',best:'Table',why:'Tables are read, so each reader can find their own row, and units can differ.',ex:'A vendor scorecard for a mixed audience.',avoid:'Heavy borders, centred numbers, tables in a live talk.'},
+ {m:'Detail plus a quick feel for high and low',best:'Heatmap',why:'Colour saturation cues the eye while the numbers stay visible.',ex:'On-time % by hub and week.',avoid:'Rainbow scales. Use one colour and add a legend.'},
+ {m:'How something changes over time',best:'Line chart',why:'Connected points show continuity and direction.',ex:'Weekly inbound OTIF, forecast as a dotted line.',avoid:'Uneven time steps; markers on every point.'},
+ {m:'Comparing categories',best:'Horizontal bar chart, sorted',why:'Eyes compare bar ends, and labels read left to right before the data.',ex:'Late PO lines by vendor.',avoid:'Pie or donut, truncated axis, 3D.'},
+ {m:'Two time points across many categories',best:'Slopegraph',why:'Slope shows direction and size of change at once.',ex:'Utilisation by zone, this year vs last.',avoid:'Many overlapping lines. Highlight one instead.'},
+ {m:'A total and its few components',best:'Stacked bar with the focus series at the base, or 100% stacked',why:'Only the bottom segment shares a baseline.',ex:'Downtime hours by cause.',avoid:'Many segments and rainbow colours.'},
+ {m:'A survey scale from negative to positive',best:'100% stacked horizontal bar',why:'A common baseline at both ends lets you compare the extremes.',ex:'Safety-culture survey results.',avoid:'One pie per question.'},
+ {m:'A start, additions and deductions, and an end',best:'Waterfall chart',why:'It shows what moved the total from start to finish.',ex:'Headcount: start, hires, transfers, exits, end.',avoid:'Stacked bars that force mental subtraction.'},
+ {m:'A relationship between two measures',best:'Scatterplot',why:'It shows correlation and outliers.',ex:'Cost per move vs moves per month.',avoid:'Unexplained axes. Annotate what to notice.'},
+ {m:'Numbers of very different magnitude',best:'Square area graph',why:'Two dimensions let both extremes fit compactly.',ex:'Of 100 enquiries, 25 get a quote and 9 are won.',avoid:'Using area for ordinary comparisons; eyes read it poorly.'},
+ {m:'Two measures in different units over time',best:'Two panels sharing the x-axis, or direct labels',why:'It removes the guesswork about which axis belongs to which series.',ex:'Volume on top, on-time % below.',avoid:'A secondary y-axis.'},
+ {m:'Parts of a whole',best:'Horizontal bars, noting that they sum to 100%',why:'Pie angles are hard to rank; bars on a baseline are easy.',ex:'Share of delays by cause.',avoid:'Pie and donut charts.'}
+];
+function initPicker(){const tb=$('pickTable');if(tb)tb.innerHTML='<tr><th>If your message is…</th><th>Use</th><th>Why</th><th>Watch out</th></tr>'+MSGS.map(m=>'<tr><td class="k">'+esc(m.m)+'</td><td><b>'+esc(m.best)+'</b></td><td>'+esc(m.why)+'</td><td>'+esc(m.avoid)+'</td></tr>').join('');
+  const sel=$('pk_sel');if(!sel)return;sel.innerHTML=MSGS.map((m,i)=>'<option value="'+i+'">'+esc(m.m)+'</option>').join('');
+  const draw=()=>{const m=MSGS[+sel.value];$('pk_out').innerHTML='<div class="grid g2"><div class="card green"><span class="tag g">Best choice</span><h4 style="margin-top:8px">'+esc(m.best)+'</h4><p>'+esc(m.why)+'</p></div><div class="card"><h4>Logistics example</h4><p>'+esc(m.ex)+'</p><p class="small"><b>Avoid:</b> '+esc(m.avoid)+'</p></div></div>';};
+  sel.addEventListener('change',draw);draw();}
+
+/* =================== CONTEXT CANVAS =================== */
+function initCanvas(){const g=id=>($(id).value||'').trim();
+  const draft=()=>{const aud=g('cv_aud').replace(/^the\s+/i,''),act=g('cv_act'),ev=g('cv_ev'),st=g('cv_stake'),mech=$('cv_mech').value,tone=$('cv_tone').value;
+    const miss=[];if(!aud)miss.push('audience');if(!act)miss.push('action');if(!ev)miss.push('evidence');if(!st)miss.push('stake');
+    $('cv_msg').textContent=miss.length?'Still missing: '+miss.join(', ')+'.':'';
+    const big='Because '+(ev||'[evidence]')+(st?', and '+st:'')+', we ask the '+(aud||'[audience]')+' to '+(act||'[action]')+'.';
+    const mt={live:'Live: keep slides sparse, rehearse out loud, and tell the audience the structure up front.',read:'Written / dashboard: no one is there to explain, so put the conclusion in the titles and add annotations.',both:'Slideument: keep the main flow lean, push detail to an appendix, and test both uses.'}[mech];
+    $('cv_out').innerHTML='<div class="grid g2"><div class="card copper"><span class="tag c">Big Idea (draft)</span><p style="margin-top:8px;font-family:Georgia,serif;font-size:19px">'+esc(big)+'</p><p class="small">Check: has a point of view, states the stake, is a complete sentence.</p></div>'
+     +'<div class="card top"><span class="tag">3-minute story skeleton</span><ol class="tight" style="padding-left:20px"><li><b>Setup:</b> the situation the '+esc(aud||'audience')+' already recognises.</li><li><b>Conflict:</b> '+esc(ev||'the evidence that shows the gap')+'.</li><li><b>Resolution:</b> '+esc(act||'what you want them to do')+(st?', because '+esc(st):'')+'.</li></ol></div></div>'
+     +'<div class="callout teal"><b class="h">Delivery notes</b><p>'+esc(mt)+' Tone: '+esc(tone.toLowerCase())+'.</p></div>';};
+  $('cv_go').addEventListener('click',draft);
+  $('cv_ex').addEventListener('click',()=>{$('cv_aud').value='Operations Director';$('cv_act').value='approve a lease study for additional warehouse space';$('cv_ev').value='forecast storage demand exceeds current capacity from year 3';$('cv_stake').value='waiting puts upcoming projects at risk';$('cv_mech').value='read';draft();});}
+
+/* =================== ACTION TITLE CHECKER =================== */
+function initTitleChecker(){const VERBS=['fell','rose','grew','dropped','exceed','exceeds','miss','missed','misses','meets','met','recommend','approve','should','need','needs','drive','drives','cause','causes','doubled','tripled','slipped','declined','increased','decreased','reduce','cut','stop','start','close','trail','trailed','above','below'];
+  const GEN=/^(overview|summary|report|dashboard|analysis|review|update|status|trend|trends)\b|\bby (week|month|vendor|hub|zone|region|category)\s*$/i;
+  const run=()=>{const t=($('tt_in').value||'').trim();if(!t){$('tt_out').innerHTML='<p class="msg">Type a title first.</p>';return;}
+    const words=t.split(/\s+/).length,low=t.toLowerCase();
+    const checks=[{ok:/\d/.test(t),y:'Contains a number',n:'No number: add the size of the finding, for example "82% vs 85%".'},{ok:VERBS.some(v=>new RegExp('\\b'+v+'\\b').test(low)),y:'Contains a verb that signals change or action',n:'No action or change verb (fell, exceeds, approve…). A noun phrase is usually a topic label.'},{ok:!GEN.test(t),y:'Does not read like a generic label',n:'It starts or ends like a topic label ("Overview", "by vendor"). Say what the reader should conclude.'},{ok:words>=7&&words<=22,y:'A readable length ('+words+' words)',n:words<7?'Very short ('+words+' words): probably a label.':'Long ('+words+' words): trim to the single point.'}];
+    const pts=checks.filter(c=>c.ok).length;
+    $('tt_out').innerHTML='<div class="big"><div><b>'+pts+' / 4</b><span>teaching-heuristic score</span></div></div><ul class="tight">'+checks.map(c=>'<li>'+(c.ok?'<b style="color:var(--green)">✓</b> '+esc(c.y):'<b style="color:var(--red)">✗</b> '+esc(c.n))+'</li>').join('')+'</ul><p class="small">Pattern to aim for: <i>[subject] [changed or misses] [by how much] — [implication or ask]</i>. These checks cannot judge whether the claim is true.</p>';};
+  $('tt_go').addEventListener('click',run);$('tt_ex').addEventListener('click',()=>{$('tt_in').value='Warehouse utilization by zone';run();});}
+
+/* =================== STORY SEQUENCER =================== */
+const SEQ=[{t:'Warehouse space decisions are costly and hard to reverse, so we size them from a forecast.',r:'Setup (Bing)'},{t:'Forecast storage demand grows every year and peaks in year 4.',r:'Evidence'},{t:'Required space will exceed current capacity from year 3.',r:'Conflict'},{t:'Lease, build or raise utilisation: only a lease closes the gap in time.',r:'Options'},{t:'Recommendation: approve a lease study this quarter.',r:'Call to action'},{t:'Recap: gap in year 3, lease is the fastest fix, decision needed now.',r:'Recap (Bongo)'}];
+function initSequencer(){const order=[3,0,5,2,4,1];let mine=[];const pool=$('seq_pool'),ml=$('seq_mine');
+  const draw=()=>{pool.innerHTML=order.map(i=>{const used=mine.indexOf(i)>=0;return '<button class="alt" data-i="'+i+'" style="text-align:left;font-weight:400;'+(used?'opacity:.4;':'')+'"'+(used?' disabled':'')+'>'+esc(SEQ[i].t)+'</button>';}).join('');
+    ml.innerHTML=mine.map(i=>'<li>'+esc(SEQ[i].t)+'</li>').join('');
+    pool.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{mine.push(+b.getAttribute('data-i'));$('seq_out').innerHTML='';draw();}));};
+  $('seq_rst').addEventListener('click',()=>{mine=[];$('seq_out').innerHTML='';draw();});
+  $('seq_chk').addEventListener('click',()=>{if(mine.length<SEQ.length){$('seq_out').innerHTML='<p class="msg">Place all six headlines first.</p>';return;}const ok=mine.filter((v,i)=>v===i).length;
+    $('seq_out').innerHTML='<div class="callout '+(ok===6?'green':'')+'"><b class="h">'+ok+' of 6 in the right place</b><ol class="tight" style="padding-left:20px">'+SEQ.map((s,i)=>'<li><b>'+esc(s.r)+':</b> '+esc(s.t)+'</li>').join('')+'</ol><p class="small">Read the six headlines in this order and you have the whole story. That is horizontal logic. The recap repeats the message and the ask, so it sticks.</p></div>';});
+  draw();}
+
+/* =================== PRE-FLIGHT CHECKLIST =================== */
+const CHECKS=[['L1','I can name the one decision maker for this page.'],['L1','I can state what I want them to know or do in one sentence (Big Idea).'],['L1','I know whether it will be read alone or presented.'],['L1','I started with a storyboard, not with the tool.'],['L2','Each chart type matches the message (no pie, donut, 3D or secondary axis).'],['L2','Bar charts start at zero; time axes have even steps.'],['L2','Categories are sorted or in natural order.'],['L3','Chart borders, heavy gridlines and unneeded markers are gone.'],['L3','Labels are horizontal, abbreviated and free of trailing zeros.'],['L3','Series are labelled directly; there is no legend to decode.'],['L4','Context is grey; only the point carries the accent colour.'],['L4','Colour use is consistent across pages and works for colour-blind readers.'],['L4','A colleague looked away and back, and their eyes landed where I intended.'],['L5','Every chart and axis has a title; units and % signs are present.'],['L5','The title states the conclusion or ask, not the topic.'],['L5','Things are aligned on clean lines with margins preserved.'],['L6','Reading only the titles tells the story (horizontal logic).'],['L6','Everything on each page supports its title (vertical logic).'],['L6','The page ends with a clear call to action.'],['L6','Someone with no context told me what they understood.']];
+function initChecklist(){const ul=$('cl_list');if(!ul)return;ul.innerHTML=CHECKS.map((c,i)=>'<li><label><input type="checkbox" data-i="'+i+'"><span><span class="lt" title="'+esc(LT[c[0]])+'">'+c[0]+'</span> '+esc(c[1])+'</span></label></li>').join('');
+  const upd=()=>{const n=ul.querySelectorAll('input:checked').length;$('cl_bar').style.width=(100*n/CHECKS.length)+'%';$('cl_txt').textContent=n+' of '+CHECKS.length+' checks done'+(n===CHECKS.length?'. Ready to publish.':'');};
+  ul.querySelectorAll('input').forEach(x=>x.addEventListener('change',upd));upd();}
+
+/* =================== CLINIC RENDERER =================== */
+function ltags(arr){return arr.map(l=>'<span class="lt" title="'+esc(LT[l])+'">'+l+'</span>').join('');}
+function initClinic(){const host=$('clinic');if(!host)return;
+  host.innerHTML=CASES.map((c,i)=>'<div class="case" id="case-'+c.n+'"><div class="case-h"><span class="case-n">'+c.n+'</span><div><h3>'+esc(c.name)+'</h3><div>'+ltags(c.tags)+'</div></div></div><p class="ctx">'+esc(c.ctx)+'</p>'
+   +'<div class="row"><div><div class="seg" role="group" aria-label="Before or after"><button class="on" data-v="b">Before</button><button data-v="a">After</button></div><div class="stage'+(c.dark?' dark':'')+'" id="cs-'+c.n+'" style="margin-top:10px"></div></div>'
+   +'<div><h4>Diagnose first: tick every real flaw</h4>'+c.issues.map((s,k)=>'<label class="chk" data-k="'+k+'"><input type="checkbox"><span>'+esc(s.t)+(s.L?' '+ltags([s.L]):'')+'<span class="why" style="display:none">'+esc(s.w)+'</span></span></label>').join('')
+   +'<div class="btns"><button data-act="chk">Check my diagnosis</button><button class="cu" data-act="rev">Reveal makeover</button></div><div class="fb"></div></div></div>'
+   +'<div class="chg"><h4>What changed, and why</h4><ul>'+c.chg.map(x=>'<li>'+esc(x[0])+' '+ltags([x[1]])+'</li>').join('')+'</ul></div></div>').join('');
+  CASES.forEach(c=>{const root=$('case-'+c.n),st=$('cs-'+c.n),btns=root.querySelectorAll('.seg button'),chg=root.querySelector('.chg');
+    const show=v=>{st.innerHTML=(v==='a'?c.after:c.before)();btns.forEach(b=>{const on=b.getAttribute('data-v')===v;b.classList.toggle('on',on);b.classList.toggle('after',on&&v==='a');});chg.classList.toggle('show',v==='a');};
+    show('b');btns.forEach(b=>b.addEventListener('click',()=>show(b.getAttribute('data-v'))));
+    root.querySelector('[data-act=rev]').addEventListener('click',()=>{show('a');chg.scrollIntoView&&chg.scrollIntoView({block:'nearest',behavior:'smooth'});});
+    root.querySelector('[data-act=chk]').addEventListener('click',()=>{let hit=0,miss=0,decoy=0,real=0;
+      root.querySelectorAll('.chk').forEach(l=>{const k=+l.getAttribute('data-k'),s=c.issues[k],on=l.querySelector('input').checked;l.classList.remove('ok','bad','miss');if(s.ok)real++;
+        if(on&&s.ok){l.classList.add('ok');hit++;}else if(on&&!s.ok){l.classList.add('bad');decoy++;}else if(!on&&s.ok){l.classList.add('miss');miss++;}
+        l.querySelector('.why').style.display=(on||s.ok)?'block':'none';});
+      const fb=root.querySelector('.fb');fb.classList.add('show');fb.innerHTML='<b>You spotted '+hit+' of '+real+' real flaws</b>'+(decoy?' and ticked '+decoy+' that are not flaws':'')+'. Green = correct, red = not a flaw, amber = missed.'+(hit===real&&!decoy?' Sharp eye. Now reveal the makeover.':'');});});
+  const sm=$('clinicSummary');if(sm)sm.innerHTML='<tr><th>Case</th><th>The sin</th><th>The fix</th><th>Lessons</th></tr>'+CASES.map(c=>'<tr><td class="k">'+c.n+'. '+esc(c.name)+'</td><td>'+esc(c.sin)+'</td><td>'+esc(c.fix)+'</td><td>'+ltags(c.tags)+'</td></tr>').join('');}
+/* =================== LAB A: where does the axis start? =================== */
+function labA(){const sl=$('la_min'),tg=$('la_tgt');if(!sl)return;
+  const draw=()=>{const mn=+sl.value;$('la_v').textContent=mn;const W=640,H=320,x0=70,x1=600,y0=36,y1=270,top=100,yy=lin(mn,top,y1,y0),st=(x1-x0)/5;let s=Rc(0,0,W,H,'#fff');
+    const span=top-mn,step=span<=8?1:(span<=30?5:20);for(let v=Math.ceil(mn/step)*step;v<=top;v+=step){s+=Ln(x0,yy(v),x1,yy(v),'#ECE8DD',1)+T(x0-6,yy(v)+4,v+'%',{anchor:'end',size:11,fill:C.muted});}
+    s+=Ln(x0,y1,x1,y1,C.mgrey,1.2);
+    D3.forEach((d,i)=>{const x=x0+i*st+st*.2;s+=Rc(x,yy(d[1]),st*.6,y1-yy(d[1]),d[1]<95?C.copper:C.grey)+T(x+st*.3,yy(d[1])-6,d[1].toFixed(1)+'%',{anchor:'middle',size:11.5,weight:700,fill:C.dark})+T(x+st*.3,y1+18,d[0],{anchor:'middle',size:11.5,fill:C.muted});});
+    if(tg.checked&&95>mn)s+=Ln(x0,yy(95),x1,yy(95),C.dark,1.2,'5 4')+T(x1,yy(95)-5,'Target 95%',{anchor:'end',size:11,weight:700});
+    s+=T(x0,20,'On-time delivery by hub · axis starts at '+mn+'%',{size:12.5,weight:700,fill:C.dark});
+    $('la_chart').innerHTML=SV(W,H,s,'Bar chart with adjustable axis baseline');
+    const a=D3[0][1],e=D3[4][1],vis=(a-mn)/(e-mn),real=a/e,looks=(1-(e-mn)/(a-mn))*100,act=(1-e/a)*100;
+    $('la_big').innerHTML='<div><b>'+vis.toFixed(1)+'×</b><span>how much taller Hub A looks than Hub E</span></div><div><b>'+real.toFixed(2)+'×</b><span>how much higher Hub A really is</span></div><div><b>'+looks.toFixed(0)+'%</b><span>how much shorter Hub E looks</span></div><div><b>'+act.toFixed(1)+'%</b><span>how much lower Hub E actually is</span></div>';
+    $('la_msg').textContent=mn===0?'Honest: the bars look nearly equal, and that is the truth. Use the target line and colour to show who misses, not a distorted axis.':(mn>=80?'Distorted: the closer the baseline is to the data, the bigger the apparent gap. Bars must start at zero.':'Getting closer to the truth. Keep sliding toward zero.');};
+  sl.addEventListener('input',draw);tg.addEventListener('change',draw);draw();}
+
+/* =================== LAB B: pie or bar =================== */
+const LBL=['Customs','Vendor delay','Documents','Transport','Weather'],DEFB=[26,24,21,18,11];
+function labB(){const inp=$('lb_in');if(!inp)return;inp.innerHTML=LBL.map((n,i)=>'<label>'+n+'<input type="number" min="0" step="1" id="lb_v'+i+'" value="'+DEFB[i]+'"></label>').join('');
+  const draw=()=>{const vals=LBL.map((n,i)=>Math.max(0,+$('lb_v'+i).value||0)),tot=sum(vals);if(tot<=0){$('lb_msg').textContent='Enter at least one positive value.';return;}
+    const pc=vals.map(v=>100*v/tot),tilt=$('lb_3d').checked,showP=$('lb_pct')&&$('lb_pct').checked;
+    const W=320,H=270,cx=105,cy=120,r=88,k=tilt?.55:1;let a=-Math.PI/2,side='',top='',lab='';
+    pc.forEach((p,i)=>{const a1=a+p/100*2*Math.PI;if(p>0){if(tilt)side+='<path d="'+arc(cx,cy+26,r,a,a1)+'" fill="'+dk(RB[i],.55)+'" stroke="#000"/>';top+='<path d="'+arc(cx,cy,r,a,a1)+'" fill="'+RB[i]+'" stroke="#fff" stroke-width="1"/>';const m=(a+a1)/2;if(showP)lab+=T(cx+.64*r*Math.cos(m),cy*(1-k)+k*(cy+.64*r*Math.sin(m))+4,Math.round(p)+'%',{anchor:'middle',size:11,weight:700,fill:'#fff'});}a=a1;});
+    let lg='';LBL.forEach((n,i)=>{lg+=Rc(205,70+i*28,12,12,RB[i])+T(223,81+i*28,n,{size:11.5});});
+    $('lb_pie').innerHTML=SV(W,H,Rc(0,0,W,H,'#fff')+T(12,20,'Pie: can you rank the slices?',{size:12.5,weight:700,fill:C.dark})+'<g transform="translate(0 '+(cy*(1-k)).toFixed(1)+') scale(1 '+k+')">'+side+top+'</g>'+lab+lg,'Pie chart');
+    const ord=LBL.map((n,i)=>({n:n,p:pc[i]})).sort((x,y)=>y.p-x.p),mx=ord[0].p;
+    const items=ord.map((d,i)=>({l:d.n,v:d.p,c:i===0?C.copper:C.grey,bold:i===0,lab:d.p.toFixed(0)+'%'}));
+    $('lb_bar').innerHTML=SV(W,H,Rc(0,0,W,H,'#fff')+T(12,20,'Bars: sorted, labelled',{size:12.5,weight:700,fill:C.dark})+HB(items,{x0:6,y0:44,lw:90,w:170,bh:28,gap:16,max:Math.max(mx*1.05,1),fs:12}),'Sorted bar chart');
+    const gap=ord[0].p-ord[1].p;let close=0;for(let i=0;i<ord.length-1;i++)if(ord[i].p-ord[i+1].p<3)close++;
+    $('lb_big').innerHTML='<div><b>'+gap.toFixed(1)+' pts</b><span>gap between #1 and #2</span></div><div><b>'+ord[0].p.toFixed(0)+'%</b><span>largest share ('+esc(ord[0].n)+')</span></div><div><b>'+close+' of '+(ord.length-1)+'</b><span>neighbouring pairs within 3 points</span></div>';
+    $('lb_msg').textContent=gap<3?'Pie: practically impossible to tell #1 from #2. Bars: obvious at a glance because the ends sit on a shared baseline.':(gap<8?'Pie: readable only if you add labels. Bars still win on speed.':'The leader is clear even in a pie, but bars still show the incremental differences between the rest.');};
+  LBL.forEach((n,i)=>$('lb_v'+i).addEventListener('input',draw));$('lb_3d').addEventListener('change',draw);if($('lb_pct'))$('lb_pct').addEventListener('change',draw);
+  $('lb_rst').addEventListener('click',()=>{DEFB.forEach((v,i)=>{$('lb_v'+i).value=v;});$('lb_3d').checked=false;if($('lb_pct'))$('lb_pct').checked=false;draw();});draw();}
+
+/* =================== LAB C: dual axis =================== */
+function labC(){const mn=$('lc_min'),mx=$('lc_max');if(!mn)return;let mode='dual';const rr=pearson(VOL,OTP);
+  const dual=(a,b)=>{const W=640,H=340,x0=64,x1=570,y0=44,y1=290,st=(x1-x0)/12,yl=lin(0,1800,y1,y0),yr=lin(a,b,y1,y0);let s=Rc(0,0,W,H,'#fff')+Ln(x0,y1,x1,y1,C.mgrey,1.2);
+    [0,600,1200,1800].forEach(v=>{s+=Ln(x0,yl(v),x1,yl(v),'#F0ECE2',1)+T(x0-6,yl(v)+4,fmt(v),{anchor:'end',size:10.5,fill:C.muted});});
+    for(let i=0;i<=4;i++){const v=a+(b-a)*i/4;s+=T(x1+8,yr(v)+4,Math.round(v)+'%',{size:10.5,fill:C.copper});}
+    VOL.forEach((v,i)=>{s+=Rc(x0+i*st+st*.18,yl(v),st*.64,y1-yl(v),C.lgrey);s+=T(x0+i*st+st/2,y1+17,MON[i],{anchor:'middle',size:10.5,fill:C.muted});});
+    s+=Pl(OTP.map((v,i)=>[x0+i*st+st/2,yr(v)]),C.copper,3.2)+T(x0,22,'Volume, TEU (bars, left axis)',{size:11.5,weight:700,fill:C.muted})+T(x1+8,22,'On-time % (line, right axis)',{size:11.5,weight:700,fill:C.copper,anchor:'end'});
+    return SV(W,H,s,'Dual-axis chart with adjustable right axis');};
+  const draw=()=>{let a=+mn.value,b=+mx.value;$('lc_v1').textContent=a;$('lc_v2').textContent=b;
+    $('lc_chart').innerHTML=mode==='split'?c2After():dual(a,b);const span=b-a;
+    $('lc_big').innerHTML='<div><b>r = '+rr.toFixed(2)+'</b><span>correlation of the two series (never changes)</span></div><div><b>'+(mode==='split'?'n/a':a+'–'+b)+'</b><span>right-axis range</span></div><div><b>'+(mode==='split'?'n/a':Math.round(100*(95-84)/span)+'%')+'</b><span>how tall the real 11-point dip looks (of plot height)</span></div>';
+    $('lc_msg').textContent=mode==='split'?'Two panels with a shared month axis show the relationship without inviting axis games. This is the recommended fix.':(span<=16?'Exaggerated: a modest dip now looks like a collapse.':(span>=100?'Hidden: the line looks almost flat, and nobody would see the problem.':'A reasonable range, but readers still have to work out which axis belongs to which series.'));};
+  mn.addEventListener('input',()=>{mode='dual';draw();});mx.addEventListener('input',()=>{mode='dual';draw();});
+  const set=(a,b,m)=>{mn.value=a;mx.value=b;mode=m;draw();};const P={honest:[80,100,'dual'],hide:[0,400,'dual'],exag:[83,96,'dual'],split:[80,100,'split']};
+  document.querySelectorAll('[data-lc]').forEach(btn=>btn.addEventListener('click',()=>{const p=P[btn.getAttribute('data-lc')];set(p[0],p[1],p[2]);}));draw();}
+
+/* =================== LAB D: declutter and focus =================== */
+const RECV=[298,306,312,310,315,318,336,352,350,348,356,362],PROC=[300,305,310,308,312,260,255,268,272,270,265,274];
+const LDC=[['border','Chart border and background box'],['grid','Dark gridlines'],['markers','Data markers on every point'],['rot','Full month names, rotated 45°'],['zeros','Trailing zeros on the axis (250.00)'],['legend','Legend instead of direct labels'],['defcol','Default tool colours (blue and orange)']];
+const LDF=[['accent','Grey out "Received", accent the "Processed" line'],['gap','Shade the growing gap'],['title','Action title, annotation and end labels']];
+function lineLab(o){const W=640,H=o.legend?376:350,x0=64,x1=o.legend?596:520,y0=106,y1=272,yy=lin(200,400,y1,y0),xx=lin(0,11,x0+8,x1-8);
+  let cr=o.defcol?'#4472C4':C.mgrey,cp=o.defcol?'#ED7D31':C.teal,wr=2.5,wp=2.5;if(o.accent){cr='#C9C5B9';cp=C.copper;wr=2;wp=4.5;}
+  let s=o.border?Rc(1.5,1.5,W-3,H-3,'#fff','stroke="#777" stroke-width="3"'):Rc(0,0,W,H,'#fff');
+  const backlog=sum(RECV.slice(5).map((v,i)=>v-PROC[5+i]));
+  if(o.title){const h=AT('Receiving has fallen behind inbound volume since June, building a backlog of about '+(Math.round(backlog/10)*10)+' pallets','Inbound pallets per day, monthly average',60);s+=h.s;}else s+=T(24,30,'Inbound pallets per day, by month',{size:15,weight:700,font:SER,fill:C.dark});
+  for(let v=200;v<=400;v+=50){if(o.grid)s+=Ln(x0,yy(v),x1,yy(v),'#666',1);s+=T(x0-6,yy(v)+4,o.zeros?v.toFixed(2):String(v),{anchor:'end',size:10.5,fill:C.muted});}
+  s+=Ln(x0,y1,x1,y1,C.mgrey,1.2);
+  if(o.gap){const up=RECV.slice(5).map((v,i)=>[xx(5+i),yy(v)]),dn=PROC.slice(5).map((v,i)=>[xx(5+i),yy(v)]).reverse();s+='<polygon points="'+up.concat(dn).map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')+'" fill="'+C.copper+'" opacity=".16"/>';}
+  const lr=RECV.map((v,i)=>[xx(i),yy(v)]),lp=PROC.map((v,i)=>[xx(i),yy(v)]);s+=Pl(lr,cr,wr)+Pl(lp,cp,wp);
+  if(o.markers){lr.forEach(p=>{s+=Cr(p[0],p[1],3.6,cr);});lp.forEach(p=>{s+=Cr(p[0],p[1],3.6,cp);});}
+  MON.forEach((m,i)=>{if(o.rot)s+=T(xx(i)+4,y1+14,MONF[i],{anchor:'end',size:9.5,rot:-45});else s+=T(xx(i),y1+18,m,{anchor:'middle',size:10.5,fill:C.muted});});
+  if(o.legend){s+=Rc(190,H-26,12,12,cr)+T(208,H-15,'Received',{size:11.5})+Rc(310,H-26,12,12,cp)+T(328,H-15,'Processed',{size:11.5});}
+  else{s+=T(x1+8,yy(RECV[11])+4,'Received'+(o.title?' '+RECV[11]:''),{size:12,weight:o.accent?400:700,fill:o.accent?C.mgrey:cr})+T(x1+8,yy(PROC[11])+4,'Processed'+(o.title?' '+PROC[11]:''),{size:12,weight:700,fill:cp});}
+  if(o.title)s+=T(xx(5),yy(PROC[5])+22,'2 staff left in June',{anchor:'middle',size:11.5,weight:700,fill:C.copper});
+  return {svg:SV(W,H,s,'Line chart of pallets received versus processed'),backlog:backlog};}
+function labD(){const cl=$('ld_clutter');if(!cl)return;const st={};LDC.forEach(x=>st[x[0]]=true);LDF.forEach(x=>st[x[0]]=false);
+  const mk=(host,list)=>{host.innerHTML=list.map(x=>'<label class="chk"><input type="checkbox" data-k="'+x[0]+'"><span>'+esc(x[1])+'</span></label>').join('');host.querySelectorAll('input').forEach(i=>i.addEventListener('change',()=>{st[i.getAttribute('data-k')]=i.checked;draw();}));};
+  mk(cl,LDC);mk($('ld_focus'),LDF);
+  const sync=()=>{document.querySelectorAll('#ld_clutter input,#ld_focus input').forEach(i=>{i.checked=!!st[i.getAttribute('data-k')];});};
+  const draw=()=>{sync();const r=lineLab(st);$('ld_chart').innerHTML=r.svg;const nc=LDC.filter(x=>st[x[0]]).length,nf=LDF.filter(x=>st[x[0]]).length;
+    $('ld_big').innerHTML='<div><b>'+nc+' / '+LDC.length+'</b><span>clutter elements switched on</span></div><div><b>'+nf+' / '+LDF.length+'</b><span>focus aids switched on</span></div><div><b>~'+(Math.round(r.backlog/10)*10)+'</b><span>pallet backlog hiding in the data</span></div>';
+    $('ld_msg').textContent=(nc>=5&&nf===0)?'Readers must decode the chart before they can think about it, and many will not bother.':(nc>=3&&nf<3)?'Still noisy. Every extra element competes with the gap that matters.':(nc<=1&&nf===0)?'Clean, but the story is not shown yet: readers must find the gap themselves.':(nc<=1&&nf===3)?'The story is visible in a few seconds: the book notes you often get only 3 to 8 seconds of attention.':'Getting there. Try removing the remaining clutter and adding the missing focus aids.';};
+  $('ld_all').addEventListener('click',()=>{LDC.forEach(x=>st[x[0]]=true);LDF.forEach(x=>st[x[0]]=false);draw();});
+  $('ld_none').addEventListener('click',()=>{LDC.forEach(x=>st[x[0]]=false);LDF.forEach(x=>st[x[0]]=false);draw();});
+  $('ld_best').addEventListener('click',()=>{LDC.forEach(x=>st[x[0]]=false);LDF.forEach(x=>st[x[0]]=true);draw();});draw();}
+
+/* =================== LAB E: count the 3s =================== */
+function genGrid(seed,target){const r=mulberry32(seed),n=60,d=[],other=[0,1,2,4,5,6,7,8,9];for(let i=0;i<n;i++)d.push(Math.floor(r()*10));let c=d.filter(x=>x===3).length;
+  while(c<target){const j=Math.floor(r()*n);if(d[j]!==3){d[j]=3;c++;}}while(c>target){const j=Math.floor(r()*n);if(d[j]===3){d[j]=other[Math.floor(r()*9)];c--;}}return d;}
+function gridSVG(d,hl){const W=640,H=200;let s=Rc(0,0,W,H,'#fff');d.forEach((v,i)=>{const col=i%12,row=Math.floor(i/12),x=34+col*47,y=38+row*36;const is3=v===3;s+=T(x,y,String(v),{anchor:'middle',size:hl&&is3?26:22,weight:hl&&is3?700:400,fill:hl?(is3?C.copper:'#B9B5AA'):C.dark,font:'Consolas,Courier New,monospace'});});return SV(W,H,s,'Grid of digits');}
+function labE(){const b=$('le_start');if(!b)return;let round=0,t0=0,cnt=7,res=[],cur=null;const grid=$('le_grid'),ans=$('le_ans');
+  const show=()=>{$('le_big').innerHTML=res.map((r,i)=>'<div><b>'+r.t.toFixed(1)+' s</b><span>Round '+(i+1)+(i===1?' (cue added)':' (no cue)')+' · '+(r.ok?'correct':'answered '+r.a+', correct was '+cnt)+'</span></div>').join('');};
+  b.addEventListener('click',()=>{round=res.length+1;if(round>2){res=[];round=1;$('le_res').textContent='';}cur=genGrid(round===1?21:84,cnt);grid.innerHTML=gridSVG(cur,round===2);grid.style.display='block';ans.style.display='flex';$('le_in').value='';$('le_in').focus&&$('le_in').focus();b.style.display='none';$('le_msg').textContent='Count the digit 3 and type your answer. The clock is running.';t0=performance.now();show();});
+  $('le_sub').addEventListener('click',()=>{const a=parseInt($('le_in').value,10);if(isNaN(a))return;const t=(performance.now()-t0)/1000;res.push({t:t,a:a,ok:a===cnt});grid.style.display='none';ans.style.display='none';b.style.display='inline-block';$('le_msg').textContent='';
+    if(res.length===1){b.textContent='Start round 2 (a visual cue is added)';}else{b.textContent='Play again';const r1=res[0],r2=res[1];$('le_res').textContent=(r1.ok&&r2.ok)?(r2.t<r1.t?'With the cue you were '+(r1.t/r2.t).toFixed(1)+'× faster, and the extra effort of scanning disappeared. That is a preattentive attribute at work: colour and size make the 3s pop out before you start thinking.':'This time the cue did not help your speed. Results vary by person and screen, but most people find the cued grid easier.'):'One of your answers was off, so the timings are not directly comparable. Try again.';}
+    show();});}
+
+/* =================== LAB F: one dataset, three audiences =================== */
+const HUBS6=['Hub A','Hub B','Hub C','Hub D','Hub E','Hub F'],LATE6=[14,9,31,12,7,22],COST6=380;
+function labF(){const seg=$('lf_seg');if(!seg)return;const tot=sum(LATE6),avg=tot/LATE6.length,cf=LATE6[2]+LATE6[5],cfPct=Math.round(100*cf/tot),mult=(LATE6[2]/avg).toFixed(1);
+  const AUD=[{k:'vp',n:'VP Logistics',care:'Where to focus the improvement programme',hl:[2,5],title:'Two hubs, C and F, account for '+cfPct+'% of late deliveries',ask:'Approve an improvement programme for Hubs C and F',big:'Because two hubs cause '+cfPct+'% of late deliveries, we ask the VP to fund a focused programme there.',lab:i=>String(LATE6[i]),line:false},
+   {k:'sup',n:'Hub C supervisor',care:'How my hub compares and what to fix',hl:[2],title:'Hub C had about '+mult+'× the network average of late deliveries: '+LATE6[2]+' vs '+Math.round(avg),ask:'Review the Hub C root causes with your team this week',big:'Because Hub C runs about twice the average late rate, we ask the supervisor to review root causes this week.',lab:i=>String(LATE6[i]),line:true},
+   {k:'fin',n:'Finance controller',care:'What it costs and what to budget',hl:[2,5],title:'Late deliveries cost about $'+fmt(tot*COST6)+' in four weeks; Hubs C and F drive $'+fmt(cf*COST6),ask:'Include the late-delivery cost in the Q4 forecast',big:'Because late deliveries cost about $'+fmt(tot*COST6)+' per four weeks, we ask Finance to reflect it in the Q4 forecast.',lab:i=>'$'+fmt(LATE6[i]*COST6),line:false}];
+  seg.innerHTML=AUD.map((a,i)=>'<button data-i="'+i+'"'+(i===0?' class="on after"':'')+'>'+a.n+'</button>').join('');
+  const draw=i=>{const a=AUD[i],W=640,H=360,h=AT(a.title,'Late deliveries by hub, last four weeks (fictional data; assumed cost per late delivery: $'+COST6+')',60);
+    const ord=LATE6.map((v,k)=>k).sort((x,y)=>LATE6[y]-LATE6[x]);const o={x0:20,y0:h.y+30,lw:70,w:360,bh:28,gap:12,max:Math.max.apply(null,LATE6)*1.12};if(a.line)o.minLx=o.x0+o.lw+o.w*avg/o.max+8;
+    const items=ord.map(k=>({l:HUBS6[k],v:LATE6[k],c:a.hl.indexOf(k)>=0?C.copper:C.grey,bold:a.hl.indexOf(k)>=0,lab:a.lab(k)}));let s=Rc(0,0,W,H,'#fff')+h.s+HB(items,o);
+    if(a.line){const tx=o.x0+o.lw+o.w*avg/o.max;s+=Ln(tx,h.y+16,tx,o.y0+6*(o.bh+o.gap)-8,C.dark,1.2,'5 4')+T(tx,h.y+12,'Network average '+Math.round(avg),{anchor:'middle',size:11,weight:700});}
+    $('lf_chart').innerHTML=SV(W,H,s,'Bars by hub, highlighted for '+a.n);
+    $('lf_info').className='grid g2x';$('lf_info').innerHTML='<div class="card top"><h4>What '+esc(a.n)+' cares about</h4><p>'+esc(a.care)+'.</p></div><div class="card copper"><h4>The ask</h4><p>'+esc(a.ask)+'.</p></div><div class="card" style="grid-column:1/-1"><h4>Big Idea for this audience</h4><p style="font-family:Georgia,serif;font-size:18px;margin:0">'+esc(a.big)+'</p><p class="small" style="margin-top:8px">Same data, different headline, highlight and ask. Specific audiences get a communication that actually fits them.</p></div>';
+    seg.querySelectorAll('button').forEach((x,k)=>{x.classList.toggle('on',k===i);x.classList.toggle('after',k===i);});};
+  seg.querySelectorAll('button').forEach(x=>x.addEventListener('click',()=>draw(+x.getAttribute('data-i'))));draw(0);}
+/* =================== EXERCISE STUDIO (all scenarios fictional) =================== */
+const K={core:'Core',sup:'Supporting',noise:'Noise',mis:'Misleading'};
+const EX=[
+{t:'Late vendors: escalate or not?',aud:'Logistics Manager, in a 10-minute weekly review',dec:'Whether to escalate to specific vendors',ask:'Approve an escalation meeting this week',
+ d:[['core','Late PO lines by vendor, last 12 weeks','The decision is which vendors to escalate, so show where lateness concentrates.'],['core','Late % per vendor vs the agreed target','A percentage normalises for vendor size, and the target defines "bad".'],['sup','Average delay (days) on the late lines','Separates a few days late from weeks late.'],['sup','PO lines per vendor (the denominator)','Shows the percentages are not based on tiny samples.'],['sup','Share of spend held by the worst vendors','Shows leverage, and the cost of a bad relationship.'],['noise','Full PO list with 40 columns','Exploratory detail. Put it behind a drill-through, not on the page.'],['noise','Number of vendors in the master data','True, but unrelated to the decision.'],['noise','Vendor logos and contact cards','Decoration.'],['mis','Network-wide on-time % only','An average hides that two vendors are far worse than the rest.'],['noise','Vendor performance for the last five years','Too much history for a weekly decision.']],
+ v:[['Horizontal bars of late % by vendor, sorted, with the target line',25,'Easy ranking on one baseline, and the target shows who is out of bounds.'],['Pie chart of late lines by vendor',5,'Slices are hard to rank, and share of lates ignores vendor size.'],['3D clustered columns, one cluster per vendor',0,'3D distorts values and adds clutter.'],['A 60-row table with colour on every cell',8,'Colour on everything means nothing stands out, and a table is slow to scan in a meeting.']],
+ h:[['Vendor performance overview',0,'A topic label that tells the reader nothing.'],['Two vendors cause half of late PO lines: escalate Brightline and Delta this week',25,'States the finding and the ask in one sentence.'],['Late PO lines by vendor, Q3',0,'Descriptive, not a conclusion.'],['Vendor performance is a concern',8,'A conclusion of sorts, but vague, with no size and no ask.']],
+ m:'Headline with the ask; sorted horizontal bars of late % with the target line, the two vendors above target in the accent colour; a small table of lines, average delay and spend share for those two; the full PO list one click away.'},
+{t:'Do we need to lease more warehouse space?',aud:'Operations Director and Finance Controller',dec:'Whether to lease additional space',ask:'Approve a lease study this quarter',
+ d:[['core','Forecast of peak-year average inventory volume, three to five years','Capacity is sized from the forecast peak-year average, so this is the foundation.'],['core','Required floor space per year vs current capacity','This is the gap that drives the decision.'],['core','Utilisation vs the planning ceiling','Shows how much headroom exists today.'],['sup','Sensitivity of the result to rack levels, movement factor and utilisation','Shows how robust the conclusion is, and which assumption matters most.'],['sup','Lease vs build cost per square metre','Needed once the need is accepted.'],['sup','Assumptions behind the forecast (partial-pallet factor, rack levels)','Makes the numbers defensible. Put in a footnote or a drill-down.'],['noise','Daily inventory snapshot for the last 24 months','Exploratory detail for the analyst, not the decision maker.'],['noise','Photos of pallet types','Decoration.'],['mis','Total inventory value in dollars','Value is not space: small, expensive items distort the picture.'],['noise','Number of SKUs by category','Not related to space needs at this level.']],
+ v:[['Line chart: required space (forecast dotted) against a current-capacity line, gap shaded',25,'Time on the x-axis, a clear threshold and an honest forecast cue.'],['Pie of inventory by category',0,'Shows composition, not whether space is sufficient.'],['A gauge showing today\'s utilisation',6,'One point in time cannot show the future gap.'],['Stacked column of 20 categories per year',4,'Too many segments, and capacity is not visible.']],
+ h:[['Warehouse capacity forecast',0,'A topic label.'],['Required space will exceed current capacity from year 3: start a lease study now',25,'Gives the finding, the timing and the ask.'],['Inventory is growing across all categories',8,'May be true, but does not lead to the decision.'],['Many factors affect how much warehouse space we need',0,'Vague, with no conclusion.']],
+ m:'Action title with the ask; one line chart of required space (actual solid, forecast dotted) against the capacity line with the gap shaded from year 3; a small sensitivity strip; assumptions in a footnote.'},
+{t:'Jetty congestion: add berth capacity?',aud:'Marine Superintendent and Terminal General Manager',dec:'Whether to add berth capacity or windows',ask:'Decide on options to add capacity',
+ d:[['core','Berth occupancy by month vs the planning threshold','Congestion is about occupancy relative to a limit.'],['core','Vessel waiting time (hours) trend','Shows whether the congestion actually costs time.'],['core','Share of waiting time by cause (berth busy, pilot or tug, weather)','Tells you whether more berth capacity would even help.'],['sup','Forecast vessel arrivals for the next six months','Shows whether the pressure will grow.'],['sup','Turnaround time by cargo type','Helps see which flows occupy the berth longest.'],['noise','Fuel price index','Not related to this decision.'],['noise','Crew nationality breakdown','Irrelevant here.'],['noise','Raw vessel position tracks','Exploratory data that clutters the page.'],['mis','Annual average berth occupancy only','Congestion happens at peaks; an annual average hides them.']],
+ v:[['Line chart: occupancy actual and forecast (dotted) with the threshold line and the breach period shaded',25,'Shows the trend, the limit and the future problem together.'],['100% stacked bar of waiting-time causes only',10,'Useful as a supporting panel, but it misses the occupancy story.'],['Pie of vessels by cargo type',0,'Not related to the question.'],['3D area chart of arrivals',0,'3D adds clutter and distorts.']],
+ h:[['Berth occupancy is forecast to pass the 70% planning threshold by Q2, driving longer waits: decide on added capacity',25,'States the finding, the reason and the ask.'],['Jetty performance dashboard',0,'A topic label.'],['Vessel waiting time analysis',0,'Descriptive, not a conclusion.'],['Occupancy has been rising',8,'True, but with no threshold, size or ask.']],
+ m:'Action title; main line chart of occupancy with the threshold and shaded breach; a small panel splitting waiting time by cause; arrivals forecast as the supporting annotation.'},
+{t:'Safety committee: where to add supervision?',aud:'Site Safety Committee',dec:'Which area gets extra supervision',ask:'Allocate extra supervision to one area',
+ d:[['core','Incidents by area, last 12 months','Shows where the problem concentrates.'],['core','Trend of incidents in the top area vs the others','A rising area is a stronger case than a high but stable one.'],['sup','Severity mix of the top area\'s incidents','Shows whether the risk is serious, not only frequent.'],['sup','Near-miss reports by area','A sign of reporting culture and early warnings.'],['sup','Exposure hours by area','Lets you compare rates fairly.'],['noise','Names of individuals involved','Not needed for the decision and sensitive; keep it in the investigation system.'],['noise','Full narrative of each incident','Detail for investigators, not for this committee.'],['noise','Daily weather log','Only relevant if analysis links it to incidents.'],['mis','Company-wide total incidents only','A flat total can hide one area that is getting worse.']],
+ v:[['Horizontal bars by area with the top area highlighted, plus a small trend line for it',25,'Ranking plus trend answers "where" and "is it getting worse".'],['Radar chart of areas across six metrics',3,'Radar charts are hard to read and compare.'],['A map with coloured pins for every incident',8,'Adds spatial context but is dense and slow to read.'],['Pie of incidents by area',5,'Hard to rank, and no trend.']],
+ h:[['Incidents in Area 3 rose four months in a row while other areas stayed flat: add supervision there',25,'Finding, evidence and ask in one sentence.'],['Safety incident report',0,'A topic label.'],['Total incidents were down 2% year on year',4,'A flat headline that hides the growing area.'],['Safety needs everyone\'s attention',0,'A slogan, not a finding.']],
+ m:'Action title with the ask; sorted bars of incidents by area with Area 3 in the accent colour; a small line for the Area 3 trend; severity and exposure hours as supporting notes.'},
+{t:'Can we cut safety stock?',aud:'Inventory Manager and Finance Director',dec:'Where to reduce safety stock without hurting service',ask:'Approve a safety-stock reduction on selected classes',
+ d:[['core','Service level achieved vs target by ABC class','Safety stock is justified by service, so show where service is above target.'],['core','Inventory value by ABC class','Shows where the money sits.'],['core','Share of value older than 365 days by class','Slow-moving stock is where cuts can be safest.'],['sup','Forecast error (MAPE and bias) by class','Explains how much safety stock the variability justifies.'],['sup','Stockout events in the last 12 months','Shows the risk of cutting.'],['sup','Safety-stock coverage in days by class','Links stock to policy.'],['mis','Total inventory value alone','One big number gives no direction on where to cut.'],['noise','List of all SKUs','Exploratory detail; keep behind a drill-down.'],['noise','Supplier addresses','Irrelevant.']],
+ v:[['100% stacked horizontal bars of aging buckets by ABC class, slow-moving bucket accented',25,'A common baseline at both ends makes the slow-moving share easy to compare.'],['Donut of inventory value by class',5,'Harder to read and no service or aging view.'],['3D columns of value by class',0,'3D distorts.'],['A table of 3,000 SKUs',4,'Too much detail for a decision.']],
+ h:[['Slow-moving stock is concentrated in C items, where service is well above target: reduce their safety stock first',25,'Finding, reason and ask.'],['Inventory overview',0,'A topic label.'],['We should reduce inventory',8,'An ask without evidence or a target.'],['Inventory by class, FY',0,'Descriptive.']],
+ m:'Action title with the ask; aging buckets as 100% stacked horizontal bars by ABC class with the slow-moving bucket accented; a small service-versus-target strip; forecast error in a footnote.'},
+{t:'Ask for two backfill hires',aud:'Department Head, who holds the headcount budget',dec:'Whether to approve two replacement hires in receiving',ask:'Approve two backfill hires',
+ d:[['core','Monthly pallets received vs processed, last 12 months','The gap between the two lines is the case.'],['core','The month the two staff left, as an annotation','Explains the cause of the shift.'],['sup','Accumulated backlog','Shows how big the gap has become.'],['sup','Overtime hours','Shows the hidden cost of staying short-staffed.'],['sup','Processing per person (available if asked)','Good to hold in reserve to answer questions.'],['mis','Full-year totals of received and processed as single numbers','They hide the timing and the widening gap.'],['noise','Org chart of the whole department','Irrelevant to the ask.'],['noise','Engagement survey results','Not related to this decision.'],['noise','Training hours per person','Not related to this decision.']],
+ v:[['Line chart of received vs processed with an annotation at the month staff left',25,'Shows the gap opening at a specific event.'],['Stacked column of tasks by type',5,'Does not show the gap.'],['Gauge of current staff utilisation',4,'A single point in time with no trend.'],['Table of monthly numbers',8,'Readable, but the reader must find the gap alone.']],
+ h:[['Receiving has trailed inbound volume since June: please approve two backfill hires',25,'Finding and ask together.'],['Receiving team performance',0,'A topic label.'],['Staff turnover impacts the team',8,'A cause, with no data and no ask.'],['Volume received and processed, last 12 months',0,'Descriptive.']],
+ m:'Action title with the ask; one line chart with two series, Processed in the accent colour; an annotation for the month staff left; the backlog and overtime as small supporting numbers.'},
+{t:'The executive one-pager: pick the vital few',aud:'Executive Committee, monthly',dec:'Whether logistics is on track and where to intervene',ask:'Decide on interventions for off-target KPIs',
+ d:[['core','Site OTIF vs target','Measures what the business feels: on-time, in-full delivery to site.'],['core','Inbound OTIF vs target','Shows whether the supply side is delivering.'],['core','Safety: recordable incident rate vs target','A non-negotiable outcome metric.'],['core','Logistics cost per unit moved vs budget','The financial outcome.'],['sup','Inventory days of supply vs target','Useful context, but a secondary outcome.'],['sup','Top three exceptions needing a decision','Moves the page from reporting to deciding.'],['noise','Number of dashboard views','An activity metric, not an outcome.'],['noise','Number of PO lines created','Activity, not performance.'],['noise','Headcount by shift','Not an executive outcome here.'],['mis','One blended "logistics health index" score','Mixes units and hides which KPI is failing.']],
+ v:[['Three or four KPI cards with target and sparkline; the off-target one accented; exceptions listed below',25,'Gives context and focus, with an obvious next step.'],['A grid of twelve gauges',3,'Too many equal items; nothing is prioritised.'],['A radar chart of all KPIs',5,'Hard to read, and units differ.'],['A single traffic light for overall performance',8,'Too coarse to act on.']],
+ h:[['Logistics is on target except site delivery, which has slipped five weeks in a row: decide on the recovery plan',25,'Finding, size of the problem and ask.'],['Monthly KPI dashboard',0,'A topic label.'],['All metrics at a glance',0,'Describes the format, not the message.'],['Performance summary: mostly green',6,'Hides the one thing that needs a decision.']],
+ m:'Action title naming the one problem KPI and the ask; three or four KPI cards with target and trend, only the failing one in the accent colour; a short list of exceptions; everything else in the drill-down.'}
+];
+const EXSC={};
+function shuf(a,seed){const r=mulberry32(seed),b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(r()*(i+1));const t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function initExercises(){const host=$('ex');if(!host)return;
+  host.innerHTML=EX.map((e,i)=>{const cand=shuf(e.d.map((x,k)=>k),i+3),vis=shuf(e.v.map((x,k)=>k),i+11),ttl=shuf(e.h.map((x,k)=>k),i+23);
+   return '<div class="sx" id="ex-'+i+'"><div class="sx-h"><span class="sx-n">'+(i+1)+'</span><h3>'+esc(e.t)+'</h3></div>'
+   +'<div class="ctxgrid"><div><b>Audience</b>'+esc(e.aud)+'</div><div><b>Decision</b>'+esc(e.dec)+'</div><div><b>You want them to</b>'+esc(e.ask)+'</div></div>'
+   +'<div class="step-h">Step 1 · Choose the data. Tick everything that belongs on the page.</div>'+cand.map(k=>'<label class="chk" data-k="'+k+'"><input type="checkbox"><span>'+esc(e.d[k][1])+'<span class="why" style="display:none"></span></span></label>').join('')
+   +'<div class="step-h">Step 2 · Choose the main visual</div>'+vis.map(k=>'<label class="opt" data-k="'+k+'"><input type="radio" name="v'+i+'"> '+esc(e.v[k][0])+'</label>').join('')
+   +'<div class="step-h">Step 3 · Choose the headline</div>'+ttl.map(k=>'<label class="opt" data-k="'+k+'"><input type="radio" name="h'+i+'"> '+esc(e.h[k][0])+'</label>').join('')
+   +'<div class="btns"><button class="cu" data-a="go">Score my answer</button><button class="alt" data-a="rs">Reset</button><span class="msg"></span></div><div class="res-box"></div></div>';}).join('');
+  EX.forEach((e,i)=>{const root=$('ex-'+i),box=root.querySelector('.res-box'),msg=root.querySelector('.msg');
+    root.querySelector('[data-a=rs]').addEventListener('click',()=>{root.querySelectorAll('input').forEach(x=>{x.checked=false;});root.querySelectorAll('.chk,.opt').forEach(x=>x.classList.remove('ok','bad','miss'));root.querySelectorAll('.chk .why').forEach(x=>{x.style.display='none';});box.classList.remove('show');msg.textContent='';});
+    root.querySelector('[data-a=go]').addEventListener('click',()=>{const vi=root.querySelector('.opt input[name=v'+i+']:checked'),hi=root.querySelector('.opt input[name=h'+i+']:checked'),ch=[].slice.call(root.querySelectorAll('.chk')).filter(l=>l.querySelector('input').checked);
+      if(!ch.length||!vi||!hi){msg.textContent='Pick at least one data item, one visual and one headline first.';return;}msg.textContent='';
+      let raw=0,maxp=0;e.d.forEach(x=>{if(x[0]==='core')maxp+=2;else if(x[0]==='sup')maxp+=1;});
+      let miss=[],hit=[],bad=[];root.querySelectorAll('.chk').forEach(l=>{const k=+l.getAttribute('data-k'),x=e.d[k],on=l.querySelector('input').checked,w=l.querySelector('.why');l.classList.remove('ok','bad','miss');
+        const tag='<b>['+K[x[0]]+']</b> '+esc(x[2]);
+        if(on){if(x[0]==='core'){raw+=2;l.classList.add('ok');}else if(x[0]==='sup'){raw+=1;l.classList.add('ok');}else if(x[0]==='noise'){raw-=1.5;l.classList.add('bad');}else{raw-=2;l.classList.add('bad');}w.style.display='block';w.innerHTML=tag;}
+        else if(x[0]==='core'){l.classList.add('miss');w.style.display='block';w.innerHTML='<b>[Missed core item]</b> '+esc(x[2]);}else if(x[0]==='sup'){w.style.display='block';w.innerHTML='<b>[Supporting, optional]</b> '+esc(x[2]);}else{w.style.display='none';}});
+      const dp=Math.round(clamp(raw/maxp,0,1)*50);
+      const vk=+vi.parentNode.getAttribute('data-k'),hk=+hi.parentNode.getAttribute('data-k'),vp=e.v[vk][1],hp=e.h[hk][1],tot=dp+vp+hp;
+      const bestV=e.v.filter(x=>x[1]===25)[0],bestH=e.h.filter(x=>x[1]===25)[0];
+      root.querySelectorAll('.opt').forEach(o=>{o.classList.remove('ok','bad');});
+      root.querySelectorAll('.opt').forEach(o=>{const grp=o.querySelector('input').getAttribute('name').charAt(0),k=+o.getAttribute('data-k'),arr=grp==='v'?e.v:e.h;if(arr[k][1]===25)o.classList.add('ok');else if(o.querySelector('input').checked)o.classList.add('bad');});
+      box.classList.add('show');
+      box.innerHTML='<div class="tot">'+tot+' / 100</div><p class="small">Data '+dp+' / 50 · Visual '+vp+' / 25 · Headline '+hp+' / 25</p>'
+        +(vp===25?'<p><b>✓ Best visual chosen.</b> '+esc(bestV[2])+'</p>':'<p><b>Your visual:</b> '+esc(e.v[vk][2])+'</p><p><b>Best visual:</b> '+esc(bestV[0])+'. '+esc(bestV[2])+'</p>')
+        +(hp===25?'<p><b>✓ Best headline chosen.</b> '+esc(bestH[2])+'</p>':'<p><b>Your headline:</b> '+esc(e.h[hk][2])+'</p><p><b>Best headline:</b> “'+esc(bestH[0])+'”: '+esc(bestH[2])+'</p>')
+        +'<div class="callout"><b class="h">Model answer</b><p>'+esc(e.m)+'</p></div><p class="small">Green and red marks on the data list above show what you got right and wrong. Scores are a teaching heuristic. In your own work the right answer depends on your audience and decision.</p>';
+      EXSC[i]=tot;updScore();box.scrollIntoView&&box.scrollIntoView({block:'nearest',behavior:'smooth'});});});}
+function updScore(){const v=Object.keys(EXSC).map(k=>EXSC[k]),n=v.length;$('sc_done').textContent=n+' / '+EX.length;$('sc_avg').textContent=n?Math.round(sum(v)/n):'–';$('sc_best').textContent=n?Math.max.apply(null,v):'–';$('sc_bar').style.width=(100*n/EX.length)+'%';}
+
+/* =================== INIT =================== */
+function init(){[1,2,3,4,5,6].forEach(n=>renderQuiz('quiz-'+n,QZ[n]));initPicker();initCanvas();initTitleChecker();initSequencer();initChecklist();initClinic();labA();labB();labC();labD();labE();labF();initExercises();}
+if(typeof document!=='undefined'&&document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else if(typeof document!=='undefined'&&typeof window!=='undefined'&&!window.__TEST__){init();}
+})();
+</script>
+</body>
+</html>

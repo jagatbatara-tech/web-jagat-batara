@@ -93,8 +93,10 @@
         .then(function(res){ if(res.status===404) return null; if(!res.ok) throw new Error('Failed to load article'); return res.text(); })
         .then(function(raw){
           if(raw===null){ document.getElementById('loading-single').style.display = 'none'; return; }
+          const parsed = parsePost(raw); const fm = parsed.fm;
+          if(fm.archive_url){ window.location.replace(fm.archive_url); return; }
           document.getElementById('loading-single').style.display = 'none';
-          const parsed = parsePost(raw); const fm = parsed.fm; const body = parsed.body; const bodyHtml = marked.parse(body || '');
+          const body = parsed.body; const bodyHtml = marked.parse(body || '');
           const heroStatsHtml = renderStatGrid(fm.hero_stats, 'stats', 'stat');
           const badgesHtml = renderTags(fm.tags, 'badges');
           const hasRichFields = fm.kicker || fm.summary || (fm.tags && fm.tags.length) || (fm.hero_stats && fm.hero_stats.length);

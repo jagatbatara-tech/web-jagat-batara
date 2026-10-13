@@ -1,0 +1,29 @@
+/* Archive card grid, styled like the "Selected Work" cards on index.html.
+   Used by the collection archive pages (studi-kasus, supply-chain,
+   data-storytelling, ai, day-in-my-life). Card markup is built by
+   assets/archive-cards.js. */
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@600;700&display=swap");
+
+.work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-bottom:24px}
+@media (max-width:760px){.work-grid{grid-template-columns:minmax(0,1fr)}}
+
+.work-card{display:flex;flex-direction:column;min-height:335px;padding:19px;background:#fff;border:1px solid #DDD8CC;border-radius:16px;box-shadow:0 6px 20px rgba(23,35,36,.06);text-decoration:none;color:inherit;transition:transform .32s ease,box-shadow .32s ease}
+.work-card:hover,.work-card:focus-visible{transform:translateY(-7px);box-shadow:0 14px 30px rgba(23,35,36,.12);outline:none}
+.work-card:focus-visible{outline:3px solid #B77A2B;outline-offset:3px}
+
+.work-visual{position:relative;height:112px;display:grid;place-items:center;overflow:hidden;border-radius:12px;color:#fff;background:linear-gradient(135deg,#22363a,#2e6e73)}
+.work-visual.copper{background:linear-gradient(135deg,#755021,#B77A2B)}
+.work-visual.green{background:linear-gradient(135deg,#24473a,#4e8368)}
+.work-visual.slate{background:linear-gradient(135deg,#25343a,#52666d)}
+.work-visual.blue{background:linear-gradient(135deg,#23465a,#3f8091)}
+.work-visual:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:23px 23px}
+.work-visual svg{position:relative;z-index:2;width:42px;height:42px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .4s ease}
+.work-card:hover .work-visual svg{transform:translateY(-5px) rotate(-5deg) scale(1.1)}
+
+.work-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-top:14px}
+.work-cat{color:#2E6E73;font-size:.67rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;line-height:1.5}
+.work-card h3{margin:8px 0;font:700 clamp(1.12rem,1.7vw,1.5rem)/1.22 'Source Serif 4',Georgia,serif;color:#1C2526}
+.work-card p{margin:0 0 12px;color:#5B6568;font-size:.82rem;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.work-tags{display:flex;flex-wrap:wrap;gap:5px;margin:auto 0 12px}
+.work-tags span{padding:4px 7px;border-radius:99px;background:#EEE9DD;font-size:.64rem;font-weight:700;color:#1C2526}
+.work-open{color:#2E6E73;font-size:.8rem;font-weight:800}

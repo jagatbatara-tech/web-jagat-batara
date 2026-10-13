@@ -26,7 +26,7 @@ tech_stack: []
 impact_summary: []
 disclaimer: This is an anonymized reconstruction of a management-consulting engagement in Indonesia's mining-services sector. Client identity, named targets, contacts, tender details, exact cost benchmarks, and confidential financial assumptions are excluded. Market and production figures reflect the original project period, not current forecasts. Documented outcomes are strategic outputs, not realized post-implementation revenue or savings.
 id_link: studi-kasus/2026-10-08-strategi-pertumbuhan-jasa-pertambangan-star
-archive_url: studi-kasus-en/mining_services_growth_strategy_STAR_professional.html
+archive_url: studi-kasus-en/mining_services_growth_strategy_v2.html
 ---
 
 ## Executive Summary

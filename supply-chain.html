@@ -162,6 +162,7 @@
           document.getElementById('loading-single').style.display = 'none';
           const parsed = parsePost(raw);
           const fm = parsed.fm;
+          if (fm.archive_url) { window.location.replace(fm.archive_url); return; }
           const body = parsed.body;
           const bodyHtml = marked.parse(body || '');
 
@@ -227,7 +228,7 @@
                 excerpt = excerpt.length > 200 ? excerpt.substring(0, 200) + '...' : excerpt;
 
                 const card = document.createElement('a');
-                card.href = fm.article_url || ('?post=' + encodeURIComponent(file.name) + (currentLang === 'id' ? '&lang=id' : ''));
+                card.href = fm.archive_url || ('?post=' + encodeURIComponent(file.name) + (currentLang === 'id' ? '&lang=id' : ''));
                 card.className = 'archive-card';
                 card.innerHTML =
                   (kicker ? ('<div class="archive-kicker">' + kicker + '</div>') : '') +

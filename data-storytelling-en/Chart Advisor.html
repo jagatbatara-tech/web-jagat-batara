@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Chart Advisor — Upload your data, see the best chart for the story</title>
-<meta name="description" content="Upload an Excel or CSV file, confirm the columns, and get two chart recommendations drawn with your own data, with the reasoning and an action title. Runs entirely in your browser. Rules follow Storytelling with Data.">
+<meta name="description" content="Upload an Excel or CSV file, confirm the columns, and get two chart recommendations drawn with your own data, with the reasoning and an action title. Runs entirely in your browser. Design principles inspired by Storytelling with Data and The Big Book of Dashboards.">
 <style>
 :root{--bg:#F4F2ED;--ink:#151B1D;--muted:#5B6568;--line:#DDD8CC;--copper:#B77A2B;--gold:#C59B43;--dark:#1C2526;--green:#3E745A;--teal:#2E6E73;--amber:#D49A3A;--red:#B64D42;--card:#FFFFFF}
 *{box-sizing:border-box}
@@ -122,7 +122,7 @@ button:disabled{opacity:.45;cursor:default}
 .hl-edit{margin-top:12px}
 .hl-edit input{width:100%;padding:8px 10px;border:1px solid #C9C3B4;border-radius:4px;font-size:15px;font-family:inherit;margin-top:4px}
 .sw{display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:6px;vertical-align:-1px}
-.stat-ok{color:var(--green);font-weight:700}.stat-no{color:var(--muted)}.stat-never{color:var(--red);font-weight:700}
+.stat-ok{color:var(--green);font-weight:700}.stat-no{color:var(--muted)}.stat-never{color:var(--red);font-weight:700} .alt-note{background:#F4F2ED;border-left:4px solid var(--teal);padding:8px 12px;margin:8px 0 10px;font-size:14px} .morebox{margin:10px 0 26px}
 footer{background:var(--dark);color:#CFCABD;padding:40px 0;margin-top:70px;font-size:14px}
 footer b{color:#fff}footer p{margin:0 0 10px}
 @media(max-width:700px){.stage{overflow-x:auto}.stage svg{min-width:560px}}
@@ -136,7 +136,7 @@ footer b{color:#fff}footer p{margin:0 0 10px}
   <p class="lead">Drop in an Excel or CSV file, confirm what each column means, and get two chart recommendations drawn with your own numbers, with the reasoning, an action title and a "before vs after" view.</p>
   <div class="meta">
     <span><b>Runs in your browser:</b> files are never uploaded</span>
-    <span><b>No AI:</b> transparent rules from <i>Storytelling with Data</i></span>
+    <span><b>No AI:</b> transparent rules you can read below</span>
     <span><b>Reads:</b> .xlsx · .csv</span>
   </div>
   <div class="page-actions">
@@ -214,8 +214,8 @@ footer b{color:#fff}footer p{margin:0 0 10px}
 
 <section id="s5"><div class="wrap">
   <div class="sec-label"><div class="sec-num">5</div><span class="t">Charts</span></div>
-  <h2>Your two best options</h2>
-  <div class="takeaway">Switch between a typical default chart and the recommended design. Edit the headline, then download the picture.</div>
+  <h2>Your best option, plus alternatives</h2>
+  <div class="takeaway">The first card is the best practice for your choices. Alternatives carry the same message in a different shape. Switch between a typical default chart and the recommended design, edit the headline, then download the picture.</div>
   <div id="results"><p class="small">Press "Recommend charts" in step 4.</p></div>
   <h3>Chart types considered</h3>
   <div class="tbl"><table id="considered"></table></div>
@@ -234,12 +234,13 @@ footer b{color:#fff}footer p{margin:0 0 10px}
     <tr><td class="k">Two numeric columns</td><td>Scatterplot with the 3 biggest outliers labelled</td><td>Shows relationship and exceptions; correlation is not causation.</td></tr>
     <tr><td class="k">Nothing else</td><td>One big number with its target</td><td>One value is better stated than charted.</td></tr>
     <tr><td class="k">A target</td><td>Target line; groups that miss it are accented</td><td>A number without a benchmark cannot be judged.</td></tr>
+    <tr><td class="k">Alternative designs</td><td>Up to two alternatives under the best practice; more behind "Show more options"</td><td>The best practice is always first and never replaced. Alternatives carry the same message in another shape, each with "Choose this when…" and "Trade-off…". Triggers: lollipop (6+ groups); Pareto (total or count, 5+ groups); strip plot (average or median per group, 8+ rows per group); small multiples and slopegraph (time + 3 or more groups); waterfall and stacked 100% (time + group, total or count).</td></tr>
   </table></div>
   <div class="grid g2 mt">
     <div class="card red"><h4>What it cannot do</h4>
       <ul class="tight"><li>It does not know your audience or decision, so edit the headline before using it.</li><li>It cannot tell whether a column was entered correctly or what a code means.</li><li>Headlines state facts about the numbers; they do not explain causes.</li><li>It does not fix pivot-table reports, several tables on one sheet, or a mix of units in one column.</li></ul></div>
     <div class="card green"><h4>Good habits</h4>
-      <ul class="tight"><li>Check the preview and the column types every time; a confident chart on a misread table is still wrong.</li><li>Keep the notes under each chart with the chart when you share it.</li><li>When groups have few rows, treat their values with care.</li><li>All rules come from <i>Storytelling with Data</i> (Knaflic, 2015); this page is an independent tool, not affiliated with the author.</li></ul></div>
+      <ul class="tight"><li>Check the preview and the column types every time; a confident chart on a misread table is still wrong.</li><li>Keep the notes under each chart with the chart when you share it.</li><li>When groups have few rows, treat their values with care.</li><li>The design principles follow ideas in <i>Storytelling with Data</i> (Knaflic, 2015) and <i>The Big Book of Dashboards</i> (Wexler, Shaffer, Cotgreave, 2017). The rules and thresholds here are our own choices and may be wrong. This page is an independent tool, not affiliated with or endorsed by the authors or publishers.</li></ul></div>
   </div>
 </div></section>
 
@@ -804,7 +805,7 @@ function modelMulti(M){
   const lastReal=ax.keys.length-1,partialIdx=ax.partial?lastReal:-1;
   if(series.length<2)return null;
   series.forEach(s=>{const idx=seriesInsight(s.vals,partialIdx);s.idx=idx;if(idx.length>=2){const sm=smoothChange(s.vals,idx,M.unit);s.first=sm.first;s.last=sm.last;s.k=sm.k;s.ch=sm;s.lastRaw=s.vals[idx[idx.length-1]];}});
-  const valid=series.filter(s=>s.ch&&!s.other),lab=labT(M),tgt=F.target,dir=F.dir,notes=[];let title,hl=-1;
+  const valid=series.filter(s=>s.ch&&!s.other),lab=labT(M),tgt=F.target,dir=F.dir,notes=[];let title,hl=-1,detail='';
   if(!valid.length)return null;
   if(tgt!=null){
     const bad=valid.filter(s=>dir==='higher'?s.lastRaw<tgt:s.lastRaw>tgt);
@@ -821,7 +822,7 @@ function modelMulti(M){
       const lo=Math.min.apply(null,others.map(signed)),hi=Math.max.apply(null,others.map(signed));
       const fmtc=x=>M.unit==='%'?(x>=0?'+':'−')+Math.abs(x).toFixed(1)+' pts':(x>=0?'+':'−')+Math.round(Math.abs(x)*100)+'%';
       const calm=Math.max(Math.abs(lo),Math.abs(hi))<(M.unit==='%'?3:0.1);
-      title=poss(top.name)+' '+lab+' '+(top.ch.dir>0?'rose':'fell')+' '+top.ch.txt+', from '+fv(top.first,M.unit)+(top.k>1?' early on':'')+' to '+fv(top.last,M.unit)+(top.k>1?' recently':'')+', while '+(calm?'the other '+others.length+' groups stayed roughly flat':'the other '+others.length+' groups moved between '+fmtc(lo)+' and '+fmtc(hi));
+      title=poss(top.name)+' '+lab+' '+(top.ch.dir>0?'rose':'fell')+' '+top.ch.txt+', from '+fv(top.first,M.unit)+' to '+fv(top.last,M.unit)+(top.k>1?' (average of the first vs the latest '+top.k+' '+ax.unitName+'s)':'');detail='The other '+others.length+' groups '+(calm?'stayed roughly flat':'moved between '+fmtc(lo)+' and '+fmtc(hi))+'.';
     } else {
       const byLast=valid.slice().sort((a,b)=>b.lastRaw-a.lastRaw);const pick=dir==='lower'?byLast[0]:byLast[byLast.length-1];hl=series.indexOf(pick);
       title='No '+dimName+' group stands out in how it changed; '+pick.name+' ends '+(dir==='lower'?'highest':'lowest')+' on '+lab+' at '+fv(pick.lastRaw,M.unit);
@@ -834,7 +835,7 @@ function modelMulti(M){
   const ls=series.filter(s=>[...ser.get(s.name).values()].some(a=>a.n<5)).length;
   if((M.agg==='mean'||M.agg==='rate')&&ls>0)notes.push(ls+' groups have periods with fewer than 5 rows. Their lines can jump around because of small samples.');
   if(dc.merged>0)notes.push(dc.merged+' '+dimName+' values differed only by capital letters or spaces and were merged.');
-  return {type:'multi',title:title,sub:lab+' by '+ax.unitName+' and '+dimName+' · based on '+ov.n.toLocaleString('en-US')+' rows',stdTitle:lab+' by '+tb.names[F.time]+' and '+dimName,labels:ax.keys.map(ax.label),longs:ax.keys.map(ax.long),series:series,hl:hl,partialIdx:partialIdx,unit:M.unit,target:tgt,dir:dir,notes:notes,source:ov.n,label:lab};
+  return {type:'multi',title:title,sub:lab+' by '+ax.unitName+' and '+dimName+' · based on '+ov.n.toLocaleString('en-US')+' rows'+(detail?' · '+detail:''),stdTitle:lab+' by '+tb.names[F.time]+' and '+dimName,labels:ax.keys.map(ax.label),longs:ax.keys.map(ax.long),series:series,hl:hl,partialIdx:partialIdx,unit:M.unit,target:tgt,dir:dir,notes:notes,source:ov.n,label:lab};
 }
 
 function modelHeat(M){
@@ -855,12 +856,12 @@ function modelHeat(M){
   if(!cnt)return null;
   const lab=labT(M),tgt=F.target,dir=F.dir;let title,miss=0;
   if(tgt!=null){cells.forEach(row=>row.forEach((v,c)=>{if(v!=null&&c<=lastCol&&(dir==='higher'?v<tgt:v>tgt))miss++;}));title=miss+' of '+cnt+' '+dimName+' × '+ax.unitName+' cells miss the '+fv(tgt,M.unit)+' target';}
-  else title='The highest '+lab+' is '+fv(mx,M.unit)+', for '+names[mr]+' in '+ax.long(keys[mc])+'; the lowest is '+fv(mn,M.unit)+' ('+names[nr]+', '+ax.long(keys[nc])+')';
+  else title=(dir==='lower')?'The highest '+lab+' is '+fv(mx,M.unit)+', for '+names[mr]+' in '+ax.long(keys[mc])+'; the lowest is '+fv(mn,M.unit)+' ('+names[nr]+', '+ax.long(keys[nc])+')':'The lowest '+lab+' is '+fv(mn,M.unit)+', for '+names[nr]+' in '+ax.long(keys[nc])+'; the highest is '+fv(mx,M.unit)+' ('+names[mr]+', '+ax.long(keys[mc])+')';
   if(dm.other>0)notes.push('Showing the top '+Math.min(F.topN,20)+' '+dimName+' groups; the rest are combined as "Other".');
-  notes.push('Darker cells mean higher values. A heatmap shows where to look; read the numbers in the cells for exact values.');
+  notes.push('Darker cells are the weaker values for your choice ('+(dir==='lower'?'lower':'higher')+' is better), so problems stand out. A heatmap shows where to look; read the numbers in the cells for exact values.');
   if(ax.partial&&lastCol<keys.length-1)notes.push('The last '+ax.unitName+' is incomplete, so it is left out of the headline and the outlined cell.');
   if((M.agg==='mean'||M.agg==='rate')&&small>0)notes.push(small+' cells are based on fewer than 5 rows. Extreme values (such as 0% or 100%) there are often just small-sample noise.');
-  return {type:'heat',title:title,sub:lab+' by '+dimName+' and '+ax.unitName+' · based on '+ov.n.toLocaleString('en-US')+' rows',stdTitle:lab+' by '+dimName+' and '+tb.names[F.time],rows:names,cols:keys.map(ax.label),cells:cells,mx:mx,mn:mn,mr:mr,mc:mc,unit:M.unit,target:tgt,dir:dir,notes:notes,source:ov.n,label:lab};
+  return {type:'heat',title:title,sub:lab+' by '+dimName+' and '+ax.unitName+' · based on '+ov.n.toLocaleString('en-US')+' rows',stdTitle:lab+' by '+dimName+' and '+tb.names[F.time],rows:names,cols:keys.map(ax.label),cells:cells,mx:mx,mn:mn,mr:mr,mc:mc,wr:(dir==='lower'?mr:nr),wc:(dir==='lower'?mc:nc),dirv:dir,part:(ax.partial&&lastCol<keys.length-1)?keys.length-1:-1,unit:M.unit,target:tgt,dir:dir,notes:notes,source:ov.n,label:lab};
 }
 
 function modelScatter(M){
@@ -899,6 +900,241 @@ function modelBig(M){
 }
 
 /* ===== RECOMMENDER: rules only, no AI ===== */
+/* ===== ALTERNATIVE DESIGNS (added) =====
+   The best-practice chart always stays first. Alternatives carry the same message in a different shape.
+   Each has a trigger rule in recommend(), a model, a renderer, and two fixed lines (choose when / trade-off). */
+const CT={
+ bar:['you want the plainest, most accurate ranking','none worth noting; this is the default'],
+ dot:['values are close together and a labelled, tighter axis is acceptable','the axis does not start at zero, so lengths are not comparable'],
+ line:['you want one clear trend line','shows the overall trend only, not the groups'],
+ col:['there are few periods and each one matters','less suited to many periods or to showing pace'],
+ multi:['you want to see how every group moved and which one changed most','all groups share one chart, so small groups look flat'],
+ heat:['there are many groups across many periods and you want to scan for patterns','exact size is read from the numbers, not the colour'],
+ scatter:['you want to see how two numbers relate','correlation is not causation'],
+ big:['you only have one value','no comparison or trend'],
+ lolli:['there are many categories and full bars feel heavy','slightly less precise than bars because the eye compares dots, not lengths'],
+ pareto:['a few groups probably account for most of the total','needs a total or count, and shows share rather than change over time'],
+ strip:['an average might hide a few extreme rows','harder to read with thousands of points (large groups are thinned)'],
+ small:['each group should be read on its own, without lines crossing','needs more space; exact values are harder to compare between panels'],
+ slope:['the question is who rose or fell between the start and the latest period','only two moments in time; the path in between is hidden'],
+ wf:['you need to explain which groups drove the change in the total','only works for totals or counts, and compares just two periods'],
+ stack:['each group\'s share matters more than its size','middle segments are hard to compare and absolute size is hidden']
+};
+function gtData(M,topN){
+  const F=S.F,tb=S.TB,ax=timeAxis(F.time,F.grain);if(!ax)return null;
+  const dc=typedCol(F.dim),dm=dimMapper(F.dim,M,topN),ser=new Map(),ov=newAcc();
+  for(let i=0;i<tb.n;i++){if(!tb.keep[i])continue;const d=dm.map.get(dc[i]),k=ax.keyOf(i);if(d==null||k==null)continue;let m=ser.get(d);if(!m){m=new Map();ser.set(d,m);}let a=m.get(k);if(!a){a=newAcc();m.set(k,a);}addAcc(a,M.val[i],M.needVals);addAcc(ov,M.val[i],M.needVals);}
+  const otherLab='Other ('+dm.other+')';
+  const names=[...ser.keys()].sort((a,b)=>{if(dm.other>0){if(a===otherLab)return 1;if(b===otherLab)return -1;}return sum([...ser.get(b).values()].map(x=>x.n))-sum([...ser.get(a).values()].map(x=>x.n));});
+  return {ax:ax,names:names,dm:dm,ov:ov,otherLab:otherLab,vals:names.map(nm=>ax.keys.map(k=>finAcc(ser.get(nm).get(k),M.agg)))};
+}
+/* --- lollipop: same model as sorted bars, drawn with stems and dots --- */
+function modelLolli(M){const b=modelBar(M,'bar');if(!b||b.items.filter(x=>!x.other).length<6)return null;return Object.assign({},b,{type:'lolli',notes:b.notes.concat(['Stems start at zero, like bars. Dots are lighter to look at but a little harder to compare precisely.'])});}
+/* --- Pareto: bars + running share as a number (no second axis) --- */
+function modelPareto(M){
+  if(!(M.agg==='sum'||M.agg==='count'))return null;
+  const b=modelBar(M,'bar');if(!b)return null;
+  let items=b.items.map(x=>Object.assign({},x,{hl:false}));
+  if(items.some(x=>x.v<0))return null;
+  if(items.filter(x=>!x.other).length<5)return null;
+  items=sortOther(items,(a,c)=>c.v-a.v);
+  const total=sum(items.map(x=>x.v));if(!(total>0))return null;
+  let cum=0;items.forEach(x=>{cum+=x.v;x.cum=cum/total;});
+  let k=0;for(const it of items){if(it.other)break;k++;if(it.cum>=0.8)break;}
+  const core=items.filter(x=>!x.other).length,dimName=S.TB.names[S.F.dim],lab=labOf(M);
+  items.slice(0,k).forEach(x=>{x.hl=true;});
+  const conc=k<=Math.ceil(core/2);
+  const title=conc?k+' of '+core+' '+dimName+' groups account for '+Math.round(items[k-1].cum*100)+'% of '+lab
+    :'No small group dominates: it takes '+k+' of '+core+' '+dimName+' groups to reach 80% of '+lab;
+  return Object.assign({},b,{type:'pareto',title:title,items:items,k:k,target:null,notes:['The running share is written next to each bar, so no second axis is needed.','The cut-off is the first group where the running total reaches 80% (a rule of thumb, not a law). The sorted-bar headline uses a 60% concentration test, so the group counts can differ.'].concat(b.notes.filter(n=>/few|fewer|merged|Other/.test(n)))});
+}
+/* --- strip plot: every row is a dot, so averages cannot hide outliers --- */
+function modelStrip(M){
+  const F=S.F,tb=S.TB;
+  if(M.kind!=='number'||!(M.agg==='mean'||M.agg==='median'))return null;
+  const dc=typedCol(F.dim),dm=dimMapper(F.dim,M,Math.min(F.topN,10)),grp=new Map(),otherLab='Other ('+dm.other+')';let skipped=0;
+  for(let i=0;i<tb.n;i++){if(!tb.keep[i])continue;const d=dm.map.get(dc[i]),v=M.val[i];if(d==null||v==null||!isFinite(v))continue;if(dm.other>0&&d===otherLab){skipped++;continue;}let a=grp.get(d);if(!a){a=[];grp.set(d,a);}a.push(v);}
+  const q=(a,p)=>{const x=(a.length-1)*p,lo=Math.floor(x),hi=Math.ceil(x);return a[lo]+(a[hi]-a[lo])*(x-lo);};
+  let groups=[...grp].map(([name,v])=>({name:name,v:v.slice().sort((a,b)=>a-b)})).filter(g=>g.v.length>=8);
+  if(groups.length<2)return null;
+  groups.forEach(g=>{
+    const a=g.v,n=a.length,avg=sum(a)/n,med=q(a,.5),q1=q(a,.25),q3=q(a,.75),iqr=q3-q1;
+    g.n=n;g.avg=avg;g.med=med;g.center=M.agg==='median'?med:avg;g.min=a[0];g.max=a[n-1];
+    const hiF=iqr>0?q3+1.5*iqr:Infinity,loF=iqr>0?q1-1.5*iqr:-Infinity;
+    g.hiOut=a.filter(v=>v>hiF).length;g.loOut=a.filter(v=>v<loF).length;
+    const plain=a.filter(v=>v<=hiF&&v>=loF),step=Math.max(1,Math.ceil(plain.length/120));
+    g.pts=plain.filter((_,i)=>i%step===0).map(v=>({v:v,o:false})).concat(a.filter(v=>v>hiF||v<loF).map(v=>({v:v,o:true})));
+    g.thin=step>1;
+  });
+  groups.sort((a,b)=>b.center-a.center);
+  const dimName=tb.names[F.dim],lab=labOf(M),total=sum(groups.map(g=>g.n));
+  let hl=-1,best=0;groups.forEach((g,i)=>{const o=g.hiOut+g.loOut;if(o>best){best=o;hl=i;}});
+  let title;const cw=M.agg==='median'?'median':'average';
+  if(hl>=0){const g=groups[hl],high=g.hiOut>=g.loOut,k=high?g.hiOut:g.loOut;
+    title=g.name+' has '+k+' unusually '+(high?'high':'low')+' '+M.noun+' value'+(k>1?'s':'')+' ('+(high?'up to '+fv(g.max,M.unit):'down to '+fv(g.min,M.unit))+') that its '+cw+' of '+fv(g.center,M.unit)+' hides';
+  } else {const w=groups.slice().sort((a,b)=>(b.max-b.min)-(a.max-a.min))[0];
+    title='Within each '+dimName+' group the '+M.noun+' values are fairly even: the widest range is '+w.name+' ('+fv(w.min,M.unit)+' to '+fv(w.max,M.unit)+')';}
+  const notes=['Each dot is one row. The dark tick is the '+cw+' of the group. Outliers use the common 1.5 × IQR rule, which is a rule of thumb.'];
+  if(groups.some(g=>g.thin))notes.push('Large groups are thinned to about 120 dots for readability; outliers are always shown.');
+  if(skipped>0)notes.push('Groups beyond the top 10 and small groups with fewer than 8 rows are not shown.');
+  return {type:'strip',title:title,sub:lab+' by '+dimName+' · every dot is one row · '+total.toLocaleString('en-US')+' rows shown',stdTitle:lab+' by '+dimName,label:lab,unit:M.unit,groups:groups,hl:hl,agg:M.agg,items:groups.map(g=>({name:g.name,v:g.center})),notes:notes,source:total,target:null};
+}
+/* --- small multiples and slopegraph reuse the multi-line model --- */
+function modelSmall(M){const mm=modelMulti(M);if(!mm)return null;if(mm.series.filter(s=>!s.other).length<3)return null;return Object.assign({},mm,{type:'small',notes:mm.notes.concat(['Every panel uses the same scale, so heights can be compared between panels.'])});}
+function modelSlope(M){
+  const mm=modelMulti(M);if(!mm)return null;
+  const rows=mm.series.filter(s=>s.ch&&!s.other);if(rows.length<3||rows.length>12)return null;
+  const kk=Math.max.apply(null,rows.map(s=>s.k||1)),r0=rows[0],ix=r0.idx,lb=mm.labels;
+  const span=(a,b)=>a===b?lb[ix[a]]:lb[ix[a]]+' – '+lb[ix[b]];
+  const p1=kk>1?'First '+kk+' ('+span(0,kk-1)+')':lb[ix[0]],p2=kk>1?'Latest '+kk+' ('+span(ix.length-kk,ix.length-1)+')':lb[ix[ix.length-1]];
+  return Object.assign({},mm,{type:'slope',rows:rows.map(s=>({name:s.name,a:s.first,b:s.last,hl:mm.series.indexOf(s)===mm.hl})),p1:p1,p2:p2,notes:mm.notes.concat(['Only the start and the latest period are compared; the path in between is hidden.'])});
+}
+/* --- waterfall: which groups drove the change in the total between two periods --- */
+function modelWf(M){
+  if(!(M.agg==='sum'||M.agg==='count'))return null;
+  const F=S.F,g=gtData(M,Math.min(F.topN,8));if(!g||g.names.length<2)return null;
+  const ax=g.ax,nk=ax.keys.length,last=(ax.partial&&nk>1)?nk-2:nk-1;let first=-1;
+  for(let k=0;k<=last;k++){if(g.vals.some(v=>v[k]!=null)){first=k;break;}}
+  if(first<0||last<=first)return null;
+  const at=(v,k)=>v[k]==null?0:v[k];
+  const rows=g.names.map((nm,i)=>({name:nm,v:at(g.vals[i],last)-at(g.vals[i],first),other:g.dm.other>0&&nm===g.otherLab}));
+  const start=sum(g.vals.map(v=>at(v,first))),end=sum(g.vals.map(v=>at(v,last)));
+  if(!start||start<0||end<0)return null;
+  const core=rows.filter(x=>!x.other).sort((a,b)=>Math.abs(b.v)-Math.abs(a.v)),steps=core.concat(rows.filter(x=>x.other));
+  if(!steps.some(x=>x.v!==0))return null;
+  const top=core[0],ch=(end-start)/start,dimName=S.TB.names[F.dim],lab=labOf(M),fl=ax.long(ax.keys[first]),ll=ax.long(ax.keys[last]);
+  const title='Total '+lab+' '+(end>=start?'rose ':'fell ')+Math.round(Math.abs(ch)*100)+'% from '+fl+' to '+ll+'; '+top.name+' contributed '+(top.v>=0?'+':'−')+fv(Math.abs(top.v),M.unit);
+  const notes=['Each bar is one '+dimName+' group\'s contribution to the change in the total. Only two periods are compared.','Teal = increase, copper = decrease. The colours show direction, not good or bad.'];
+  if(ax.partial)notes.push('The last '+ax.unitName+' is incomplete, so the comparison ends one '+ax.unitName+' earlier.');
+  if(g.dm.other>0)notes.push('Showing the top '+Math.min(F.topN,8)+' '+dimName+' groups; the rest are combined as "Other".');
+  return {type:'wf',title:title,sub:lab+' · change by '+dimName+' · '+fl+' to '+ll+' · based on '+g.ov.n.toLocaleString('en-US')+' rows',stdTitle:'Change in '+lab+' by '+dimName,label:lab,unit:M.unit,start:start,end:end,items:steps.map(x=>({name:x.name,v:x.v,other:x.other})),fl:fl,ll:ll,notes:notes,source:g.ov.n,target:null,topName:top.name};
+}
+/* --- stacked 100%: the mix of each group over time --- */
+function modelStack(M){
+  if(!(M.agg==='sum'||M.agg==='count'))return null;
+  const F=S.F,g=gtData(M,Math.min(F.topN,5));if(!g||g.names.length<2)return null;
+  const ax=g.ax;let keys=ax.keys.map((_,i)=>i);if(ax.partial&&keys.length>1)keys=keys.slice(0,-1);
+  const notes=[];if(keys.length>24){keys=keys.slice(-24);notes.push('Showing only the latest 24 '+ax.unitName+'s.');}
+  if(keys.length<3)return null;
+  if(g.vals.some(v=>v.some(x=>x!=null&&x<0)))return null;
+  const val=(i,k)=>g.vals[i][k]==null?0:g.vals[i][k],tot=keys.map(k=>sum(g.names.map((_,i)=>val(i,k))));
+  if(tot.some(t=>!(t>0)))return null;
+  const abs=g.names.map((_,i)=>keys.map(k=>val(i,k))),share=abs.map(r=>r.map((v,j)=>v/tot[j]));
+  const chg=share.map(r=>r[r.length-1]-r[0]);let bi=-1,bv=-1;
+  g.names.forEach((nm,i)=>{if(g.dm.other>0&&nm===g.otherLab)return;if(Math.abs(chg[i])>bv){bv=Math.abs(chg[i]);bi=i;}});
+  if(bi<0)return null;
+  const dimName=S.TB.names[F.dim],lab=labOf(M),fl=ax.long(ax.keys[keys[0]]),ll=ax.long(ax.keys[keys[keys.length-1]]),pt=x=>Math.round(x*100),nm=g.names[bi];
+  const title=bv>=0.03?nm+'\'s share of '+lab+' '+(chg[bi]>0?'rose':'fell')+' from '+pt(share[bi][0])+'% to '+pt(share[bi][share[bi].length-1])+'% between '+fl+' and '+ll
+    :'The mix of '+lab+' across '+dimName+' is stable: the biggest shift is '+nm+' ('+(chg[bi]>=0?'+':'−')+Math.abs(chg[bi]*100).toFixed(1)+' pts)';
+  notes.push('Shares add up to 100% in every '+ax.unitName+', so a group can lose share while still growing in size.');
+  if(ax.partial)notes.push('The last '+ax.unitName+' is incomplete and is left out.');
+  if(g.dm.other>0)notes.push('Showing the top '+Math.min(F.topN,5)+' '+dimName+' groups; the rest are combined as "Other".');
+  return {type:'stack',title:title,sub:lab+' share by '+dimName+' and '+ax.unitName+' · based on '+g.ov.n.toLocaleString('en-US')+' rows',stdTitle:lab+' by '+S.TB.names[F.time]+' and '+dimName,label:lab,unit:'%',names:g.names,labels:keys.map(k=>ax.label(ax.keys[k])),abs:abs,share:share,tot:tot,bi:bi,other:g.names.map(n=>g.dm.other>0&&n===g.otherLab),notes:notes,source:g.ov.n,target:null};
+}
+/* ---------- renderers ---------- */
+function rPareto(m,rec,title){
+  const W=720;if(!rec)return stdColumns(m,W);
+  const items=m.items,n=items.length,h=AT(title,m.sub,66);
+  const maxLen=Math.max.apply(null,items.map(i=>Math.min(i.name.length,28))),lw=clamp(maxLen*6.6+10,80,200);
+  const lab=items.map(i=>fv(i.v,m.unit)),labW=Math.max.apply(null,lab.map(s=>s.length))*7.6+14,cw=64;
+  const x0=24,zero=x0+lw,pw=W-zero-labW-cw-16,vmax=Math.max.apply(null,items.map(i=>i.v))||1,sx=lin(0,vmax*1.02,0,pw);
+  const bh=clamp(Math.floor(330/n)-8,14,26),gap=Math.max(24,Math.round(bh*.8)),y0=h.y+24;let s=T(W-16,y0-12,'Running share',{anchor:'end',size:11,weight:700,fill:C.dark});
+  items.forEach((it,i)=>{const y=y0+i*(bh+gap),xv=zero+sx(it.v),col=it.other?C.lgrey:(it.hl?C.copper:C.grey),f=it.hl?C.dark:C.muted,w=it.hl?700:400;
+    s+=T(zero-8,y+bh/2+4,trunc(it.name,28),{anchor:'end',size:12.5,fill:f,weight:w})+Rc(zero,y,xv-zero,bh,col)+T(xv+6,y+bh/2+4,lab[i],{size:12.5,fill:f,weight:w})+T(W-16,y+bh/2+4,Math.round(it.cum*100)+'%',{anchor:'end',size:12.5,fill:f,weight:w});});
+  const yEnd=y0+n*(bh+gap)-gap;
+  if(m.k>0&&m.k<n){const yy=y0+m.k*(bh+gap)-gap/2;s+=Ln(x0,yy,W-16,yy,C.dark,1.2,'5 4')+T(x0,yy-3,'Reached '+Math.round(items[m.k-1].cum*100)+'% with '+m.k+' group'+(m.k>1?'s':''),{size:10.5,weight:700,fill:C.dark});}
+  s+=Ln(zero,y0-4,zero,yEnd+4,C.mgrey,1);
+  const H=yEnd+34;s+=T(24,H-10,'Bars start at zero · '+m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Pareto bar chart with running share'),W:W,H:H};
+}
+function rStrip(m,rec,title){
+  const W=720;if(!rec)return stdColumns(m,W);
+  const G=m.groups,n=G.length,h=AT(title,m.sub,66);
+  const maxLen=Math.max.apply(null,G.map(g=>Math.min(g.name.length,28))),lw=clamp(maxLen*6.6+10,80,200),x0=24,px0=x0+lw,px1=W-76,rh=36,y0=h.y+12;
+  let lo=Infinity,hi=-Infinity;G.forEach(g=>{lo=Math.min(lo,g.min);hi=Math.max(hi,g.max);});
+  const pad=(hi-lo)*.04||1;lo-=pad;hi+=pad;const zeroOk=lo>=0||G.every(g=>g.min>=0);if(zeroOk&&lo<(hi-lo)*.25)lo=0;
+  const sx=lin(lo,hi,px0,px1),tk=niceTicks(lo,hi,5);let s='';
+  G.forEach((g,i)=>{const cy=y0+i*rh+rh/2,hl=i===m.hl;
+    s+=Ln(px0,cy+rh/2-1,px1,cy+rh/2-1,'#EDE9DE',1)+T(px0-8,cy+4,trunc(g.name,28),{anchor:'end',size:12.5,fill:hl?C.dark:C.muted,weight:hl?700:400});
+    g.pts.forEach((p,k)=>{const jy=cy+(((k*47)%13)-6)*(rh/34);s+=Cr(sx(p.v),jy,p.o?4.5:3,p.o?C.copper:C.mgrey,'fill-opacity="'+(p.o?1:.55)+'"');});
+    s+=Ln(sx(g.center),cy-rh*.38,sx(g.center),cy+rh*.38,C.dark,2.4)+T(W-16,cy+4,fv(g.center,m.unit),{anchor:'end',size:12,fill:hl?C.dark:C.muted,weight:hl?700:400});});
+  const yE=y0+n*rh;s+=Ln(px0,yE,px1,yE,C.mgrey,1)+T(W-16,y0-6,m.agg==='median'?'Median':'Average',{anchor:'end',size:11,weight:700,fill:C.dark});
+  tk.forEach(v=>{if(v>=lo&&v<=hi)s+=Ln(sx(v),yE,sx(v),yE+5,C.mgrey,1)+T(sx(v),yE+18,fvAx(v,m.unit),{anchor:'middle',size:10.5,fill:C.muted});});
+  const H=yE+52;s+=T(24,H-10,'Dark tick = '+(m.agg==='median'?'median':'average')+' · copper dots = unusual values · '+(lo>0?'axis does not start at zero · ':'')+m.source.toLocaleString('en-US')+' rows',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Strip plot with every row as a dot'),W:W,H:H};
+}
+function rSmall(m,rec,title){
+  if(!rec)return rMulti(m,false,title);
+  const W=720,SR=m.series,n=SR.length,cols=n<=4?2:(n<=9?3:4),rows=Math.ceil(n/cols),h=AT(title,m.sub,66),gx=16,pw=(W-48-gx*(cols-1))/cols,ph=96,rowH=ph+44,all=[];
+  SR.forEach(s=>s.vals.forEach(v=>{if(v!=null)all.push(v);}));
+  const dom=yDomain(all,m.target,false),yy=lin(dom[0],dom[1],ph,0),nl=m.labels.length,xx=i=>(nl===1?pw/2:3+i*(pw-6)/(nl-1));let s='';
+  SR.forEach((sr,k)=>{const cx=24+(k%cols)*(pw+gx),cy=h.y+22+Math.floor(k/cols)*rowH,hl=k===m.hl;
+    s+='<g transform="translate('+cx.toFixed(1)+' '+cy.toFixed(1)+')">'+T(0,-7,trunc(sr.name,Math.max(8,Math.floor(pw/7))),{size:12,weight:hl?700:600,fill:hl?C.dark:C.muted})+Ln(0,ph,pw,ph,C.mgrey,1);
+    if(m.target!=null)s+=Ln(0,yy(m.target),pw,yy(m.target),C.dark,1,'4 3');
+    const solid=m.partialIdx>=0?m.partialIdx-1:nl-1,pts=[];sr.vals.forEach((v,i)=>{if(v!=null&&i<=solid)pts.push([xx(i),yy(v)]);});
+    const col=hl?C.copper:(sr.other?C.lgrey:C.mgrey);if(pts.length>1)s+=Pl(pts,col,hl?3:1.8);
+    let li=-1;for(let i=solid;i>=0;i--)if(sr.vals[i]!=null){li=i;break;}
+    if(m.partialIdx>=0&&sr.vals[m.partialIdx]!=null&&li>=0)s+=Pl([[xx(li),yy(sr.vals[li])],[xx(m.partialIdx),yy(sr.vals[m.partialIdx])]],col,1.4,'stroke-dasharray="3 3"');
+    if(li>=0)s+=Cr(xx(li),yy(sr.vals[li]),3.5,col)+T(xx(li),yy(sr.vals[li])-8,fv(sr.vals[li],m.unit),{anchor:'end',size:10.5,fill:hl?C.dark:C.muted,weight:hl?700:400});
+    s+=T(0,ph+14,m.labels[0],{size:10,fill:C.muted})+T(pw,ph+14,m.labels[nl-1],{anchor:'end',size:10,fill:C.muted})+'</g>';});
+  const H=h.y+22+rows*rowH+14;s+=T(24,H-10,'Same scale in every panel · '+m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Small multiples, one panel per group'),W:W,H:H};
+}
+function rSlope(m,rec,title){
+  if(!rec)return rMulti(m,false,title);
+  const W=720,R=m.rows,n=R.length,h=AT(title,m.sub,66),xl=270,xr=470,y0=h.y+34,y1=y0+Math.max(220,n*26),all=[];
+  R.forEach(r=>{all.push(r.a,r.b);});
+  let lo=Math.min.apply(null,all),hi=Math.max.apply(null,all);if(lo>=0&&lo<0.6*hi)lo=0;else lo-=(hi-lo)*.1;hi+=(hi-lo)*.05||1;
+  const yy=lin(lo,hi,y1,y0);let s=T(xl,y0-16,m.p1,{anchor:'middle',size:11,weight:700,fill:C.dark})+T(xr,y0-16,m.p2,{anchor:'middle',size:11,weight:700,fill:C.dark});
+  const dl=dodge(R.map((r,i)=>({y:yy(r.a),i:i})),14,y0-4,y1+4),dr=dodge(R.map((r,i)=>({y:yy(r.b),i:i})),14,y0-4,y1+4);
+  const draw=(r,hl)=>{const c=hl?C.copper:C.grey;s+=Ln(xl,yy(r.a),xr,yy(r.b),c,hl?4:1.8)+Cr(xl,yy(r.a),hl?5:3.5,c)+Cr(xr,yy(r.b),hl?5:3.5,c);};
+  R.forEach(r=>{if(!r.hl)draw(r,false);});R.forEach(r=>{if(r.hl)draw(r,true);});
+  dl.forEach(l=>{const r=R[l.i];s+=T(xl-12,l.y+4,trunc(r.name,22)+'  '+fv(r.a,m.unit),{anchor:'end',size:r.hl?12.5:11.5,weight:r.hl?700:400,fill:r.hl?C.dark:C.muted});});
+  dr.forEach(l=>{const r=R[l.i];s+=T(xr+12,l.y+4,fv(r.b,m.unit),{size:r.hl?12.5:11.5,weight:r.hl?700:400,fill:r.hl?C.dark:C.muted});});
+  const H=y1+40;s+=T(24,H-10,m.source.toLocaleString('en-US')+' rows used · '+(lo>0?'axis does not start at zero':'axis starts at zero'),{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Slopegraph, start versus latest'),W:W,H:H};
+}
+function rWf(m,rec,title){
+  const W=720;if(!rec)return stdColumns(m,W);
+  const items=m.items,h=AT(title,m.sub,66),rows=[{name:m.fl+' (start)',v:m.start,end:true}].concat(items.map(x=>({name:x.name,v:x.v,other:x.other}))).concat([{name:m.ll+' (latest)',v:m.end,end:true}]),n=rows.length;
+  const lv=[];let run=0;rows.forEach((r,i)=>{if(r.end){lv.push([0,r.v]);if(i===0)run=r.v;}else{lv.push([run,run+r.v]);run+=r.v;}});
+  let lo=Math.min.apply(null,lv.map(a=>Math.min(a[0],a[1]))),hi=Math.max.apply(null,lv.map(a=>Math.max(a[0],a[1])));
+  const levels=lv.filter((_,i)=>!rows[i].end).reduce((a,x)=>a.concat(x),[]).concat([m.start,m.end]),mn=Math.min.apply(null,levels),mx=Math.max.apply(null,levels);
+  let trunc0=false;if(mn>0&&(mx-mn)<0.5*mx){lo=mn-(mx-mn)*.25;hi=mx+(mx-mn)*.15;trunc0=true;}else{lo=Math.min(0,lo);hi=hi*1.04;}
+  const maxLen=Math.max.apply(null,rows.map(r=>Math.min(String(r.name).length,26))),lw=clamp(maxLen*6.4+10,90,210),x0=24+lw,x1=W-70,sx=lin(lo,hi,x0,x1),bh=22,gap=10,y0=h.y+10;
+  const topI=items.reduce((b,x,i)=>Math.abs(x.v)>Math.abs(items[b].v)?i:b,0);let s='';
+  rows.forEach((r,i)=>{const y=y0+i*(bh+gap),a=lv[i],xa=sx(Math.min(a[0],a[1])),xb=sx(Math.max(a[0],a[1])),isTop=!r.end&&(i-1)===topI,col=r.end?C.mgrey:(r.v>=0?C.teal:C.copper);
+    s+=T(x0-8,y+bh/2+4,trunc(r.name,26),{anchor:'end',size:12.5,fill:(r.end||isTop)?C.dark:C.muted,weight:(r.end||isTop)?700:400});
+    s+=Rc(r.end&&trunc0?x0:xa,y,(r.end&&trunc0?xb-x0:xb-xa),bh,col);
+    s+=T(xb+6,y+bh/2+4,r.end?fv(r.v,m.unit):(r.v>=0?'+':'−')+fv(Math.abs(r.v),m.unit),{size:12.5,fill:(r.end||isTop)?C.dark:C.muted,weight:(r.end||isTop)?700:400});
+    if(i<n-1){const nx=sx(r.end?r.v:a[1]);s+=Ln(nx,y+bh,nx,y+bh+gap,C.mgrey,1,'2 2');}});
+  const yEnd=y0+n*(bh+gap)-gap,H=yEnd+36;
+  s+=T(24,H-10,'Teal = increase · copper = decrease · '+(trunc0?'axis does not start at zero because the changes are small next to the totals · ':'')+m.source.toLocaleString('en-US')+' rows',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Waterfall chart of group contributions'),W:W,H:H};
+}
+function rStack(m,rec,title){
+  const W=720,n=m.labels.length;
+  if(!rec){
+    const H=400,x0=70,x1=W-30,y0=56,y1=290,mx=Math.max.apply(null,m.tot),tk=niceTicks(0,mx,6),hi=Math.max(mx,tk[tk.length-1]),yy=lin(0,hi,y1,y0),band=(x1-x0)/n;let s=stdFrame(W,H,m.stdTitle);
+    tk.forEach(v=>{s+=Ln(x0,yy(v),x1,yy(v),'#666',1)+T(x0-6,yy(v)+4,v.toFixed(2),{anchor:'end',size:10});});
+    for(let j=0;j<n;j++){let acc=0;m.names.forEach((nm,i)=>{const v=m.abs[i][j];s+=Rc(x0+j*band+band*.2,yy(acc+v),band*.6,yy(acc)-yy(acc+v),XL[i%XL.length],'stroke="#000" stroke-width=".5"');acc+=v;});s+=T(x0+j*band+band/2+4,y1+14,trunc(m.labels[j],12),{anchor:'end',size:10,rot:-45});}
+    s+=stdLegend(m.names.map((nm,i)=>({name:nm,color:XL[i%XL.length]})),W,H-18);
+    return {svg:SV(W,H,s,'Standard stacked column chart'),W:W,H:H};
+  }
+  const h=AT(title,m.sub,66),x0=44,x1=W-160,y0=h.y+12,y1=y0+250,H=y1+56,yy=lin(0,1,y1,y0),band=(x1-x0)/n;
+  const order=[m.bi].concat(m.names.map((_,i)=>i).filter(i=>i!==m.bi).sort((a,b)=>sum(m.share[b])-sum(m.share[a])));
+  const greys=['#CFCABD','#BDB7A8','#A9A394','#968F7F','#8A8576'];let s='';
+  [0,.5,1].forEach(v=>{s+=T(x0-6,yy(v)+4,Math.round(v*100)+'%',{anchor:'end',size:10.5,fill:C.muted});});
+  const labs=[];
+  for(let j=0;j<n;j++){let acc=0;order.forEach((i,k)=>{const v=m.share[i][j],yTop=yy(acc+v),hh=yy(acc)-yy(acc+v),col=i===m.bi?C.copper:(m.other[i]?C.lgrey:greys[(k-1)%greys.length]);
+    s+=Rc(x0+j*band+band*.12,yTop,band*.76,hh,col,'stroke="#fff" stroke-width="1"');
+    if(i===m.bi&&(j===0||j===n-1)&&hh>14)s+=T(x0+j*band+band/2,yTop+hh/2+4,Math.round(v*100)+'%',{anchor:'middle',size:11.5,weight:700,fill:'#fff'});
+    if(j===n-1)labs.push({y:yTop+hh/2,name:m.names[i],hl:i===m.bi,v:v});acc+=v;});}
+  dodge(labs,13,y0,y1).forEach(l=>{s+=T(x1+10,l.y+4,trunc(l.name,18)+(l.hl?'  '+Math.round(l.v*100)+'%':''),{size:l.hl?12.5:11.5,weight:l.hl?700:400,fill:l.hl?C.copper:C.muted});});
+  s+=xLabels(m.labels,i=>x0+band*(i+.5),y1+18,x1-x0,true)+T(24,H-10,'Each column adds up to 100% · '+m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Stacked 100% column chart of group share'),W:W,H:H};
+}
+
 function recommend(){
   const F=S.F,tb=S.TB,M=metricInfo(),hasT=F.time>=0,hasD=F.dim>=0,hasM2=F.m2!=null&&F.m2>=0&&M.kind==='number';
   const cands=[],considered=[];
@@ -917,15 +1153,29 @@ function recommend(){
     add('bar',85,'Horizontal bars, sorted',['Category + a measure: bars on one zero baseline are the easiest to compare.','Sorted so the ranking is obvious, with one accent colour on the point.'],()=>modelBar(M,'bar'));
     add('dot',narrow?88:58,'Dot plot',narrow?['The values are close together (within 15% of the highest). Bars must start at zero, which would make real differences look tiny.','A dot plot may use a tighter axis honestly, as long as the axis is labelled.']:['A dot plot is a lighter alternative to bars when you care about position rather than size.'],()=>modelBar(M,'dot'));
   }
+  /* alternatives: they never replace the best practice, they only add other shapes for the same message */
+  const gc=hasD?tb.info[F.dim].uniq:0,addTot=(M.agg==='sum'||M.agg==='count');
+  if(hasD&&!hasT){
+    if(gc>=6)add('lolli',gc>10?70:62,'Lollipop chart',['Same ranking as the sorted bars, drawn with a thin stem and a dot.','Lighter on the page when there are many categories.'],()=>modelLolli(M));
+    if(addTot&&gc>=5)add('pareto',66,'Pareto bars (running share)',['Shows how quickly the biggest groups add up to most of the total.','The running share is a number beside each bar, so no second axis is needed.'],()=>modelPareto(M));
+    if(M.kind==='number'&&(M.agg==='mean'||M.agg==='median'))add('strip',64,'Strip plot (every row as a dot)',['An average hides how the individual rows are spread.','Every row is a dot and the average is a tick, so unusual rows stay visible.'],()=>modelStrip(M));
+  }
+  if(hasD&&hasT){
+    if(gc>=3)add('small',66,'Small multiples',['One small panel per group, all on the same scale.','Each group can be read on its own without lines crossing.'],()=>modelSmall(M));
+    if(gc>=3)add('slope',62,'Slopegraph (start vs latest)',['Compares each group between the start and the latest period.','Good when the question is who rose or fell, not the path in between.'],()=>modelSlope(M));
+    if(addTot&&gc>=2)add('wf',58,'Waterfall (what drove the change)',['Splits the change in the total between two periods into one bar per group.','Shows which groups pushed it up and which pulled it down.'],()=>modelWf(M));
+    if(addTot&&gc>=2)add('stack',54,'Stacked 100% columns (mix over time)',['Shows each group\'s share of the total in every period.','Good when the mix matters more than the size.'],()=>modelStack(M));
+  }
   cands.sort((a,b)=>b.score-a.score);
-  const shown=[];for(const c of cands){const mod=c.build();if(mod){shown.push({id:c.id,name:c.name,reasons:c.reasons,model:mod,score:c.score});}if(shown.length===2)break;}
+  const shown=[],failed=new Set();for(const c of cands){let mod=null;try{mod=c.build();}catch(e){if(!shown.length)throw e;console.error(e);}if(mod){shown.push({id:c.id,name:c.name,reasons:c.reasons,model:mod,score:c.score,choose:(CT[c.id]||[])[0],trade:(CT[c.id]||[])[1]});}else failed.add(c.id);if(shown.length===3)break;}
+  const more=cands.filter(c=>!failed.has(c.id)&&!shown.some(x=>x.id===c.id));
   const has=id=>shown.some(s=>s.id===id),cand=id=>cands.some(c=>c.id===id);
-  const st=(id,okNeed,why)=>{if(has(id))return ['Recommended',''];if(cand(id))return ['Possible','Available but ranked lower for your selection.'];return ['Not available',why];};
-  [['bar','Horizontal bars','Needs a group-by column and no time column.'],['dot','Dot plot','Needs a group-by column and no time column.'],['line','Line chart','Needs a time column.'],['multi','Line chart, one highlighted','Needs both a time column and a group-by column.'],['col','Columns by period','Needs a time column and no grouping.'],['heat','Heatmap','Needs both a time column and a group-by column.'],['scatter','Scatterplot','Needs a second numeric column (and a numeric main measure).'],['big','Single number','Used only when no grouping, time or second column is chosen.']].forEach(r=>{const s=st(r[0],0,r[2]);considered.push({name:r[1],status:s[0],why:s[1]});});
-  considered.push({name:'Pie / donut',status:'Never used',why:'Angles and areas are hard to compare; bars do it better.'});
-  considered.push({name:'3D charts',status:'Never used',why:'3D distorts values and adds clutter.'});
-  considered.push({name:'Secondary y-axis',status:'Never used',why:'Use two aligned panels or direct labels instead.'});
-  return {M:M,shown:shown,considered:considered};
+  const st=(id,okNeed,why)=>{if(shown.length&&shown[0].id===id)return ['Recommended',''];if(has(id))return ['Alternative shown',''];if(cand(id))return ['Possible','Available but ranked lower for your selection.'];return ['Not available',why];};
+  [['bar','Horizontal bars','Needs a group-by column and no time column.'],['dot','Dot plot','Needs a group-by column and no time column.'],['line','Line chart','Needs a time column.'],['multi','Line chart, one highlighted','Needs both a time column and a group-by column.'],['col','Columns by period','Needs a time column and no grouping.'],['heat','Heatmap','Needs both a time column and a group-by column.'],['scatter','Scatterplot','Needs a second numeric column (and a numeric main measure).'],['big','Single number','Used only when no grouping, time or second column is chosen.'],['lolli','Lollipop (alternative)','Needs a group-by column, no time column, and at least 6 groups.'],['pareto','Pareto bars (alternative)','Needs a group-by column, a total or count measure with no negatives, and at least 5 groups.'],['strip','Strip plot (alternative)','Needs a group-by column and a numeric measure averaged per group, with at least 8 rows in 2 or more groups.'],['small','Small multiples (alternative)','Needs a time column and a group-by column with at least 3 groups.'],['slope','Slopegraph (alternative)','Needs a time column and a group-by column with 3 to 12 groups.'],['wf','Waterfall (alternative)','Needs time + group-by and a total or count measure.'],['stack','Stacked 100% (alternative)','Needs time + group-by, a total or count measure with no negatives, and at least 3 periods.']].forEach(r=>{const s=st(r[0],0,r[2]);considered.push({name:r[1],status:s[0],why:s[1]});});
+  considered.push({name:'Pie / donut',status:'Not recommended',why:'Angles and areas are hard to compare; bars do it better. A donut can be acceptable for one KPI that is capped at 100%, but this tool does not draw it.'});
+  considered.push({name:'3D charts',status:'Not recommended',why:'3D distorts values and adds clutter.'});
+  considered.push({name:'Secondary y-axis',status:'Not recommended',why:'Use two aligned panels or direct labels instead.'});
+  return {M:M,shown:shown,more:more,considered:considered};
 }
 function pearson(x,y){const n=x.length;let mx=0,my=0;for(let i=0;i<n;i++){mx+=x[i];my+=y[i];}mx/=n;my/=n;let sxy=0,sxx=0,syy=0;for(let i=0;i<n;i++){sxy+=(x[i]-mx)*(y[i]-my);sxx+=(x[i]-mx)**2;syy+=(y[i]-my)**2;}return sxy/Math.sqrt(sxx*syy);}
 
@@ -958,15 +1208,15 @@ function rBar(m,rec,title){
   items.forEach((it,i)=>{
     const y=y0+i*(bh+gap),xv=x0+lw+sx(it.v),col=it.other?C.lgrey:(it.hl?C.copper:C.grey),bold=it.hl;
     s+=T(x0+lw-8,y+bh/2+4,trunc(it.name,28),{anchor:'end',size:12.5,fill:bold?C.dark:C.muted,weight:bold?700:400});
-    s+=Rc(Math.min(zero,xv),y,Math.abs(xv-zero),bh,col);
-    let lx=it.v>=0?xv+6:xv-6;if(tx!=null&&it.v>=0&&lx<tx+6&&lx+lab[i].length*7.2>tx-2)lx=tx+8;
+    if(m.type==='lolli'){s+=Ln(zero,y+bh/2,xv,y+bh/2,col,2.5)+Cr(xv,y+bh/2,Math.min(8,bh/2+1),col);}else s+=Rc(Math.min(zero,xv),y,Math.abs(xv-zero),bh,col);
+    let lx=it.v>=0?xv+6+(m.type==='lolli'?9:0):xv-6;if(tx!=null&&it.v>=0&&lx<tx+6&&lx+lab[i].length*7.2>tx-2)lx=tx+8;
     s+=T(lx,y+bh/2+4,lab[i],{anchor:it.v>=0?'start':'end',size:12.5,fill:bold?C.dark:C.muted,weight:bold?700:400});
   });
   const yEnd=y0+n*(bh+gap)-gap,H=yEnd+34;
   if(tx!=null)s+=Ln(tx,h.y+14,tx,yEnd+4,C.dark,1.2,'5 4')+T(tx,h.y+10,'Target '+fv(m.target,m.unit),{anchor:'middle',size:11,weight:700,fill:C.dark});
   if(vmin<0)s+=Ln(zero,y0-4,zero,yEnd+4,C.mgrey,1);
-  s+=T(24,H-10,'Bars start at zero · '+m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
-  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Sorted horizontal bar chart'),W:W,H:H};
+  s+=T(24,H-10,(m.type==='lolli'?'Stems start at zero':'Bars start at zero')+' · '+m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
+  return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,m.type==='lolli'?'Lollipop chart':'Sorted horizontal bar chart'),W:W,H:H};
 }
 function rDot(m,rec,title){
   const W=720;if(!rec)return stdColumns(m,W);
@@ -1062,23 +1312,23 @@ function rMulti(m,rec,title){
 function mixHex(a,b,t){const pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16),ch=sh=>Math.round(((pa>>sh)&255)*(1-t)+((pb>>sh)&255)*t);return '#'+[16,8,0].map(sh=>('0'+ch(sh).toString(16)).slice(-2)).join('');}
 function rHeat(m,rec,title){
   const W=720,nr=m.rows.length,nc=m.cols.length,maxLen=Math.max.apply(null,m.rows.map(r=>Math.min(r.length,26))),lw=clamp(maxLen*6.6+12,80,200),x0=24,cw=Math.min(56,Math.floor((W-x0-lw-20)/nc)),ch=nr>14?20:26;
-  const t=v=>m.mx===m.mn?0.5:(v-m.mn)/(m.mx-m.mn),showNum=cw>=34;
+  const t=v=>m.mx===m.mn?0.5:Math.min(1,Math.max(0,(v-m.mn)/(m.mx-m.mn))),showNum=cw>=34;
   const h=rec?AT(title,m.sub,66):{s:T(W/2,28,trunc(m.stdTitle,70),{anchor:'middle',weight:700,size:15,fill:'#000'}),y:44};
   const y0=h.y+22;let s='';
-  m.cols.forEach((c,j)=>{if(nc<=12||j%Math.ceil(nc/12)===0)s+=T(x0+lw+j*cw+cw/2,y0-6,c,{anchor:'middle',size:10.5,fill:rec?C.muted:'#000'});});
+  m.cols.forEach((c,j)=>{if(nc<=12||j%Math.ceil(nc/12)===0)s+=T(x0+lw+j*cw+cw/2,y0-6,c+(j===m.part?'*':''),{anchor:'middle',size:10.5,fill:rec?C.muted:'#000'});});
   m.rows.forEach((r,i)=>{
     s+=T(x0+lw-8,y0+i*ch+ch/2+4,trunc(r,26),{anchor:'end',size:12,fill:rec?C.muted:'#000'});
     m.cells[i].forEach((v,j)=>{
       const x=x0+lw+j*cw,y=y0+i*ch;
       if(v==null){s+=Rc(x,y,cw,ch,'#fff','stroke="#EEE"');return;}
-      const tt=t(v),rc=rec?mixHex('#F4EBDD','#8A5410',Math.pow(tt,0.9)):(tt<.5?mixHex('#F8696B','#FFEB84',tt*2):mixHex('#FFEB84','#63BE7B',(tt-.5)*2));
-      s+=Rc(x,y,cw,ch,rc,rec?'stroke="#fff" stroke-width="1"':'stroke="#000" stroke-width="1"');
-      if(showNum)s+=T(x+cw/2,y+ch/2+4,fv(v,m.unit),{anchor:'middle',size:cw<44?9.5:10.5,fill:rec?(tt>0.55?'#fff':C.dark):'#000'});
+      const tt=t(v),td=rec?(m.dirv==='lower'?tt:1-tt):tt,rc=rec?mixHex('#F4EBDD','#8A5410',Math.pow(td,0.9)):(tt<.5?mixHex('#F8696B','#FFEB84',tt*2):mixHex('#FFEB84','#63BE7B',(tt-.5)*2));
+      s+=Rc(x,y,cw,ch,rc,rec?'stroke="#fff" stroke-width="1"'+(j===m.part?' opacity=".55"':''):'stroke="#000" stroke-width="1"');
+      if(showNum)s+=T(x+cw/2,y+ch/2+4,fv(v,m.unit),{anchor:'middle',size:cw<44?9.5:10.5,fill:rec?((td>0.55&&j!==m.part)?'#fff':C.dark):'#000'});
     });
   });
-  if(rec)s+=Rc(x0+lw+m.mc*cw-1,y0+m.mr*ch-1,cw+2,ch+2,'none','stroke="'+C.dark+'" stroke-width="2"');
+  if(rec)s+=Rc(x0+lw+(m.wc==null?m.mc:m.wc)*cw-1,y0+(m.wr==null?m.mr:m.wr)*ch-1,cw+2,ch+2,'none','stroke="'+C.dark+'" stroke-width="2"');
   const H=y0+nr*ch+(rec?64:50);
-  if(rec){const lx=x0+lw;s+=T(lx,H-34,'Lower',{size:10.5,fill:C.muted})+Rc(lx+40,H-44,100,10,'url(#hg)')+T(lx+148,H-34,'Higher',{size:10.5,fill:C.muted});s+=T(24,H-10,'Outlined cell = highest value · '+m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});}
+  if(rec){const lx=x0+lw;s+=T(lx,H-34,'Stronger',{size:10.5,fill:C.muted})+Rc(lx+54,H-44,100,10,'url(#hg)')+T(lx+162,H-34,'Weaker',{size:10.5,fill:C.muted});s+=T(24,H-10,'Outlined cell = weakest value'+(m.part>=0?' · * incomplete period, not used for the scale':'')+' · '+m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});}
   const defs=rec?'<defs><linearGradient id="hg"><stop offset="0" stop-color="#F4EBDD"/><stop offset="1" stop-color="#8A5410"/></linearGradient></defs>':'';
   const body=rec?Rc(0,0,W,H,'#fff')+defs+h.s+s:Rc(1.5,1.5,W-3,H-3,'#fff','stroke="#777" stroke-width="3"')+h.s+s;
   return {svg:SV(W,H,body,'Heatmap'),W:W,H:H};
@@ -1127,9 +1377,10 @@ function rBig(m,rec,title){
   s+=T(24,H-10,m.source.toLocaleString('en-US')+' rows used',{size:10.5,fill:C.muted});
   return {svg:SV(W,H,Rc(0,0,W,H,'#fff')+h.s+s,'Single number'),W:W,H:H};
 }
-function renderModel(m,rec,title){
+function renderModel(m,rec,title){const r=renderModel0(m,rec,title),tt=esc(title||m.title);r.svg=r.svg.replace(/aria-label="[^"]*"/,'aria-label="'+tt+'"').replace(/^(<svg[^>]*>)/,'$1<title>'+tt+'</title>');return r;}
+function renderModel0(m,rec,title){
   const t=title||m.title;
-  switch(m.type){case 'bar':return rBar(m,rec,t);case 'dot':return rDot(m,rec,t);case 'line':return rLine(m,rec,t);case 'col':return rCol(m,rec,t);case 'multi':return rMulti(m,rec,t);case 'heat':return rHeat(m,rec,t);case 'scatter':return rScatter(m,rec,t);default:return rBig(m,rec,t);}
+  switch(m.type){case 'bar':return rBar(m,rec,t);case 'dot':return rDot(m,rec,t);case 'line':return rLine(m,rec,t);case 'col':return rCol(m,rec,t);case 'multi':return rMulti(m,rec,t);case 'heat':return rHeat(m,rec,t);case 'scatter':return rScatter(m,rec,t);case 'lolli':return rBar(m,rec,t);case 'pareto':return rPareto(m,rec,t);case 'strip':return rStrip(m,rec,t);case 'small':return rSmall(m,rec,t);case 'slope':return rSlope(m,rec,t);case 'wf':return rWf(m,rec,t);case 'stack':return rStack(m,rec,t);default:return rBig(m,rec,t);}
 }
 /* ===== SAMPLE DATA (all fictional) ===== */
 function sheetObj(name,rows){return {name:name,hidden:false,rows:rows,pct:{},warn:{},async ensure(){}};}
@@ -1293,10 +1544,11 @@ function runRecommend(silent){
   if(!r.shown.length){$('results').innerHTML='<div class="callout red"><b class="h">No chart could be built</b><p>These choices leave too little valid data (for example no valid dates, or fewer than 5 rows with both numbers). Check the column types in step 3.</p></div>';return;}
   S.ranOnce=true;
   const host=$('results');host.innerHTML='';
-  r.shown.forEach((c,idx)=>{
+  const mk=(c,idx)=>{
     const card=document.createElement('div');card.className='rcard'+(idx?' second':'');
-    card.innerHTML='<div class="rhead"><span class="tag '+(idx?'g':'c')+'">Option '+(idx+1)+'</span><h3>'+esc(c.name)+'</h3></div>'
-      +'<ul class="tight">'+c.reasons.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'
+    const note=idx&&c.choose?'<div class="alt-note"><b>Choose this when</b> '+esc(c.choose)+'.<br><b>Trade-off:</b> '+esc(c.trade)+'.</div>':'';
+    card.innerHTML='<div class="rhead"><span class="tag '+(idx?'g':'c')+'">'+(idx?'Alternative '+String.fromCharCode(64+idx):'Best practice')+'</span><h3>'+esc(c.name)+'</h3></div>'
+      +'<ul class="tight">'+c.reasons.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'+note
       +'<div class="btns"><div class="seg"><button class="on after" data-m="rec">Recommended design</button><button data-m="std">Typical default</button></div><button class="alt" data-x="svg">Download SVG</button><button class="alt" data-x="png">Download PNG</button></div>'
       +'<div class="stage" style="margin-top:12px"></div>'
       +'<label class="hl-edit"><span class="small"><b>Headline</b> — written from the numbers; edit it to fit your audience and decision.</span><input type="text"></label>'
@@ -1311,8 +1563,20 @@ function runRecommend(silent){
     nl.push(qline('info','Headline logic is a fixed template filled with your numbers. It states facts about the data, not causes.'));
     card.querySelector('.nl').innerHTML=nl.join('');
     draw();
-  });
-  $('considered').innerHTML='<tr><th>Chart type</th><th>Status</th><th>Why</th></tr>'+r.considered.map(x=>'<tr><td class="k">'+esc(x.name)+'</td><td class="'+({Recommended:'stat-ok',Possible:'stat-no','Not available':'stat-no','Never used':'stat-never'}[x.status])+'">'+x.status+'</td><td>'+esc(x.why)+'</td></tr>').join('');
+  };
+  r.shown.forEach((c,idx)=>mk(c,idx));
+  if(r.more&&r.more.length){
+    const box=document.createElement('div');box.className='morebox';
+    box.innerHTML='<button class="alt" type="button">Show more options</button> <span class="small">Other designs your data allows. They never replace the best practice above.</span>';
+    host.appendChild(box);
+    box.querySelector('button').addEventListener('click',()=>{
+      box.remove();let idx=r.shown.length,added=0;
+      r.more.forEach(c=>{let mod=null;try{mod=c.build();}catch(e){console.error(e);}
+        if(mod){mk({id:c.id,name:c.name,reasons:c.reasons,model:mod,score:c.score,choose:(CT[c.id]||[])[0],trade:(CT[c.id]||[])[1]},idx++);added++;}});
+      if(!added){const p=document.createElement('p');p.className='small';p.textContent='No other design fits this data.';host.appendChild(p);}
+    });
+  }
+  $('considered').innerHTML='<tr><th>Chart type</th><th>Status</th><th>Why</th></tr>'+r.considered.map(x=>'<tr><td class="k">'+esc(x.name)+'</td><td class="'+({Recommended:'stat-ok','Alternative shown':'stat-ok',Possible:'stat-no','Not available':'stat-no','Not recommended':'stat-never'}[x.status])+'">'+x.status+'</td><td>'+esc(x.why)+'</td></tr>').join('');
   if(!silent)host.scrollIntoView({behavior:'smooth'});
 }
 

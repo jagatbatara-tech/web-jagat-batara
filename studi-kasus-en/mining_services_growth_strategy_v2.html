@@ -7,33 +7,31 @@
 <meta name="description" content="Anonymized management-consulting case study: where an Indonesian mining contractor should grow when its core market is squeezed. Problem diagnosis, cost leadership, accessible contracts, capital-light value-chain moves, and a sequenced roadmap.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@600;700&display=swap">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
-:root{color-scheme:light dark;
---bg:#F3F6F6;--paper:#FFFFFF;--ink:#14232C;--ink2:#4B5F6A;--mute:#74858E;--line:#D6DEE1;
---teal:#0B7A75;--teal-bg:#DCEFED;--amber:#B86F0A;--amber-bg:#FAEBD0;
---head:'Bricolage Grotesque','Segoe UI',system-ui,sans-serif;--body:'Source Sans 3','Segoe UI',system-ui,sans-serif;}
-@media (prefers-color-scheme:dark){:root{
---bg:#0E171C;--paper:#16232A;--ink:#E8EFF2;--ink2:#AFBDC4;--mute:#86969E;--line:#2A3B44;
---teal:#4FC3BC;--teal-bg:#12393A;--amber:#F0AE4B;--amber-bg:#3A2B12;}}
+:root{color-scheme:light;
+--bg:#F4F2ED;--paper:#FFFFFF;--ink:#172324;--ink2:#4A5557;--mute:#687276;--line:#DDD8CC;
+--teal:#2E6E73;--teal-bg:#EAF3F3;--amber:#9A6420;--amber-bg:#FBF6EA;--copper:#B77A2B;--gold:#D7B36A;--dark:#1C2526;
+--head:'Source Serif 4',Georgia,'Times New Roman',serif;--body:Inter,'Segoe UI',Arial,sans-serif;}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:64px}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.62}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.65}
 a{color:var(--teal)}
+.top a:focus-visible{outline-color:var(--gold)}
 a:focus-visible,button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
 .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
-h1,h2,h3{font-family:var(--head);font-weight:700;line-height:1.18;margin:0;letter-spacing:-0.01em}
+h1,h2,h3{font-family:var(--head);font-weight:700;line-height:1.18;margin:0;letter-spacing:-0.015em}
 h1{font-size:clamp(30px,4.4vw,48px)}
 h2{font-size:clamp(23px,2.7vw,31px);max-width:30ch}
-h3{font-size:19px;font-weight:500}
+h3{font-size:19px;font-weight:600}
 p{margin:0 0 1em;max-width:68ch}
-.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
-.top .wrap{display:flex;gap:20px;align-items:center;overflow-x:auto;white-space:nowrap;padding-top:10px;padding-bottom:10px;font-size:15px}
-.top a{text-decoration:none;color:var(--ink2)}
-.top a:hover{color:var(--teal)}
+.top{position:sticky;top:0;z-index:5;background:rgba(28,37,38,.96);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.top .wrap{display:flex;gap:20px;align-items:center;overflow-x:auto;white-space:nowrap;padding-top:13px;padding-bottom:13px;font-size:14px}
+.top a{text-decoration:none;color:#D9D4C7}
+.top a:hover{color:#fff}
 .top .sp{flex:1}
-.hero{padding:56px 0 40px}
+.hero{padding:56px 0 40px;border-top:4px solid var(--copper)}
 .hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:start}
 .answer{font-size:19px;color:var(--ink);margin-top:20px}
 .meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin:22px 0 0;padding:0;list-style:none;font-size:14.5px;color:var(--ink2)}
@@ -53,8 +51,8 @@ section>.wrap>p.lead{font-size:18px;margin-top:14px}
 .b{position:absolute;top:4px;height:16px}
 .vl{position:absolute;top:3px;font-size:13.5px;font-weight:600;white-space:nowrap}
 .three{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin:22px 0 0}
-.three div{border-top:3px solid var(--amber);padding-top:10px}
-.three b{display:block;font-family:var(--head);font-size:17px;margin-bottom:4px;font-weight:500}
+.three div{border-top:3px solid var(--copper);padding-top:10px}
+.three b{display:block;font-family:var(--head);font-size:17px;margin-bottom:4px;font-weight:600}
 .three p{font-size:15.5px;margin:0}
 svg{display:block;width:100%;height:auto}
 svg text{font-family:var(--body);fill:var(--ink)}

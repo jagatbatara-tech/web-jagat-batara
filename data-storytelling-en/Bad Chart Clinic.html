@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bad Chart Clinic: 50 Charts and Dashboards to Diagnose and Fix</title>
+<style>html,body{margin:0}</style>
+<!-- ===== MERGE NOTE: everything inside <article id="dvq"> (plus its <style> and <script>) is self-contained and scoped to #dvq. Copy the three blocks into your index. ===== -->
+<style>
+#dvq{--bg:#F4F2ED;--ink:#151B1D;--muted:#5B6568;--line:#DDD8CC;--copper:#B77A2B;--gold:#C59B43;--dark:#1C2526;--green:#3E745A;--teal:#2E6E73;--red:#B64D42;--card:#fff;
+ background:var(--bg);color:var(--ink);font-family:"Segoe UI",Calibri,Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.6;font-size:16.5px}
+#dvq *{box-sizing:border-box}
+#dvq h1,#dvq h2,#dvq h3{font-family:Georgia,"Times New Roman",serif;line-height:1.2;color:var(--dark);margin:0}
+#dvq .wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+#dvq p{margin:0 0 12px}#dvq .small{font-size:14px;color:var(--muted)}
+#dvq .hero{background:linear-gradient(135deg,#0F1415 0%,#1C2526 58%,#27312F 100%);color:#fff;padding:64px 0 42px}
+#dvq .hero h1{color:#fff;font-size:clamp(30px,5vw,52px);margin:12px 0 14px;max-width:780px}
+#dvq .kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12.5px;color:var(--gold);font-weight:700}
+#dvq .lead{font-size:clamp(16px,2vw,19px);max-width:720px;color:#E8E4DA}
+#dvq .meta{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:13.5px;color:#CFCABD;border-top:1px solid rgba(255,255,255,.25);padding-top:14px;margin-top:22px}#dvq .meta b{color:#fff}
+#dvq .page-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+#dvq .page-action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border:1px solid var(--copper);border-radius:6px;background:var(--copper);color:#fff;text-decoration:none;font-size:14px;font-weight:700;transition:background .2s,border-color .2s}
+#dvq .page-action:hover,#dvq .page-action:focus-visible{background:var(--dark);border-color:#fff;outline:2px solid var(--gold);outline-offset:2px}
+#dvq .page-action.secondary{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.55)}
+#dvq .page-action.secondary:hover,#dvq .page-action.secondary:focus-visible{background:rgba(255,255,255,.2)}
+#dvq section{padding:34px 0}
+#dvq .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:820px){#dvq .grid3{grid-template-columns:1fr}}
+#dvq .card{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--copper);border-radius:4px;padding:18px 20px;margin-bottom:14px}
+#dvq .card.good{border-top-color:var(--green)}#dvq .card.warn{border-top-color:var(--red)}#dvq .card.teal{border-top-color:var(--teal)}
+#dvq .card h3{font-size:20px;margin-bottom:8px}
+#dvq .btn{background:var(--copper);color:#fff;border:0;border-radius:4px;padding:12px 20px;font-size:15.5px;font-weight:700;cursor:pointer;margin:6px 8px 6px 0;font-family:inherit}
+#dvq .btn:hover{background:#9a6420}#dvq .btn:disabled{background:#b9b4a8;cursor:not-allowed}
+#dvq .btn.ghost{background:transparent;color:var(--dark);border:2px solid var(--dark)}#dvq .btn.ghost:hover{background:var(--dark);color:#fff}
+#dvq .btn.sm{padding:6px 12px;font-size:13.5px}
+#dvq .btn:focus-visible,#dvq input:focus-visible+span,#dvq input:focus-visible+.fxb{outline:3px solid var(--teal);outline-offset:2px}
+#dvq .modes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:700px){#dvq .modes{grid-template-columns:1fr}}
+#dvq .mode{background:#fff;border:2px solid var(--line);border-radius:6px;padding:16px;text-align:left;cursor:pointer;font-family:inherit;color:var(--ink)}
+#dvq .mode:hover{border-color:var(--copper)}#dvq .mode b{display:block;font-family:Georgia,serif;font-size:26px;color:var(--copper)}#dvq .mode span{font-size:14px;color:var(--muted)}
+#dvq .seed{margin:14px 0}#dvq .seed input{padding:8px 10px;border:1px solid var(--line);border-radius:4px;font-size:15px;width:190px;font-family:inherit}
+#dvq .axl{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media(max-width:820px){#dvq .axl{grid-template-columns:repeat(2,1fr)}}
+#dvq .axl div{background:#fff;border:1px solid var(--line);border-radius:4px;padding:10px 12px;font-size:14px}#dvq .axl b{display:block;color:var(--dark)}
+#dvq .lvs{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between}#dvq .lvc{text-align:center;font-size:14px;flex:1;min-width:92px}#dvq .lvc b{display:block}
+#dvq .prog{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:6px 0 14px}#dvq .prog i{display:block;height:100%;background:var(--copper)}
+#dvq .chead{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+#dvq .tag{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--dark);color:#fff;padding:3px 9px;border-radius:3px}
+#dvq .tag.t2{background:var(--teal)}#dvq .tag.t3{background:var(--copper)}#dvq .tag.t4{background:#6b6659}
+#dvq .ctx{background:#fff;border-left:5px solid var(--copper);padding:12px 16px;margin-bottom:14px;font-size:16px}
+#dvq .vis{background:#fff;border:1px solid var(--line);border-radius:4px;padding:8px;overflow:hidden}#dvq .vis svg{width:100%;height:auto;display:block}
+#dvq .vlab{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:2px 0 6px}#dvq .vlab.bad{color:var(--red)}#dvq .vlab.good{color:var(--green)}
+#dvq .stage{background:#fff;border:1px solid var(--line);border-radius:4px;padding:18px 20px;margin-top:16px}#dvq .stage h3{font-size:21px;margin-bottom:6px}
+#dvq .opts{display:grid;gap:8px;margin:12px 0}
+#dvq .opt{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:10px 12px;cursor:pointer}
+#dvq .opt input{margin-top:5px;width:18px;height:18px;accent-color:var(--copper)}#dvq .opt:hover{border-color:var(--copper)}
+#dvq .fxg{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:12px 0}
+@media(max-width:760px){#dvq .fxg{grid-template-columns:1fr}}
+#dvq .fxc{display:block;cursor:pointer}#dvq .fxc input{position:absolute;opacity:0}
+#dvq .fxb{border:2px solid var(--line);border-radius:6px;padding:10px;background:var(--bg);height:100%}#dvq .fxc input:checked+.fxb{border-color:var(--copper);background:#fff7ea}
+#dvq .fxt{font-size:14.5px;margin-bottom:8px}#dvq .fxv{background:#fff;border:1px solid var(--line);overflow:hidden}#dvq .fxv svg{width:100%;height:auto;display:block}
+#dvq .lock{color:var(--green);font-weight:700;margin:6px 0}
+#dvq .score{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:baseline;background:var(--dark);color:#fff;padding:14px 18px;border-radius:4px}
+#dvq .score b{font-family:Georgia,serif;font-size:42px;color:var(--gold)}#dvq .score span{color:#CFCABD}#dvq .sd b{font-size:17px;color:#fff;font-family:inherit}
+#dvq .ba{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:820px){#dvq .ba{grid-template-columns:1fr}}
+#dvq .fbl{list-style:none;padding:0;margin:8px 0;display:grid;gap:8px}
+#dvq .fb{border-left:5px solid var(--line);background:var(--bg);padding:9px 12px;border-radius:0 4px 4px 0;font-size:15px}
+#dvq .fb.ok{border-left-color:var(--green)}#dvq .fb.miss{border-left-color:#D49A3A;background:#fff6e4}#dvq .fb.bad{border-left-color:var(--red);background:#fbe9e6}#dvq .fb.ig{border-left-color:var(--line)}#dvq .fb.pick{outline:2px solid var(--copper)}
+#dvq .fbh{font-size:13px;margin-bottom:2px}#dvq .why{font-size:14px;color:var(--muted);margin-top:3px}#dvq .src{font-size:12px;color:var(--teal);font-weight:700;margin-left:6px}
+#dvq .chip{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:1px 8px;border-radius:10px;background:#E4E0D3;color:var(--dark);margin-left:6px}#dvq .chip.best{background:var(--green);color:#fff}
+#dvq .nav{margin:18px 0}
+#dvq .rhero{display:flex;gap:26px;align-items:center;background:#fff;border:1px solid var(--line);border-top:5px solid var(--copper);padding:22px;border-radius:4px;margin-bottom:16px}
+@media(max-width:620px){#dvq .rhero{flex-direction:column;text-align:center}}
+#dvq .rhero h2{font-size:clamp(34px,6vw,52px);color:var(--copper)}#dvq .rnum b{font-family:Georgia,serif;font-size:40px}#dvq .rnum span{color:var(--muted);margin-left:8px;font-size:14px}
+#dvq .rgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:820px){#dvq .rgrid{grid-template-columns:1fr}}
+#dvq .rgrid svg{width:100%;height:auto}
+#dvq .abar{margin:8px 0}#dvq .al{display:flex;justify-content:space-between;font-size:14px;gap:8px}#dvq .al span{color:var(--muted)}
+#dvq .at{height:9px;background:var(--line);border-radius:5px;overflow:hidden}#dvq .at i{display:block;height:100%;background:var(--copper)}
+#dvq .modal{position:fixed;inset:0;background:rgba(21,27,29,.7);z-index:99;overflow:auto;padding:20px}#dvq .mbox{max-width:960px;margin:0 auto;background:var(--bg);padding:18px;border-radius:6px}
+/* dashboards */
+#dvq .dsh{background:#fff;padding:12px;font-size:12px;color:var(--ink);position:relative}
+#dvq .dsh.dk{background:#0a0c10;color:#e8f6ff}#dvq .dsh.bd{border:3px solid #000}#dvq .dsh.dk.bd{border-color:#0ff}
+#dvq .dsh .dt{font-weight:800;font-size:15px;margin-bottom:8px}#dvq .dsh .dt.ctr{text-align:center;font-size:17px}
+#dvq .dsh .dh{font-family:Georgia,serif;font-weight:700;font-size:16px;color:var(--dark);margin-bottom:8px;line-height:1.25}
+#dvq .dsh .df{margin:0 0 10px 16px;padding:0;font-size:12.5px;color:var(--ink)}
+#dvq .dsh .dflt{display:flex;gap:8px;margin-bottom:10px}#dvq .dsh .dflt span,#dvq .dsh .fi{border:1px solid var(--line);padding:3px 9px;border-radius:3px;background:#faf9f6;font-size:11px}
+#dvq .dsh .dwrap{display:flex;gap:8px}#dvq .dsh .dg{display:grid;gap:8px;flex:1;min-width:0}
+#dvq .dsh .tile{padding:8px 10px;min-width:0;border:1px solid transparent}
+#dvq .dsh.bd .tile{border:3px solid #000}#dvq .dsh.sh .tile{box-shadow:4px 4px 8px rgba(0,0,0,.45);background-image:linear-gradient(135deg,rgba(255,255,255,.55),rgba(0,0,0,.18));border-radius:10px;border:2px solid #fff}
+#dvq .dsh.dk .tile{background:#11151c;border:1px solid #0ff}
+#dvq .dsh .tile svg{width:100%;height:auto;display:block}
+#dvq .dsh .kl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}#dvq .dsh.dk .kl{color:#8fe}
+#dvq .dsh .kv{font-family:Georgia,serif;font-weight:700;font-size:24px;line-height:1.15}#dvq .dsh.big .kv{font-size:38px}
+#dvq .dsh .kt{font-size:11px;color:var(--muted)}#dvq .dsh .ktx{font-size:12px}
+#dvq .dsh .tile.alr{border-top:3px solid var(--copper)}#dvq .dsh.dk .dh,#dvq .dsh.dk .dt{color:#fff}#dvq .dsh.dk .tile.alr{border-top-color:#fff}#dvq .dsh.dk .kv{color:#fff}
+#dvq .dsh .dside{width:62px;display:flex;flex-direction:column;gap:5px;font-size:10px}#dvq .dsh .dside span{border:1px solid var(--line);padding:2px 4px;background:#faf9f6;color:#999}
+#dvq .dsh .dfoot{font-size:10px;color:#8a8576;margin-top:8px}
+#dvq .dsh.ph{max-width:300px;margin:0 auto;border:10px solid #222;border-radius:26px;padding:8px}
+#dvq .dsh .fi{display:block;margin-top:5px}
+#dvq code{background:#E4E0D3;padding:1px 6px;border-radius:3px}
+#dvq .dsh.sm{font-size:9px}#dvq .dsh.sm .kv{font-size:15px}#dvq .dsh.sm .kl{font-size:8px}#dvq .dsh.sm .kt{font-size:8px}#dvq .dsh.sm .tile{padding:4px 5px}
+#dvq .dsh .kv.neon{color:#39ff14}
+</style></head><body>
+<article id="dvq">
+<div id="dvq-top"></div>
+<header class="hero"><div class="wrap"><div class="kicker">Data storytelling · Interactive practice</div>
+<h1>Bad Chart Clinic: diagnose it, fix it, get your skill profile</h1>
+<p class="lead">Fifty flawed charts and dashboards. For each one you spot what is wrong, pick the redesign you would ship, then see the real fix. At the end you get a skill radar and a level, from Newbie to Master.</p>
+<div class="meta"><span><b id="dvq-cnt">50</b> cases</span><span><b>8</b> skill axes</span><span><b>5</b> levels</span><span>All data is fictional · Runs offline in your browser</span></div>
+  <div class="page-actions">
+    <a class="page-action" id="archive-return" href="../data-storytelling.html">Back to Data Storytelling</a>
+    <a class="page-action secondary" id="home-return" href="../index.html">Home</a>
+  </div></div></header>
+<div class="wrap">
+<section id="dvq-intro">
+ <div class="grid3">
+  <div class="card"><h3>1. Diagnose</h3><p class="small">Tick every real flaw. Some options are decoys that sound plausible but are not problems; wrong ticks cost points, and ticking everything scores zero.</p></div>
+  <div class="card teal"><h3>2. Choose the fix</h3><p class="small">Pick the redesign you would ship from four previews. One is best, others are partial or make things worse.</p></div>
+  <div class="card good"><h3>3. See the answer</h3><p class="small">Answers lock. You then see Before → After, the reason for every flaw, and the source page.</p></div>
+ </div>
+ <h2 style="margin:22px 0 10px">Choose a run</h2>
+ <div class="modes"><button class="mode" id="dvq-m10"><b>Quick · 10</b><span>About 10 minutes. Every skill axis still appears.</span></button>
+ <button class="mode" id="dvq-m25"><b>Standard · 25</b><span>About 25 minutes. A reliable skill profile.</span></button>
+ <button class="mode" id="dvq-m50"><b>Full · 50</b><span>The complete clinic and the most accurate radar.</span></button></div>
+ <div class="seed"><label>Seed (optional, repeats the same run): <input id="dvq-seed" type="text" maxlength="16" placeholder="e.g. team-a"></label></div>
+ <button class="btn ghost" id="dvq-resume" hidden></button>
+ <div class="card" style="margin-top:18px"><h3>How scoring works</h3><p class="small"><b>Teaching heuristic, not an exam.</b> Each case is worth 100 points: <b>60</b> for diagnosis (each real flaw spotted earns its share; each decoy ticked costs 1.5 shares; select-all scores zero) and <b>40</b> for the fix (best 40, partial 10 to 25, harmful 0). Your radar uses accuracy per skill axis, shown with the number of items behind it. Axes with fewer than four items are marked low confidence. Your level depends on the average score <i>and</i> on how even your axes are.</p></div>
+ <h3 style="margin:18px 0 10px">The eight skill axes</h3>
+ <div class="axl"><div><b>Context &amp; message</b>Audience, decision, Big Idea</div><div><b>Choosing the visual</b>Right chart for the question</div><div><b>Decluttering</b>Remove what adds no information</div><div><b>Focus &amp; colour</b>Grey base, one accent</div><div><b>Text &amp; titles</b>Action titles, labels, notes</div><div><b>Data integrity</b>Axes, scales, honest geometry</div><div><b>Accessibility</b>Colour-blind safe, legible, mobile</div><div><b>Dashboard design</b>Hierarchy, KPIs, filters, flow</div></div>
+ <h3 style="margin:22px 0 10px">Five levels</h3><div class="lvs" id="dvq-levels"></div>
+ <p class="small" style="margin-top:18px">Method and principles follow <i>Storytelling with Data</i> (C. Nussbaumer Knaflic, 2015) and <i>The Big Book of Dashboards</i> (Wexler, Shaffer, Cotgreave, 2017). Page references are PDF page numbers. All cases, numbers and wording here are original and fictional; buy the books for the full treatment.</p>
+</section>
+<section id="dvq-game" hidden></section>
+<section id="dvq-res" hidden></section>
+</div></article>
+<script>
+(function(){'use strict';
+/* ===== RENDERER: spec -> SVG / HTML ===== */
+const C={ink:'#151B1D',mut:'#5B6568',g1:'#D9D4C8',g2:'#B3AD9E',g3:'#7E796C',acc:'#B77A2B',teal:'#2E6E73',red:'#B64D42',grn:'#3E745A',blu:'#2F6DA8',org:'#D9822B',
+rb:['#e6194b','#3cb44b','#ffe119','#4363d8','#f58231','#911eb4','#46f0f0','#f032e6','#bcf60c','#008080','#9a6324','#800000']};
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const T=(x,y,s,o={})=>`<text x="${+x.toFixed(1)}" y="${+y.toFixed(1)}" font-size="${o.s||11}" fill="${o.f||C.mut}" text-anchor="${o.a||'start'}" font-weight="${o.w||400}"${o.r?` transform="rotate(${o.r} ${+x.toFixed(1)} ${+y.toFixed(1)})"`:''}>${esc(s)}</text>`;
+const wrap=(s,n)=>{const w=String(s).split(' ');const L=[];let c='';w.forEach(x=>{if((c+' '+x).trim().length>n&&c){L.push(c);c=x}else c=(c+' '+x).trim()});L.push(c);return L};
+const fm=(v,sp)=>{const d=sp.dec||0;const t=Math.abs(v).toFixed(d).replace(/\B(?=(\d{3})+(?!\d))/g,',');return (v<0?'−':(sp.sg&&v>0?'+':''))+(sp.pre||'')+t+(sp.suf||'')};
+const L_=(x1,y1,x2,y2,c,w,d)=>`<line x1="${+x1.toFixed(1)}" y1="${+y1.toFixed(1)}" x2="${+x2.toFixed(1)}" y2="${+y2.toFixed(1)}" stroke="${c}" stroke-width="${w||1}"${d?` stroke-dasharray="${d}"`:''}/>`;
+const R_=(x,y,w,h,f,x2)=>`<rect x="${+x.toFixed(1)}" y="${+y.toFixed(1)}" width="${+Math.max(0,w).toFixed(1)}" height="${+Math.max(0,h).toFixed(1)}" fill="${f}"${x2||''}/>`;
+
+function frame(sp,w,h,o){
+  const mini=o&&o.mini,dk=sp.dk,tc=dk?'#fff':C.ink,sc=dk?'#9fb0b0':C.mut;
+  let s=`<rect width="${w}" height="${h}" fill="${dk?'#0a0c10':'#fff'}"/>`;
+  if(sp.bd) s+=`<rect x="2" y="2" width="${w-4}" height="${h-4}" fill="none" stroke="${dk?'#0ff':'#222'}" stroke-width="3"/>`;
+  let y=mini?16:22;const fs=mini?12:(sp.ctr?18:16),lh=fs+4;
+  if(sp.title){const ls=wrap(sp.title,Math.floor((w-36)/(fs*0.53)));
+    ls.forEach((ln,i)=>{s+=T(sp.ctr?w/2:16,y+i*lh,ln,{s:fs,a:sp.ctr?'middle':'start',w:sp.ctr?800:600,f:sp.ctr?(dk?'#fff':'#000'):tc})});y+=(ls.length-1)*lh+4;}
+  if(sp.sub){s+=T(16,y+15,sp.sub,{s:mini?10:12,f:sc});y+=19;}
+  if(sp.yt){s+=T(16,y+19,sp.yt,{s:mini?9:11,f:sc});y+=18;}
+  if(sp.xt)s+=T(16,h-8,sp.xt,{s:mini?9:11,f:sc});
+  return {s,x0:16,y0:y+12,x1:w-16,y1:h-(sp.xt?28:14)-(sp.rot?Math.max(40,Math.min(96,(sp.L?Math.max(...sp.L.map(x=>String(x).length)):8)*4.9+10)):14)-(sp.lg?20:0),tc,sc,dk};
+}
+const bg=sp=>sp.dk?'#0a0c10':'#fff';
+const col=(sp,i,acc)=>sp.rb?C.rb[i%C.rb.length]:(acc===true?(sp.ac||C.acc):(acc===false?C.g1:C.g2));
+
+/* ---- horizontal bars ---- */
+function barCore(sp,f,w){
+  let L=sp.L.slice(),V=sp.V.slice(),R=sp.ref?sp.ref.slice():null,P=sp.cols?sp.cols.slice():null;
+  if(sp.srt){const ix=L.map((_,i)=>i).sort((a,b)=>V[b]-V[a]);L=ix.map(i=>L[i]);V=ix.map(i=>V[i]);if(R)R=ix.map(i=>R[i]);}
+  const n=L.length,lw=sp.lw||Math.min(160,Math.max(...L.map(x=>String(x).length))*6.1+16);
+  const x0=f.x0+lw,x1=f.x1-(sp.vl===false?6:54),y0=f.y0,y1=f.y1;
+  const mn=sp.tr!=null?sp.tr:Math.min(0,...V),mx=sp.mx||Math.max(...V,sp.tgt||0,...(R||[0]))*1.06;
+  const sx=v=>x0+(v-mn)/(mx-mn)*(x1-x0),z=sx(Math.max(mn,0));let s='';
+  if(sp.gr||sp.ax){for(let k=0;k<=4;k++){const v=mn+(mx-mn)*k/4,x=sx(v);if(sp.gr)s+=L_(x,y0,x,y1,f.dk?'#556':'#555',1);s+=T(x,y1+12,fm(v,sp),{s:9,a:'middle',f:f.sc});}}
+  const bh=(y1-y0)/n,th=bh*(sp.thin?.32:.62);
+  L.forEach((l,i)=>{const y=y0+i*bh+(bh-th)/2,v=V[i],a=sp.acc?sp.acc.includes(l):null;
+    let c=sp.rg?(v<0?'#d62728':'#2ca02c'):sp.dv?(v<0?C.org:C.blu):P?P[i]:col(sp,i,a===null?null:a);
+    const xe=sx(v),xa=Math.min(z,xe),wd=Math.abs(xe-z);
+    if(sp.d3){s+=`<polygon points="${xa+wd},${y} ${xa+wd+7},${y-6} ${xa+wd+7},${y+th-6} ${xa+wd},${y+th}" fill="#000" opacity=".35"/><polygon points="${xa},${y} ${xa+7},${y-6} ${xa+wd+7},${y-6} ${xa+wd},${y}" fill="#000" opacity=".2"/>`;}
+    s+=R_(xa,y,wd,th,c);
+    s+=T(f.x0+lw-8+(sp.lal?-lw+8:0),y+th/2+4,l,{s:sp.sm?10:11,a:sp.lal?'start':'end',f:a?C.ink:f.sc,w:a?700:400});
+    if(sp.vl!==false)s+=T(v<0?z+6:xa+wd+6+(sp.d3?7:0),y+th/2+4,fm(v,sp),{s:11,a:'start',f:a?C.acc:f.tc,w:a?700:400});
+    if(R)s+=L_(sx(R[i]),y-3,sx(R[i]),y+th+3,C.ink,2);});
+  if(sp.tr==null&&!sp.noZ)s+=L_(z,y0,z,y1,f.dk?'#99a':C.g3,1);
+  if(sp.tgt!=null){const x=sx(sp.tgt);s+=L_(x,y0-4,x,y1,C.ink,1.4,'5 4')+T(x,y0-6,sp.tl||'Target',{s:10,a:'middle',f:C.ink,w:600});}
+  if(sp.rtl)s+=T(x1,y1+26,sp.rtl,{s:10,a:'end'});
+  return s;
+}
+/* ---- columns (single / grouped) ---- */
+function colCore(sp,f,w){
+  const S=sp.S||[{n:'',v:sp.V}],L=sp.L,n=L.length,m=S.length;
+  const x0=f.x0+(sp.gr||sp.ax?30:0),x1=f.x1,y0=f.y0,y1=f.y1;
+  const all=[].concat(...S.map(q=>q.v));const mn=sp.tr!=null?sp.tr:Math.min(0,...all),mx=sp.mx||Math.max(...all)*1.1;
+  const sy=v=>y1-(v-mn)/(mx-mn)*(y1-y0);let s='';
+  if(sp.gr||sp.ax)for(let k=0;k<=4;k++){const v=mn+(mx-mn)*k/4,y=sy(v);if(sp.gr)s+=L_(x0,y,x1,y,'#555',1);s+=T(x0-4,y+3,fm(v,sp),{s:9,a:'end',f:f.sc});}
+  const gw=(x1-x0)/n,bw=gw*(sp.thin?.3:.72)/m;
+  L.forEach((l,i)=>{const gx=x0+i*gw+gw*(1-.72*(sp.thin?.42:1))/2;
+    S.forEach((q,j)=>{const v=q.v[i],x=gx+j*bw,y=sy(Math.max(v,mn)),h0=sy(Math.max(mn,0))-y;
+      const a=sp.acc?sp.acc.includes(q.n)||sp.acc.includes(l):null;
+      const c=sp.rb?C.rb[(m>1?j:i)%C.rb.length]:q.c||(a===null?(m>1?[C.g2,C.acc,C.teal][j]:C.g2):(a?C.acc:C.g1));
+      if(sp.d3)s+=`<polygon points="${x+bw},${y} ${x+bw+6},${y-5} ${x+bw+6},${y+h0-5} ${x+bw},${y+h0}" fill="#000" opacity=".35"/>`;
+      s+=R_(x,y,bw-1,h0,c);
+      if(sp.vl!==false&&(sp.vl||m===1))s+=T(x+bw/2,y-4,fm(v,sp),{s:9,a:'middle',f:f.tc});});
+    const lx=gx+bw*m/2;
+    s+=sp.rot?T(lx,y1+14,l,{s:10,a:'end',r:-45,f:f.sc}):T(lx,y1+14,l,{s:10,a:'middle',f:f.sc});});
+  s+=L_(x0,sy(Math.max(mn,0)),x1,sy(Math.max(mn,0)),f.dk?'#99a':C.g3,1);
+  if(sp.lg&&m>1)S.forEach((q,j)=>{s+=R_(f.x0+j*110,y1+(sp.rot?42:26),10,10,sp.rb?C.rb[j]:[C.g2,C.acc,C.teal][j])+T(f.x0+j*110+14,y1+(sp.rot?51:35),q.n,{s:10})});
+  else if(m>1)S.forEach((q,j)=>{s+=T(x1-60,y0+12+j*14,'■ '+q.n,{s:10,f:[C.g3,C.acc,C.teal][j],w:700})});
+  if(sp.tgt!=null){s+=L_(x0,sy(sp.tgt),x1,sy(sp.tgt),C.ink,1.3,'5 4')+T(x1,sy(sp.tgt)-4,sp.tl||'Target',{s:10,a:'end',f:C.ink,w:600});}
+  return s;
+}
+/* ---- lines ---- */
+function lineCore(sp,f,w,box){
+  const b=box||f,S=sp.S,L=sp.L,n=L.length,x0=b.x0+(sp.gr||sp.ax?30:0),x1=b.x1-(sp.lg||sp.nolab?4:(sp.lab===false?4:78)),y0=b.y0,y1=b.y1;
+  const all=[].concat(...S.map(q=>q.v));const mn=sp.mn!=null?sp.mn:0,mx=sp.mx||Math.max(...all,sp.tgt||0)*1.1;
+  const sy=v=>y1-(v-mn)/(mx-mn)*(y1-y0),xv=sp.xv||L.map((_,i)=>i),xa=Math.min(...xv),xb=Math.max(...xv);
+  const sx=i=>x0+(xv[i]-xa)/(xb-xa||1)*(x1-x0);let s='';
+  if(sp.fc!=null&&!sp.nofc)s+=R_(sx(sp.fc),y0-6,x1-sx(sp.fc)+4,y1-y0+6,'#EFEBE1')+T(sx(sp.fc)+6,y0+6,'FORECAST',{s:9,f:C.g3,w:700});
+  if(sp.gr||sp.ax)for(let k=0;k<=4;k++){const v=mn+(mx-mn)*k/4,y=sy(v);if(sp.gr)s+=L_(x0,y,x1,y,'#555',1);s+=T(x0-4,y+3,fm(v,sp),{s:9,a:'end',f:f.sc});}
+  s+=L_(x0,y1,x1,y1,f.dk?'#99a':C.g3,1);
+  if(sp.tgt!=null){s+=L_(x0,sy(sp.tgt),x1,sy(sp.tgt),C.ink,1.2,'5 4')+T(x0+2,sy(sp.tgt)-4,sp.tl||'Target',{s:10,f:C.ink,w:600});}
+  const every=sp.every||1;
+  L.forEach((l,i)=>{if(i%every===0&&!sp.nox)s+=sp.rot?T(sx(i),y1+14,l,{s:10,a:'end',r:-45,f:f.sc}):T(sx(i),y1+14,l,{s:10,a:'middle',f:f.sc});});
+  S.forEach((q,j)=>{const a=sp.acc?sp.acc.includes(q.n):null;
+    const c=sp.rb?(f.dk?['#39ff14','#ff2bd6','#fff200','#00e5ff','#ff6a00','#b388ff','#00ff9d'][j%7]:C.rb[j%C.rb.length]):(a===null?(q.c||[C.g3,C.acc,C.teal][j%3]):(a?(f.dk?'#ffffff':C.acc):(f.dk?'#5b6573':C.g1)));
+    const wd=sp.glow?3.5:(a===null?2.2:(a?3.2:1.6));
+    const pts=q.v.map((v,i)=>[sx(i+(q.o||0)),sy(v)]);
+    const cut=sp.fc!=null&&!sp.nofc?sp.fc:-1;
+    if(cut>0){s+=`<polyline fill="none" stroke="${c}" stroke-width="${wd}" points="${pts.slice(0,cut+1).map(p=>p.map(x=>+x.toFixed(1)).join(',')).join(' ')}"/><polyline fill="none" stroke="${c}" stroke-width="${wd*.7}" stroke-dasharray="2 4" points="${pts.slice(cut).map(p=>p.map(x=>+x.toFixed(1)).join(',')).join(' ')}"/>`;}
+    else s+=`<polyline fill="none" stroke="${c}" stroke-width="${wd}"${sp.glow?` opacity=".95"`:''} points="${pts.map(p=>p.map(x=>+x.toFixed(1)).join(',')).join(' ')}"/>`;
+    if(sp.mk)pts.forEach(p=>{s+=`<circle cx="${+p[0].toFixed(1)}" cy="${+p[1].toFixed(1)}" r="3.2" fill="${c}"/>`;if(sp.mkl)s+=T(p[0],p[1]-7,fm(q.v[pts.indexOf(p)],sp),{s:9,a:'middle',f:f.tc});});
+    const last=pts[pts.length-1];
+    if(!sp.mk&&a){s+=`<circle cx="${last[0].toFixed(1)}" cy="${last[1].toFixed(1)}" r="4" fill="${c}"/>`+T(last[0]-4,last[1]-9,fm(q.v[q.v.length-1],sp),{s:11,a:'end',f:c,w:700});if(sp.first){s+=`<circle cx="${pts[0][0].toFixed(1)}" cy="${pts[0][1].toFixed(1)}" r="4" fill="${c}"/>`+T(pts[0][0]+4,pts[0][1]-9,fm(q.v[0],sp),{s:11,f:c,w:700});}}
+    if(!sp.lg&&sp.lab!==false&&!sp.nolab)s+=T(last[0]+7,last[1]+4,q.n,{s:11,f:a===false?C.g3:c,w:a?700:400});});
+  (sp.ann||[]).forEach(an=>{const q=S[an.s||0],x=sx(an.i),y=sy(q.v[an.i]);s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5" fill="#fff" stroke="${C.acc}" stroke-width="2"/>`;
+    wrap(an.t,an.w||26).forEach((ln,k)=>{s+=T(x+(an.dx||8),y+(an.dy||-22)+k*12,ln,{s:10,f:C.ink})});});
+  if(sp.lg)S.forEach((q,j)=>{const c=sp.rb?(f.dk?['#39ff14','#ff2bd6','#fff200','#00e5ff','#ff6a00','#b388ff','#00ff9d'][j%7]:C.rb[j%C.rb.length]):[C.g3,C.acc,C.teal][j%3];const lx=f.x0+(j%4)*(sp.lgw||112),ly=b.y1+(sp.rot?44:30)+Math.floor(j/4)*13;s+=R_(lx,ly-8,10,9,c)+T(lx+14,ly,q.n,{s:10,f:f.sc});});
+  return s;
+}
+/* ---- dual axis / panels ---- */
+function dualCore(sp,f,w){
+  const x0=f.x0+34,x1=f.x1-36,y0=f.y0,y1=f.y1,L=sp.L,n=L.length,a=sp.S[0].v,b=sp.S[1].v;
+  const ma=Math.max(...a)*1.15,mnb=sp.rmn,mxb=sp.rmx,sa=v=>y1-v/ma*(y1-y0),sb=v=>y1-(v-mnb)/(mxb-mnb)*(y1-y0);let s='';
+  for(let k=0;k<=4;k++){const y=y1-(y1-y0)*k/4;s+=L_(x0,y,x1,y,'#555',1)+T(x0-4,y+3,fm(ma*k/4,sp),{s:9,a:'end'})+T(x1+4,y+3,(mnb+(mxb-mnb)*k/4).toFixed(0)+'%',{s:9});}
+  const gw=(x1-x0)/n;
+  L.forEach((l,i)=>{s+=R_(x0+i*gw+gw*.15,sa(a[i]),gw*.7,y1-sa(a[i]),'#4363d8')+T(x0+i*gw+gw/2,y1+14,l,{s:10,a:'end',r:-45})});
+  s+=`<polyline fill="none" stroke="#e6194b" stroke-width="2.2" points="${b.map((v,i)=>(x0+i*gw+gw/2).toFixed(1)+','+sb(v).toFixed(1)).join(' ')}"/>`;
+  b.forEach((v,i)=>{s+=`<circle cx="${(x0+i*gw+gw/2).toFixed(1)}" cy="${sb(v).toFixed(1)}" r="3" fill="#e6194b"/>`});
+  return s+R_(f.x0+10,y1+40,10,9,'#4363d8')+T(f.x0+24,y1+48,sp.S[0].n,{s:10})+R_(f.x0+170,y1+40,10,9,'#e6194b')+T(f.x0+184,y1+48,sp.S[1].n,{s:10});
+}
+function panelsCore(sp,f,w){
+  const y0=f.y0,y1=f.y1,mid=y0+(y1-y0)*.5,gap=26;
+  const top={...sp,S:[sp.S[0]],V:sp.S[0].v,acc:sp.hi,thin:false,ax:true,vl:false,gr:false,nofc:true};
+  const hi=sp.hl||[];let s='';
+  const fa={...f,y0:y0+14,y1:mid-gap+6},fb={...f,y0:mid+16,y1:y1};
+  s+=T(f.x0,y0+4,sp.S[0].n,{s:11,f:C.ink,w:700});
+  const L=sp.L,n=L.length,x0=f.x0+34,x1=f.x1-8,gw=(x1-x0)/n,A=sp.S[0].v,B=sp.S[1].v,ma=Math.max(...A)*1.1;
+  A.forEach((v,i)=>{const h=(v/ma)*(fa.y1-fa.y0);s+=R_(x0+i*gw+gw*.18,fa.y1-h,gw*.64,h,hi.includes(i)?C.acc:C.g1)});
+  s+=L_(x0,fa.y1,x1,fa.y1,C.g3,1);
+  s+=T(f.x0,mid+6,sp.S[1].n,{s:11,f:C.ink,w:700});
+  const mnb=sp.rmn,mxb=sp.rmx,sb=v=>fb.y1-(v-mnb)/(mxb-mnb)*(fb.y1-fb.y0);
+  hi.forEach(i=>{s+=R_(x0+i*gw,fb.y0-4,gw,fb.y1-fb.y0+4,'#F4E7D3')});
+  s+=`<polyline fill="none" stroke="${C.g3}" stroke-width="2" points="${B.map((v,i)=>(x0+i*gw+gw/2).toFixed(1)+','+sb(v).toFixed(1)).join(' ')}"/>`;
+  hi.forEach(i=>{s+=`<circle cx="${(x0+i*gw+gw/2).toFixed(1)}" cy="${sb(B[i]).toFixed(1)}" r="4" fill="${C.acc}"/>`});
+  L.forEach((l,i)=>{s+=T(x0+i*gw+gw/2,fb.y1+14,l,{s:10,a:'middle'})});
+  [mnb,mxb].forEach(v=>{s+=T(x0-4,sb(v)+3,v+'%',{s:9,a:'end'})});
+  return s;
+}
+/* ---- pie / donut ---- */
+function arc(cx,cy,r,a0,a1,ri){const p=(a,rr)=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)],big=a1-a0>Math.PI?1:0,A=p(a0,r),B=p(a1,r);
+  if(!ri)return `M${cx},${cy} L${A[0].toFixed(1)},${A[1].toFixed(1)} A${r},${r} 0 ${big} 1 ${B[0].toFixed(1)},${B[1].toFixed(1)} Z`;
+  const C2=p(a1,ri),D=p(a0,ri);return `M${A[0].toFixed(1)},${A[1].toFixed(1)} A${r},${r} 0 ${big} 1 ${B[0].toFixed(1)},${B[1].toFixed(1)} L${C2[0].toFixed(1)},${C2[1].toFixed(1)} A${ri},${ri} 0 ${big} 0 ${D[0].toFixed(1)},${D[1].toFixed(1)} Z`;}
+function pieCore(sp,f,w){
+  const V=sp.V,L=sp.L,tot=V.reduce((a,b)=>a+b,0),cx=sp.lg?w*.34:w*.5,cy=(f.y0+f.y1)/2+(sp.d3?-10:0),r=Math.min((f.y1-f.y0)/2-6,w*.27);
+  const don=sp.t==='donut',tr=sp.d3?`transform="translate(${cx} ${cy}) scale(1 .55) translate(${-cx} ${-cy})"`:'';let s='';
+  if(sp.d3){s+=`<g ${tr}><circle cx="${cx}" cy="${cy+22}" r="${r}" fill="#222"/></g>`;}
+  s+=`<g ${tr}>`;let a=-Math.PI/2;
+  V.forEach((v,i)=>{const da=v/tot*2*Math.PI;s+=`<path d="${arc(cx,cy,r,a,a+da,don?r*.55:0)}" fill="${sp.rb?C.rb[i%C.rb.length]:(sp.acc&&sp.acc.includes(L[i])?C.acc:C.g1)}" stroke="#fff" stroke-width="${sp.bd?3:1.5}"/>`;a+=da});s+='</g>';
+  if(don&&sp.ct)s+=T(cx,cy+5,sp.ct,{s:16,a:'middle',f:f.tc,w:700});
+  a=-Math.PI/2;
+  V.forEach((v,i)=>{const da=v/tot*2*Math.PI,m=a+da/2;if(sp.lg){const ly=f.y0+8+i*18,lx=w*.66;s+=R_(lx,ly-9,10,10,sp.rb?C.rb[i%C.rb.length]:C.g1)+T(lx+15,ly,L[i],{s:11,f:f.sc});}
+    else{const tx=cx+(r+10)*Math.cos(m),ty=cy+(r+10)*Math.sin(m)*(sp.d3?.55:1);s+=T(tx,ty+4,L[i]+' '+Math.round(v/tot*100)+'%',{s:11,a:Math.cos(m)>0?'start':'end',f:f.tc});}
+    if(sp.pl)s+=T(cx+r*.72*Math.cos(m),cy+r*.72*Math.sin(m)*(sp.d3?.55:1)+4,Math.round(v/tot*100)+'%',{s:10,a:'middle',f:'#000',w:700});a+=da});
+  return s;
+}
+/* ---- stacked ---- */
+function stackCore(sp,f,w){
+  const L=sp.L;let S=sp.S.map(q=>({...q}));
+  if(sp.fo){const k=S.findIndex(q=>q.n===sp.fo);const q=S.splice(k,1)[0];S.unshift(q);}
+  const n=L.length,x0=f.x0+(sp.hz?(sp.lw||120):30),x1=f.x1-(sp.hz||sp.fo?70:4),y0=f.y0,y1=f.y1;let s='';
+  const tots=L.map((_,i)=>S.reduce((a,q)=>a+q.v[i],0)),mx=sp.pct?100:Math.max(...tots)*1.05;
+  const cl=(q,j)=>sp.rb?C.rb[j%C.rb.length]:sp.dvc?sp.dvc[j]:(sp.fo?(j===0?C.acc:['#CFCABD','#BDB7A8','#A9A394','#968F7F','#8A8576'][(j-1)%5]):C.g2);
+  if(sp.hz){const bh=(y1-y0)/n,th=bh*.62;
+    L.forEach((l,i)=>{const y=y0+i*bh+(bh-th)/2;let x=x0;s+=T(x0-8,y+th/2+4,l,{s:11,a:'end',f:f.sc});
+      S.forEach((q,j)=>{const ww=q.v[i]/tots[i]*(x1-x0);s+=R_(x,y,ww,th,cl(q,j),` stroke="#fff" stroke-width="1"`);if(sp.sl&&ww>26)s+=T(x+ww/2,y+th/2+4,Math.round(q.v[i]/tots[i]*100),{s:10,a:'middle',f:'#000'});x+=ww;});});
+    if(sp.lg||sp.dvc){const per=Math.max(1,Math.floor((f.x1-f.x0)/112));S.forEach((q,j)=>{const lx=f.x0+(j%per)*112,ly=y1+16+Math.floor(j/per)*14;s+=R_(lx,ly-9,10,9,cl(q,j))+T(lx+14,ly,q.n,{s:10})})}
+    return s;}
+  const gw=(x1-x0)/n,bw=gw*.64;
+  L.forEach((l,i)=>{let y=y1;S.forEach((q,j)=>{const hh=(sp.pct?q.v[i]/tots[i]*100:q.v[i])/mx*(y1-y0);y-=hh;s+=R_(x0+i*gw+(gw-bw)/2,y,bw,hh,cl(q,j),sp.rb?' stroke="#fff"':'');
+    if(sp.fo&&j===0&&(i===0||i===n-1))s+=T(x0+i*gw+gw/2,y+hh/2+4,q.v[i],{s:11,a:'middle',f:'#fff',w:700});if(sp.sl&&hh>14)s+=T(x0+i*gw+gw/2,y+hh/2+3,q.v[i],{s:9,a:'middle'});});
+    s+=T(x0+i*gw+gw/2,y1+14,l,{s:10,a:'middle'});});
+  if(sp.gr)for(let k=0;k<=4;k++){const y=y1-(y1-y0)*k/4;s+=L_(x0,y,x1,y,'#555',1)+T(x0-4,y+3,(mx*k/4).toFixed(2),{s:9,a:'end'})}
+  s+=L_(x0,y1,x1,y1,C.g3,1);
+  if(sp.lg){const per=Math.max(1,Math.floor((f.x1-f.x0)/104));S.forEach((q,j)=>{const lx=f.x0+(j%per)*104,ly=y1+30+Math.floor(j/per)*13;s+=R_(lx,ly-9,10,9,cl(q,j))+T(lx+14,ly,q.n,{s:10})})}
+  else{let yy=y1;S.forEach((q,j)=>{const hh=q.v[n-1]/mx*(y1-y0);yy-=hh;s+=T(x0+(n-1)*gw+gw/2+bw/2+6,yy+hh/2+4,q.n,{s:10,f:j===0?C.acc:C.g3,w:j===0?700:400})});}
+  return s;
+}
+/* ---- table ---- */
+function tblCore(sp,f,w){
+  const cols=sp.cols,rows=sp.rows,n=rows.length+1,x0=f.x0,x1=f.x1,y0=f.y0,y1=f.y1,rh=Math.min(30,(y1-y0)/n),cw=(x1-x0)/cols.length;let s='';
+  const heavy=sp.heavy,ci=sp.num||[];
+  for(let r=0;r<n;r++){const y=y0+r*rh;
+    if(heavy)s+=L_(x0,y,x1,y,'#000',2);else if(r<=1||r===n-1)s+=L_(x0,y,x1,y,C.g1,1);
+    for(let c=0;c<cols.length;c++){const txt=r===0?cols[c]:rows[r-1][c];const num=ci.includes(c);const hi=r>0&&sp.hi&&sp.hi.includes(r-1);
+      const cc=sp.heat||sp.rbcell||sp.tl;const xx=heavy?x0+c*cw+cw/2:(cc&&c>0?x0+c*cw+cw/2:(num?x0+(c+1)*cw-10:x0+c*cw+8));const an=heavy?'middle':(num?'end':'start');
+      if(r>0&&sp.rag&&c===sp.rag.c){const v=rows[r-1][c];s+=R_(x0+c*cw+4,y+3,cw-8,rh-6,sp.rag.m[v]||'#ccc');}
+      let tcol=r===0?C.ink:(sp.bold?'#000':(hi?C.acc:(sp.hi?C.g3:C.ink)));
+      if(r>0&&c>0&&(sp.rbcell||sp.heat||sp.tl)){const v=parseInt(rows[r-1][c]);const fill=sp.rbcell?C.rb[(v-1)%12]:sp.tl?(v<=3?'#2ca02c':v<=6?'#ffe119':'#d62728'):`rgba(46,110,115,${(1-(v-1)/9*.88).toFixed(2)})`;s+=R_(x0+c*cw+3,y+2,cw-6,rh-4,fill);if(sp.heat&&v<=4)tcol='#fff';else if(sp.heat)tcol=C.ink}
+      s+=T(xx,y+rh/2+4,txt,{s:11,a:sp.heat||sp.rbcell||sp.tl?(c>0?'middle':an):an,f:tcol,w:(r===0||sp.bold||hi||(sp.heat&&parseInt(txt)<=2))?700:400});
+      if(heavy)s+=L_(x0+c*cw,y,x0+c*cw,y+rh,'#000',2);}}
+  s+=L_(x0,y0+n*rh,x1,y0+n*rh,heavy?'#000':C.g1,heavy?2:1);if(heavy)s+=L_(x1,y0,x1,y0+n*rh,'#000',2);
+  return s;
+}
+/* ---- waterfall ---- */
+function wfCore(sp,f,w){
+  const L=sp.L,V=sp.V,n=L.length,x0=f.x0+10,x1=f.x1,y0=f.y0,y1=f.y1,gw=(x1-x0)/n;let run=0,s='';const lv=[];
+  V.forEach((v,i)=>{if(i===0||i===n-1){lv.push([0,i===0?v:run]);if(i===0)run=v}else{lv.push([run,run+v]);run+=v}});
+  const mx=Math.max(...lv.map(a=>Math.max(...a)))*1.12,sy=v=>y1-v/mx*(y1-y0);
+  lv.forEach((a,i)=>{const lo=Math.min(...a),hi=Math.max(...a),end=(i===0||i===n-1),c=end?C.g3:(V[i]>0?C.blu:C.org);
+    s+=R_(x0+i*gw+gw*.17,sy(hi),gw*.66,sy(lo)-sy(hi),c)+T(x0+i*gw+gw/2,sy(hi)-5,end?(i===0?V[0]:run):(V[i]>0?'+':'−')+Math.abs(V[i]),{s:11,a:'middle',f:C.ink,w:600})+T(x0+i*gw+gw/2,y1+14,L[i],{s:10,a:'middle'});
+    if(i<n-1)s+=L_(x0+i*gw+gw*.83,sy(a[1]),x0+(i+1)*gw+gw*.17,sy(a[1]),C.g2,1,'2 2');});
+  return s+L_(x0,y1,x1,y1,C.g3,1);
+}
+/* ---- slopegraph ---- */
+function slopeCore(sp,f,w){
+  const L=sp.L,A=sp.A,B=sp.B,xl=f.x0+150,xr=f.x1-150,y0=f.y0+14,y1=f.y1,all=A.concat(B),mn=Math.min(...all),mx=Math.max(...all),sy=v=>y1-(v-mn)/(mx-mn)*(y1-y0);let s=T(xl,y0-10,sp.p1,{s:11,a:'middle',f:C.ink,w:700})+T(xr,y0-10,sp.p2,{s:11,a:'middle',f:C.ink,w:700});
+  const sp2=(arr)=>{const o=arr.map((v,i)=>({i,y:sy(v)})).sort((a,b)=>a.y-b.y);for(let k=1;k<o.length;k++)if(o[k].y-o[k-1].y<13)o[k].y=o[k-1].y+13;const r=[];o.forEach(q=>r[q.i]=q.y);return r;};
+  const ya=sp2(A),yb=sp2(B);
+  L.forEach((l,i)=>{const a=sp.acc&&sp.acc.includes(l),c=a?C.acc:C.g2;s+=L_(xl,sy(A[i]),xr,sy(B[i]),c,a?3:1.5)+`<circle cx="${xl}" cy="${sy(A[i]).toFixed(1)}" r="3" fill="${c}"/><circle cx="${xr}" cy="${sy(B[i]).toFixed(1)}" r="3" fill="${c}"/>`
+    +T(xl-8,ya[i]+4,l+'  '+fm(A[i],sp),{s:10.5,a:'end',f:a?C.acc:C.mut,w:a?700:400})+T(xr+8,yb[i]+4,fm(B[i],sp),{s:10.5,f:a?C.acc:C.mut,w:a?700:400});});
+  return s;
+}
+/* ---- bubbles, tiles, gauges, big number, strip ---- */
+function bubCore(sp,f,w){const V=sp.V,L=sp.L,n=V.length,cols=Math.ceil(n/2),mx=Math.max(...V),cw=(f.x1-f.x0)/cols,rh=(f.y1-f.y0)/2;let s='';
+  V.forEach((v,i)=>{const r=Math.sqrt(v/mx)*Math.min(cw,rh)*.46,cx=f.x0+(i%cols+.5)*cw+(i>=cols?cw*.0:0),cy=f.y0+(Math.floor(i/cols)+.5)*rh;s+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}" fill="${C.rb[i%12]}" opacity=".85"/>`+T(cx,cy+4,L[i],{s:10,a:'middle',f:'#000'});});return s;}
+function tilesCore(sp,f,w){const V=sp.V,L=sp.L,n=V.length,cols=sp.cols||5,rows=Math.ceil(n/cols),cw=(f.x1-f.x0)/cols,rh=(f.y1-f.y0)/rows;let s='';
+  V.forEach((v,i)=>{const x=f.x0+(i%cols)*cw,y=f.y0+Math.floor(i/cols)*rh;s+=R_(x+2,y+2,cw-4,rh-4,C.rb[(i*5)%12],' opacity=".8"')+T(x+cw/2,y+rh/2-1,L[i],{s:11,a:'middle',f:'#000',w:700})+T(x+cw/2,y+rh/2+13,v,{s:10,a:'middle',f:'#000'});});return s;}
+function gaugeCore(sp,f,w){const V=sp.V,L=sp.L,n=V.length,cw=(f.x1-f.x0)/n,r=Math.min(cw*.4,(f.y1-f.y0)*.38),cy=(f.y0+f.y1)/2;let s='';
+  V.forEach((v,i)=>{const cx=f.x0+(i+.5)*cw,a0=Math.PI*.75,aa=Math.PI*1.5;const p=(a,rr)=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)];
+    const seg=(from,to,c,wd)=>{const A=p(from,r),B=p(to,r);return `<path d="M${A[0].toFixed(1)},${A[1].toFixed(1)} A${r},${r} 0 ${to-from>Math.PI?1:0} 1 ${B[0].toFixed(1)},${B[1].toFixed(1)}" fill="none" stroke="${c}" stroke-width="${wd}"/>`};
+    s+=seg(a0,a0+aa,'#ddd',14)+seg(a0,a0+aa*v/100,C.rb[(i*3+1)%12],14)+T(cx,cy+6,v+'%',{s:16,a:'middle',f:C.ink,w:700})+T(cx,cy+r+28,L[i],{s:11,a:'middle',f:C.mut});});return s;}
+function numCore(sp,f,w){return T(f.x0+8,(f.y0+f.y1)/2+14,sp.big,{s:64,f:C.acc,w:700})+wrap(sp.txt,44).map((l,i)=>T(f.x0+10,(f.y0+f.y1)/2+44+i*18,l,{s:14,f:C.ink})).join('');}
+function stripCore(sp,f,w){const L=sp.L,D=sp.D,n=L.length,x0=f.x0+120,x1=f.x1-10,y0=f.y0,y1=f.y1,mx=sp.mx||Math.max(...[].concat(...D))*1.05,sx=v=>x0+v/mx*(x1-x0),rh=(y1-y0)/n;let s='';
+  for(let k=0;k<=4;k++){const x=sx(mx*k/4);s+=T(x,y1+12,Math.round(mx*k/4),{s:9,a:'middle'})}
+  L.forEach((l,i)=>{const cy=y0+(i+.5)*rh;s+=T(x0-8,cy+4,l,{s:11,a:'end'})+L_(x0,cy+rh/2,x1,cy+rh/2,C.g1,.8);
+    D[i].forEach((v,k)=>{const jy=cy+((k*37)%11-5)*(rh/22),big=sp.big&&v>=sp.big;s+=`<circle cx="${sx(v).toFixed(1)}" cy="${jy.toFixed(1)}" r="${big?4.5:3}" fill="${big?C.acc:C.g2}" opacity="${big?1:.7}"/>`});
+    const av=D[i].reduce((a,b)=>a+b,0)/D[i].length;if(sp.avg)s+=L_(sx(av),cy-rh*.4,sx(av),cy+rh*.4,C.ink,2)});
+  if(sp.avg)s+=T(x1,y0-4,'| average',{s:10,a:'end',f:C.ink});return s;}
+
+const DH={bar:260,col:300,line:300,dual:330,panels:340,pie:300,donut:300,stack:300,tbl:300,wf:290,slope:320,bub:300,tiles:260,gauge:230,num:200,strip:300};
+function render(sp,o={}){
+  if(sp.t==='dash')return dashHTML(sp,o);
+  const w=o.w||640,h=o.h||sp.h||(o.mini?o.h||190:DH[sp.t]||300),f=frame(sp,w,h,o);let b='';
+  const map={bar:barCore,col:colCore,line:lineCore,dual:dualCore,panels:panelsCore,pie:pieCore,donut:pieCore,stack:stackCore,tbl:tblCore,wf:wfCore,slope:slopeCore,bub:bubCore,tiles:tilesCore,gauge:gaugeCore,num:numCore,strip:stripCore};
+  b=map[sp.t](sp,f,w);
+  return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(sp.title||sp.t)}" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Calibri,Arial,sans-serif">${f.s}${b}</svg>`;
+}
+/* ---- dashboards (HTML) ---- */
+function spark(v,c,w=90,h=26){const mn=Math.min(...v),mx=Math.max(...v),p=v.map((y,i)=>(i/(v.length-1)*(w-4)+2).toFixed(1)+','+(h-3-(y-mn)/(mx-mn||1)*(h-6)).toFixed(1));return `<svg viewBox="0 0 ${w} ${h}" width="${w}" height="${h}"><polyline fill="none" stroke="${c}" stroke-width="1.8" points="${p.join(' ')}"/></svg>`}
+function dashHTML(sp,o){
+  const cls=['dsh',sp.dk?'dk':'',sp.bd?'bd':'',sp.sh?'sh':'',sp.ph?'ph':'',sp.big?'big':''].join(' ');
+  let h=`<div class="${cls}">`;
+  if(sp.hl)h+=`<div class="dh">${esc(sp.hl)}</div>`;else if(sp.title)h+=`<div class="dt${sp.ctr?' ctr':''}">${esc(sp.title)}</div>`;
+  if(sp.find)h+=`<ul class="df">${sp.find.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  if(sp.flt&&sp.flt.pos==='top')h+=`<div class="dflt">${sp.flt.items.map(x=>`<span>${esc(x)} ▾</span>`).join('')}</div>`;
+  h+=`<div class="dwrap"><div class="dg" style="grid-template-columns:repeat(${sp.cols||3},minmax(0,1fr))">`;
+  (sp.tiles||[]).forEach((t,i)=>{
+    const span=t.sp||1;let st=`grid-column:span ${span};`;let inner='';let c='tile';
+    if(sp.rb)st+=`background:${C.rb[(i*2+1)%12]}${sp.dk?'':'33'};`;
+    if(t.k==='kpi'){const al=t.al;
+      if(al)c+=' alr';
+      inner=`<div class="kl">${esc(t.n)}</div><div class="kv" style="${al?'color:'+C.acc:''}">${esc(t.v)}</div>`+(t.tg?`<div class="kt">${esc(t.tg)}</div>`:'')+(t.tr?`<div class="ks">${spark(t.tr,al?C.acc:C.g3)}</div>`:'')+(t.ds?`<div class="kt">${esc(t.ds)}</div>`:'');}
+    else if(t.k==='chart')inner=render(t.s,{w:t.w||300,h:t.h||175,mini:true});
+    else if(t.k==='txt')inner=`<div class="kl">${esc(t.n||'')}</div><div class="ktx">${esc(t.v)}</div>`;
+    else if(t.k==='flt')inner=`<div class="kl">Filters</div>`+t.items.map(x=>`<div class="fi">${esc(x)} ▾</div>`).join('');
+    h+=`<div class="${c}" style="${st}">${inner}</div>`;});
+  h+='</div>';
+  if(sp.flt&&sp.flt.pos==='right')h+=`<div class="dside">${sp.flt.items.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`;
+  h+='</div>';
+  if(sp.foot)h+=`<div class="dfoot">${esc(sp.foot)}</div>`;
+  return h+'</div>';
+}
+
+/* ===== GAME ENGINE ===== */
+const AX={
+ CTX:{n:'Context & message',s:'Context',adv:'Name the decision maker and the action you want before choosing any chart. Write the one-sentence Big Idea first (SWD ch.1).'},
+ VIS:{n:'Choosing the visual',s:'Visual choice',adv:'Match the chart to the message: bars for categories, lines for time, text for one or two numbers. Retire pies, donuts, 3D and dual axes (SWD ch.2).'},
+ CLU:{n:'Decluttering',s:'Clutter',adv:'Every element costs attention. Remove borders, heavy gridlines, markers and legends; label directly and align cleanly (SWD ch.3).'},
+ FOC:{n:'Focus & colour',s:'Focus & colour',adv:'Make everything grey, then give ONE thing the accent colour. Keep colour meaning consistent (SWD ch.4).'},
+ TXT:{n:'Text & titles',s:'Text & titles',adv:'Write action titles that state the conclusion, title every axis and annotate what matters (SWD ch.5).'},
+ INT:{n:'Data integrity',s:'Integrity',adv:'Bars start at zero, time steps are even, no 3D distortion, no fake zoom. A single misleading axis costs all your credibility (SWD p.66-69).'},
+ ACC:{n:'Accessibility',s:'Accessibility',adv:'Never rely on red vs green alone; add arrows, signs or blue/orange. Keep text horizontal, legible and readable on a phone or wall screen (SWD p.137; BBD ch.33).'},
+ DSH:{n:'Dashboard design',s:'Dashboard design',adv:'Lead with a headline, give KPIs a target and trend, size things by importance, and use overview, filter, then details on demand (BBD ch.5-8, 32).'}
+};
+const AXK=Object.keys(AX);
+const DEC={
+ d3:['Use 3D so the chart looks more professional',0,'INT','3D skews values and adds nothing; never use 3D for one dimension.','SWD p.81'],
+ dcol:['Add more colours so every item is easy to tell apart',0,'FOC','When everything is different, nothing stands out.','SWD p.134'],
+ dmore:['Add more categories or detail so nothing is left out',0,'CLU','More detail adds load. Show what the decision needs and move the rest to a drill-down.','SWD p.148'],
+ dbig:['Make every label and number bigger',0,'FOC','If everything is bigger, nothing stands out.','SWD p.132'],
+ dsm:['Smooth the lines so they look nicer',0,'INT','Smoothing hides real data points.','SWD p.62'],
+ dpie:['Switch to a pie chart',0,'VIS','Pies are harder to read than bars on a common baseline.','SWD p.79'],
+ dgrid:['Add darker gridlines so values are easier to read',0,'CLU','Heavy gridlines compete with the data; if used, make them thin and light.','SWD p.109'],
+ dleg:['Add a legend so every series can be decoded',0,'CLU','Direct labels remove the back-and-forth that a legend causes.','SWD p.112'],
+ dthick:['Use thicker outlines on every element',0,'CLU','Heavier outlines are only more noise.','SWD p.106'],
+ dsec:['Add a secondary axis so more measures fit',0,'VIS','A second axis forces readers to decode scales and implies a relationship.','SWD p.82'],
+ dzero:['Start the axis higher so differences are easier to see',0,'INT','Truncating a bar axis exaggerates differences.','SWD p.66'],
+ dcentre:['Centre-align everything for balance',0,'CLU','Centre alignment leaves ragged edges; left-align instead.','SWD p.98'],
+ dtrend:['Add a trend line to every series',0,'CLU','Extra lines add load without sharpening the message.','SWD p.148'],
+ danim:['Add animation so it grabs attention',0,'FOC','Flying or blinking animation is more annoying than helpful.','SWD p.146'],
+ dgauge:['Add gauge needles for visual impact',0,'VIS','Decoration adds noise.','SWD p.148'],
+ dtable:['Add a data table under the chart so every value shows',0,'CLU','Redundant data is clutter; label only what matters.','SWD p.68'],
+ dkpi:['Add more KPI tiles so the dashboard feels complete',0,'DSH','The problem is too many items already; prioritise the vital few.','BBD p.123'],
+ dinter:['Add more filters and interactions',0,'DSH','Interactivity only helps if it adds insight; it does not fix a missing message.','BBD p.344']
+};
+const CASES=[];
+function add(id,dom,k,lv,fxAx,ctx,bad,good,fl,fx){
+  CASES.push({id,dom,k,lv,fxAx,ctx,bad,good,
+    fl:fl.map(f=>{if(typeof f==='string')f=DEC[f];else if(typeof f[0]==='string'&&DEC[f[0]]&&f.length===2)f=[DEC[f[0]][0],0,DEC[f[0]][2],f[1],DEC[f[0]][4]];return {t:f[0],r:f[1],ax:f[2],w:f[3],s:f[4]}}),
+    fx:fx.map(x=>({t:x[0],p:x[1],w:x[2],sp:x[3]?Object.assign({},good,x[3]):good}))});
+}
+/* ---- RNG + sampler ---- */
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function hashS(s){let h=2166136261;for(const c of String(s)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function shuf(a,r){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function axesOf(c){const s=new Set(c.fl.map(f=>f.ax));s.add(c.fxAx);return s}
+function itemsOf(c){const m={};c.fl.forEach(f=>m[f.ax]=(m[f.ax]||0)+1);m[c.fxAx]=(m[c.fxAx]||0)+1;return m}
+function sample(N,seed,pool){
+  pool=pool||CASES;const r=mulberry(hashS(seed));N=Math.min(N,pool.length);
+  const sh=shuf(pool,r),nd=Math.round(N*.4),q={dash:nd,chart:N-nd},cnt={dash:0,chart:0},picked=[],have={};AXK.forEach(a=>have[a]=0);
+  const key=c=>c.k==='dash'?'dash':'chart';
+  if(N<pool.length){
+    const need=()=>AXK.some(a=>have[a]<3);
+    while(need()&&picked.length<Math.ceil(N*.8)){let best=null,bs=0;
+      for(const c of sh){if(picked.includes(c)||cnt[key(c)]>=q[key(c)])continue;const it=itemsOf(c);let sc=0;for(const a in it)sc+=Math.min(it[a],Math.max(0,3-have[a]));if(sc>bs){bs=sc;best=c}}
+      if(!best)break;picked.push(best);cnt[key(best)]++;const it=itemsOf(best);for(const a in it)have[a]+=it[a];}
+    for(const c of sh){if(picked.length>=N)break;if(picked.includes(c)||cnt[key(c)]>=q[key(c)])continue;picked.push(c);cnt[key(c)]++}
+    for(const c of sh){if(picked.length>=N)break;if(!picked.includes(c))picked.push(c)}
+  }else picked.push(...sh);
+  const r2=mulberry(hashS(seed+'|ord'));
+  return picked.map(c=>[c,c.lv+r2()*1.3]).sort((a,b)=>a[1]-b[1]).map(x=>x[0]);
+}
+/* ---- scoring ---- */
+function scoreCase(cs,ticks,fxi){
+  const R=cs.fl.filter(f=>f.r).length;let hits=0,fp=0;
+  cs.fl.forEach((f,i)=>{if(ticks[i]){f.r?hits++:fp++}});
+  const all=ticks.length>0&&ticks.every(Boolean);
+  const diag=all?0:Math.round(Math.max(0,(hits-1.5*fp)/R)*600)/10;
+  const fix=cs.fx[fxi].p,ax={};
+  cs.fl.forEach((f,i)=>{const ok=f.r?ticks[i]:!ticks[i];const a=ax[f.ax]=ax[f.ax]||[0,0];a[0]+=ok?1:0;a[1]++});
+  const a=ax[cs.fxAx]=ax[cs.fxAx]||[0,0];a[0]+=fix/40;a[1]++;
+  return {diag,fix,total:Math.round((diag+fix)*10)/10,hits,fp,R,all,ax};
+}
+function aggregate(list){ // list of {ax}
+  const t={};AXK.forEach(k=>t[k]=[0,0]);list.forEach(s=>{for(const k in s.ax){t[k][0]+=s.ax[k][0];t[k][1]+=s.ax[k][1]}});
+  const out={};AXK.forEach(k=>out[k]={pct:t[k][1]?Math.round(t[k][0]/t[k][1]*100):null,n:t[k][1]});return out;
+}
+const LEVELS=[
+ {k:1,n:'Newbie',d:'Charts still happen to you. Start with the six lessons and the clutter checklist.'},
+ {k:2,n:'Beginner',d:'You spot the obvious problems. Next: fix the cause, not only the symptom.'},
+ {k:3,n:'Practitioner',d:'Solid fundamentals. Tighten the weak axes and your charts will carry a message.'},
+ {k:4,n:'Expert',d:'You see the flaw and the fix quickly. Polish dashboard-level judgement.'},
+ {k:5,n:'Master',d:'Balanced, accurate and consistent. Teach others, and keep a gallery of good examples.'}];
+function levelOf(totalPct,axes){
+  let k=totalPct<35?1:totalPct<52?2:totalPct<68?3:totalPct<82?4:5;
+  const v=AXK.map(a=>axes[a]).filter(a=>a.n>=4&&a.pct!=null).map(a=>a.pct);
+  let sd=0,mn=100;if(v.length>1){const m=v.reduce((a,b)=>a+b,0)/v.length;sd=Math.sqrt(v.reduce((a,b)=>a+(b-m)*(b-m),0)/v.length);mn=Math.min(...v)}
+  let note='';
+  if(v.length>1){if(k===5&&(mn<60||sd>15)){k=4;note='Capped at Expert: one axis is below 60% or results are uneven.'}
+    if(k===4&&mn<45){k=3;note='Capped at Practitioner: one axis is below 45%.'}}
+  return {lv:LEVELS[k-1],sd:Math.round(sd),mn,note};
+}
+/* ---- radar ---- */
+function radarSVG(axes,size){
+  const cx=size/2,cy=size/2,r=size*.34,n=AXK.length;const P=(i,v)=>{const a=-Math.PI/2+i*2*Math.PI/n;return [cx+r*v/100*Math.cos(a),cy+r*v/100*Math.sin(a)]};let s='';
+  [25,50,75,100].forEach(g=>{s+=`<polygon points="${AXK.map((_,i)=>P(i,g).map(x=>x.toFixed(1)).join(',')).join(' ')}" fill="none" stroke="#DDD8CC" stroke-width="1"/>`});
+  AXK.forEach((k,i)=>{const e=P(i,100),l=P(i,122);s+=`<line x1="${cx}" y1="${cy}" x2="${e[0].toFixed(1)}" y2="${e[1].toFixed(1)}" stroke="#DDD8CC"/><text x="${l[0].toFixed(1)}" y="${(l[1]+4).toFixed(1)}" font-size="${size>300?12:11}" text-anchor="${l[0]<cx-4?'end':l[0]>cx+4?'start':'middle'}" fill="#151B1D" font-weight="600">${esc(AX[k].s)}</text>`});
+  s+=`<polygon points="${AXK.map((_,i)=>P(i,85).map(x=>x.toFixed(1)).join(',')).join(' ')}" fill="none" stroke="#2E6E73" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+  const pts=AXK.map((k,i)=>P(i,axes[k].pct==null?0:axes[k].pct));
+  s+=`<polygon points="${pts.map(p=>p.map(x=>x.toFixed(1)).join(',')).join(' ')}" fill="#B77A2B" fill-opacity=".28" stroke="#B77A2B" stroke-width="2.5"/>`+pts.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.5" fill="#B77A2B"/>`).join('');
+  return s;
+}
+/* ---- cartoon characters (original art) ---- */
+function person(L){
+  const sk='#F2C9A0',shirt=['#8C8778','#2F6DA8','#2E6E73','#1C2526','#7B2D26'][L-1];let s='';
+  if(L===5)s+=`<path d="M28 94 L60 80 L92 94 L106 168 L14 168Z" fill="#B64D42"/>`;
+  s+=`<rect x="22" y="98" width="14" height="46" rx="7" fill="${shirt}"/><rect x="84" y="98" width="14" height="46" rx="7" fill="${shirt}"/><rect x="34" y="90" width="52" height="68" rx="14" fill="${shirt}"/><circle cx="29" cy="146" r="7" fill="${sk}"/><circle cx="91" cy="146" r="7" fill="${sk}"/><rect x="52" y="78" width="16" height="16" fill="${sk}"/>`;
+  if(L===4)s+=`<path d="M52 92 L60 112 L68 92Z" fill="#fff"/><path d="M58 96 L62 96 L63 118 L60 124 L57 118Z" fill="#B77A2B"/>`;
+  s+=`<circle cx="60" cy="58" r="27" fill="${sk}"/>`;
+  const hair=['#6B4A2B','#2B2B2B','#8A4B1F','#5B5B5B','#C9A227'][L-1];
+  s+=L===1?`<path d="M33 52 Q36 28 60 28 Q84 28 87 52 Q74 40 60 42 Q46 40 33 52Z" fill="${hair}"/><path d="M40 30 L36 18 M52 27 L52 14 M66 27 L70 14" stroke="${hair}" stroke-width="4" stroke-linecap="round"/>`
+   :`<path d="M33 54 Q33 28 60 28 Q87 28 87 54 Q80 40 60 40 Q40 40 33 54Z" fill="${hair}"/>`;
+  const mouths=['<path d="M50 74 Q60 66 70 74" fill="none" stroke="#4A2F1A" stroke-width="3" stroke-linecap="round"/>','<line x1="51" y1="72" x2="69" y2="72" stroke="#4A2F1A" stroke-width="3" stroke-linecap="round"/>','<path d="M50 69 Q60 79 70 69" fill="none" stroke="#4A2F1A" stroke-width="3" stroke-linecap="round"/>','<path d="M48 68 Q60 84 72 68Z" fill="#fff" stroke="#4A2F1A" stroke-width="2.5"/>','<path d="M47 67 Q60 86 73 67Z" fill="#fff" stroke="#4A2F1A" stroke-width="2.5"/>'];
+  s+=`<circle cx="49" cy="58" r="3.4" fill="#151B1D"/><circle cx="71" cy="58" r="3.4" fill="#151B1D"/>`+mouths[L-1];
+  if(L===1)s+=`<path d="M92 40 Q96 48 92 52 Q88 48 92 40Z" fill="#7EC8E3"/><path d="M42 50 L56 48 M64 48 L78 50" stroke="#151B1D" stroke-width="2.5" stroke-linecap="round"/>`;
+  if(L>=4)s+=`<circle cx="49" cy="58" r="9" fill="none" stroke="#151B1D" stroke-width="2.4"/><circle cx="71" cy="58" r="9" fill="none" stroke="#151B1D" stroke-width="2.4"/><line x1="58" y1="58" x2="62" y2="58" stroke="#151B1D" stroke-width="2.4"/>`;
+  if(L===2)s+=`<rect x="80" y="46" width="22" height="4" rx="2" fill="#D9822B" transform="rotate(-25 90 48)"/>`;
+  if(L===5)s+=`<path d="M38 30 L44 14 L52 26 L60 10 L68 26 L76 14 L82 30Z" fill="#C59B43" stroke="#9a7420" stroke-width="2"/>`;
+  // props
+  if(L===1)s+=`<g transform="translate(6 118)"><circle cx="20" cy="22" r="19" fill="#e6194b"/><path d="M20 22 L20 3 A19 19 0 0 1 36 12Z" fill="#ffe119"/><path d="M20 22 L36 12 A19 19 0 0 1 36 32Z" fill="#3cb44b"/><path d="M20 22 L36 32 A19 19 0 0 1 14 40Z" fill="#4363d8"/></g><text x="94" y="30" font-size="30" font-weight="700" fill="#B64D42">?</text>`;
+  if(L===2)s+=`<g transform="translate(78 108)"><rect width="34" height="30" rx="3" fill="#fff" stroke="#8C8778"/><rect x="5" y="14" width="6" height="12" fill="#2F6DA8"/><rect x="14" y="8" width="6" height="18" fill="#2F6DA8"/><rect x="23" y="18" width="6" height="8" fill="#2F6DA8"/></g>`;
+  if(L===3)s+=`<g transform="translate(78 104)"><rect width="36" height="40" rx="3" fill="#fff" stroke="#8C8778"/><rect x="11" y="-3" width="14" height="6" rx="2" fill="#8C8778"/><polyline points="5,30 14,20 22,24 31,10" fill="none" stroke="#B77A2B" stroke-width="2.5"/><line x1="5" y1="34" x2="31" y2="34" stroke="#DDD8CC"/></g>`;
+  if(L===4)s+=`<g transform="translate(76 100)"><rect width="42" height="42" rx="3" fill="#fff" stroke="#8C8778"/><polygon points="21,6 36,15 33,33 15,35 8,18" fill="#B77A2B" fill-opacity=".35" stroke="#B77A2B" stroke-width="2"/></g>`;
+  if(L===5)s+=`<g transform="translate(78 98)"><path d="M10 0 H34 V14 A12 12 0 0 1 10 14Z" fill="#C59B43" stroke="#9a7420" stroke-width="2"/><rect x="19" y="26" width="6" height="10" fill="#C59B43"/><rect x="12" y="36" width="20" height="6" rx="2" fill="#9a7420"/><path d="M10 4 H3 Q3 16 12 18 M34 4 H41 Q41 16 32 18" fill="none" stroke="#C59B43" stroke-width="3"/></g><polygon points="96,24 99,32 107,32 101,37 103,45 96,40 89,45 91,37 85,32 93,32" fill="#C59B43"/>`;
+  return s;
+}
+const personSVG=(L,w)=>`<svg viewBox="0 0 120 170" width="${w||150}" role="img" aria-label="${LEVELS[L-1].n} character" xmlns="http://www.w3.org/2000/svg">${person(L)}</svg>`;
+
+/* ===== CASES ===== */
+const sum=a=>a.reduce((x,y)=>x+y,0),pc=(x,t)=>Math.round(100*x/t),M8=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],M8F=['January','February','March','April','May','June','July','August'];
+const sortBy=(L,V)=>{const ix=L.map((_,i)=>i).sort((a,b)=>V[b]-V[a]);return [ix.map(i=>L[i]),ix.map(i=>V[i])]};
+
+/* --- 1 --- */
+(()=>{const L=['Trucking','Customs hold','Weather','Documentation','Berth busy','Equipment'],V=[17,22,13,19,20,9];const [sl,sv]=sortBy(L,V),top=sl.slice(0,3),t3=sum(sv.slice(0,3));
+add('c01','Operations','chart',1,'VIS','Monthly shipping review. The Logistics Manager must decide which delay causes to attack first.',
+ {t:'pie',title:'Delay Causes',L,V,rb:1,lg:1,d3:1},
+ {t:'bar',title:`Three causes drive ${t3}% of delayed shipments: customs, berth and documentation`,sub:'Share of delayed shipments by cause, Q3',L,V,srt:1,acc:top,suf:'%'},
+ [['Six rainbow colours and nothing is emphasised',1,'FOC','When everything is different, nothing stands out.','SWD p.134'],['The 3D tilt distorts the slice sizes',1,'INT','Slices at the front look bigger than equal values at the back.','SWD p.79'],['A legend forces the eye to travel back and forth',1,'CLU','Direct labels remove the lookup.','SWD p.112'],['The slices are close in size, so ranking them is guesswork',1,'VIS','Eyes cannot rank similar angles; bars on one baseline can be ranked at a glance.','SWD p.79'],['The title "Delay Causes" is a topic label, not a takeaway',1,'TXT','State the conclusion the manager should act on.','SWD p.157'],'dmore','dthick'],
+ [['Sorted horizontal bars, top three in the accent colour',40,'Bars share a baseline, ranking is instant and the title states the finding.',null],['A flat pie with the top three slices highlighted',20,'Better than the original, but angles are still hard to compare.',{t:'pie'}],['A flat rainbow pie with a % on every slice',10,'Labels help, but colour still carries no meaning.',{t:'pie',rb:1,pl:1}],['A 3D column chart in the original order',0,'3D distorts values and the order gives no help.',{t:'col',d3:1,rb:1}]]);})();
+/* --- 2 --- */
+(()=>{const V=[4.2,4.35,4.1,4.9,5.2,5.05,6.1,6.3],g=Math.round((V[7]/V[0]-1)*100);
+add('c02','Sales','chart',1,'CLU','Monthly sales meeting. The VP wants to know whether growth is holding up.',
+ {t:'col',title:'Monthly Revenue',L:M8F,V,rot:1,gr:1,bd:1,dec:2,pre:'$',suf:'M'},
+ {t:'col',title:`Monthly revenue is up ${g}% since January, with the biggest step in July`,yt:'Revenue ($M)',L:M8,V,acc:['Jul','Aug'],pre:'$',suf:'M',dec:1},
+ [['A heavy border frames the whole chart',1,'CLU','The chart still looks complete without a border (closure).','SWD p.108'],['Dark gridlines compete with the bars',1,'CLU','Thin light grey or none; the data should stand out.','SWD p.109'],['Full month names are rotated 45 degrees',1,'CLU','Diagonal text reads about 52% slower; abbreviate and keep it horizontal.','SWD p.100'],['Two-decimal labels such as $4.20M add noise',1,'CLU','The precision is not needed for the message.','SWD p.111'],['The title "Monthly Revenue" is a label, and there is no axis title',1,'TXT','State the conclusion and title the axis.','SWD p.157'],'dcol','dbig'],
+ [['Light chart, abbreviated months, July and August highlighted, action title',40,'Every extra element is gone and the point is obvious.',null],['No border, but gridlines and rotated labels stay',15,'One of four clutter problems fixed.',{gr:1,rot:1,L:M8F,dec:2}],['Horizontal bars, one per month',10,'Time reads left to right; bars lose the sense of sequence.',{t:'bar'}],['The same chart in 3D',0,'3D adds distortion and no information.',{d3:1}]]);})();
+/* --- 3 --- */
+(()=>{const vol=[1180,1240,1310,1420,1560,1630,1490,1370],ot=[96,95,94,91,86,82,88,92];
+add('c03','Port operations','chart',2,'VIS','Port review. The Terminal Manager asks: does higher volume hurt on-time departures?',
+ {t:'dual',title:'Volume vs On Time',L:M8F,S:[{n:'Volume',v:vol},{n:'On Time',v:ot}],rmn:70,rmx:100,bd:1,rot:1},
+ {t:'panels',title:'On-time departures fell below 90% in May and June, the two months above 1,500 TEU',L:M8,S:[{n:'Volume (TEU)',v:vol},{n:'On-time departures (%)',v:ot}],rmn:75,rmx:100,hl:[4,5],h:340},
+ [['A secondary axis makes readers decode which series uses which scale',1,'VIS','Pull the series apart with one shared x axis instead.','SWD p.82'],['Full month names rotated 45 degrees',1,'CLU','Abbreviate and keep text horizontal.','SWD p.100'],['Dark gridlines and a heavy border compete with the data',1,'CLU','They add ink without adding information.','SWD p.108'],['No axis titles and a legend far from the data',1,'TXT','Every axis needs a title; direct labels beat a legend.','SWD p.157'],['The title "Volume vs On Time" gives no conclusion',1,'TXT','The reader has to find the relationship alone.','SWD p.157'],'d3',['Add a third series, average delay, to explain more',0,'CLU','More series add load; the message needs fewer things.','SWD p.148']],
+ [['Two stacked panels sharing the month axis, May and June highlighted',40,'No axis guesswork, and the highlight links both panels.',null],['The dual-axis chart without gridlines',15,'Cleaner, but readers still decode two scales.',{t:'dual',L:M8F}],['Columns of volume only',10,'Loses the on-time story that the question is about.',{t:'col',S:[{n:'Volume',v:vol}]}],['A pie chart of each month',0,'Pies cannot show a trend or a relationship.',{t:'pie',L:M8,V:vol}]]);})();
+/* --- 4 --- */
+(()=>{const L=['Hub A','Hub B','Hub C','Hub D','Hub E'],V=[96.1,95.2,93.8,95.9,94.4],miss=L.filter((_,i)=>V[i]<95);
+add('c04','Logistics','chart',1,'INT','Network review. Is there a real difference in on-time delivery between the five hubs?',
+ {t:'bar',title:'ON-TIME DELIVERY!!!',L,V,tr:93,rb:1,dec:2,suf:'%',gr:1,mx:96.5},
+ {t:'bar',title:'Two of five hubs miss the 95% target, but only by 0.6 to 1.2 points',sub:'On-time delivery, last month',L,V,srt:1,acc:miss,tgt:95,tl:'Target 95%',dec:1,suf:'%'},
+ [['The axis starts at 93%, so small gaps look enormous',1,'INT','Bar length must match value, so bars start at zero.','SWD p.66'],['Every bar is a different rainbow colour',1,'FOC','Colour carries no meaning here.','SWD p.134'],['The 95% target is missing, so nobody can see who misses it',1,'CTX','Without the benchmark readers cannot tell good from bad.','SWD p.42'],['The shouting title states no conclusion',1,'TXT','Say what the reader should conclude.','SWD p.157'],['Two-decimal labels such as 96.10% add noise',1,'CLU','The precision does not help the decision.','SWD p.111'],'dpie',['The axis should start even higher, at 95%',0,'INT','That would exaggerate the differences even more.','SWD p.67']],
+ [['Zero baseline, target line, only the two misses in the accent colour',40,'Honest lengths, clear benchmark and a calm, true message.',null],['Zero baseline, no target line',20,'Honest, but nobody can see who misses.',{tgt:undefined}],['Truncated axis with a target line',10,'The target helps but the geometry still exaggerates.',{tr:93,mx:96.5,srt:0}],['One gauge per hub',0,'Arc lengths are harder to compare than bars.',{t:'gauge'}]]);})();
+/* --- 5 --- */
+(()=>{const W=['W1','W2','W3','W4','W5','W6','W7','W8'],S=[{n:'Hub A',v:[9,9,10,9,9,10,9,9]},{n:'Hub B',v:[11,10,11,11,10,11,11,10]},{n:'Hub C',v:[8,8,9,8,8,8,9,8]},{n:'Hub D',v:[10,11,10,10,11,10,10,11]},{n:'Hub E',v:[12,12,11,12,12,12,11,12]},{n:'Hub F',v:[8,8,9,10,11,12,13,14]}],f=S[5].v,g=Math.round((f[7]/f[0]-1)*100);
+add('c05','Procurement','chart',1,'FOC','Procurement review. Is supplier lead time getting worse anywhere?',
+ {t:'line',title:'Lead Time by Hub',L:W,S,rb:1,lg:1,mk:1,gr:1,bd:1,lgw:96},
+ {t:'line',title:`Hub F's lead time rose ${g}% in eight weeks while the other hubs stayed flat`,yt:'Lead time (days)',L:W,S,acc:['Hub F'],first:1,mx:16},
+ [['Six crossing coloured lines make a spaghetti graph',1,'FOC','Nobody can follow one line in the tangle.','SWD p.243'],['A six-entry legend exceeds what short-term memory holds',1,'CLU','About four chunks fit; label directly.','SWD p.117'],['Markers on every data point',1,'CLU','The line already shows the data.','SWD p.110'],['Heavy gridlines and a thick border',1,'CLU','They compete with the lines.','SWD p.108'],['Nothing points to the one hub that changed',1,'TXT','The finding is buried; highlight it and say it.','SWD p.157'],'dsec','dsm'],
+ [['Five hubs in light grey, Hub F in the accent colour, direct labels',40,'Context stays, the point is obvious and there is no legend.',null],['Hub F and Hub B both highlighted',20,'Closer, but a second accent splits attention.',{acc:['Hub F','Hub B']}],['Keep all colours but remove the gridlines',10,'Still spaghetti.',{rb:1,lg:1,lgw:96}],['Add a value label to every point',0,'Labelling everything creates a cluttered mess.',{rb:1,mk:1,mkl:1,lg:1,lgw:96}]]);})();
+/* --- 6 --- */
+(()=>{const S=[{n:'Electrical',v:[18,17,18,19,18,17]},{n:'Mechanical',v:[30,31,29,30,31,30]},{n:'Hydraulic',v:[8,10,13,17,20,24]},{n:'Software',v:[6,6,5,6,5,6]},{n:'Operator',v:[12,11,12,12,11,12]}],L=['Apr','May','Jun','Jul','Aug','Sep'];
+add('c06','Maintenance','chart',2,'FOC','Reliability review. The Maintenance Manager must choose where to invest next.',
+ {t:'stack',title:'Downtime',L,S,rb:1,lg:1,gr:1},
+ {t:'stack',title:'Hydraulic downtime tripled in six months, from 8 to 24 hours a month',yt:'Downtime hours by cause',L,S,fo:'Hydraulic'},
+ [['Five rainbow segments in every column',1,'FOC','Nothing stands out.','SWD p.134'],['Only the bottom segment shares a baseline, so the others cannot be compared',1,'VIS','Put the series you care about at the base.','SWD p.70'],['A legend sits apart from the data',1,'CLU','Direct labels are faster.','SWD p.112'],['Gridlines and labels such as 20.00 add noise',1,'CLU','Trailing zeros carry no information.','SWD p.111'],['No story: which cause is growing?',1,'TXT','The reader has to work out the finding.','SWD p.157'],'d3',['Use one pie per month instead',0,'VIS','Six pies are harder to compare than one stacked chart.','SWD p.79']],
+ [['The growing cause moved to the baseline in the accent colour, others grey',40,'The trend is easy to read and the others stay as context.',null],['A line chart per cause, Hydraulic in the accent colour',30,'Also good: time on the x axis, one highlight.',{t:'line',acc:['Hydraulic'],fo:undefined}],['Clustered columns with five series per month',10,'Thirty bars; far too much to compare.',{t:'col',acc:['Hydraulic']}],['100% stacked columns with the rainbow palette',0,'Hides the growth in hours and keeps the colour noise.',{t:'stack',pct:1,rb:1,lg:1,fo:undefined}]]);})();
+/* --- 7 --- */
+(()=>{const V=['Brightline','Delta','Karya','Mitra','Samudra','Nusa','Tirta'],N=[420,380,510,300,450,260,330],Lt=[101,87,46,27,36,21,29];const P=Lt.map((x,i)=>x/N[i]*100),ix=P.map((_,i)=>i).sort((a,b)=>P[b]-P[a]);
+const oth=pc(sum(Lt.slice(2)),sum(N.slice(2)));
+add('c07','Procurement','chart',1,'CLU','Weekly vendor review. Which vendors need a conversation?',
+ {t:'tbl',title:'Vendor Data',cols:['Vendor','PO lines','Late lines','Late %'],rows:V.map((v,i)=>[v,N[i]+'.00',Lt[i]+'.00',P[i].toFixed(2)+'%']),heavy:1,bold:1,h:300},
+ {t:'tbl',title:`Brightline and Delta are late on about 1 in 4 PO lines; the other five vendors average ${oth}%`,cols:['Vendor','PO lines','Late lines','Late %'],rows:ix.map(i=>[V[i],String(N[i]),String(Lt[i]),Math.round(P[i])+'%']),hi:[0,1],num:[1,2,3],h:300},
+ [['Heavy black borders around every cell',1,'CLU','Borders should fade into the background.','SWD p.56'],['Everything is bold, so nothing stands out',1,'FOC','Emphasis only works when it is rare.','SWD p.145'],['Numbers are centred with two decimals',1,'CLU','Right-align and round so digits line up.','SWD p.111'],['Rows are unsorted, so the worst vendors are hidden',1,'VIS','Order by what matters.','SWD p.74'],['The title "Vendor Data" is a label, not a message',1,'TXT','Say who needs the conversation.','SWD p.157'],['Add more columns such as contact and region',0,'CLU','Columns that do not serve the decision are clutter.','SWD p.148'],'dpie'],
+ [['Light rules, sorted by late %, only the two outliers emphasised',40,'The table fades back and the two vendors jump out.',null],['Sorted, but keep the heavy borders and bold',15,'Order fixed; clutter and contrast remain.',{heavy:1,bold:1,num:undefined,hi:undefined}],['Horizontal bars of late % per vendor',30,'Also good, since the decision is about ranking.',{t:'bar',L:ix.map(i=>V[i]),V:ix.map(i=>Math.round(P[i])),suf:'%',acc:[V[ix[0]],V[ix[1]]],cols:undefined,h:280}],['Bold the whole table so it stands out',0,'When everything is emphasised, nothing is.',{bold:1,hi:undefined}]]);})();
+/* --- 8 --- */
+(()=>{const L=['Zone A','Zone B','Zone C','Zone D','Zone E'],V=[88,72,91,65,79],over=L.filter((_,i)=>V[i]>85);
+add('c08','Warehouse','chart',2,'VIS','Warehouse planning. Which zones are over the 85% planning ceiling?',
+ {t:'gauge',title:'Utilization',L,V},
+ {t:'bar',title:'Zones A and C exceed the 85% planning ceiling; B, D and E have room',sub:'Storage utilization by zone',L,V,srt:1,acc:over,tgt:85,tl:'Ceiling 85%',suf:'%'},
+ [['Rings need arc lengths compared, which is hard',1,'VIS','Bars on a common baseline are far easier.','SWD p.81'],['Five colours with no meaning',1,'FOC','Colour should signal the problem zones.','SWD p.134'],['The 85% ceiling is not shown, so 88% has no context',1,'CTX','The benchmark makes the number meaningful.','SWD p.42'],['Big rings waste space and are not sorted',1,'CLU','Space goes to decoration, not comparison.','SWD p.148'],['The one-word title says nothing',1,'TXT','State the conclusion.','SWD p.157'],'d3','dgauge'],
+ [['Sorted bars with the ceiling as a dashed reference line',40,'Rank and gap to the limit are both visible at once.',null],['Unsorted columns with the ceiling line',25,'The ceiling helps; sorting would help more.',{t:'col',srt:0}],['Gauges with a tick at 85%',10,'Context added but arcs are still hard.',{t:'gauge'}],['A pie of zones',0,'Share of the whole is not the question.',{t:'pie',L,V}]]);})();
+/* --- 9 --- */
+(()=>{const L=['W1','W2','W3','W4','W5','W6','W7','W8','W9','W10'],S=[{n:'Plan',v:Array(10).fill(520)},{n:'Actual',v:[505,512,518,510,521,515,490,452,431,418]},{n:'Last year',v:[498,505,510,500,507,512,509,511,505,514]}];
+add('c09','Control room','chart',2,'FOC','A control-room screen. The template has a dark background and the team insists on keeping it. Dispatch volume is the key message.',
+ {t:'line',title:'Dispatch',L,S,dk:1,rb:1,glow:1,gr:1,lg:1,mx:560,mn:380},
+ {t:'line',title:'Dispatches fell 20% below plan in the last three weeks',yt:'Dispatches per week',L,S,dk:1,acc:['Actual'],mx:560,mn:380},
+ [['Neon colours all shout at the same volume',1,'FOC','On black, yellow and neon green are extremely loud.','SWD p.225'],['Glow and bright gridlines are louder than the data',1,'CLU','Structure should recede.','SWD p.108'],['A legend sits away from the lines',1,'CLU','Direct labels are faster.','SWD p.112'],['No headline about the drop',1,'TXT','The story is invisible.','SWD p.157'],['Saturated neon on black is hard to tell apart for colour-blind viewers',1,'ACC','Several saturated hues look alike; use luminance contrast instead.','BBD p.38'],['Dark backgrounds are never acceptable',0,'FOC','If the room demands it, flip the logic: grey is the base, white the accent.','SWD p.225'],'dcol'],
+ [['Keep the dark background; grey base, one white accent line, direct labels',40,'The brand is respected and the story stands out.',null],['Dark background, all lines grey, no accent',20,'Calm, but nothing says where to look.',{acc:undefined}],['White background with the same neon rainbow',10,'The glow is gone but the rainbow remains.',{dk:0,rb:1,lg:1}],['Brighter neon with more glow',0,'More contrast between lines means less contrast with the message.',{rb:1,glow:1,gr:1,lg:1}]]);})();
+/* --- 10 --- */
+(()=>{const L=['North','South','East','West','Central'],V=[8,-5,3,-12,1];
+add('c10','Sales','chart',2,'ACC','Quarterly review. Which regions are ahead of or behind plan? Several managers are colour-blind.',
+ {t:'bar',title:'Variance',L,V,rg:1,suf:'%'},
+ {t:'bar',title:'West is 12% below plan; North is the only region more than 5% ahead',sub:'Revenue vs plan, by region',L,V,srt:1,dv:1,sg:1,suf:'%'},
+ [['Red and green are the only cue for good and bad',1,'ACC','About 8% of men have trouble telling them apart.','SWD p.137'],['The bars are unsorted',1,'VIS','Order by what matters.','SWD p.74'],['The title "Variance" says nothing',1,'TXT','State the finding.','SWD p.157'],['Positive values carry no + sign',1,'ACC','A sign is a second cue that works without colour.','SWD p.137'],['Red and green bars sit side by side',1,'ACC','Use blue and orange as the safe positive/negative pair.','BBD p.37'],'dcol',['Add traffic-light dots next to each bar',0,'ACC','Another red/green cue repeats the problem.','BBD p.392']],
+ [['Sorted bars in blue and orange with +/− signs',40,'Works for everyone, even in greyscale.',null],['Keep red/green, add signs and sort',25,'The signs rescue colour-blind readers, but red/green remains risky.',{rg:1}],['Blue/orange but unsorted',30,'Colour is fixed; sorting would add clarity.',{srt:0}],['A different rainbow colour per region',0,'Colour means nothing and still fails for some viewers.',{rb:1,dv:0}]]);})();
+
+/* --- 11 --- */
+(()=>{const Q=['Q1','Q2','Q3','Q4','Q5','Q6','Q7','Q8'],S=[{n:'Product A',v:[50,51,52,52,53,53,54,54]},{n:'Product B',v:[30,33,37,42,47,53,58,64]},{n:'Product C',v:[20,20,19,19,18,18,17,17]}],g=Math.round((64/54-1)*100);
+add('c11','Finance','chart',1,'CLU','Quarterly business review. The CFO wants to know how the three product lines are trending.',
+ {t:'line',title:'Revenue',L:Q,S,lg:1,mk:1,rb:1},
+ {t:'line',title:`Product B overtook Product A in Q7 and is now ${g}% larger`,yt:'Revenue ($M)',L:Q,S,acc:['Product B'],ann:[{i:6,s:1,t:'B passes A in Q7',dx:-96,dy:-26}]},
+ [['A legend makes the eye travel back and forth',1,'CLU','Label the lines directly (proximity).','SWD p.112'],['Markers on every point',1,'CLU','The line already shows the data.','SWD p.110'],['Three equal-weight colours when one story matters',1,'FOC','Grey for context, one accent for the point.','SWD p.133'],['The title "Revenue" is only a label',1,'TXT','Say what the CFO should notice.','SWD p.157'],['No axis titles or units',1,'TXT','Every axis needs a title.','SWD p.157'],'dsm','dgrid'],
+ [['Grey A and C, Product B in the accent colour with a crossover note',40,'The overtake is the story and the chart says so.',null],['Direct labels, all three lines in colour',20,'Legend gone, but nothing guides the eye.',{acc:undefined,ann:[]}],['Keep the legend, highlight Product B',10,'The highlight helps; the legend still costs effort.',{lg:1,lab:false}],['A rainbow stacked column chart',0,'Hides the overtake and adds colour noise.',{t:'stack',rb:1,lg:1,fo:undefined}]]);})();
+/* --- 12 --- */
+(()=>{const L=['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25','Q4 25','Q1 26','Q2 26','Q3 26','Q4 26'],V=[38,39,41,42,44,46,47,49,52,55,58,61],cap=55,k=V.findIndex(v=>v>=cap);
+add('c12','Warehouse','chart',2,'INT','Capacity planning. The Operations Director must decide whether to start a lease study.',
+ {t:'line',title:'Storage Demand',L,S:[{n:'Demand',v:V}],nofc:1,gr:1,mk:1,nolab:1,every:2},
+ {t:'line',title:`Forecast storage demand passes today's 55k m² capacity in ${L[k]}`,yt:'Storage demand (000 m²)',L,S:[{n:'Demand',v:V}],fc:7,tgt:cap,tl:'Capacity 55k',acc:['Demand'],every:2,mn:30,mx:65},
+ [['Forecast is drawn exactly like actual data',1,'INT','Use a thinner dotted line and light shading for forecasts.','SWD p.170'],['No capacity line, so the problem is invisible',1,'CTX','The threshold is what makes demand meaningful.','SWD p.42'],['Heavy gridlines and markers on every point',1,'CLU','They add ink without information.','SWD p.108'],['Nothing in the chart says which part is forecast',1,'TXT','Label the forecast region so nobody mistakes it for fact.','SWD p.171'],['The title is a label, not the conclusion',1,'TXT','Say when demand exceeds capacity.','SWD p.157'],['Show the forecast as a thicker solid line so it stands out',0,'INT','A bold solid line implies certainty; dotted and thinner signals an estimate.','SWD p.170'],'dmore'],
+ [['Dotted forecast with shading, capacity line, action title',40,'Honest about uncertainty and tied to the decision.',null],['Dotted forecast, no capacity line',25,'Honest, but the decision threshold is missing.',{tgt:undefined}],['Capacity line, forecast still solid',15,'The threshold helps; the forecast looks like fact.',{nofc:1}],['Columns for every quarter',10,'Actual and forecast look identical again.',{t:'col',S:undefined,V,fc:undefined,acc:undefined}]]);})();
+/* --- 13 --- */
+(()=>{const L=['Sales','Support','Operations','Finance','Legal','IT','HR','Marketing'],V=[22,18,11,6,5,9,7,12],avg=Math.round(sum(V)/V.length*10)/10;const [sl,sv]=sortBy(L,V);
+add('c13','HR','chart',1,'VIS','HR review. Which departments should get a retention plan first?',
+ {t:'col',title:'Attrition',L,V,rot:1,gr:1,suf:'%'},
+ {t:'bar',title:`Sales and Support lose 18 to 22% of staff a year, well above the ${Math.round(avg)}% company average`,sub:'Annual attrition by department',L,V,srt:1,acc:['Sales','Support'],tgt:avg,tl:`Average ${Math.round(avg)}%`,suf:'%'},
+ [['Categories are in no useful order',1,'VIS','Sort so the biggest items come first (SWD case study 3).','SWD p.74'],['Vertical columns with rotated labels',1,'CLU','Horizontal bars let labels read left to right.','SWD p.73'],['Nothing is highlighted',1,'FOC','Two departments matter; colour them.','SWD p.133'],['No company average for context',1,'CTX','Without a benchmark readers cannot tell high from normal.','SWD p.42'],['The title says only "Attrition"',1,'TXT','Say which departments need attention.','SWD p.157'],'dpie',['Use a line chart to connect the departments',0,'VIS','Lines imply continuity; departments are categories.','SWD p.61']],
+ [['Sorted horizontal bars, two departments highlighted, average line',40,'Ranking, focus and context in one glance.',null],['Sorted vertical columns with the average line',25,'Good order, but labels are tighter than they need to be.',{t:'col',L:sl,V:sv,rot:1,tgt:avg}],['Unsorted horizontal bars',20,'Easy to read, but the order hides the ranking.',{srt:0}],['A line chart across departments',0,'A line implies a sequence that does not exist.',{t:'line',S:[{n:'Attrition',v:V}],acc:undefined,tgt:undefined}]]);})();
+/* --- 14 --- */
+(()=>{const L=['Price is too high','Slow delivery times','Poor customer service','Product quality problems','Switched to competitor offer','Moved or no longer needed'],V=[34,27,19,11,6,3],S=['Price','Delivery','Service','Quality','Competitor','Moved'];
+add('c14','Customer survey','chart',1,'VIS','Churn review. Which reasons for leaving should the retention team tackle?',
+ {t:'col',title:'Reasons',L,V,rot:1,suf:'%',dec:1},
+ {t:'bar',title:'Price and slow delivery explain 61% of lost customers',sub:'Main reason for leaving (% of respondents)',L,V,srt:1,acc:[L[0],L[1]],suf:'%'},
+ [['Long labels are rotated and hard to read',1,'CLU','Rotated text reads far slower than horizontal text.','SWD p.100'],['Vertical bars put the labels after the data',1,'VIS','Horizontal bars show what each bar means before the number.','SWD p.73'],['Nothing is emphasised',1,'FOC','The first two reasons carry the story.','SWD p.133'],['Decimals like 34.0% add noise',1,'CLU','Whole percentages are enough here.','SWD p.111'],['The title "Reasons" is a label',1,'TXT','Say what the data shows.','SWD p.157'],'d3',['Shorten the labels until they fit under the columns',0,'CLU','Cutting words loses meaning; flip to horizontal bars instead.','SWD p.73']],
+ [['Horizontal bars, top two highlighted, action title',40,'Full labels, clear ranking and a clear message.',null],['Horizontal bars in the original order',25,'Readable, but the ranking is lost.',{srt:0,acc:undefined}],['Vertical columns with shortened labels',20,'Fits, but meaning is lost and the order is weak.',{t:'col',L:S,V,rot:0,acc:undefined}],['A pie chart',0,'Six slices of different size are hard to compare.',{t:'pie',L,V}]]);})();
+/* --- 15 --- */
+(()=>{const L=['1','2','3','4','5','6','7','8','9','10','11','12'],V=[42,44,43,45,47,46,48,63,61,60,62,64],g=Math.round((63/48-1)*100);
+add('c15','Web analytics','chart',1,'TXT','Marketing review. Did the spring campaign change traffic?',
+ {t:'line',L,S:[{n:'Sessions',v:V}],gr:1,mk:1,nolab:1,mn:30,mx:70},
+ {t:'line',title:`Weekly sessions jumped ${g}% in week 8 after the campaign launched and have held`,yt:'Sessions (thousands)',xt:'Week',L,S:[{n:'Sessions',v:V}],acc:['Sessions'],mn:30,mx:70,nolab:1,ann:[{i:7,s:0,t:'Campaign launched in week 8',dx:-130,dy:-34,w:20}]},
+ [['The chart has no title',1,'TXT','Every chart needs a title.','SWD p.157'],['Neither axis has a title',1,'TXT','Without axis titles readers must guess what they see.','SWD p.157'],['There is no unit (thousands? millions?)',1,'TXT','State units so numbers can be read correctly.','SWD p.106'],['The jump in week 8 is not annotated',1,'TXT','Explain spikes and external events.','SWD p.158'],['Heavy gridlines and markers add clutter',1,'CLU','They compete with the line.','SWD p.108'],'dleg','dbig'],
+ [['Action title, axis titles with units, annotation at the launch week',40,'Anyone can read it without help.',null],['Title and axis titles, but no annotation',25,'Readers see the jump but not the reason.',{ann:[]}],['Annotation only, no titles',15,'Cause is clear; what is being measured is not.',{title:undefined,yt:undefined,xt:undefined}],['Columns with a value label on each',10,'Cluttered, and the story is still unstated.',{t:'col',S:undefined,V,vl:1,acc:undefined,ann:[]}]]);})();
+/* --- 16 --- */
+(()=>{const L=Array.from({length:14},(_,i)=>'D'+(i+1)),V=[310,305,320,315,308,312,300,318,120,230,300,311,309,314],base=Math.round(sum(V.slice(0,8))/8),dip=Math.round((1-V[8]/base)*100);
+add('c16','E-commerce','chart',2,'CLU','Incident review. The CTO wants to see the impact of last week\'s outage.',
+ {t:'line',title:'Orders per Day',L,S:[{n:'Orders',v:V}],mk:1,mkl:1,gr:1,nolab:1,mn:0,mx:380},
+ {t:'line',title:`The day-9 outage cut orders ${dip}% below normal; volumes were back by day 11`,yt:'Orders per day',L,S:[{n:'Orders',v:V}],acc:['Orders'],mn:0,mx:380,nolab:1,ann:[{i:8,s:0,t:`Outage: ${V[8]} orders`,dx:12,dy:8,w:22}]},
+ [['Every point carries a marker and a number',1,'CLU','Labelling everything creates a cluttered mess.','SWD p.131'],['Heavy gridlines add more ink',1,'CLU','Remove them or make them light.','SWD p.109'],['The dip is not set apart from the rest',1,'FOC','Colour or mark only the point that matters.','SWD p.131'],['No title explains the finding',1,'TXT','State the impact in words.','SWD p.157'],['There is no note on what caused the dip',1,'TXT','Annotate the cause of the spike or dip.','SWD p.158'],['Remove all numbers so the chart is clean',0,'TXT','Readers still need magnitude for the one point that matters.','SWD p.131'],'dtable'],
+ [['One line, the dip marked and annotated, action title',40,'Only the point of interest carries ink.',null],['Line with an annotation, no title',15,'The dip is explained but the takeaway is not stated.',{title:undefined}],['No labels at all, no annotation',20,'Clean, but the impact is not quantified.',{ann:[],title:'Orders per day'}],['Labels and markers on every point, grid removed',10,'Still a cluttered mess.',{mk:1,mkl:1,ann:[]}]]);})();
+/* --- 17 --- */
+(()=>{const Y=[2000,2005,2010,2011,2012,2013,2014,2015,2016],V=[2.1,2.4,3.0,3.2,3.1,2.9,2.7,2.5,2.4],S=[{n:'Fuel cost',v:V}],fall=Math.round((1-V[8]/V[3])*100);
+add('c17','Logistics','chart',3,'INT','Cost review. Fuel cost per tonne-km is plotted for selected years; the early gaps are five years, the later gaps one year.',
+ {t:'line',title:'Fuel Cost',L:Y.map(String),S,gr:1,mk:1,nolab:1,mn:0,mx:3.6,pre:'$',dec:1},
+ {t:'line',title:`Fuel cost per tonne-km peaked at $3.20 in 2011 and has fallen ${fall}% since`,yt:'Fuel cost per tonne-km ($)',L:Y.map(String),xv:Y,S,acc:['Fuel cost'],nolab:1,mn:0,mx:3.6,pre:'$',dec:1,ann:[{i:3,s:0,t:'Peak $3.20',dx:-62,dy:-18,w:14}]},
+ [['Five-year and one-year steps are drawn with the same spacing',1,'INT','Time points must be spaced evenly or proportionally; otherwise the slope misleads.','SWD p.62'],['The 2011 peak is not highlighted',1,'FOC','The point of the chart is the peak and the decline.','SWD p.131'],['Heavy gridlines and markers',1,'CLU','They compete with the line.','SWD p.108'],['No axis title or unit',1,'TXT','State what is plotted and in what unit.','SWD p.157'],['The title "Fuel Cost" is a label',1,'TXT','Say what happened to the cost.','SWD p.157'],['Switch to bars so the uneven gaps disappear',0,'INT','Bars would hide the uneven intervals, not fix them.','SWD p.62'],'dsm'],
+ [['Spacing proportional to time, peak annotated, action title',40,'Slopes now tell the truth.',null],['Only the annual points 2010 to 2016, evenly spaced',25,'Honest spacing, but the long-run context is lost.',{L:Y.slice(2).map(String),xv:undefined,S:[{n:'Fuel cost',v:V.slice(2)}],ann:[{i:1,s:0,t:'Peak $3.20',dx:-62,dy:-18,w:14}]}],['Even spacing, with a note about the gap',10,'A caveat helps, but the geometry still misleads.',{xv:undefined}],['Columns for each listed year',0,'Equal-width bars again hide the unequal time gaps.',{t:'col',S:undefined,V,xv:undefined,ann:[],acc:undefined}]]);})();
+/* --- 18 --- */
+(()=>{
+add('c18','Operations','chart',1,'VIS','Weekly scorecard note. Site on-time delivery was 82% against an 85% target.',
+ {t:'col',title:'OTIF',L:['Actual','Target'],V:[82,85],rb:1,d3:1,gr:1,suf:'%'},
+ {t:'num',title:'Site delivery is 3 points below target',big:'82%',txt:'of site deliveries were on time last month, against an 85% target.'},
+ [['A chart is used for just two numbers',1,'VIS','When you have one or two numbers, show the numbers themselves.','SWD p.54'],['The 3D bars distort the values',1,'INT','Bar 82 can read as about 0.8 of the axis.','SWD p.82'],['Rainbow colours for two bars',1,'FOC','Colour should carry meaning.','SWD p.134'],['Gridlines and a full 0 to 100 axis waste space',1,'CLU','There is nothing to look up.','SWD p.55'],['The gap to the target is never stated',1,'TXT','Say the 3-point gap in words.','SWD p.157'],'dmore','dpie'],
+ [['Large number with one sentence of context',40,'The number keeps its oomph and the gap is stated.',null],['A flat two-bar chart with labels',20,'Honest, but the chart adds nothing a sentence could not.',{t:'col',L:['Actual','Target'],V:[82,85],suf:'%',title:'OTIF',h:230}],['A gauge showing 82%',10,'Decorative; the target gap is missing.',{t:'gauge',L:['On time'],V:[82]}],['A pie of on-time vs late',0,'Two numbers in a pie lose the target.',{t:'pie',L:['On time','Late'],V:[82,18],title:'OTIF'}]]);})();
+/* --- 19 --- */
+(()=>{const L=['Laptops','Tablets','Phones','Audio','Wearables','Accessories','Displays'],A=[120,90,200,60,40,55,70],B=[140,84,230,75,38,58,96],ch=A.map((a,i)=>Math.round((B[i]/a-1)*100)),dp=ch[6];
+add('c19','Retail','chart',2,'VIS','Category review. Which categories grew or shrank between 2024 and 2025?',
+ {t:'col',title:'Sales 2024 vs 2025',L,S:[{n:'2024',v:A},{n:'2025',v:B}],rb:1,lg:1,gr:1,vl:0},
+ {t:'slope',title:`Displays grew fastest, up ${dp}% year on year; Tablets and Wearables shrank`,sub:'Sales by category ($M)',L,A,B,p1:'2024',p2:'2025',acc:['Displays']},
+ [['Fourteen bars make the change per category hard to see',1,'VIS','Two points per category are the job of a slopegraph.','SWD p.63'],['A legend decodes two series',1,'CLU','Label the two time points instead.','SWD p.112'],['Gridlines and rainbow colours',1,'CLU','They add ink and hide the message.','SWD p.108'],['Nothing is emphasised',1,'FOC','The fastest-growing category deserves the accent.','SWD p.133'],['The title is a label',1,'TXT','State the conclusion.','SWD p.157'],'dpie','dmore'],
+ [['Slopegraph, Displays highlighted, action title',40,'Direction and rate of change are visible at once.',null],['Bars of % change, sorted, Displays highlighted',30,'A strong alternative that ranks the change.',{t:'bar',L:sortBy(L,ch)[0],V:sortBy(L,ch)[1],srt:0,acc:['Displays'],sg:1,suf:'%',A:undefined,B:undefined}],['Clustered columns, grey 2024 and accent 2025',20,'Readable, but changes still need mental subtraction.',{t:'col',S:[{n:'2024',v:A},{n:'2025',v:B}],acc:['2025']}],['Stacked columns',0,'Stacking two years hides the change completely.',{t:'stack',S:[{n:'2024',v:A},{n:'2025',v:B}],fo:undefined,rb:1,lg:1}]]);})();
+/* --- 20 --- */
+(()=>{const L=['Start','Hires','Transfers in','Transfers out','Attrition','End'],D=[120,28,6,-11,-19,124],g=Math.round((124/120-1)*100);
+add('c20','HR','chart',2,'VIS','Workforce review. How did headcount change during the year, and why?',
+ {t:'col',title:'Headcount',L,V:[120,28,6,11,19,124],rb:1,gr:1},
+ {t:'wf',title:`Hiring lifted headcount ${g}% to 124 despite 30 departures`,sub:'Headcount bridge, start to end of year',L,V:D},
+ [['Separate bars hide how the pieces add up',1,'VIS','A waterfall shows the start, additions, deductions and the end.','SWD p.71'],['Departures look like additions',1,'VIS','Direction is lost when losses and gains share one style.','SWD p.71'],['Rainbow colours with no meaning',1,'FOC','Use colour only to separate gains from losses.','SWD p.134'],['Gridlines add clutter',1,'CLU','The labels already carry the values.','SWD p.109'],['The title says only "Headcount"',1,'TXT','State the net change and its cause.','SWD p.157'],'d3','dpie'],
+ [['Waterfall with start, additions, deductions and end',40,'The path from 120 to 124 is explicit.',null],['A small table of the six numbers',20,'Exact, but the build-up must be calculated in the head.',{t:'tbl',cols:['Item','Heads'],rows:L.map((l,i)=>[l,String(D[i])]),num:[1],h:260}],['Stacked columns, start vs end',10,'Hides which flows drove the change.',{t:'stack',L:['Start','End'],S:[{n:'Staff',v:[120,124]}],fo:undefined,rb:1,lg:1}],['A pie of the five flows',0,'Flows are not parts of a whole.',{t:'pie',L:L.slice(1,5),V:[28,6,11,19]}]]);})();
+
+/* --- 21 --- */
+(()=>{const OL=['Classroom','Coaching','E-learning','Peer groups','Podcasts'],OS=[[25,32,25,12,6],[20,25,25,18,12],[6,10,22,32,30],[15,22,28,21,14],[30,28,22,12,8]],names=['Never','Rarely','Sometimes','Often','Always'];
+const mk=(ix)=>names.map((n,j)=>({n,v:ix.map(i=>OS[i][j])})),ta=i=>OS[i][3]+OS[i][4],ord=OL.map((_,i)=>i).sort((a,b)=>ta(b)-ta(a));
+add('c21','Learning & development','chart',2,'FOC','Training review. Which learning formats do employees actually use? Responses use a five-point frequency scale.',
+ {t:'stack',hz:1,title:'Survey',L:OL,S:mk([0,1,2,3,4]),rb:1,lg:1,lw:100},
+ {t:'stack',hz:1,title:`E-learning is used often or always by ${ta(ord[0])}% of staff; classroom sessions by only ${ta(ord[4])}%`,sub:'How often do you use each format? (% of respondents)',L:ord.map(i=>OL[i]),S:mk(ord),dvc:['#C85A1E','#E9A266','#D8D4C6','#8FB4D6','#2F6DA8'],sl:1,lw:100},
+ [['Default rainbow colours hide the tendency from never to always',1,'FOC','Neighbouring answers should have neighbouring colours (SWD case study 3).','SWD p.239'],['Formats are listed alphabetically',1,'VIS','Sort by what matters, here how often a format is used.','SWD p.235'],['There is no conclusion in the title',1,'TXT','State which formats win and lose.','SWD p.157'],['No numbers appear for any segment',1,'CLU','A few labelled values let readers anchor the scale.','SWD p.253'],['The legend order differs from the stacking order',1,'CLU','Legend and bars must read the same way.','BBD p.215'],'d3','dpie'],
+ [['Sorted 100% bars, diverging colours from never to always, headline',40,'Both ends share a baseline and the tendency is visible.',null],['Diverging colours, alphabetical order',25,'Colour fixed, order still hides the ranking.',{L:OL,S:mk([0,1,2,3,4])}],['Sorted bars with the default rainbow',15,'Order fixed, colours still hide the tendency.',{dvc:undefined,rb:1,sl:0}],['A pie for each format',0,'Five pies cannot be compared.',{t:'pie',L:names,V:OS[2],title:'E-learning'}]]);})();
+/* --- 22 --- */
+(()=>{const L=['Billing','Login','Delivery','Returns','Warranty','App crashes','Pricing','Accounts','Shipping cost','Other'],V=[320,280,240,190,150,140,120,90,80,60],t3=pc(sum(V.slice(0,3)),sum(V));
+add('c22','Customer support','chart',2,'VIS','Support planning. Which ticket topics should the team prioritise?',
+ {t:'bub',title:'Topics',L,V},
+ {t:'bar',title:`Billing, login and delivery generate ${t3}% of support tickets`,sub:'Tickets by topic, last quarter',L,V,srt:1,acc:L.slice(0,3)},
+ [['Bubble size is hard to compare precisely',1,'VIS','Eyes judge area poorly; length on a baseline is accurate.','BBD p.422'],['Rainbow colours carry no meaning',1,'FOC','Colour should highlight, not decorate.','SWD p.134'],['No values or ranking can be read',1,'VIS','Readers cannot tell how much larger the first is than the fifth.','BBD p.424'],['The title is a label',1,'TXT','Say which topics drive the load.','SWD p.157'],['Topics are arranged with no order',1,'VIS','Sort so the biggest comes first.','SWD p.74'],'d3','dmore'],
+ [['Sorted horizontal bars, top three highlighted',40,'Ranking and size are exact and instant.',null],['Thin bars with circles (lollipop style)',30,'Same accuracy with extra visual interest; a fair compromise.',{thin:1}],['Packed bubbles with labels added',5,'Labels help, but sizes remain hard to compare.',{t:'bub'}],['A pie chart of topics',0,'Ten slices cannot be ranked.',{t:'pie'}]]);})();
+/* --- 23 --- */
+(()=>{const W=['W1','W2','W3','W4','W5','W6','W7','W8'],V=[98.2,98.3,98.1,98.4,98.5,98.4,98.6,98.6];
+add('c23','Logistics','chart',3,'INT','Weekly report. On-time delivery edged up from 98.2% to 98.6%.',
+ {t:'line',title:'SURGE IN PERFORMANCE',L:W,S:[{n:'On-time %',v:V}],mn:98,mx:98.7,gr:1,mk:1,nolab:1,dec:1,suf:'%',bd:1},
+ {t:'line',title:'On-time delivery is steady near 98%, up just 0.4 points in eight weeks',yt:'On-time delivery (%)',L:W,S:[{n:'On-time %',v:V}],mn:90,mx:100,tgt:98,tl:'Target 98%',acc:['On-time %'],nolab:1,dec:1,suf:'%'},
+ [['The axis is zoomed so 0.4 points look like a surge',1,'INT','Non-zero baselines are fine for lines, but do not over-zoom tiny changes.','SWD p.68'],['The headline overclaims',1,'TXT','The title must match what the data supports.','SWD p.69'],['No target gives the numbers context',1,'CTX','Show the target the team is judged against.','SWD p.42'],['Heavy gridlines, markers and a border',1,'CLU','They add ink without information.','SWD p.108'],['No axis title',1,'TXT','State what is plotted.','SWD p.157'],['Start the line chart at zero so it is honest',0,'INT','A zero baseline is not required for lines; here it would flatten everything into one line.','SWD p.68'],'dsm'],
+ [['Sensible axis (90 to 100), target line, honest title',40,'Small change looks small and the target gives context.',null],['Axis from zero',20,'Honest but nothing can be seen.',{mn:0,mx:105}],['Axis 97.5 to 99, no target',15,'Still exaggerates the change.',{mn:97.5,mx:99,tgt:undefined}],['The zoomed chart with an even bigger headline',0,'More exaggeration, not less.',{mn:98,mx:98.7,tgt:undefined,title:'SURGE IN PERFORMANCE',gr:1,mk:1,bd:1}]]);})();
+/* --- 24 --- */
+(()=>{const cols=['Market','Product A','Product B','Product C','Product D'],R=[['Australia','1','4','9','3'],['Brazil','1','2','8','5'],['Canada','2','1','10','4'],['China','1','5','7','3'],['France','1','3','9','6'],['Germany','3','1','10','2']];
+add('c24','Sales','chart',2,'FOC','Market review. Where does each product rank by sales (1 = best)? The leaders matter most.',
+ {t:'tbl',title:'Sales Rank',cols,rows:R,rbcell:1,h:280},
+ {t:'tbl',title:'Product A leads in four of six markets; Product C ranks outside the top five everywhere',sub:'Sales rank by market (1 = best, darker = better)',cols,rows:R,heat:1,h:280},
+ [['Each rank has its own colour, so nothing stands out',1,'FOC','When everything is different, nothing is.','SWD p.134'],['The eye lands on red and purple, not on the market leaders',1,'FOC','Saturation should signal importance, so leaders should be darkest.','SWD p.135'],['Rainbow colours carry no order',1,'VIS','Use one colour with varying saturation for ordered values.','SWD p.135'],['The title is a label',1,'TXT','Say who leads and who lags.','SWD p.157'],['Red and green appear next to each other',1,'ACC','Colour-blind readers cannot separate them.','SWD p.137'],'dcol',['Add a ten-colour legend below the table',0,'CLU','A ten-entry legend overloads short-term memory.','SWD p.117']],
+ [['One-colour heat map, rank 1 darkest, action title',40,'Leaders pop out and order is encoded naturally.',null],['Plain table, no colour',20,'Readable, but the leaders need to be found.',{heat:0,sub:undefined}],['Traffic-light colours by rank',0,'Red/green again, and rank is not good/bad.',{heat:0,tl:1}],['The rainbow table with a legend',5,'A legend does not fix a rainbow.',{heat:0,rbcell:1}]]);})();
+/* --- 25 --- */
+(()=>{const names=['Campaign A','Campaign B','Campaign C','Campaign D'],V=[[1,2,3.2,4.4,5.5,6.5],[1.2,2.6,4,5.3,6.7,8],[1,2.5,4.4,6.4,8.4,10.2],[2,5,7.5,10,12,13.4]],off=[0,2,4,6],wk=['1','2','3','4','5','6'],mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const S=V.map((v,i)=>({n:names[i],v})),SC=V.map((v,i)=>({n:names[i],v,o:off[i]})),k=V[3].findIndex(x=>x>=10)+1;
+add('c25','Marketing','chart',3,'VIS','Campaign review. Which campaign gained sign-ups fastest after launch? Campaigns launched in different months.',
+ {t:'line',title:'Cumulative Sign-ups',L:mo,S:SC,rb:1,lg:1,gr:1,mk:1,nolab:1,lgw:100},
+ {t:'line',title:`Campaign D passed 10k sign-ups in week ${k}; Campaign A had 6.5k after six weeks`,yt:'Cumulative sign-ups (000)',xt:'Weeks since launch',L:wk,S,acc:['Campaign D']},
+ [['A calendar x-axis makes campaigns with different launch dates incomparable',1,'VIS','Index each campaign to its own launch (week 1, week 2...).','BBD p.394'],['Four rainbow lines and a legend',1,'FOC','Grey for context, one accent.','SWD p.243'],['Gridlines and markers on every point',1,'CLU','They add ink without information.','SWD p.108'],['The title is a label',1,'TXT','State which campaign wins and by how much.','SWD p.157'],['Slopes starting at different places cannot be compared',1,'VIS','An index chart aligns the starting point.','BBD p.393'],'dsec','dsm'],
+ [['Index chart: weeks since launch on the x axis, Campaign D highlighted',40,'Growth rates become directly comparable.',null],['Index chart with every line in colour',25,'Alignment fixed; the point is still not highlighted.',{acc:undefined,rb:1,lg:1,lgw:100}],['Calendar axis with Campaign D highlighted',10,'Focus added, comparison still impossible.',{S:SC,L:mo,xt:'Month',acc:['Campaign D']}],['A bar chart of final totals',10,'Hides how fast each campaign grew.',{t:'bar',L:names,V:V.map(v=>v[5]),acc:['Campaign D'],S:undefined,xt:undefined,yt:undefined}]]);})();
+/* --- 26 --- */
+(()=>{const L=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug'],S=[{n:'Area 1',v:[5,6,5,5,6,5,5,6]},{n:'Area 2',v:[4,4,5,4,4,5,4,4]},{n:'Area 3',v:[4,3,3,4,6,8,10,12]},{n:'Area 4',v:[6,5,6,6,5,6,6,5]}],tot=S.map(s=>sum(s.v)),names=S.map(s=>s.n);
+add('c26','Safety','chart',2,'CTX','Safety committee. The committee must decide which area gets extra supervision.',
+ {t:'col',title:'Safety Incidents',L:names,V:tot,rb:1,vl:1},
+ {t:'line',title:'Incidents in Area 3 rose four months in a row while other areas stayed flat: add supervision there',yt:'Incidents per month',L,S,acc:['Area 3'],first:1},
+ [['Totals hide that one area is getting worse',1,'CTX','The decision depends on the trend, not the eight-month total.','SWD p.38'],['No recommendation or ask for the committee',1,'CTX','Always tell the audience what you want them to do.','SWD p.38'],['Rainbow colours for four areas',1,'FOC','Colour carries no meaning.','SWD p.134'],['The title is a label',1,'TXT','State the finding and the ask.','SWD p.157'],['No time axis, so a rise cannot be seen',1,'VIS','Trends need time on the x axis.','SWD p.61'],'dpie','dmore'],
+ [['Line per area over time, Area 3 highlighted, finding and ask in the title',40,'The trend and the decision are one sentence.',null],['The same lines, all in grey',20,'Trend visible, but no focus and no ask.',{acc:undefined,title:'Safety incidents by area',first:undefined}],['Sorted bars of eight-month totals',15,'Ranks areas, but still hides the trend.',{t:'bar',L:names,V:tot,srt:1,S:undefined,acc:['Area 3'],yt:undefined,first:undefined,title:'Area 3 has the most incidents over eight months'}],['Stacked monthly columns by area',10,'Totals by month; the area story is lost.',{t:'stack',S,L,rb:1,lg:1,fo:undefined,acc:undefined,first:undefined,title:'Incidents by month'}]]);})();
+/* --- 27 --- */
+(()=>{const L=['Supplier A','Supplier B','Supplier C','Supplier D'],V=[34,31,25,10];
+add('c27','Procurement','chart',1,'INT','Sourcing review. Which supplier holds the biggest share of spend?',
+ {t:'pie',title:'Spend by Supplier',L,V:[31,34,25,10],rb:1,lg:1,d3:1},
+ {t:'bar',title:'Supplier A holds 34% of spend, slightly ahead of Supplier B at 31%',sub:'Share of annual spend',L,V,srt:1,acc:['Supplier A'],suf:'%'},
+ [['The 3D tilt makes the nearest slice look biggest',1,'INT','The slice that looks largest is not the largest (31% vs 34%).','SWD p.79'],['The slices are close in size',1,'VIS','Close angles cannot be ranked.','SWD p.79'],['A legend sits apart from the data',1,'CLU','Label directly or use bars.','SWD p.112'],['Rainbow colours for four values',1,'FOC','Nothing is emphasised.','SWD p.134'],['The title is a label',1,'TXT','State the finding.','SWD p.157'],'dmore','dthick'],
+ [['Sorted bars, the leader highlighted',40,'Close values are easy to rank on a baseline.',null],['A flat donut with % labels',15,'No 3D, but arcs are harder than angles.',{t:'donut'}],['A flat pie with % labels',20,'Honest, but still hard to rank close values.',{t:'pie'}],['A 3D column chart',0,'3D distorts values again.',{t:'col',d3:1,rb:1}]]);})();
+/* --- 28 --- */
+(()=>{const L=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct'],V=[58,57,59,56,54,52,51,49,48,46],d=Math.round((1-V[9]/V[0])*100);
+add('c28','Inventory','chart',2,'TXT','Monthly inventory review. The chart itself is fine; the CFO reads only the title.',
+ {t:'line',title:'Inventory Days by Month',L,S:[{n:'Days',v:V}],acc:['Days'],tgt:50,tl:'Target 50',mn:30,mx:65,nolab:1},
+ {t:'line',title:`Inventory days fell ${d}% in ten months, from 58 to 46, and are now below the 50-day target`,yt:'Days of inventory',L,S:[{n:'Days',v:V}],acc:['Days'],tgt:50,tl:'Target 50',mn:30,mx:65,nolab:1},
+ [['The title is a descriptive label',1,'TXT','Use the title for the conclusion.','SWD p.157'],['The y axis has no title',1,'TXT','Every axis needs a title.','SWD p.157'],['The reader must work out that the line crossed the target',1,'TXT','State the crossing in words.','SWD p.157'],['No label on the latest value',1,'FOC','Mark the point the story ends on.','SWD p.131'],['Grey axes compete with the line',1,'CLU','Push axes to the background.','SWD p.129'],'dsm','dleg'],
+ [['Inventory days fell 21% in ten months, from 58 to 46, and are now below the 50-day target',40,'Finding, size and benchmark in one sentence.',null],['Inventory days improved',20,'A conclusion, but vague: no size, no target.',{title:'Inventory days improved'}],['Inventory days by month, with target',0,'Still a descriptive label.',{title:'Inventory days by month, with target'}],['Great success: the inventory problem is solved',0,'Overclaims beyond the data.',{title:'Great success: the inventory problem is solved'}]]);})();
+/* --- 29 --- */
+(()=>{const L=['Excel','Power BI','SQL','Python','Tableau','R'],V=[92,58,41,36,31,12];
+add('c29','Analytics','chart',2,'INT','Skills survey. Analysts could tick every tool they use, so answers overlap.',
+ {t:'pie',title:'Tools Used',L,V,rb:1,lg:1},
+ {t:'bar',title:'Excel is used by 92% of analysts and Power BI by 58%; R by only 12%',sub:'% of analysts using each tool (multiple answers allowed)',L,V,srt:1,acc:['Excel','Power BI'],suf:'%'},
+ [['A pie implies the parts add to one whole',1,'INT','These answers overlap and add to 270%; a pie would misstate them.','SWD p.80'],['Slices are normalised and no longer match the percentages',1,'INT','Readers see shares of 270%, not usage rates.','SWD p.80'],['Rainbow colours with a legend',1,'FOC','Nothing is emphasised.','SWD p.134'],['The title is a label',1,'TXT','State what the survey found.','SWD p.157'],['There is no note that multiple answers were allowed',1,'TXT','Say how the question was asked.','SWD p.157'],'d3','dpie'],
+ [['Sorted bars, the note about multiple answers, the two leaders highlighted',40,'Each tool is its own percentage, honestly shown.',null],['Sorted bars without the note',25,'Correct chart; readers may still assume parts of a whole.',{sub:undefined}],['A donut chart',5,'Same wrong whole, with arcs.',{t:'donut'}],['A 100% stacked bar',0,'Forces overlapping answers into a whole.',{t:'stack',hz:1,L:['Tools'],S:L.map((n,i)=>({n,v:[V[i]]})),fo:undefined,lg:1,rb:1,title:'Tools used',sub:undefined,acc:undefined}]]);})();
+/* --- 30 --- */
+(()=>{const L=['TX','FL','OH','CA','NY','GA','IL','PA','MI','NC','VA','WA'],V=[120,98,80,70,55,45,40,38,30,28,22,18],t3=pc(sum(V.slice(0,3)),sum(V));
+add('c30','Compliance','chart',2,'VIS','Compliance review. Which states file the most complaints? The audience wants a ranking.',
+ {t:'tiles',title:'Complaints by State',L,V,cols:6,h:240},
+ {t:'bar',title:`Texas, Florida and Ohio file ${t3}% of all complaints`,sub:'Complaints by state, last 12 months',L,V,srt:1,acc:['TX','FL','OH'],lw:40},
+ [['A tile map cannot be ranked at a glance',1,'VIS','When ranking is the job, sorted bars beat any map.','BBD p.248'],['Rainbow tile colours with no scale',1,'FOC','Colour carries no meaning here.','SWD p.134'],['State positions are approximate, not geographic',1,'VIS','Tile placement compromises location; it adds nothing to a ranking.','BBD p.249'],['Values sit inside tiles in small text',1,'ACC','Small text on saturated colour is hard to read.','BBD p.28'],['The title is a label',1,'TXT','State the finding.','SWD p.157'],'dmore','d3'],
+ [['Sorted horizontal bars, the top three highlighted',40,'Ranking and magnitude are exact.',null],['Sorted bars, no highlight',25,'Exact, but nothing says where to look.',{acc:undefined}],['The tile map with one colour and values',10,'Better colour, still hard to rank.',{t:'tiles',V,cols:6,h:240,acc:undefined}],['A pie of 12 states',0,'Twelve slices cannot be read.',{t:'pie',V}]]);})();
+
+/* ===== DASHBOARDS ===== */
+const K=(n,v,o)=>Object.assign({k:'kpi',n,v},o||{}),CH=(s,sp,w,h)=>({k:'chart',s,sp,w:w||250,h:h||160});
+const T12=[['Site OTIF','80%'],['Inbound OTIF','91%'],['Safety rate','0.4'],['Cost / unit','$41'],['Inventory days','46'],['Backlog','312'],['Dock-to-stock','1.8 d'],['Pick accuracy','99.2%'],['Overtime','6.1%'],['Vendor late %','12%'],['Returns','2.3%'],['Fill rate','96%']];
+/* --- 31 --- */
+(()=>{const tr=[86,85,84,83,82,80];
+add('c31','Operations','dash',1,'DSH','Weekly logistics scorecard for the Operations Director, who has about two minutes.',
+ {t:'dash',title:'KPI Dashboard',cols:4,rb:1,tiles:T12.map(x=>K(x[0],x[1]))},
+ {t:'dash',hl:'Site delivery is 5 points below target for the third week; everything else is on plan',cols:3,tiles:[K('Site OTIF','80%',{tg:'Target 85%',tr,al:1,ds:'Down 6 points in six weeks'}),K('Inbound OTIF','91%',{tg:'Target 90%',tr:[89,90,90,91,91,91]}),K('Safety rate','0.4',{tg:'Target ≤0.5',tr:[.5,.4,.5,.4,.4,.4]}),K('Other nine metrics','On plan',{sp:3,ds:'Details one click away in the drill-down'})]},
+ [['Twelve equal tiles: nothing is prioritised',1,'DSH','Equal size says everything is equally important.','SWD p.132'],['Random background colours carry no meaning',1,'FOC','Colour should signal status or focus.','SWD p.134'],['Numbers have no target, trend or comparison',1,'CTX','A number alone cannot say whether it is good.','BBD p.112'],['There is no headline and no ask',1,'TXT','The director must guess what matters.','SWD p.157'],['Every metric is shown even though most are on plan',1,'DSH','Show the vital few and push the rest to a drill-down.','BBD p.123'],'dkpi','dbig'],
+ [['The vital three with target and trend, one accent, nine others in a drill-down',40,'The page says what matters and what to do in seconds.',null],['Twelve tiles, grey, with targets added',20,'Context added, but the director still hunts for the problem.',{cols:4,hl:undefined,title:'KPI Dashboard',tiles:T12.map((x,i)=>K(x[0],x[1],{tg:'Target '+x[1],al:i===0}))}],['Twelve tiles with a headline added',15,'The message is stated, but twelve tiles remain.',{cols:4,tiles:T12.map(x=>K(x[0],x[1]))}],['Twelve tiles, bigger numbers',0,'Everything bigger means nothing stands out.',{cols:4,big:1,hl:undefined,title:'KPI Dashboard',tiles:T12.map(x=>K(x[0],x[1]))}]]);})();
+/* --- 32 --- */
+(()=>{const tr=[34,34,33,33,32,31];
+add('c32','Sales','dash',1,'CTX','Monthly sales summary for the VP. Revenue is on plan; margin is not.',
+ {t:'dash',title:'Sales Summary',cols:4,tiles:[K('Revenue','$4.2M'),K('Orders','12,400'),K('Margin','31%'),K('NPS','38')]},
+ {t:'dash',hl:'Revenue is on plan, but margin is 3 points below target and has slipped for six months',cols:4,tiles:[K('Revenue','$4.2M',{tg:'Plan $4.2M',tr:[3.6,3.8,3.9,4,4.1,4.2]}),K('Orders','12,400',{tg:'Plan 12,000',tr:[11,11.4,11.8,12,12.2,12.4]}),K('Margin','31%',{tg:'Target 34%',tr,al:1}),K('NPS','38',{tg:'Target 35',tr:[33,34,35,36,37,38]})]},
+ [['Numbers stand alone with no target',1,'CTX','Readers cannot tell if $4.2M is good or bad.','BBD p.112'],['There is no trend or sparkline',1,'CTX','A single point hides direction.','BBD p.102'],['There is no headline',1,'TXT','State the message in words.','SWD p.157'],['All four numbers have the same emphasis',1,'DSH','The one metric off target should stand out.','SWD p.145'],['The title is a label',1,'TXT','Say what the VP should conclude.','SWD p.157'],'dkpi','dinter'],
+ [['Each KPI with target and trend, only margin in the accent, headline',40,'Context, direction and focus in one glance.',null],['Add up and down arrows only',15,'Direction added, but no target and no focus.',{hl:undefined,title:'Sales Summary',tiles:[K('Revenue','$4.2M ▲'),K('Orders','12,400 ▲'),K('Margin','31% ▼'),K('NPS','38 ▲')]}],['Add red and green status lights',5,'Red/green is a colour-blind trap and still has no numbers behind it.',{hl:undefined,title:'Sales Summary',tiles:[K('Revenue','$4.2M ● green'),K('Orders','12,400 ● green'),K('Margin','31% ● red'),K('NPS','38 ● green')]}],['Make the numbers larger',0,'Bigger numbers add no context.',{big:1,hl:undefined,title:'Sales Summary',tiles:[K('Revenue','$4.2M'),K('Orders','12,400'),K('Margin','31%'),K('NPS','38')]}]]);})();
+/* --- 33 --- */
+(()=>{const k=(sh,rb)=>[K('Headcount','124',{tr:[110,114,118,120,122,124]}),K('Attrition','14%',{tr:[10,11,12,13,14,14]}),K('Time to hire','41 d',{tr:[44,43,42,42,41,41]}),K('eNPS','32',{tr:[28,29,30,31,32,32]})];
+add('c33','HR','dash',1,'CLU','People dashboard for the HR Director. Leadership liked "something that pops".',
+ {t:'dash',title:'People Metrics',cols:4,rb:1,sh:1,bd:0,tiles:k()},
+ {t:'dash',hl:'Attrition is 2 points above target; hiring speed and engagement are on plan',cols:4,tiles:[K('Headcount','124',{tr:[110,114,118,120,122,124]}),K('Attrition','14%',{tg:'Target 12%',tr:[10,11,12,13,14,14],al:1}),K('Time to hire','41 d',{tg:'Target 40 d',tr:[44,43,42,42,41,41]}),K('eNPS','32',{tg:'Target 30',tr:[28,29,30,31,32,32]})]},
+ [['Gradients and glossy fills decorate the tiles',1,'CLU','Decoration is clutter.','SWD p.106'],['Drop shadows and heavy outlines add weight',1,'CLU','Borders and shadows compete with the numbers.','BBD p.284'],['Random background colours with no meaning',1,'FOC','Colour should signal status.','SWD p.134'],['There is no headline',1,'TXT','State the message.','SWD p.157'],['No targets next to the numbers',1,'CTX','A number alone cannot say whether it is good.','BBD p.112'],'dbig','dinter'],
+ [['Flat tiles, white space, targets, one alert accent, headline',40,'Clean and quiet; attrition is the only thing that speaks.',null],['Remove the shadows but keep rainbow colours',15,'One decoration gone, meaningless colour remains.',{rb:1}],['Keep shadows, otherwise the clean version',15,'Meaning fixed, decoration remains.',{sh:1}],['Heavy black borders to separate tiles',0,'More lines mean more clutter.',{bd:1}]]);})();
+/* --- 34 --- */
+(()=>{const W=['W1','W2','W3','W4','W5','W6'],late=[6,6,7,8,10,12],P=['Port Z','Port Y','Port X','Port W'],PV=[38,11,9,7];
+add('c34','Logistics','dash',2,'DSH','Shipping review. The key finding is that late shipments are rising. Leadership reads top-left first.',
+ {t:'dash',title:'Shipping Dashboard',cols:3,tiles:[K('Total shipments','12,480'),K('Active vendors','214'),K('Avg PO value','$4,120'),CH({t:'line',title:'Shipments',L:W,S:[{n:'S',v:[10,11,12,11,12,12]}],acc:['S'],nolab:1,ax:1}),CH({t:'bar',title:'By region',L:['E','W','N','S'],V:[40,30,20,10],srt:1,acc:['E']}),CH({t:'line',title:'Late shipments %',L:W,S:[{n:'Late %',v:late}],acc:['Late %'],nolab:1,ax:1})]},
+ {t:'dash',hl:'Late shipments doubled to 12% in six weeks, and Port Z accounts for most of the increase',cols:3,tiles:[Object.assign(CH({t:'line',title:'Late shipments (%)',L:W,S:[{n:'Late %',v:late}],acc:['Late %'],nolab:1,ax:1,suf:'%',mn:0,mx:14},0,500,190),{sp:2}),K('Late now','12%',{tg:'Was 6% six weeks ago',al:1}),CH({t:'bar',title:'Late share by port (%)',L:P,V:PV,srt:1,acc:['Port Z'],suf:'%'},0,250,160),K('Shipments','12,480',{ds:'Volume is stable'}),K('Vendors','214',{ds:'Unchanged'})]},
+ [['The key chart sits bottom-right at the same size as filler',1,'DSH','Position and size signal importance; put the key view top-left and large.','SWD p.140'],['All six tiles have the same size',1,'DSH','Equal size says equal importance.','SWD p.132'],['Prime space is given to totals that never change',1,'DSH','Top-left is for the most important message.','SWD p.140'],['There is no headline',1,'TXT','State what leadership should take away.','SWD p.157'],['The key trend is drawn small with no label on the rise',1,'FOC','Highlight the change that matters.','SWD p.131'],'dkpi','dinter'],
+ [['Headline, large late-shipment trend top-left, port breakdown beside it',40,'Eyes land on the problem and the cause.',null],['Move the late trend to the top-left, keep equal sizes',20,'Better position, but size still says nothing.',{hl:undefined,title:'Shipping Dashboard',cols:3,tiles:[CH({t:'line',title:'Late shipments %',L:W,S:[{n:'Late %',v:late}],acc:['Late %'],nolab:1,ax:1}),CH({t:'bar',title:'Late share by port',L:P,V:PV,srt:1,acc:['Port Z']}),K('Total shipments','12,480'),K('Active vendors','214'),K('Avg PO value','$4,120'),K('Late now','12%',{al:1})]}],['Add a headline only',15,'The message is stated but the layout still hides it.',{cols:3,tiles:[K('Total shipments','12,480'),K('Active vendors','214'),K('Avg PO value','$4,120'),CH({t:'line',title:'Shipments',L:W,S:[{n:'S',v:[10,11,12,11,12,12]}],acc:['S'],nolab:1,ax:1}),CH({t:'bar',title:'By region',L:['E','W','N','S'],V:[40,30,20,10],srt:1,acc:['E']}),CH({t:'line',title:'Late shipments %',L:W,S:[{n:'Late %',v:late}],acc:['Late %'],nolab:1,ax:1})]}],['Add six more charts so nothing is missed',0,'More tiles dilute the message further.',{title:'Shipping Dashboard',hl:undefined,cols:4,tiles:Array.from({length:8},(_,i)=>K('Metric '+(i+1),String(10+i*3)))}]]);})();
+/* --- 35 --- */
+(()=>{const R=['West','East','North','South'],V=[4.2,3.1,2.6,2.2],M=['Q1','Q2','Q3','Q4'];
+const body=(flt,hl,ttl)=>({t:'dash',[hl?'hl':'title']:hl||ttl,cols:2,flt,tiles:[CH({t:'bar',title:'Sales by region ($M)',L:R,V,srt:1,acc:['West'],pre:'$',suf:'M',dec:1},0,250,170),CH({t:'line',title:'Quarterly sales ($M)',L:M,S:[{n:'Sales',v:[2.6,2.9,3.1,3.4]}],acc:['Sales'],nolab:1,ax:1},0,250,170)]});
+add('c35','Sales','dash',2,'DSH','A regional sales dashboard that managers open once a month. They must filter by region, period and product.',
+ body({pos:'right',items:['Reg','Per','Prod']},null,'Sales Dashboard'),
+ body({pos:'top',items:['Region: All','Period: Q4','Product: All']},'West leads with $4.2M; use the filters above to compare any region, period or product'),
+ [['The filters sit on the far right in tiny pale text',1,'DSH','Occasional users look top-left first and never find them.','BBD p.94'],['The filter labels are abbreviated ("Reg", "Per")',1,'TXT','Label controls so users know what they do.','BBD p.234'],['There is no headline or hint that the page is interactive',1,'TXT','Tell the audience how to use it.','SWD p.157'],['The charts have no emphasis',1,'FOC','The leading region deserves the accent.','SWD p.133'],['The user must discover the controls by trial and error',1,'DSH','Affordances should say how to interact.','SWD p.144'],'dkpi','dleg'],
+ [['Labelled filters top-left with the current selection, plus a headline',40,'Infrequent users find the controls immediately.',null],['Keep filters on the right but make them bold and labelled',20,'Better, but still outside the first-look zone.',{flt:{pos:'right',items:['Region','Period','Product']}}],['Hide the filters behind a menu icon',5,'Hidden controls are rarely used.',{flt:undefined}],['Add a pop-up tutorial on first visit',10,'Helps once, then users forget again.',{flt:undefined,foot:'First visit: click Help ▸ to learn the controls'}]]);})();
+/* --- 36 --- */
+(()=>{const mini=(rb)=>[CH({t:'pie',title:'By region',L:['W','E','N','S'],V:[35,26,21,18],rb,lg:0}),CH({t:'col',title:'Monthly sales',L:['J','F','M','A','M','J'],V:[3,3.2,3.4,3.3,3.8,4],rb}),CH({t:'line',title:'Trend',L:['J','F','M','A','M','J'],S:[{n:'A',v:[3,3.2,3.4,3.3,3.8,4]},{n:'B',v:[2,2.2,2.1,2.4,2.6,2.8]},{n:'C',v:[1,1.1,1.3,1.2,1.4,1.5]}],rb,lg:1,mk:1,gr:1}),CH({t:'bar',title:'Top products',L:['P1','P2','P3','P4'],V:[40,32,25,18],rb}),CH({t:'donut',title:'Channel mix',L:['Ret','Web','Par'],V:[50,30,20],rb}),CH({t:'gauge',title:'vs plan',L:['Q1','Q2','Q3'],V:[92,104>100?100:104,88]}),CH({t:'stack',title:'Mix',L:['Q1','Q2','Q3'],S:[{n:'a',v:[3,4,5]},{n:'b',v:[2,2,3]},{n:'c',v:[1,2,2]}],rb,lg:1}),CH({t:'bub',title:'Segments',L:['A','B','C','D'],V:[40,30,20,10]}),CH({t:'tiles',title:'Stores',L:['1','2','3','4','5','6'],V:[5,4,3,6,2,7],cols:3,h:150})];
+add('c36','Sales','dash',2,'DSH','Quarterly sales dashboard for the executive team. The IT team added a chart for every request.',
+ {t:'dash',title:'Sales Dashboard',cols:3,tiles:mini(1)},
+ {t:'dash',hl:'Sales are 6% above plan, led by the West; Online is the only channel below plan',cols:3,tiles:[K('Sales vs plan','+6%',{tg:'$12.1M vs $11.4M',tr:[3,3.2,3.4,3.3,3.8,4]}),CH({t:'bar',title:'Sales by region ($M)',L:['West','East','North','South'],V:[4.2,3.1,2.6,2.2],srt:1,acc:['West'],pre:'$',dec:1}),CH({t:'bar',title:'Channel vs plan (%)',L:['Retail','Wholesale','Partner','Online'],V:[9,7,4,-8],srt:1,dv:1,sg:1,suf:'%'})]},
+ [['Nine charts of equal size compete for attention',1,'DSH','Too many equal elements: nothing leads.','BBD p.264'],['Rainbow colours across every chart',1,'FOC','Colour has no consistent meaning.','SWD p.134'],['Pies, donut, gauges and bubbles make comparison hard',1,'VIS','Several chart types that avoid accurate comparison.','BBD p.415'],['There is no headline or hierarchy',1,'TXT','Say what the executives should take away.','SWD p.157'],['Legends in several tiles force lookups',1,'CLU','Label directly.','SWD p.112'],'dkpi','dinter'],
+ [['Headline, one KPI and two focused bar charts',40,'Three views answer the two questions executives have.',null],['Keep six of the nine charts, grey, with a headline',20,'Better, but still more than the message needs.',{cols:3,tiles:mini(0).slice(0,6)}],['Add filters so executives can choose their own view',5,'Interactivity cannot replace a message.',{hl:undefined,title:'Sales Dashboard',cols:3,flt:{pos:'top',items:['Region ▾','Channel ▾']},tiles:mini(1)}],['Add three more charts for completeness',0,'More tiles, more noise.',{hl:undefined,title:'Sales Dashboard',cols:4,tiles:mini(1).concat(mini(1).slice(0,3))}]]);})();
+/* --- 37 --- */
+(()=>{const R=['North','South','East','West','Central'],V=[71,68,66,64,62],rag=['Green','Green','Amber','Amber','Red'];
+add('c37','Sales','dash',3,'ACC','Regional scorecard. The target is 60%; every region is above it. Several managers are colour-blind.',
+ {t:'dash',title:'Regional Scorecard',cols:1,tiles:[CH({t:'tbl',title:'',cols:['Region','Score','Rank','Status'],rows:R.map((r,i)=>[r,V[i]+'%',String(i+1),rag[i]]),rag:{c:3,m:{Green:'#2ca02c',Amber:'#ffbf00',Red:'#d62728'}},heavy:0,h:220},0,520,230)]},
+ {t:'dash',hl:'All five regions beat the 60% target; Central is the weakest at 62%',cols:1,tiles:[CH({t:'bar',title:'Score by region (%)',L:R,V,srt:1,acc:['Central'],tgt:60,tl:'Target 60%',suf:'%'},0,520,230)]},
+ [['Colours are assigned by rank, not by performance',1,'DSH','Last place is red even though everyone beat the target.','BBD p.106'],['Red and green are the only cue',1,'ACC','Colour-blind readers cannot separate them.','SWD p.137'],['Uniform cells hide how much better or worse a region is',1,'VIS','Bars show magnitude; coloured cells do not.','BBD p.106'],['The target is not shown',1,'CTX','Without it, scores have no meaning.','BBD p.42'],['The title is a label',1,'TXT','State the finding.','SWD p.157'],'dcol',['Add a purple status for critical regions',0,'ACC','More status colours add decoding work.','SWD p.117']],
+ [['Sorted bars with the target line, weakest region highlighted',40,'Magnitude, target and focus are all visible.',null],['The table with blue and orange status plus arrows',20,'Accessible colours, still no magnitude or target.',{tiles:[CH({t:'tbl',title:'',cols:['Region','Score','Target','Gap'],rows:R.map((r,i)=>[r,V[i]+'%','60%','▲ +'+(V[i]-60)]),h:220,num:[1,2,3]},0,520,230)],hl:undefined,title:'Regional Scorecard'}],['Bars coloured red/green by rank',5,'Same ranking trap, same colour trap.',{tiles:[CH({t:'bar',title:'Score by region (%)',L:R,V,srt:1,rb:1,tgt:60,suf:'%'},0,520,230)]}],['A gauge per region',0,'Gauges add decoration, not information.',{tiles:[CH({t:'gauge',title:'Score by region (%)',L:R,V},0,520,230)]}]]);})();
+/* --- 38 --- */
+(()=>{const mk=(pie)=>{const f=(t,L,V,ex)=>pie?{t:'pie',title:t,L,V,rb:1,lg:1}:Object.assign({t:'bar',title:t,L,V,srt:1,suf:'%'},ex);return [CH(f('By channel',['Email','Chat','Phone','Social'],[42,29,18,11],{acc:['Email','Chat']})),CH(f('By priority',['High','Medium','Low'],[38,40,22],{acc:['High']})),CH(f('By product',['Core','Mobile','API','Other'],[44,28,18,10],{})),CH(f('By region',['EU','US','APAC'],[40,35,25],{}))]};
+add('c38','Customer support','dash',1,'VIS','Support dashboard. Leaders want to know where tickets come from and how urgent they are.',
+ {t:'dash',title:'Ticket Breakdown',cols:2,tiles:mk(1)},
+ {t:'dash',hl:'Email and chat bring in 71% of tickets, and 38% are high priority',cols:2,tiles:mk(0)},
+ [['Four pies cannot be compared with one another',1,'VIS','Angles are hard to read, and the pies share no baseline.','SWD p.79'],['Rainbow colours with different meanings in each pie',1,'FOC','Colour should keep one meaning across the dashboard.','SWD p.136'],['Legends in every tile',1,'CLU','Direct labels remove the lookup.','SWD p.112'],['No headline',1,'TXT','State the finding.','SWD p.157'],['Slices are not sorted',1,'VIS','Sorted bars give instant ranking.','SWD p.80'],'d3','dmore'],
+ [['Four small sorted bar charts, key bars highlighted, headline',40,'Instant ranking and a consistent accent.',null],['Pies with percentages and a headline',10,'Message stated, but pies remain.',{tiles:mk(1)}],['Donut charts',5,'Arc lengths are even harder than angles.',{tiles:mk(1).map(t=>({...t,s:{...t.s,t:'donut'}}))}],['3D pies',0,'3D distorts values.',{tiles:mk(1).map(t=>({...t,s:{...t.s,d3:1}}))}]]);})();
+/* --- 39 --- */
+(()=>{const R=['North','East','South','West'],A=[64,98,106,112];
+add('c39','Sales','dash',3,'INT','Target attainment by region. Two regions have exceeded their target.',
+ {t:'dash',title:'Target Attainment',cols:1,tiles:[CH({t:'gauge',title:'',L:R,V:[64,98,100,100]},0,520,200)]},
+ {t:'dash',hl:'North is 36 points short of target; South and West have beaten theirs',cols:1,tiles:[CH({t:'bar',title:'Sales vs target (%)',L:R,V:A,srt:1,acc:['North'],tgt:100,tl:'Target',suf:'%'},0,520,220)]},
+ [['A ring tops out at 100%, so over-performance is invisible',1,'INT','South at 106% and West at 112% both look like 100%.','BBD p.419'],['Large rings waste space',1,'CLU','Space goes to decoration, not comparison.','SWD p.148'],['Colours carry no meaning',1,'FOC','Highlight the region that needs attention.','SWD p.134'],['The target is not marked as a line',1,'CTX','A line makes the gap explicit.','BBD p.112'],['No headline',1,'TXT','State what leaders should know.','SWD p.157'],'dgauge','d3'],
+ [['Sorted bars with a 100% target line, North highlighted',40,'Over and under performance are both honest.',null],['Progress bars capped at 100%',20,'Readable, but over-performance still hidden.',{tiles:[CH({t:'bar',title:'Sales vs target (%)',L:R,V:[64,98,100,100],srt:1,acc:['North'],tgt:100,suf:'%'},0,520,220)]}],['Donuts with the real value in the centre',10,'The numbers are right, but arcs are hard to compare.',{tiles:[CH({t:'gauge',title:'',L:R,V:[64,98,100,100]},0,520,200)],hl:undefined,title:'Target Attainment'}],['A pie of attainment',0,'Attainment is not parts of a whole.',{tiles:[CH({t:'pie',title:'',L:R,V:A,rb:1,lg:1},0,520,230)],hl:undefined,title:'Target Attainment'}]]);})();
+/* --- 40 --- */
+(()=>{const L=['W1','W2','W3','W4','W5','W6','W7','W8'],S=[{n:'Plan',v:Array(8).fill(520)},{n:'Actual',v:[505,512,518,510,490,452,431,418]},{n:'Prior',v:[498,505,510,500,507,512,509,511]}];
+add('c40','Control room','dash',2,'FOC','A wall-mounted control-room dashboard in a dim room. The corporate template is black.',
+ {t:'dash',title:'DISPATCH CONTROL',cols:3,dk:1,rb:1,tiles:[K('Dispatched','418',{tr:[5,5,5,4,4,4]}),K('Delayed','31',{tr:[3,3,4,5,6,7]}),K('On plan','80%',{tr:[98,97,94,90,86,80]}),CH({t:'line',title:'Dispatch',L,S,dk:1,rb:1,glow:1,lg:1,mn:380,mx:560},0,300,160),CH({t:'bar',title:'By depot',L:['A','B','C','D'],V:[40,30,20,10],dk:1,rb:1},0,250,160),CH({t:'bar',title:'Delays',L:['X','Y','Z'],V:[9,14,8],dk:1,rb:1},0,250,160)]},
+ {t:'dash',hl:'Dispatch volume is 20% below plan after three weeks of decline',cols:3,dk:1,tiles:[K('Dispatched','418',{tg:'Plan 520',al:1,tr:[5,5,5,4,4,4]}),K('Delayed','31',{tr:[3,3,4,5,6,7]}),K('On plan','80%',{tr:[98,97,94,90,86,80]}),Object.assign(CH({t:'line',title:'Weekly dispatches',L,S,dk:1,acc:['Actual'],mn:380,mx:560},0,500,190),{sp:3})]},
+ [['Neon colours of equal loudness fight for attention',1,'FOC','On black, saturated colours shout equally.','SWD p.225'],['Glow and bright grid are louder than the data',1,'CLU','Structure should recede.','SWD p.108'],['No headline or accent tells the room what to watch',1,'TXT','State the message.','SWD p.157'],['Legends and six equal tiles',1,'DSH','Direct labels and hierarchy beat legends and equal tiles.','BBD p.264'],['Saturated rainbow on black is hard for colour-blind viewers',1,'ACC','Use luminance contrast instead of many hues.','BBD p.38'],['Dark backgrounds are never acceptable',0,'FOC','If the room demands it, make grey the base and white the accent.','SWD p.225'],'dcol'],
+ [['Dark kept, grey base, one white accent, headline, one large chart',40,'Respects the template and makes the story obvious.',null],['White background with the same neon palette',10,'Glow removed, rainbow still there.',{dk:0,tiles:[K('Dispatched','418'),K('Delayed','31'),K('On plan','80%'),CH({t:'line',title:'Dispatch',L,S,rb:1,lg:1,mn:380,mx:560},0,300,160)],hl:undefined,title:'DISPATCH CONTROL',rb:1}],['Dark, all grey, no accent',20,'Calm, but nothing says where to look.',{tiles:[K('Dispatched','418'),K('Delayed','31'),K('On plan','80%'),Object.assign(CH({t:'line',title:'Weekly dispatches',L,S,dk:1,mn:380,mx:560},0,500,190),{sp:3})]}],['Brighter neon and more glow',0,'More contrast between items hides the message.',{rb:1,hl:undefined,title:'DISPATCH CONTROL',tiles:[K('Dispatched','418'),K('Delayed','31'),K('On plan','80%'),CH({t:'line',title:'Dispatch',L,S,dk:1,rb:1,glow:1,lg:1,mn:380,mx:560},0,300,160)]}]]);})();
+
+/* --- 41 --- */
+(()=>{const M=['January','February','March','April','May','June'],Ms=['Jan','Feb','Mar','Apr','May','Jun'];
+const ch=(t,V,bad)=>CH(bad?{t:'col',title:t,L:M,V,rot:1,gr:1,bd:1}:{t:'col',title:t,L:Ms,V,acc:['Jun']},0,250,170);
+add('c41','Healthcare','dash',2,'CLU','Provider productivity report, usually printed. Four monthly trend charts.',
+ {t:'dash',title:'Provider Report',cols:2,bd:1,tiles:[ch('Encounters',[310,320,300,330,340,360],1),ch('wRVU',[420,430,415,440,455,470],1),ch('Panel size',[1180,1190,1200,1210,1210,1220],1),ch('New patients',[22,25,21,27,30,34],1)]},
+ {t:'dash',hl:'Encounters, wRVU and new patients rose through June; panel size is flat',cols:2,tiles:[ch('Encounters',[310,320,300,330,340,360],0),ch('wRVU',[420,430,415,440,455,470],0),ch('Panel size',[1180,1190,1200,1210,1210,1220],0),ch('New patients',[22,25,21,27,30,34],0)]},
+ [['A heavy border around the page and every tile',1,'CLU','Borders and lines create a feeling of clutter.','BBD p.284'],['Full month names rotated 90 degrees',1,'CLU','Rotated text is slow to read and hides typos.','BBD p.321'],['Dark gridlines in every chart',1,'CLU','Make them light or remove them.','SWD p.109'],['The title does not state the finding',1,'TXT','Say what changed.','SWD p.157'],['The June value is not highlighted',1,'FOC','The latest value is what readers check first.','SWD p.131'],'dkpi','dinter'],
+ [['No borders, white space and alignment, abbreviated months, headline',40,'Structure comes from space, not lines.',null],['Remove the page border, keep tile borders',15,'One layer of clutter gone.',{cols:2,bd:0,tiles:[ch('Encounters',[310,320,300,330,340,360],1),ch('wRVU',[420,430,415,440,455,470],1),ch('Panel size',[1180,1190,1200,1210,1210,1220],1),ch('New patients',[22,25,21,27,30,34],1)]}],['Shaded boxes in place of lines',15,'Less harsh, but still decoration.',{sh:1}],['A bold border to make it stand out',0,'More ink, no information.',{bd:1}]]);})();
+/* --- 42 --- */
+(()=>{const R=['Brewster','York','Katonah','Croton'],Y=[63.5,52.8,41,19.2],P=[58.2,44,45.6,28.2];
+add('c42','Retail','dash',3,'ACC','Regional sales manager checking YTD vs last year on a phone between store visits.',
+ {t:'dash',title:'YTD Sales',ph:1,cols:3,tiles:[K('YTD','$176K'),K('Last yr','$176K'),K('Diff','0%'),CH({t:'bar',title:'Brewster',L:['T','L'],V:[63,58],h:80,vl:true},0,150,110),CH({t:'bar',title:'York',L:['T','L'],V:[52,44]},0,150,110),CH({t:'bar',title:'Katonah',L:['T','L'],V:[41,45]},0,150,110),CH({t:'line',title:'Trend',L:['J','F','M','A'],S:[{n:'a',v:[1,2,3,4]}]},0,150,110),CH({t:'line',title:'Trend',L:['J','F','M','A'],S:[{n:'a',v:[1,2,3,4]}]},0,150,110),CH({t:'line',title:'Trend',L:['J','F','M','A'],S:[{n:'a',v:[1,2,3,4]}]},0,150,110)]},
+ {t:'dash',hl:'Katonah and Croton trail last year; York is ahead',ph:1,cols:1,tiles:[CH({t:'bar',title:'YTD sales ($K) vs last year',L:R,V:Y,ref:P,srt:1,acc:['Katonah','Croton'],vl:true,pre:'$',suf:'K'},0,300,230),K('Croton',' −32%',{tg:'$19.2K vs $28.2K last year',al:1})]},
+ [['A three-column desktop layout is squeezed onto a phone',1,'DSH','Stack cards vertically and let people scroll.','BBD p.342'],['Text is far too small to read on the phone',1,'ACC','Small text on a small screen is unreadable.','SWD p.155'],['Six tiny charts have no hierarchy',1,'DSH','The phone screen can hold one idea at a time.','BBD p.140'],['Last year is not drawn next to this year',1,'VIS','Comparison needs a shared baseline and a reference.','BBD p.141'],['No headline',1,'TXT','State the finding in the first line.','SWD p.157'],'dinter','dkpi'],
+ [['One vertical column: headline, bars with last-year marks, one alert card',40,'Readable at arm\'s length and tells the story fast.',null],['One column, bars only, no headline',20,'Layout fixed; the message is missing.',{hl:undefined,title:'YTD Sales',tiles:[CH({t:'bar',title:'YTD sales ($K) vs last year',L:R,V:Y,ref:P,srt:1,vl:true,pre:'$',suf:'K'},0,300,230)]}],['Keep the grid but enlarge the numbers',10,'Bigger numbers do not fix the layout.',{hl:undefined,title:'YTD Sales',big:1,cols:3,tiles:[K('YTD','$176K'),K('Last yr','$176K'),K('Diff','0%')]}],['Add tooltips for the detail',0,'Touch screens cannot hover.',{hl:undefined,title:'YTD Sales',cols:3,foot:'Hover for detail',tiles:[K('YTD','$176K'),K('Last yr','$176K'),K('Diff','0%')]}]]);})();
+/* --- 43 --- */
+(()=>{const L=['OEE','Availability','Performance','Quality'],V=[71,91,80,97],T=[75,90,88,96];
+add('c43','Manufacturing','dash',2,'VIS','Plant operations. The plant manager wants to know where OEE (availability × performance × quality) is losing ground.',
+ {t:'dash',title:'Plant KPIs',cols:1,tiles:[CH({t:'gauge',title:'',L,V},0,520,190)]},
+ {t:'dash',hl:'OEE is 4 points below target because performance runs 8 points under plan; availability and quality are fine',cols:1,tiles:[CH({t:'bar',title:'Actual vs target (%); tick = target',L,V,ref:T,acc:['OEE','Performance'],suf:'%',mx:110},0,520,230)]},
+ [['Four gauges show no target',1,'CTX','Without a target mark the arcs mean little.','BBD p.112'],['Gauges force the eye to compare arc lengths',1,'VIS','Bars with a target tick are far easier.','SWD p.81'],['Colours carry no meaning',1,'FOC','Highlight the metrics that miss.','SWD p.134'],['No headline',1,'TXT','State where the loss comes from.','SWD p.157'],['No trend shows whether each metric is improving',1,'DSH','Add sparklines or a trend view.','BBD p.112'],'dgauge','d3'],
+ [['Bars with a target tick, the misses highlighted, headline',40,'Gap to target is visible at once and the cause is named.',null],['A table of actual vs target',25,'Exact values, but the gaps need calculating.',{tiles:[CH({t:'tbl',title:'',cols:['Metric','Actual','Target','Gap'],rows:L.map((l,i)=>[l,V[i]+'%',T[i]+'%',(V[i]-T[i]>0?'+':'−')+Math.abs(V[i]-T[i])]),num:[1,2,3],h:230},0,520,230)]}],['Gauges with a target tick',10,'Context added, arcs remain hard.',{tiles:[CH({t:'gauge',title:'',L,V},0,520,190)],hl:undefined,title:'Plant KPIs'}],['A pie of the four metrics',0,'The metrics are not parts of a whole.',{tiles:[CH({t:'pie',title:'',L,V,rb:1,lg:1},0,520,230)],hl:undefined,title:'Plant KPIs'}]]);})();
+/* --- 44 --- */
+(()=>{const L=['Team A','Team B','Team C'],D=[[1,2,2,2,3,3,3,4,4,5],[1,1,2,2,3,3,3,4,4,6],[1,1,1,2,2,2,2,2,13,16]],all=[].concat(...D),avg=(sum(all)/all.length).toFixed(1),n10=all.filter(x=>x>=10).length;
+add('c44','Customer support','dash',3,'CTX','Support review. Management asks whether resolution time is a problem. The average is '+avg+' days.',
+ {t:'dash',title:'Resolution Time',cols:2,tiles:[K('Average resolution time',avg+' days',{sp:2}),CH({t:'bar',title:'Average by team (days)',L,V:D.map(d=>+(sum(d)/d.length).toFixed(1)),dec:1,rb:1},0,500,150)]},
+ {t:'dash',hl:`Averages look fine, but ${n10} tickets took over 10 days, both in Team C`,cols:1,tiles:[CH({t:'strip',title:'Days to resolve, one dot per ticket',L,D,big:10,mx:18,xt:'Days'},0,520,230)]},
+ [['An average hides the few very slow tickets',1,'CTX','The decision depends on the outliers, which the mean buries.','BBD p.159'],['Averages by team look almost identical',1,'VIS','Show the distribution, not only the centre.','BBD p.70'],['Rainbow colours for three teams',1,'FOC','Colour carries no meaning.','SWD p.134'],['One huge number takes the whole top row',1,'DSH','Size signals importance; this number is not the story.','SWD p.132'],['No headline',1,'TXT','State what leaders should act on.','SWD p.157'],'dpie','dmore'],
+ [['A dot per ticket by team, long waits highlighted, headline',40,'Every ticket is visible and the outliers are named.',null],['Dots per ticket, no highlight',25,'Distribution shown, but nothing says where to look.',{tiles:[CH({t:'strip',title:'Days to resolve, one dot per ticket',L,D,mx:18,xt:'Days'},0,520,230)]}],['A box plot per team',20,'Good for distribution, but outliers are not named and some readers do not know box plots.',{tiles:[CH({t:'strip',title:'Days to resolve, one dot per ticket',L,D,mx:18,avg:1,xt:'Days'},0,520,230)]}],['Average with a trend line',0,'Still hides the outliers.',{hl:undefined,title:'Resolution Time',cols:2,tiles:[K('Average resolution time',avg+' days',{sp:2}),CH({t:'line',title:'Average by week (days)',L:['W1','W2','W3','W4'],S:[{n:'avg',v:[3.1,3.3,3.2,3.3]}],acc:['avg'],nolab:1,ax:1},0,500,150)]}]]);})();
+/* --- 45 --- */
+(()=>{const L=['Creative','Strategy','Tech','Project mgmt'],V=[53,41,28,33],T=[50,45,60,65],below=L.filter((_,i)=>V[i]<T[i]);
+add('c45','Agency','dash',2,'CTX','Utilization review for the COO. Each department has its own billable-hours target.',
+ {t:'dash',title:'Utilization',cols:1,tiles:[CH({t:'col',title:'Billable %',L,V,rb:1,gr:1},0,520,220)]},
+ {t:'dash',hl:'Three of four departments are below their utilization target; Tech is at less than half',cols:1,tiles:[CH({t:'bar',title:'Billable % (tick = target)',L,V,ref:T,acc:below,suf:'%',mx:75},0,520,220)]},
+ [['No target, so the bars have no meaning',1,'CTX','Readers cannot tell good from bad.','BBD p.112'],['Rainbow colours for four departments',1,'FOC','Colour should highlight misses.','SWD p.134'],['Gridlines add clutter',1,'CLU','The labels already carry the values.','SWD p.109'],['The title is a label',1,'TXT','State the finding.','SWD p.157'],['No highlight on the departments that miss',1,'FOC','Focus attention on the problem.','SWD p.131'],'d3','dmore'],
+ [['Bars with a target tick per department, misses highlighted, headline',40,'Each department is judged against its own target.',null],['Bars with one target line at 50% for all',20,'A target helps, but the targets differ by department.',{tiles:[CH({t:'bar',title:'Billable % (line = 50%)',L,V,tgt:50,tl:'50%',acc:below,suf:'%',mx:75},0,520,220)]}],['Colour by status red and green',5,'Colour-blind trap, and still no target mark.',{hl:undefined,title:'Utilization',tiles:[CH({t:'bar',title:'Billable %',L,V,rg:1,suf:'%'},0,520,220)]}],['A gauge for each department',0,'Decoration without targets.',{hl:undefined,title:'Utilization',tiles:[CH({t:'gauge',title:'',L,V},0,520,200)]}]]);})();
+/* --- 46 --- */
+(()=>{const R=['Brewster','York','Katonah','Croton','Ardsley'],Y=[63.5,52.8,41,19.2,19.1],P=[58.2,44,45.6,28.2,19],ch=Y.map((y,i)=>Math.round((y/P[i]-1)*100));
+add('c46','Retail','dash',2,'VIS','Year-to-date sales vs last year by store, for the regional manager.',
+ {t:'dash',title:'YTD vs Last Year',cols:1,tiles:[CH({t:'tbl',title:'',cols:['Store','YTD','Last year','% diff'],rows:R.map((r,i)=>[r,'$'+Y[i]+'K','$'+P[i]+'K',(ch[i]>0?'▲ ':'▼ ')+Math.abs(ch[i])+'%']),heavy:0,h:230,num:[1,2,3]},0,520,240)]},
+ {t:'dash',hl:`Croton is ${Math.abs(ch[3])}% and Katonah ${Math.abs(ch[2])}% behind last year; York is ${ch[1]}% ahead`,cols:1,tiles:[CH({t:'bar',title:'YTD sales ($K); tick = last year',L:R,V:Y,ref:P,srt:1,acc:['Croton','Katonah'],pre:'$',suf:'K'},0,520,230)]},
+ [['A table forces mental arithmetic to compare stores',1,'VIS','Bars show how much larger one store is.','BBD p.144'],['Arrows show direction but not size',1,'VIS','A ▼ 32% and a ▼ 10% look alike.','BBD p.107'],['Rows are not sorted by what matters',1,'VIS','Sort by the difference or by size.','SWD p.74'],['The title is a label',1,'TXT','State the finding.','SWD p.157'],['There is no emphasis on the stores that lag',1,'FOC','Highlight the problem stores.','SWD p.131'],'dpie','d3'],
+ [['Bars with last-year ticks, lagging stores highlighted, headline',40,'Magnitude and gap are visible at once.',null],['Clustered columns, this year and last year',25,'Both values visible; the gap still needs reading.',{tiles:[CH({t:'col',title:'YTD sales ($K)',L:R,S:[{n:'Last year',v:P},{n:'This year',v:Y}],acc:['This year'],pre:'$',suf:'K'},0,520,230)]}],['The table with colour on every cell',10,'Colour added, arithmetic remains.',{tiles:[CH({t:'tbl',title:'',cols:['Store','YTD','Last year','% diff'],rows:R.map((r,i)=>[r,'$'+Y[i]+'K','$'+P[i]+'K',(ch[i]>0?'▲ ':'▼ ')+Math.abs(ch[i])+'%']),h:230,num:[1,2,3],bold:1},0,520,240)],hl:undefined,title:'YTD vs Last Year'}],['A pie of YTD sales',0,'Share of the total is not the question.',{tiles:[CH({t:'pie',title:'',L:R,V:Y,rb:1,lg:1},0,520,230)],hl:undefined,title:'YTD vs Last Year'}]]);})();
+/* --- 47 --- */
+(()=>{const rev=8.2,plan=8.5,pct=Math.round(rev/plan*100);const mini=()=>[CH({t:'col',title:'Revenue',L:['J','F','M','A'],V:[7,7.5,8,8.2]},0,250,150),CH({t:'bar',title:'By line',L:['TV','Ads','Merch','Corp'],V:[3,2,1.8,1.4]},0,250,150),CH({t:'line',title:'Ratings',L:['J','F','M','A'],S:[{n:'M',v:[2,2.1,2.3,2.2]}]},0,250,150),CH({t:'col',title:'Social',L:['FB','TW','IG'],V:[105,98,112]},0,250,150),CH({t:'bar',title:'Costs',L:['A','B','C'],V:[3,2,1]},0,250,150),CH({t:'line',title:'Traffic',L:['J','F','M','A'],S:[{n:'M',v:[4,5,4,6]}]},0,250,150)];
+add('c47','Executive reporting','dash',2,'CTX','A weekly report emailed to an executive who will spend two minutes on it. It cannot be interactive.',
+ {t:'dash',title:'Weekly Executive Report',cols:3,tiles:mini()},
+ {t:'dash',hl:'Revenue is '+pct+'% of plan and on pace; merchandise and advertising are behind',find:[`Revenue is $${rev}M, ${pct}% of the $${plan}M plan.`,'TV and sponsorship are ahead of pace; merchandise and advertising are behind.','Instagram growth is up 12% on last month; Twitter is down.'],cols:3,tiles:[K('Revenue','$8.2M',{tg:'Plan $8.5M',tr:[7,7.5,8,8.2]}),CH({t:'bar',title:'Pace to goal (%)',L:['TV','Sponsors','Merch','Ads'],V:[108,104,92,88],srt:1,acc:['Merch','Ads'],tgt:100,suf:'%'},0,250,150),CH({t:'bar',title:'Social growth index',L:['IG','FB','TW'],V:[112,105,98],srt:1,acc:['TW'],tgt:100},0,250,150)]},
+ [['Six charts and no statement of what matters',1,'CTX','A two-minute reader needs the key findings up front.','BBD p.112'],['No targets or plans appear in any chart',1,'CTX','Without them the executive cannot judge progress.','BBD p.112'],['All charts share equal size and weight',1,'DSH','The ones that matter most should stand out.','SWD p.132'],['The title is a label',1,'TXT','Put the conclusion in the headline.','SWD p.157'],['Charts rely on hover for detail, which email cannot do',1,'DSH','A static email must carry its own labels.','BBD p.112'],'dinter','dkpi'],
+ [['Headline and three bullet findings, three focused visuals',40,'The reader gets the story in two minutes.',null],['Add three bullet findings above the six charts',20,'The message is stated, but six charts remain.',{cols:3,tiles:mini()}],['Replace the email with a link to an interactive page',5,'The executive asked for a static page.',{hl:undefined,title:'Weekly Executive Report',find:undefined,foot:'Open the live dashboard ▸',cols:3,tiles:mini().slice(0,3)}],['Make the report two pages long',0,'More content is not more insight.',{hl:undefined,title:'Weekly Executive Report',find:undefined,cols:3,tiles:mini().concat(mini())}]]);})();
+/* --- 48 --- */
+(()=>{const P=['Product A','Product B','Product C','Product D','Product E'],pr=[60,45,70,30,52],ne=[25,50,0,30,36],de=[15,5,30,40,12],nps=pr.map((p,i)=>p-de[i]),ord=nps.map((_,i)=>i).sort((a,b)=>nps[b]-nps[a]);
+add('c48','Market research','dash',3,'VIS','Brand tracking. Which products would customers recommend? The company reports Net Promoter Score (promoters minus detractors).',
+ {t:'dash',title:'NPS by Product',cols:1,tiles:[CH({t:'bar',title:'NPS',L:ord.map(i=>P[i]),V:ord.map(i=>nps[i]),sg:1,rb:1},0,520,220)]},
+ {t:'dash',hl:'Products B, C and E all score an NPS of 40, but half of Product B\'s customers are still undecided',cols:1,tiles:[CH({t:'stack',hz:1,title:'Detractors, passives, promoters (% of respondents)',L:ord.map(i=>P[i]+'  NPS '+(nps[i]>0?'+':'')+nps[i]),S:[{n:'Detractors',v:ord.map(i=>de[i])},{n:'Passives',v:ord.map(i=>ne[i])},{n:'Promoters',v:ord.map(i=>pr[i])}],dvc:['#D9822B','#D8D4C6','#2F6DA8'],sl:1,lw:140},0,520,250)]},
+ [['A single score hides the mix behind it',1,'CTX','Three products share an NPS of 40 with very different makeup.','BBD p.213'],['Passives, the tipping point, are invisible',1,'CTX','Passives are one point from becoming promoters or detractors.','BBD p.211'],['Rainbow bars for the products',1,'FOC','Colour carries no meaning.','SWD p.134'],['No headline',1,'TXT','State the finding.','SWD p.157'],['Negative and positive scores use no colour logic',1,'DSH','Use blue and orange for positive and negative.','BBD p.37'],'dpie','d3'],
+ [['Stacked 100% bars of detractors, passives and promoters, NPS in the label, headline',40,'Score and composition together.',null],['The NPS bars in blue and orange',20,'Colour logic fixed; the mix is still hidden.',{tiles:[CH({t:'bar',title:'NPS',L:ord.map(i=>P[i]),V:ord.map(i=>nps[i]),dv:1,sg:1},0,520,220)]}],['Promoters only',10,'Drops detractors and passives; the score cannot be recovered.',{tiles:[CH({t:'bar',title:'% promoters',L:ord.map(i=>P[i]),V:ord.map(i=>pr[i]),srt:1,suf:'%'},0,520,220)]}],['A pie per product',0,'Five pies cannot be compared.',{tiles:[CH({t:'pie',title:'Product B',L:['Detractors','Passives','Promoters'],V:[5,50,45],rb:1,lg:1},0,520,230)]}]]);})();
+/* --- 49 --- */
+(()=>{const tiles=(n,sm)=>Array.from({length:n},(_,i)=>K(['Calls waiting','Avg answer','Abandon %','SLA met','Agents on','Longest wait','Calls today','Closed %','Outbound','Callbacks','Queue A','Queue B'][i],['7','38 s','4.1%','91%','24','2:41','1,208','34%','312','18','3','4'][i],{tg:sm?undefined:undefined}));
+add('c49','Call center','dash',3,'ACC','A call-center dashboard on a wall TV. Agents read it from six metres away.',
+ {t:'dash',title:'Call Center',cols:6,sm:1,tiles:tiles(12)},
+ {t:'dash',hl:'Seven calls are waiting and answer time is 38 seconds, above the 30-second SLA',cols:3,big:1,tiles:[K('Calls waiting','7',{tg:'SLA ≤5',al:1}),K('Avg answer','38 s',{tg:'SLA ≤30 s',al:1}),K('SLA met','91%',{tg:'Target 90%'})]},
+ [['Twelve numbers in tiny type cannot be read from across the room',1,'ACC','Wall displays need very large numbers.','BBD p.353'],['Everything has the same weight',1,'DSH','Only the metrics that need action should stand out.','SWD p.132'],['There is no SLA beside any number',1,'CTX','Without the threshold, nobody knows what is bad.','BBD p.349'],['No headline',1,'TXT','Say what the floor should do now.','SWD p.157'],['Dense grid with no spacing',1,'CLU','Space helps readers find each tile from afar.','BBD p.353'],'dinter','dkpi'],
+ [['Three large numbers with SLAs, the two breaches in the accent, headline',40,'Readable from six metres and tells the floor what to do.',null],['The same twelve tiles with larger type',20,'Readable, but nothing says what to do.',{hl:undefined,title:'Call Center',cols:3,big:1,tiles:tiles(6)}],['Add a scrolling ticker of all twelve metrics',5,'Motion adds distraction, not clarity.',{hl:undefined,title:'Call Center',cols:3,big:1,foot:'Calls waiting 7 · Avg answer 38 s · Abandon 4.1% · SLA met 91% ...',tiles:tiles(3)}],['Twelve tiles in neon colours',0,'Colour without meaning.',{hl:undefined,title:'Call Center',cols:6,sm:1,rb:1,dk:1,tiles:tiles(12)}]]);})();
+/* --- 50 --- */
+(()=>{const G=[K('Uptime','99.8%',{tg:'Target met 14 months in a row'}),K('Batch success','99.9%',{tg:'Target met 14 months in a row'}),K('Refresh on time','99.7%',{tg:'Target met 14 months in a row'}),K('Reports published','212',{tg:'Same as last quarter'})];
+add('c50','Analytics governance','dash',3,'DSH','A reporting dashboard launched 14 months ago. Its KPIs have been green since week 2. Views fell from 12 per week to 3.',
+ {t:'dash',title:'Platform Health',cols:4,tiles:G},
+ {t:'dash',hl:'Reliability has hit its target for 14 months: retire it and track repeat failures instead',cols:3,tiles:[CH({t:'line',title:'Dashboard views per week',L:['W1','W4','W8','W12','W16','W20'],S:[{n:'Views',v:[12,10,8,6,4,3]}],acc:['Views'],nolab:1,ax:1},0,250,160),K('Repeat failures','31',{tg:'This month; new question',al:1,tr:[12,15,19,22,27,31]}),K('Decision','Retire',{ds:'Uptime, batch success and refresh no longer inform decisions'})]},
+ [['The KPIs never change, so they no longer inform decisions',1,'DSH','A KPI that never fails is worth reviewing.','BBD p.402'],['Nobody tracks whether the dashboard is used',1,'DSH','Track views and audience over time.','BBD p.403'],['It answers the questions asked 14 months ago',1,'CTX','Questions evolve; dashboards must too.','BBD p.402'],['All tiles are green with no headline',1,'TXT','State what is new or what has changed.','SWD p.157'],['There is no owner or review date',1,'CTX','Dashboards need a review cycle.','BBD p.407'],'dkpi','dinter'],
+ [['Retire the always-green KPIs, track usage, add a new question',40,'The dashboard evolves with the questions.',null],['Redesign the visuals only',10,'A prettier version of questions nobody asks.',{hl:undefined,title:'Platform Health',cols:4,big:1,tiles:G}],['Add more KPIs',0,'More KPIs nobody reads.',{hl:undefined,title:'Platform Health',cols:4,tiles:G.concat([K('Tickets','88',{tg:'Target met'}),K('Latency','0.8 s',{tg:'Target met'}),K('Errors','0.2%',{tg:'Target met'}),K('Backups','100%',{tg:'Target met'})])}],['Send the same page by email daily',5,'Distribution is not the problem.',{hl:undefined,title:'Platform Health',foot:'Delivered daily at 7:00 by email',cols:4,tiles:G}]]);})();
+
+/* ===== BALANCE PATCH: retag + extra decoys so every skill axis has enough items ===== */
+(()=>{
+ const by={};CASES.forEach(c=>by[c.id]=c);
+ CASES.filter(c=>c.k==='dash').forEach(c=>c.fl.forEach(f=>{if(f.ax==='TXT'&&/headline/i.test(f.t))f.ax='CTX'}));
+ CASES.forEach(c=>c.fl.forEach(f=>{if(f.r&&/rotated/i.test(f.t))f.ax='ACC';if(!f.r&&/3D so the chart/.test(f.t))f.ax='VIS'}));
+ by.c04.fl.forEach(f=>{if(/Two-decimal/.test(f.t))f.ax='INT'});
+ by.c16.fl.forEach(f=>{if(/Every point carries/.test(f.t))f.ax='CLU'});
+ const dec=(ids,t,ax,w,s)=>ids.forEach(id=>by[id].fl.push({t,r:0,ax,w,s}));
+ dec(['c10','c31','c32','c43','c45','c49','c37'],'Red and green are the standard colours for good and bad, so use them','ACC','About 8% of men cannot tell them apart; add a second cue or use blue and orange.','SWD p.137');
+ dec(['c26','c32','c44','c45','c47','c48','c36'],'Show every data point and let the audience draw their own conclusions','CTX','Explanatory communication needs a point of view; keep exploration for the analysis stage.','SWD p.36');
+ dec(['c12','c17','c23','c29','c39','c20'],'Rescale the axes freely so the message looks stronger','INT','Manipulating a scale to support a point costs you credibility.','SWD p.69');
+})();
+
+/* ===== UI ===== */
+const KEY='dvq.v1',byId={};CASES.forEach(c=>byId[c.id]=c);
+const Q=s=>document.querySelector('#dvq '+s);
+let ST=null;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}};
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))}catch(e){return null}};
+const clear=()=>{try{localStorage.removeItem(KEY)}catch(e){}};
+const perm=(n,seed)=>shuf([...Array(n).keys()],mulberry(hashS(seed)));
+const axChip=a=>`<span class="chip ax-${a}">${AX[a].s}</span>`;
+function show(id){['intro','game','res'].forEach(k=>{Q('#dvq-'+k).hidden=k!==id});const top=Q('#dvq-top');if(top)top.scrollIntoView({behavior:'smooth',block:'start'})}
+function intro(){
+  const sv=load(),b=Q('#dvq-resume');
+  if(sv&&sv.ids&&sv.i<sv.ids.length&&(sv.i>0||sv.pend)){b.hidden=false;b.textContent=`Resume your run (case ${sv.i+1} of ${sv.ids.length})`}else b.hidden=true;
+  show('intro');
+}
+function begin(mode){const seed=(Q('#dvq-seed').value||'').trim()||Math.random().toString(36).slice(2,8);
+  ST={v:1,mode,seed,ids:sample(mode,seed).map(c=>c.id),i:0,ans:[],pend:null};save();play();}
+function play(){
+  if(ST.i>=ST.ids.length)return results();
+  const c=byId[ST.ids[ST.i]],n=ST.ids.length,g=Q('#dvq-game');
+  const pct=Math.round(ST.i/n*100);
+  g.innerHTML=`<div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="${n}" aria-valuenow="${ST.i}"><i style="width:${pct}%"></i></div>
+  <div class="chead"><span class="tag">Case ${ST.i+1} / ${n}</span><span class="tag t2">${esc(c.dom)}</span><span class="tag t3">${c.k==='dash'?'Dashboard':'Chart'}</span><span class="tag t4">${['','Easy','Medium','Hard'][c.lv]}</span></div>
+  <div class="ctx"><b>Context.</b> ${esc(c.ctx)}</div>
+  <div class="vis" id="dvq-bad"><div class="vlab">Before: what the audience receives</div>${render(c.bad)}</div>
+  <div id="dvq-s1"></div><div id="dvq-s2"></div><div id="dvq-rev"></div>`;
+  show('game');stage1(c);
+}
+function stage1(c){
+  const done=ST.pend&&ST.pend.ticks,o=perm(c.fl.length,ST.seed+c.id+'f'),el=Q('#dvq-s1');
+  el.innerHTML=`<div class="stage"><h3>Step 1: Diagnose</h3><p class="small">Tick every real flaw you can see. Some options are decoys: ticking them costs points, and ticking everything scores zero.</p>
+  <div class="opts" role="group" aria-label="Candidate flaws">${o.map(i=>`<label class="opt"><input type="checkbox" data-i="${i}" ${done?'disabled':''} ${done&&ST.pend.ticks[i]?'checked':''}><span>${esc(c.fl[i].t)}</span></label>`).join('')}</div>
+  ${done?'<p class="lock">🔒 Diagnosis locked.</p>':'<button class="btn" id="dvq-l1">Lock diagnosis</button>'}</div>`;
+  if(done)return stage2(c);
+  Q('#dvq-l1').onclick=()=>{const ticks=c.fl.map((_,i)=>Q(`#dvq-s1 input[data-i="${i}"]`).checked);ST.pend={ticks};save();stage1(c)};
+}
+function stage2(c){
+  const el=Q('#dvq-s2'),o=perm(c.fx.length,ST.seed+c.id+'x'),locked=ST.pend.fx!=null;
+  el.innerHTML=`<div class="stage"><h3>Step 2: Choose the fix</h3><p class="small">Which redesign would you ship?</p>
+  <div class="fxg" role="radiogroup" aria-label="Redesign options">${o.map((i,k)=>`<label class="fxc"><input type="radio" name="fx" value="${i}" ${locked?'disabled':''} ${locked&&ST.pend.fx===i?'checked':''}><div class="fxb"><div class="fxt"><b>${'ABCD'[k]}.</b> ${esc(c.fx[i].t)}</div><div class="fxv">${render(c.fx[i].sp,{w:360,h:c.k==='dash'?undefined:230,mini:false})}</div></div></label>`).join('')}</div>
+  ${locked?'<p class="lock">🔒 Fix locked.</p>':'<button class="btn" id="dvq-l2" disabled>Lock my fix</button>'}</div>`;
+  if(locked)return reveal(c);
+  const b=Q('#dvq-l2');el.querySelectorAll('input').forEach(i=>i.onchange=()=>b.disabled=false);
+  b.onclick=()=>{const v=el.querySelector('input:checked');if(!v)return;ST.pend.fx=+v.value;save();stage2(c)};
+}
+function revealHTML(c,a){
+  const s=scoreCase(c,a.ticks,a.fx);
+  const fl=c.fl.map((f,i)=>{const t=a.ticks[i],k=f.r?(t?'ok':'miss'):(t?'bad':'ig'),lab={ok:'✓ Spotted',miss:'✗ Missed',bad:'⚠ Not a flaw',ig:'• Correctly ignored'}[k];
+    return `<li class="fb ${k}"><div class="fbh"><b>${lab}</b> ${axChip(f.ax)}</div><div>${esc(f.t)}</div><div class="why">${esc(f.w)} <span class="src">${esc(f.s)}</span></div></li>`}).join('');
+  const fxs=c.fx.map((x,i)=>`<li class="fb ${i===a.fx?'pick':''} ${x.p===40?'ok':''}"><div class="fbh"><b>${i===a.fx?'Your pick · ':''}${x.p} / 40</b>${x.p===40?' <span class="chip best">Best</span>':''}</div><div>${esc(x.t)}</div><div class="why">${esc(x.w)}</div></li>`).join('');
+  return `<div class="stage rev"><div class="score"><div><b>${s.total}</b><span>/ 100</span></div><div class="sd">Diagnosis <b>${s.diag}</b>/60 · Fix <b>${s.fix}</b>/40${s.all?' · Select-all gives zero diagnosis points':''}</div></div>
+  <h3>Before → After</h3><div class="ba"><div><div class="vlab bad">Before</div><div class="vis">${render(c.bad)}</div></div><div><div class="vlab good">After (recommended)</div><div class="vis">${render(c.good)}</div></div></div>
+  <h3>Flaw by flaw</h3><ul class="fbl">${fl}</ul><h3>The fix options</h3><ul class="fbl">${fxs}</ul></div>`;
+}
+function reveal(c){
+  const a=ST.pend;Q('#dvq-rev').innerHTML=revealHTML(c,a)+`<div class="nav"><button class="btn" id="dvq-next">${ST.i+1>=ST.ids.length?'See my results →':'Next case →'}</button></div>`;
+  Q('#dvq-rev').scrollIntoView({behavior:'smooth',block:'start'});
+  Q('#dvq-next').onclick=()=>{ST.ans.push({id:c.id,ticks:a.ticks,fx:a.fx});ST.i++;ST.pend=null;save();play()};
+}
+function results(){
+  const cs=ST.ans.map(a=>byId[a.id]),sc=ST.ans.map((a,i)=>scoreCase(cs[i],a.ticks,a.fx));
+  const axes=aggregate(sc),tot=Math.round(sc.reduce((a,b)=>a+b.total,0)/sc.length*10)/10,lv=levelOf(tot,axes);
+  let el=AXK.filter(k=>axes[k].pct!=null&&axes[k].n>=3);if(el.length<4)el=AXK.filter(k=>axes[k].pct!=null);const ranked=el.sort((a,b)=>axes[b].pct-axes[a].pct),str=ranked.slice(0,2),wk=ranked.slice(-2).reverse();
+  const worst=sc.map((s,i)=>[s,i]).sort((a,b)=>a[0].total-b[0].total).slice(0,5);
+  const bars=AXK.map(k=>{const a=axes[k];return `<div class="abar"><div class="al"><b>${AX[k].n}</b><span>${a.pct==null?'–':a.pct+'%'} · ${a.n} item${a.n===1?'':'s'}${a.n<4?' · low confidence':''}</span></div><div class="at"><i style="width:${a.pct||0}%"></i></div></div>`}).join('');
+  const g=Q('#dvq-res');
+  g.innerHTML=`<div class="rhero"><div class="rchar">${personSVG(lv.lv.k,170)}</div><div><div class="kicker">Your level</div><h2>${lv.lv.n}</h2><p>${lv.lv.d}</p><div class="rnum"><b>${tot}</b><span>/ 100 average · ${ST.ans.length} cases · seed <code>${esc(ST.seed)}</code></span></div>${lv.note?`<p class="small">${esc(lv.note)}</p>`:''}</div></div>
+  <div class="rgrid"><div class="card"><h3>Skill radar</h3><svg viewBox="-90 0 560 340" role="img" aria-label="Skill radar chart" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif"><g transform="translate(0 -8)">${radarSVG(axes,380)}</g></svg><p class="small">Orange area: your accuracy per axis. Dashed teal line: expert level (85%).</p></div>
+  <div class="card"><h3>Axis scores</h3>${bars}</div></div>
+  <div class="rgrid"><div class="card good"><h3>Strongest</h3>${str.map(k=>`<p><b>${AX[k].n} · ${axes[k].pct}%</b><br><span class="small">Keep using this; mentor others here.</span></p>`).join('')}</div>
+  <div class="card warn"><h3>Work on next</h3>${wk.map(k=>`<p><b>${AX[k].n} · ${axes[k].pct}%</b><br><span class="small">${AX[k].adv}</span></p>`).join('')}</div></div>
+  <div class="card"><h3>Five costliest cases</h3><ul class="fbl">${worst.map(([s,i])=>`<li class="fb"><div class="fbh"><b>${s.total} / 100</b> <span class="chip">${esc(cs[i].dom)}</span></div><div>${esc(cs[i].ctx)}</div><button class="btn sm ghost" data-r="${i}">Review this case</button></li>`).join('')}</ul></div>
+  <div class="nav"><button class="btn" id="dvq-png">Download result card (PNG)</button><button class="btn ghost" id="dvq-copy">Copy summary</button><button class="btn ghost" id="dvq-again">Play again</button></div><p class="small" id="dvq-msg"></p><div id="dvq-modal" class="modal" hidden><div class="mbox"><button class="btn sm" id="dvq-mx">Close</button><div id="dvq-mc"></div></div></div>`;
+  show('res');
+  g.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{const i=+b.dataset.r;Q('#dvq-mc').innerHTML=`<div class="ctx"><b>Context.</b> ${esc(cs[i].ctx)}</div>`+revealHTML(cs[i],ST.ans[i]);Q('#dvq-modal').hidden=false});
+  Q('#dvq-mx').onclick=()=>Q('#dvq-modal').hidden=true;
+  Q('#dvq-again').onclick=()=>{clear();ST=null;intro()};
+  const sum=`Bad Chart Clinic: ${lv.lv.n} · ${tot}/100 (${ST.ans.length} cases). Strongest: ${str.map(k=>AX[k].n).join(', ')}. To improve: ${wk.map(k=>AX[k].n).join(', ')}. Seed ${ST.seed}.`;
+  Q('#dvq-copy').onclick=()=>{try{navigator.clipboard.writeText(sum).then(()=>Q('#dvq-msg').textContent='Summary copied.',()=>Q('#dvq-msg').textContent=sum)}catch(e){Q('#dvq-msg').textContent=sum}};
+  Q('#dvq-png').onclick=()=>png(lv,tot,axes,str,wk);
+  ST.done=true;save();
+}
+function png(lv,tot,axes,str,wk){
+  const W=1060,H=520,svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" font-family="Segoe UI,Arial,sans-serif"><rect width="${W}" height="${H}" fill="#F4F2ED"/><rect width="${W}" height="70" fill="#1C2526"/><text x="30" y="44" font-size="26" fill="#fff" font-family="Georgia,serif" font-weight="700">Bad Chart Clinic · Result card</text>
+  <g transform="translate(120 70)">${radarSVG(axes,380)}</g><g transform="translate(610 110)"><svg viewBox="0 0 120 170" width="190" height="270">${person(lv.lv.k)}</svg></g>
+  <text x="830" y="140" font-size="14" fill="#B77A2B" font-weight="700" letter-spacing="2">LEVEL</text><text x="830" y="185" font-size="32" fill="#1C2526" font-family="Georgia,serif" font-weight="700">${lv.lv.n}</text><text x="830" y="245" font-size="46" fill="#B77A2B" font-weight="700">${tot}</text><text x="830" y="268" font-size="14" fill="#5B6568">average score / 100</text>
+  <text x="610" y="410" font-size="14" fill="#2E6E73" font-weight="700">Strongest: ${esc(str.map(k=>AX[k].s).join(' · '))}</text><text x="610" y="436" font-size="14" fill="#B64D42" font-weight="700">Work on: ${esc(wk.map(k=>AX[k].s).join(' · '))}</text><text x="30" y="${H-18}" font-size="12" fill="#5B6568">Seed ${esc(ST.seed)} · ${ST.ans.length} cases</text></svg>`;
+  const img=new Image(),url='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  img.onload=()=>{try{const cv=document.createElement('canvas');cv.width=W*2;cv.height=H*2;const x=cv.getContext('2d');x.scale(2,2);x.drawImage(img,0,0);cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='bad-chart-clinic-result.png';a.click()})}catch(e){Q('#dvq-msg').textContent='Could not create the PNG in this browser.'}};
+  img.onerror=()=>Q('#dvq-msg').textContent='Could not create the PNG in this browser.';img.src=url;
+}
+function init(){
+  Q('#dvq-m10').onclick=()=>begin(10);Q('#dvq-m25').onclick=()=>begin(25);Q('#dvq-m50').onclick=()=>begin(50);
+  Q('#dvq-resume').onclick=()=>{ST=load();ST.done?results():play()};
+  Q('#dvq-cnt').textContent=CASES.length;
+  const ch=Q('#dvq-levels');if(ch)ch.innerHTML=LEVELS.map(l=>`<div class="lvc">${personSVG(l.k,92)}<b>${l.n}</b></div>`).join('');
+  intro();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script></body></html>

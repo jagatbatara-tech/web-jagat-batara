@@ -1,5 +1,6 @@
 ---
 title: "Strategi Pertumbuhan Jasa Pertambangan: Studi Kasus Eksekutif STAR"
+archive_url: "studi-kasus/strategi-pertumbuhan-jasa-pertambangan.html"
 kicker: "Studi Kasus Konsultasi Eksekutif · STAR + Bukti · Indonesia"
 date: 2026-10-08T00:00:00.000Z
 summary: >
@@ -53,7 +54,7 @@ Klien membutuhkan kontrak dan sumber pendapatan tambahan, tetapi pertumbuhan kon
 
 Tekanan utama meliputi volatilitas harga batu bara, berkurangnya volume pemindahan lapisan penutup, pemain lama berskala besar dengan kontrak jangka panjang, serta ekspektasi pelanggan yang meningkat terhadap transparansi biaya, keselamatan, keandalan produksi, dan struktur komersial yang fleksibel. Di sisi lain, diversifikasi berisiko mengalihkan fokus manajemen; kepemilikan di sepanjang rantai nilai dapat menambah risiko modal dan pelaksanaan; sementara masuk terlalu dini ke konstruksi atau EPC dapat memperlihatkan kesenjangan rekayasa, rekam jejak, dan tata kelola proyek.
 
-Prospek pasar dalam analisis awal menggunakan acuan produksi batu bara 421 Mt, ekspektasi pertumbuhan industri 2,0–2,5%, dan perkiraan sekitar 116 kontraktor dalam lanskap jasa pertambangan yang lebih luas. Angka-angka ini menggambarkan periode perencanaan yang dianalisis, bukan proyeksi terkini.
+Prospek pasar dalam analisis awal menggunakan acuan produksi batu bara 421 Mt, ekspektasi pertumbuhan industri 2.0–2.5%, dan perkiraan sekitar 116 kontraktor dalam lanskap jasa pertambangan yang lebih luas. Angka-angka ini menggambarkan periode perencanaan yang dianalisis, bukan proyeksi terkini.
 
 ### Hipotesis yang diuji
 
@@ -83,7 +84,7 @@ Wawancara memberikan konteks yang tidak terlihat dari data publik: tekanan biaya
 
 ### 2. Menerjemahkan praktik pesaing menjadi cetak biru kepemimpinan biaya
 
-Tim meninjau utilisasi armada, kecepatan truk, jarak angkut, ketersediaan, umur aset, biaya bahan bakar dan tenaga kerja, pengeboran dan peledakan, pemeliharaan, suku cadang, penghentian operasi, model perbaikan, jenjang KPI, insentif, pelatihan, serta koordinasi rantai pasok. Implikasinya adalah meningkatkan dispatch dan pencocokan alat, menerapkan perhitungan biaya berbasis aktivitas dengan akuntabilitas yang jelas, membedakan program pemeliharaan dan perpanjangan umur aset, serta menjadikan kepemimpinan biaya sebagai sistem operasi—bukan kampanye penghematan sementara.
+Tim meninjau utilisasi armada, kecepatan truk, jarak angkut, ketersediaan, umur aset, biaya bahan bakar dan tenaga kerja, pengeboran dan peledakan, pemeliharaan, suku cadang, waktu henti (downtime), model perbaikan, jenjang KPI, insentif, pelatihan, serta koordinasi rantai pasok. Implikasinya adalah meningkatkan dispatch dan pencocokan alat, menerapkan perhitungan biaya berbasis aktivitas dengan akuntabilitas yang jelas, membedakan program pemeliharaan dan perpanjangan umur aset, serta menjadikan kepemimpinan biaya sebagai sistem operasi—bukan kampanye penghematan sementara.
 
 ### 3. Mengembangkan logika pelanggan dan perolehan kontrak
 

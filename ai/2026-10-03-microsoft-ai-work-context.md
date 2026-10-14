@@ -1,6 +1,6 @@
 ---
 title: "Memahami Ekosistem AI Microsoft: Bukan Hanya Soal Model, tetapi Konteks"
-kicker: "AI & Digital Transformation"
+kicker: "AI & Transformasi Digital"
 date: 2026-10-03T00:00:00.000Z
 summary: >
   Perbedaan antara Microsoft 365 Copilot, GitHub Copilot, Copilot Studio, dan Azure AI Foundry bukan sekadar model yang digunakan, melainkan konteks kerja yang mereka pahami.

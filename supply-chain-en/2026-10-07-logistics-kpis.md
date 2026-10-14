@@ -10,5 +10,5 @@ tags:
   - KPI
   - CSCP
 id_link: "supply-chain/2026-10-07-kpi-logistik"
-article_url: "supply-chain-en/CSCP%20Logistics%20KPI.html"
+archive_url: "supply-chain-en/CSCP%20Logistics%20KPI.html"
 ---

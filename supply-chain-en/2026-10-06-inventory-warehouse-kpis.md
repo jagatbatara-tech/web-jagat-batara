@@ -10,5 +10,5 @@ tags:
   - KPI
   - CSCP
 id_link: "supply-chain/2026-10-06-kpi-persediaan-gudang"
-article_url: "supply-chain-en/CSCP%20Inventory%20Warehouse%20KPI%20EN.html"
+archive_url: "supply-chain-en/CSCP%20Inventory%20Warehouse%20KPI%20EN.html"
 ---

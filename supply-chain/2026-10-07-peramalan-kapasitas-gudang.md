@@ -9,5 +9,5 @@ tags:
   - Capacity Planning
   - CSCP
 en_link: "supply-chain-en/2026-10-07-warehouse-capacity-forecasting"
-article_url: "supply-chain-en/CSCP%20Module%205%20Warehouse%20Capacity%20Forecasting.html?lang=id"
+archive_url: "supply-chain/peramalan-kapasitas-gudang.html"
 ---

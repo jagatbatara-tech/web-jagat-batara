@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pesanan pembelian mana yang kemungkinan terlambat tiba?</title>
+<style>
+:root{--bg:#F4F2ED;--ink:#151B1D;--muted:#5B6568;--line:#DDD8CC;--copper:#B77A2B;--gold:#C59B43;--dark:#1C2526;--green:#3E745A;--teal:#2E6E73;--amber:#D49A3A;--red:#B64D42;--card:#fff;--soft:#EEE9DD}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Calibri,Arial,sans-serif;line-height:1.55;font-size:16px}
+a{color:var(--teal)}
+.wrap{max-width:1220px;margin:0 auto;padding:0 22px}
+h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;color:var(--dark);line-height:1.2}
+h2{font-size:30px;margin:0 0 6px}
+h3{font-size:21px;margin:26px 0 8px}
+h4{font-size:16px;margin:18px 0 6px;font-family:"Segoe UI",sans-serif;letter-spacing:.02em}
+p{margin:8px 0}
+.lab{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--copper)}
+.small{font-size:13px;color:var(--muted)}
+.lead{font-size:18px;color:var(--muted);max-width:860px}
+/* hero */
+.hero{background:var(--dark);color:#EDEAE1;padding:46px 0 38px;border-bottom:6px solid var(--copper)}
+.hero h1{color:#fff;font-size:44px;margin:8px 0 12px;max-width:900px}
+.hero p{color:#CFCABC;font-size:18px;max-width:860px}
+.hero .meta{display:flex;gap:26px;flex-wrap:wrap;margin-top:18px;font-size:14px;color:#BDB8AA}
+.hero .meta b{color:#F2D9A0}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.btn{display:inline-block;background:var(--copper);color:#fff;text-decoration:none;font-weight:700;padding:11px 20px;border-radius:6px;border:0;cursor:pointer;font-size:15px;font-family:inherit}
+.btn.alt{background:transparent;border:2px solid #8A8472;color:#EDEAE1}
+.btn.sm{padding:6px 12px;font-size:13px;border-radius:5px}
+.btn.line{background:#fff;color:var(--dark);border:1px solid var(--line)}
+.btn.on{background:var(--dark);color:#fff}
+/* nav */
+nav.toc{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line)}
+nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;white-space:nowrap;padding:0 22px}
+nav.toc a{display:block;padding:12px 11px;font-size:13.5px;text-decoration:none;color:var(--muted);font-weight:600;border-bottom:3px solid transparent}
+nav.toc a:hover{color:var(--dark);border-bottom-color:var(--copper)}
+section{padding:46px 0 10px;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+.num{display:inline-block;background:var(--copper);color:#fff;border-radius:50%;width:34px;height:34px;line-height:34px;text-align:center;font-family:Georgia,serif;font-size:17px;margin-right:10px;vertical-align:3px}
+/* cards */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:14px}
+.card{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--copper);border-radius:8px;padding:14px 18px}
+.card h4{margin-top:0}
+.card .n{font-family:Georgia,serif;font-size:26px;color:var(--copper);font-weight:700}
+.note{background:#FFFBF1;border:1px dashed var(--amber);border-radius:8px;padding:10px 14px;font-size:14px;margin:14px 0}
+.note b{color:#8A5A12}
+.callout{background:#EAF3F3;border-left:5px solid var(--teal);border-radius:6px;padding:10px 14px;margin:14px 0;font-size:15px}
+.warnbox{background:#FBEDEB;border:1px solid #EBC8C3;border-left:5px solid var(--red);border-radius:6px;padding:10px 16px;margin:14px 0;font-size:14px}
+/* tables */
+.tw{overflow-x:auto;margin:10px 0;border:1px solid var(--line);border-radius:6px;background:#fff}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{background:var(--dark);color:#fff;text-align:left;padding:7px 9px;font-weight:600;vertical-align:bottom;white-space:nowrap}
+td{padding:6px 9px;border-top:1px solid var(--line);vertical-align:top}
+td.r,th.r{text-align:right}
+td.c{text-align:center}
+tr.grp td{background:var(--soft);font-weight:700}
+.k{font-weight:700}
+/* formulas */
+.eq{font-family:Consolas,"Courier New",monospace;font-size:14px;background:var(--dark);color:#EDEAE1;border-radius:6px;padding:10px 14px;margin:8px 0;overflow-x:auto;line-height:1.7}
+.eq b{color:#F2D9A0}
+.eq .c{color:#8FB3B5}
+code{font-family:Consolas,monospace;background:#EDE8DA;padding:1px 5px;border-radius:3px;font-size:13.5px}
+/* status chips */
+.stp{display:inline-block;color:#fff;font-weight:700;border-radius:12px;padding:2px 10px;font-size:12.5px;white-space:nowrap}
+.s-Ontime{background:var(--green)}
+.s-ProbablyOntime{background:#7BA38D;color:#12301F}
+.s-ProbablyLate{background:var(--amber);color:#1C2526}
+.s-Late{background:var(--red)}
+.s-gray{background:#9AA3A6}
+.s-Received{background:#6E7A7C}
+/* flow */
+.flowbox{background:#fff;border:1px solid var(--line);border-radius:8px;padding:10px;margin:14px 0;overflow-x:auto}
+.flowbox svg{min-width:900px;width:100%;height:auto;display:block}
+.seg{display:flex;gap:8px;margin:12px 0}
+.seg .btn{flex:0 0 auto}
+.own{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:6px 0}
+.own i,.leg i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.leg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin:8px 0}
+/* params */
+.ph{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.fld label{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:3px}
+.fld .h{font-size:12px;color:var(--muted);margin-top:2px}
+input[type=text],input[type=number],input[type=date],select{font:inherit;font-size:13.5px;border:1px solid #CFC9BB;border-radius:5px;padding:5px 7px;background:#FFF8E1;color:#0000CC;width:100%;min-width:0}
+td input,td select{min-width:70px}
+td select{min-width:96px}
+input[type=checkbox]{width:16px;height:16px;accent-color:var(--copper)}
+.lv{background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 16px}
+.lvg{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.lv label{display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--dark)}
+.lv label span{color:var(--copper)}
+.lv input[type=range]{width:100%;accent-color:var(--copper)}
+/* results */
+.kp{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:12px 0}
+.kp div{background:#fff;border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:6px;padding:10px 12px}
+.kp div.bad{border-left-color:var(--red)}
+.kp b{display:block;font-family:Georgia,serif;font-size:26px;color:var(--dark);line-height:1.1}
+.kp span{font-size:12.5px;color:var(--muted)}
+.res li{margin:4px 0}
+.chart{background:#fff;border:1px solid var(--line);border-radius:8px;overflow-x:auto;margin:10px 0}
+.chart svg{display:block;min-width:900px;width:100%;height:auto}
+.up{color:var(--green);font-weight:700}.dn{color:var(--red);font-weight:700}
+td.ok{background:#E9F2EC}td.ck{background:#F8D9D5}
+.mx{display:grid;grid-template-columns:130px 1fr 1fr;gap:6px;font-size:13.5px;margin:10px 0}
+.mx div{border-radius:6px;padding:9px 11px}
+.mx .h{background:var(--dark);color:#fff;font-weight:700;text-align:center}
+.mx .rh{background:var(--dark);color:#fff;font-weight:700}
+.ok{background:#E9F2EC}.w1{background:#FBF1DE}.w2{background:#FBEDEB}
+/* literature map */
+.lit{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;margin-top:14px;align-items:start}
+.ladder{display:grid;gap:10px}
+.rung{background:#fff;border:1px solid var(--line);border-left:8px solid var(--copper);border-radius:8px;padding:11px 14px}
+.rung b{font-family:Georgia,serif;font-size:16px;color:var(--dark)}
+.rung .small{display:block;margin-top:2px}
+.pp{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+.pl{font-style:normal;font-size:11.5px;font-weight:700;color:#fff;border-radius:11px;padding:1px 9px}
+.p1{background:var(--teal)}.p2{background:var(--copper)}.p3{background:var(--green)}
+.rung.cur{border-left-color:var(--dark);background:#F7F4EC}
+.paper{background:#fff;border:1px solid var(--line);border-top:5px solid var(--teal);border-radius:8px;padding:12px 16px;margin-bottom:12px}
+.paper.b{border-top-color:var(--copper)}.paper.c{border-top-color:var(--green)}
+.paper h4{margin:0 0 4px;font-family:Georgia,serif;font-size:16px}
+.paper .map{font-size:13.5px;margin-top:6px}
+.paper .map b{display:inline-block;background:var(--dark);color:#fff;border-radius:4px;padding:0 6px;margin-right:4px;font-size:12px}
+footer{padding:30px 0 50px;color:var(--muted);font-size:13.5px}
+@media(max-width:900px){.grid3,.grid2,.lit{grid-template-columns:1fr}.ph{grid-template-columns:repeat(2,1fr)}.lvg{grid-template-columns:repeat(2,1fr)}.kp{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:32px}h2{font-size:25px}}
+@media(max-width:520px){.ph,.lvg{grid-template-columns:1fr}.mx{grid-template-columns:90px 1fr 1fr}.wrap{padding:0 14px}}
+
+.page-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.page-action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border:1px solid var(--copper);border-radius:6px;background:var(--copper);color:#fff;text-decoration:none;font-size:14px;font-weight:700;transition:background .2s,border-color .2s}
+.page-action:hover,.page-action:focus-visible{background:var(--dark);border-color:#fff;outline:2px solid var(--gold);outline-offset:2px}
+.page-action.secondary{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.55)}
+.page-action.secondary:hover,.page-action.secondary:focus-visible{background:rgba(255,255,255,.2)}
+</style></head><body>
+<header class="hero"><div class="wrap">
+  <div class="lab" style="color:#F2D9A0">Edukasi logistik &middot; Model what-if interaktif</div>
+  <h1>Pesanan pembelian mana yang kemungkinan terlambat tiba?</h1>
+  <p>Pesanan pembelian tidak menjadi terlambat pada tanggal jatuh temponya. Ia sudah terlambat lebih awal, di hub, ketika barang masih menunggu kontainer atau kapal. Halaman ini membahas alur fisik, KPI di setiap langkah, dan model peramalan yang menunjukkan pesanan mana yang mulai bergeser terlambat selagi Anda masih bisa bertindak.</p>
+  <div class="meta"><span><b>Cakupan:</b> material masuk dan produk keluar</span><span><b>Input:</b> dapat diedit, contoh umum sudah dimuat</span><span><b>Dijalankan:</b> di browser Anda, tidak ada data yang disimpan atau dikirim</span></div>
+  <div class="page-actions">
+    <a class="page-action" id="archive-return" href="../supply-chain.html?lang=id">Kembali ke Supply Chain</a>
+    <a class="page-action secondary" id="home-return" href="../index-id.html">Beranda</a>
+  </div>
+  <div class="btns"><a class="btn" href="#s6">Ke pengaturan parameter</a><a class="btn alt" href="#s2">Baca alur bisnis terlebih dahulu</a></div>
+</div></header>
+
+<nav class="toc"><div class="wrap">
+  <a href="#sum">Ringkasan</a><a href="#s1">1 &middot; Pertanyaannya</a><a href="#s2">2 &middot; Alur bisnis</a><a href="#s3">3 &middot; KPI</a><a href="#s4">4 &middot; Metode</a><a href="#s5">5 &middot; Rumus</a><a href="#s6">6 &middot; Parameter</a><a href="#s7">7 &middot; Hasil &amp; what-if</a><a href="#s8">8 &middot; Membaca hasil</a><a href="#s9">9 &middot; Peta literatur</a><a href="#s10">10 &middot; Menyempurnakan model</a><a href="#s11">11 &middot; Batasan</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="sum">
+  <div class="lab">Versi singkat</div>
+  <h2>Tujuh gagasan di balik model ini</h2>
+  <div class="grid3">
+    <div class="card"><div class="n">01</div><h4>Keterlambatan ditentukan di hub</h4><p>Setelah barang berada di laut, hanya sedikit yang bisa dilakukan. Peringatan yang berguna muncul saat barang masih berada di hub, atau bahkan sebelum pemasok mengirimkannya.</p></div>
+    <div class="card"><div class="n">02</div><h4>Satu peramalan, dua penilaian</h4><p>Tanggal kedatangan hasil peramalan yang sama dibandingkan dengan tanggal jatuh tempo di lokasi (apakah kebutuhan terpenuhi?) dan dengan standar pengiriman (apakah logistik menjalankan tugasnya?).</p></div>
+    <div class="card"><div class="n">03</div><h4>Waktu bergantung pada tahapnya</h4><p>Sebelum hub, tanggal janji pemasok menjadi dasar peramalan. Di hub, konsolidasi standar. Di laut, keberangkatan aktual.</p></div>
+    <div class="card"><div class="n">04</div><h4>Toleransi adalah jendela eskalasi</h4><p>Setiap hub memiliki rentang hari ketika pesanan yang tampak terlambat masih bisa dipulihkan dengan mempercepat keberangkatan. Melewati rentang itu, pesanan tetap terlambat meskipun pelayarannya standar.</p></div>
+    <div class="card"><div class="n">05</div><h4>Data mentah per pengiriman, pesanan per baris</h4><p>Setiap penerimaan (RTN) dinilai sendiri untuk aspek logistik. Kuantitasnya kemudian dijumlahkan per baris PO untuk memutuskan status lengkap dan status lokasi.</p></div>
+    <div class="card"><div class="n">06</div><h4>Mesin yang sama dijalankan untuk pengiriman keluar</h4><p>Produk yang meninggalkan lokasi mengikuti pola kebalikannya: tanggal siap, hub, konsolidasi, pelayaran, penerimaan pelanggan. Hanya labelnya yang berubah.</p></div>
+    <div class="card"><div class="n">07</div><h4>Setiap angka adalah milik Anda</h4><p>Semua nilai contoh adalah placeholder umum. Ganti dengan lead time, standar, dan toleransi Anda sendiri sebelum menarik kesimpulan.</p></div>
+  </div>
+</section>
+
+<section id="s1">
+  <h2><span class="num">1</span>Pertanyaannya</h2>
+  <p class="lead">Pesanan terbuka mana yang akan melewati tanggal jatuh temponya jika tidak ada perubahan, dan mana yang masih bisa diselamatkan?</p>
+  <p>Status seperti "Tepat waktu" atau "Terlambat" yang tercetak setelah pengiriman hanya menjelaskan masa lalu. Perencana membutuhkan kebalikannya: daftar pesanan yang mengarah ke keterlambatan yang sudah diurutkan, alasannya, dan tanggal batas ketika tindakan masih efektif. Model di halaman ini membangun daftar tersebut hanya dari lima tanggal per pengiriman: tanggal janji pemasok, penerimaan barang di hub (GR Offsite), mulai pengiriman, penerimaan di lokasi (GR Onsite), dan hari ini.</p>
+  <div class="callout"><b>Tiga pertanyaan yang dijawab halaman ini.</b> (1) Di mana posisi setiap pesanan dalam alur saat ini, dan apakah ia mulai bergeser? (2) Apakah penyebabnya pemasok, hub, atau pelayaran? (3) Jika pemasok terlambat, hub menahan barang lebih lama, atau pelayaran molor, berapa banyak pesanan yang menjadi terlambat, dan yang mana saja?</div>
+</section>
+
+<section id="s2">
+  <h2><span class="num">2</span>Alur bisnis dari awal hingga akhir</h2>
+  <p class="lead">Setiap pengiriman melewati empat fase yang sama. Setiap fase memiliki penanggung jawab dan KPI. Model mengukur keterlambatan di sepanjang rantai ini.</p>
+  <div class="seg"><button class="btn sm on" data-flow="in">Material masuk</button><button class="btn sm line" data-flow="out">Produk keluar</button></div>
+  <div class="flowbox" id="flowsvg"></div>
+  <div class="own"><span><i style="background:#B77A2B"></i>Pemasok atau pabrik</span><span><i style="background:#4F9A9E"></i>3PL di hub</span><span><i style="background:#2E6E73"></i>Konsolidasi di hub</span><span><i style="background:#27403F"></i>Pengangkut, bea cukai, darat</span></div>
+  <div id="flowtxt"></div>
+  <h3>Masuk dan keluar adalah cerminan satu sama lain</h3>
+  <div class="tw"><table><thead><tr><th>Konsep</th><th>Masuk (material)</th><th>Keluar (produk)</th></tr></thead><tbody>
+    <tr><td class="k">Pesanan</td><td>Baris pesanan pembelian</td><td>Baris pesanan penjualan atau pengiriman</td></tr>
+    <tr><td class="k">Janji awal</td><td>PO Delivery Date: pemasok mengirim ke hub</td><td>Tanggal siap kirim: pabrik menyerahkan ke hub</td></tr>
+    <tr><td class="k">Penerimaan di hub</td><td>GR Offsite dicatat oleh 3PL</td><td>Penerimaan di hub dicatat oleh 3PL</td></tr>
+    <tr><td class="k">Konsolidasi</td><td>Menggabungkan lot pemasok ke dalam kontainer atau kapal</td><td>Memuat kontainer dan menunggu batas waktu (cut-off) kapal</td></tr>
+    <tr><td class="k">Pelayaran</td><td>Mulai pengiriman hingga kedatangan, kepabeanan, dan rute darat</td><td>Keberangkatan kapal hingga kedatangan, kepabeanan, dan last mile</td></tr>
+    <tr><td class="k">Titik akhir</td><td>GR Onsite di lokasi</td><td>Bukti penerimaan di pelanggan</td></tr>
+    <tr><td class="k">Target akhir</td><td>Due Site Date = PO Delivery Date + Lead Time</td><td>Tanggal jatuh tempo pelanggan = Tanggal siap + Lead Time</td></tr>
+    <tr><td class="k">KPI pertama</td><td>RIFOT: pemasok diterima lengkap dan tepat waktu di hub</td><td>OTIF di asal: produk siap lengkap dan tepat waktu</td></tr>
+  </tbody></table></div>
+  <h3>Penyebab umum keterlambatan per fase (pengalaman umum, bukan data perusahaan)</h3>
+  <div class="grid2">
+    <div class="card"><h4>Fase pemasok atau pabrik</h4><p class="small">Produksi atau pengadaan molor, lot parsial, dokumen belum siap, pemasok belum mengonfirmasi tanggal. Pesanan sudah terlambat sebelum pekerjaan logistik dimulai.</p></div>
+    <div class="card" style="border-top-color:var(--teal)"><h4>Fase pencatatan di hub</h4><p class="small">Barang menunggu di area penumpukan atau dermaga untuk inspeksi, pelabelan, atau pencatatan. Pemasok tampak terlambat di sistem padahal barangnya sudah ada secara fisik.</p></div>
+    <div class="card" style="border-top-color:var(--teal)"><h4>Fase konsolidasi</h4><p class="small">Menunggu lot lain untuk melengkapi kontainer, ruang booking, atau pelayaran berikutnya. Inilah fase ketika eskalasi masih dapat mengubah hasil.</p></div>
+    <div class="card" style="border-top-color:var(--dark)"><h4>Fase pelayaran, kepabeanan, dan darat</h4><p class="small">Kemacetan pelabuhan, transshipment, inspeksi, pelepasan bea cukai, pengangkutan truk. Sedikit yang dapat dipulihkan setelah kapal berangkat.</p></div>
+  </div>
+</section>
+
+<section id="s3">
+  <h2><span class="num">3</span>KPI di sepanjang alur</h2>
+  <p class="lead">Setiap KPI menjawab satu pertanyaan tentang satu fase. Bersama-sama, KPI menunjukkan siapa yang bertanggung jawab atas keterlambatan.</p>
+  <div class="tw"><table><thead><tr><th>KPI</th><th>Pertanyaan</th><th>Dari</th><th>Ke</th><th>Dibandingkan dengan</th><th>Penanggung jawab</th></tr></thead><tbody>
+    <tr><td class="k">RIFOT</td><td>Apakah pemasok mengirim lengkap dan tepat waktu ke hub?</td><td>PO Delivery Date</td><td>GR Offsite (lengkap)</td><td>PO Delivery Date</td><td>Pemasok, pengadaan</td></tr>
+    <tr><td class="k">GR tepat waktu</td><td>Berapa lama dari penerimaan fisik di 3PL hingga pencatatan GR?</td><td>Penerimaan fisik 3PL</td><td>Pencatatan GR Offsite</td><td>KPI GR (hari)</td><td>3PL</td></tr>
+    <tr><td class="k">KPI konsolidasi</td><td>Berapa lama barang tertahan di hub sebelum pengiriman dimulai?</td><td>GR Offsite</td><td>Mulai Pengiriman</td><td>Hari konsolidasi standar per hub</td><td>3PL, logistik</td></tr>
+    <tr><td class="k">Standar pelayaran</td><td>Apakah pelayaran, kepabeanan, dan rute darat memenuhi tabel pengiriman?</td><td>Mulai Pengiriman</td><td>GR Onsite</td><td>Lead Time &minus; konsolidasi standar</td><td>Pengangkut, forwarder</td></tr>
+    <tr><td class="k">Logistik tepat waktu</td><td>Apakah logistik secara keseluruhan memenuhi tabel pengiriman?</td><td>GR Offsite</td><td>GR Onsite</td><td>GR Offsite + Lead Time</td><td>Logistik</td></tr>
+    <tr><td class="k">DIFOT</td><td>Apakah seluruh kuantitas sampai di lokasi tepat pada tanggal jatuh tempo?</td><td>PO Delivery Date</td><td>GR Onsite (lengkap)</td><td>Due Site Date</td><td>Rantai pasok secara keseluruhan</td></tr>
+  </tbody></table></div>
+  <div class="callout"><b>Mengapa langkah pencatatan GR penting.</b> Jika pemasok mengirim tepat waktu tetapi 3PL mencatat penerimaan dua hari kemudian, RIFOT berbasis hub menunjukkan pemasok terlambat. Mencatat tanggal penerimaan fisik memisahkan keduanya. Model menerima tanggal tersebut sebagai kolom opsional dan membagi keterlambatan sesuai dengan itu.</div>
+  <div class="mx"><div></div><div class="h">Logistik tepat waktu</div><div class="h">Logistik terlambat</div>
+    <div class="rh">Lokasi tepat waktu</div><div class="ok"><b>Sehat.</b> Tidak ada yang perlu dilakukan.</div><div class="w1"><b>Masalah logistik tersembunyi.</b> Lokasi terlindungi oleh pemasok yang datang lebih awal. Perbaiki prosesnya, tidak mendesak.</div>
+    <div class="rh">Lokasi terlambat</div><div class="w1"><b>Penyebab pemasok.</b> Eskalasi ke pengadaan.</div><div class="w2"><b>Penyebab logistik.</b> Prioritas tertinggi.</div></div>
+</section>
+
+<section id="s4">
+  <h2><span class="num">4</span>Metode</h2>
+  <p class="lead">Peramalan berbasis aturan dalam empat langkah, diterapkan pada setiap baris PO dan setiap penerimaan.</p>
+  <h3>Langkah 1. Kelompokkan data mentah</h3>
+  <p>Data mentah memiliki satu baris per penerimaan (RTN). Jika baris PO yang sama muncul lebih dari sekali dengan RTN berbeda, baris tersebut dikirim secara bertahap. Model mempertahankan kedua tingkat detail tersebut.</p>
+  <ul><li><b>Tingkat RTN</b> digunakan untuk penilaian logistik, karena setiap pengiriman memiliki tanggalnya sendiri.</li><li><b>Tingkat baris PO</b> digunakan untuk keputusan lengkap dan penilaian lokasi, karena kuantitas dipesan per baris.</li></ul>
+  <h3>Langkah 2. Tentukan tahap setiap baris PO</h3>
+  <p>Hanya peristiwa yang bertanggal pada atau sebelum tanggal acuan yang dihitung. Kuantitas dari semua penerimaan pada baris dijumlahkan.</p>
+  <div class="tw"><table><thead><tr><th>Tahap</th><th>Uji (diperiksa dari bawah ke atas)</th></tr></thead><tbody>
+    <tr><td class="k">Diterima</td><td>Kuantitas di lokasi &ge; kuantitas PO</td></tr>
+    <tr><td class="k">Di laut</td><td>Kuantitas dengan mulai pengiriman &ge; kuantitas PO</td></tr>
+    <tr><td class="k">Di hub</td><td>Kuantitas dicatat di hub &ge; kuantitas PO (lengkap di hub)</td></tr>
+    <tr><td class="k">Vendor</td><td>Selain itu, termasuk baris yang dikirim sebagian</td></tr>
+  </tbody></table></div>
+  <h3>Langkah 3. Ramalkan kedatangan</h3>
+  <div class="tw"><table><thead><tr><th>Tahap</th><th>Peramalan kedatangan</th><th>Logika</th></tr></thead><tbody>
+    <tr><td class="k">Vendor</td><td>MAX(tanggal acuan, PO Delivery Date) + Lead Time</td><td>Asumsikan pemasok mengirim pada tanggal janjinya. Setelah tanggal itu lewat, pengiriman paling awal adalah hari ini.</td></tr>
+    <tr><td class="k">Di hub</td><td>Tanggal acuan + (Lead Time &minus; Konsolidasi Standar)</td><td>Skenario terbaik: barang meninggalkan hub hari ini. Konsolidasi standar sudah terlewati.</td></tr>
+    <tr><td class="k">Di laut</td><td>Mulai Pengiriman + (Lead Time &minus; Konsolidasi Standar)</td><td>Tanggal keberangkatan adalah fakta. Yang tersisa hanya pelayaran standar.</td></tr>
+    <tr><td class="k">Diterima</td><td>GR Onsite aktual</td><td>Final.</td></tr>
+  </tbody></table></div>
+  <div class="note"><b>Asumsi.</b> Lead Time sudah mencakup konsolidasi standar di hub. Due Site Date = PO Delivery Date + Lead Time, dan tanggal ini tidak boleh dipindahkan ketika pemasok mengirim lebih awal.</div>
+  <h3>Langkah 4. Bandingkan dengan target, lalu terapkan rentangnya</h3>
+  <div class="grid2">
+    <div class="card"><h4>Penilaian 1: status lokasi (per baris PO)</h4><p class="small">Target adalah Due Site Date. Target ini mencakup pemasok, sehingga menjawab apakah kebutuhan terpenuhi. Hanya final ketika baris sudah lengkap.</p></div>
+    <div class="card" style="border-top-color:var(--teal)"><h4>Penilaian 2: status logistik (per RTN)</h4><p class="small">Target adalah GR Offsite + Lead Time. Waktu mulai ketika barang masuk hub, sehingga pemasok dikecualikan dan setiap pengiriman dinilai sendiri.</p></div>
+  </div>
+  <div class="tw"><table><thead><tr><th>Slack (target &minus; peramalan)</th><th>Status</th><th>Arti untuk tindakan</th></tr></thead><tbody>
+    <tr><td>&gt; toleransi</td><td><span class="stp s-Ontime">Tepat waktu</span></td><td>Tidak perlu tindakan</td></tr>
+    <tr><td>0 hingga toleransi</td><td><span class="stp s-ProbablyOntime">Kemungkinan tepat waktu</span></td><td>Di dalam jendela eskalasi: bertindak sekarang agar tetap tepat waktu</td></tr>
+    <tr><td>&minus;toleransi hingga &minus;1</td><td><span class="stp s-ProbablyLate">Kemungkinan terlambat</span></td><td>Terlambat hingga sebesar toleransi kecuali keberangkatan atau pelayaran dipercepat</td></tr>
+    <tr><td>&lt; &minus;toleransi</td><td><span class="stp s-Late">Terlambat</span></td><td>Terlambat bahkan pada waktu pelayaran standar</td></tr>
+    <tr><td>Toleransi = 0 (rute langsung)</td><td><span class="stp s-Ontime">Tepat waktu</span> / <span class="stp s-Late">Terlambat</span></td><td>Tidak ada penyangga hub, sehingga tidak ada kelas "Kemungkinan"</td></tr>
+  </tbody></table></div>
+  <p class="small">Toleransi sebelum pengiriman dipakai untuk tahap vendor dan hub; toleransi setelah pengiriman dipakai di laut. Keduanya adalah variabel per hub, dipisahkan untuk penilaian lokasi dan penilaian logistik.</p>
+</section>
+
+<section id="s5">
+  <h2><span class="num">5</span>Rumus</h2>
+  <h4>Tanggal dan standar</h4>
+  <div class="eq">Due Site Date = <b>PO Delivery Date</b> + LT Target Logistik = <b>GR Offsite (RTN ini)</b> + LT Sisa LT setelah hub = LT &minus; Konsolidasi Standar Tanggal keberangkatan terakhir = Due Site Date &minus; (LT &minus; Konsolidasi Standar)</div>
+  <h4>Kuantitas per baris PO (peristiwa pada atau sebelum tanggal acuan)</h4>
+  <div class="eq">Qty di hub = &Sigma; qty RTN dengan GR Offsite &le; tanggal acuan Lengkap di hub = (Qty di hub &ge; qty PO) Qty dikirim = &Sigma; qty RTN dengan Mulai Pengiriman &le; tanggal acuan Qty di lokasi = &Sigma; qty RTN dengan GR Onsite &le; tanggal acuan DIFOT = 1 jika diterima lengkap dan GR Onsite terakhir &le; Due Site Date, selain itu 0</div>
+  <h4>Peramalan, slack, dan status</h4>
+  <div class="eq">Peramalan(Vendor) = MAX(tanggal acuan, PO Delivery Date) + LT Peramalan(Di hub) = tanggal acuan + (LT &minus; Std) Peramalan(Di laut) = Mulai Pengiriman + (LT &minus; Std) Slack = Target &minus; Peramalan        <span class="c">(positif = lebih awal)</span>
+Status = rentang(Slack, toleransi)</div>
+  <h4>Ke mana hari-hari itu pergi: pembagian tepat dari kedatangan yang terlambat</h4>
+  <p>Untuk pengiriman yang sudah diterima, hari keterlambatan terhadap Due Site Date terbagi tepat menjadi empat bagian, karena Lead Time adalah jumlah konsolidasi standar dan sisa standar:</p>
+  <div class="eq">Kedatangan &minus; Due Site Date = (Penerimaan 3PL &minus; PO Delivery Date)                 <span class="c">pemasok</span>
+ + (GR Offsite &minus; Penerimaan 3PL)                        <span class="c">pencatatan GR</span>
+ + (Mulai Pengiriman &minus; GR Offsite &minus; Konsolidasi Standar)   <span class="c">waktu tinggal di hub vs KPI</span>
+ + (GR Onsite &minus; Mulai Pengiriman &minus; (LT &minus; Std))      <span class="c">pelayaran vs standar</span></div>
+  <h4>Contoh perhitungan, dihitung langsung dari tabel hub</h4>
+  <div class="card" id="worked"></div>
+  <h4>Lapisan probabilitas (perluasan, bagian 10)</h4>
+  <div class="eq">P(terlambat) = porsi dari N simulasi dengan Peramalan + kelebihan waktu di hub + keterlambatan pemasok + noise transit &gt; Due Site Date kelebihan waktu di hub, keterlambatan pemasok = MAX(0, Normal(0, sd)) noise transit = Normal(0, sd)</div>
+</section>
+
+<section id="s6">
+  <h2><span class="num">6</span>Pengaturan parameter</h2>
+  <p class="lead">Isi bagian ini sebelum membaca hasil. Contoh umum sudah dimuat.</p>
+  <div class="seg"><button class="btn sm on" data-dir="in">Material masuk</button><button class="btn sm line" data-dir="out">Produk keluar</button></div>
+  <div class="small" id="dirnote"></div>
+
+  <h3>6.1 Umum</h3>
+  <div class="card"><div class="ph">
+    <div class="fld"><label>Gunakan tanggal hari ini sebagai tanggal acuan</label><select data-p="useToday" data-type="bool"><option value="false">Tidak, gunakan tanggal tetap</option><option value="true">Ya, gunakan hari ini</option></select></div>
+    <div class="fld"><label>Tanggal acuan tetap</label><input type="date" data-p="asof"><div class="h">Peristiwa setelah tanggal ini diabaikan</div></div>
+    <div class="fld"><label>KPI GR tepat waktu (hari)</label><input type="number" step="any" data-p="grKpi"><div class="h">Dari penerimaan 3PL ke pencatatan GR</div></div>
+    <div class="fld"><label>Kumpulan data yang digunakan</label><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm line" id="b_port">Portofolio contoh</button><button class="btn sm line" id="b_test">Set uji</button><button class="btn sm line" id="b_blank">Kosong</button></div><div class="h">Set uji = 19 baris yang dipakai untuk memeriksa terhadap model Excel</div></div>
+  </div></div>
+
+  <h3>6.2 Tabel parameter hub</h3>
+  <p class="small">Satu baris per rute. Konsolidasi standar adalah jumlah hari barang biasanya ditahan di hub; ini bagian dari Lead Time. Toleransi adalah jendela eskalasi dalam hari. Isi 0 untuk rute langsung.</p>
+  <div class="tw"><table id="t_hub"></table></div>
+  <div class="note"><b>Placeholder.</b> Setiap angka di sini adalah contoh umum. Toleransi logistik disamakan dengan toleransi lokasi sampai Anda memutuskan lain.</div>
+
+  <h3>6.3 Pengiriman (satu baris per RTN)</h3>
+  <p class="small" id="rtnnote"></p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0"><button class="btn sm line" id="b_add">Tambah baris</button><button class="btn sm line" id="b_del">Hapus baris terakhir</button></div>
+  <div class="tw"><table id="t_rtn"></table></div>
+  <p class="small">Kolom tingkat PO (hub, kuantitas PO, tanggal janji, lead time, tanda batal, penggantian tanggal acuan) dibaca dari baris pertama setiap baris PO. Pastikan nilainya sama di semua baris pada baris yang sama. Batal = X menghapus seluruh baris. Jika penggantian tanggal acuan dikosongkan, digunakan tanggal umum.</p>
+
+  <h3>6.4 Pengaturan lapisan probabilitas (ilustrasi)</h3>
+  <div class="card"><div class="ph">
+    <div class="fld"><label>Keterlambatan pemasok, sd (hari)</label><input type="number" step="any" data-p="mc.sdVendor"><div class="h">Hanya tahap vendor</div></div>
+    <div class="fld"><label>Kelebihan waktu di hub, sd (hari)</label><input type="number" step="any" data-p="mc.sdHub"><div class="h">Tahap vendor dan hub</div></div>
+    <div class="fld"><label>Noise transit, sd (hari)</label><input type="number" step="any" data-p="mc.sdTransit"><div class="h">Semua baris terbuka</div></div>
+    <div class="fld"><label>Simulasi per baris</label><input type="number" step="100" data-p="mc.sims"><div class="h">200 hingga 10,000</div></div>
+  </div></div>
+  <div class="note"><b>Placeholder.</b> Sebaran ini tidak diperkirakan dari data. Dalam praktiknya, sebaran berasal dari riwayat setiap pemasok dan jalur (bagian 10).</div>
+</section>
+
+<section id="s7">
+  <h2><span class="num">7</span>Hasil dan what-if</h2>
+  <p class="lead">Geser tuas untuk melihat pesanan mana yang berubah status, dan mengapa. Semua hasil dihitung ulang seketika.</p>
+
+  <h3>7.1 Tuas what-if</h3>
+  <div class="lv"><div class="lvg">
+    <div><label>Proyeksi ke depan jika tidak ada tindakan <span id="o_hor">0 d</span></label><input type="range" id="l_hor" min="0" max="30" step="1" value="0"><div class="small">Waktu bergerak maju, tanpa peristiwa baru</div></div>
+    <div><label>Pemasok molor sebesar <span id="o_ven">0 d</span></label><input type="range" id="l_ven" min="0" max="30" step="1" value="0"><div class="small">Hanya baris tahap vendor</div></div>
+    <div><label>Hub menahan barang lebih lama sebesar <span id="o_hub">0 d</span></label><input type="range" id="l_hub" min="0" max="30" step="1" value="0"><div class="small">Baris vendor dan hub. 0 = berangkat hari ini</div></div>
+    <div><label>Pelayaran molor sebesar <span id="o_tr">0 d</span></label><input type="range" id="l_tr" min="-10" max="30" step="1" value="0"><div class="small">Semua baris terbuka. Negatif = lebih cepat</div></div>
+  </div><div style="margin-top:10px"><button class="btn sm line" id="b_lvreset">Atur ulang tuas</button></div></div>
+
+  <h3>7.2 Ringkasan utama</h3>
+  <div id="r_head" class="callout"></div>
+  <div class="kp" id="r_kpis"></div>
+
+  <h3>7.3 Pesanan mana yang kemungkinan terlambat tiba</h3>
+  <p class="small">Diurutkan berdasarkan probabilitas terlambat tiba, lalu berdasarkan slack. Kolom status berasal dari model berbasis aturan; kolom probabilitas adalah perluasan di bagian 10.</p>
+  <div class="tw"><table id="t_rank"></table></div>
+
+  <h3>7.4 Linimasa baris terbuka dan tertutup</h3>
+  <div class="seg"><button class="btn sm on" data-view="wi">What-if</button><button class="btn sm line" data-view="base">Dasar</button></div>
+  <div class="chart" id="c_time"></div>
+  <div class="leg" id="c_time_leg"></div>
+
+  <h3>7.5 Jumlah status, dasar dibandingkan what-if</h3>
+  <div class="tw"><table id="t_dist"></table></div>
+
+  <h3>7.6 Penilaian logistik per pengiriman, dan ke mana hari-hari itu pergi</h3>
+  <p class="small">Kolom di sebelah kanan membagi hari terhadap tabel pengiriman menjadi pemasok, pencatatan GR, waktu tinggal di hub terhadap KPI, dan pelayaran terhadap standar. Negatif = lebih baik dari standar. Tanda strip berarti tahap tersebut belum terjadi.</p>
+  <div class="tw"><table id="t_rtn_res"></table></div>
+
+  <h3>7.7 Rantai KPI dari data (tidak terpengaruh oleh tuas)</h3>
+  <div class="tw"><table id="t_kpi"></table></div>
+  <div class="small">Persentase dari contoh umum hanya membuktikan bahwa rumusnya berfungsi. Angka tersebut bukan ukuran kinerja.</div>
+
+  <h3>7.8 Pemeriksaan mandiri terhadap model Excel</h3>
+  <div id="selfcheck" class="callout"></div>
+  <div id="r_warn" class="warnbox"></div>
+</section>
+
+<section id="s8">
+  <h2><span class="num">8</span>Membaca hasil</h2>
+  <div class="grid2">
+    <div class="card"><h4>Jangan membaca "Kemungkinan tepat waktu" sebagai aman</h4><p>Artinya pesanan berada di dalam jendela eskalasi. Dengan asumsi skenario terbaik (berangkat hari ini), baris dengan slack nol tidak memiliki ruang untuk variasi apa pun. Kolom probabilitas menunjukkannya: baris dengan slack nol sering kali memiliki probabilitas terlambat yang tinggi begitu variasi diperhitungkan.</p></div>
+    <div class="card" style="border-top-color:var(--teal)"><h4>Tindak baris hub lebih dulu</h4><p>Baris vendor bergantung pada janji yang tidak bisa Anda ubah. Baris laut tidak bisa diubah. Baris hub memiliki tanggal sekaligus tuas, sehingga menjadi prioritas pertama untuk eskalasi.</p></div>
+    <div class="card" style="border-top-color:var(--green)"><h4>Baca kedua status secara bersamaan</h4><p>Baris yang terlambat pada status lokasi tetapi tepat waktu pada logistik adalah masalah pemasok. Baris yang tepat waktu di lokasi tetapi terlambat pada logistik adalah masalah tersembunyi yang terlindungi oleh pemasok yang datang lebih awal.</p></div>
+    <div class="card" style="border-top-color:var(--red)"><h4>Uji tuas satu per satu</h4><p>Penahanan di hub selama tujuh hari dan keterlambatan pelayaran selama tujuh hari sama-sama menambah tujuh hari pada kedatangan baris hub. Keduanya berbeda dalam hal siapa yang memiliki perbaikannya dan kapan Anda masih bisa bertindak.</p></div>
+  </div>
+</section>
+
+<section id="s9">
+  <h2><span class="num">9</span>Peta literatur</h2>
+  <p class="lead">Model berbasis aturan adalah baseline transparan yang menjadi titik awal riset terkini. Peta ini menunjukkan tiga makalah yang memperluasnya.</p>
+  <div class="lit">
+    <div>
+      <h4>Tangga kematangan peramalan</h4>
+      <div class="ladder">
+        <div class="rung cur"><b>Level 0 &middot; Rentang berbasis aturan (model ini)</b><span class="small">Lead time tetap per rute, toleransi tetap per hub, empat label. Transparan dan mudah diaudit.</span><div class="pp"><i class="pl p1">Baseline Makalah 1</i><i class="pl p2">Baseline Makalah 2</i></div></div>
+        <div class="rung"><b>Level 1 &middot; Probabilitas terlambat</b><span class="small">Ganti satu tanggal dengan distribusi yang dibangun dari riwayat, sehingga setiap pesanan memiliki probabilitas dan interval.</span><div class="pp"><i class="pl p2">Makalah 2</i><i class="pl p3">Makalah 3</i></div></div>
+        <div class="rung"><b>Level 2 &middot; Hari keterlambatan, bukan hanya label</b><span class="small">Pertama klasifikasikan terlambat atau tidak, lalu prediksi jumlah hari keterlambatan. Ini adalah "prediksi hari keterlambatan" yang masih belum dimiliki model.</span><div class="pp"><i class="pl p3">Makalah 3</i></div></div>
+        <div class="rung"><b>Level 3 &middot; Ambang adaptif</b><span class="small">Toleransi yang berubah mengikuti variabilitas yang teramati per rute, bukan satu rentang tetap per hub.</span><div class="pp"><i class="pl p1">Makalah 1</i></div></div>
+        <div class="rung"><b>Level 4 &middot; Aturan keputusan</b><span class="small">Ubah probabilitas menjadi tindakan dengan aturan biaya: percepat, peringatkan lokasi, atau terima.</span><div class="pp"><i class="pl p2">Makalah 2</i></div></div>
+      </div>
+      <div class="note"><b>Asal setiap bagian model.</b> <b>H1</b> rentang toleransi tetap &rarr; baseline Makalah 1. <b>H2</b> lead time tabel pengiriman yang statis &rarr; baseline Makalah 2. <b>H3</b> empat label tanpa hari keterlambatan &rarr; Makalah 3. <b>H4</b> asumsi "pemasok mengirim tepat waktu" &rarr; lapisan probabilitas (Makalah 2 dan 3).</div>
+    </div>
+    <div>
+      <div class="paper"><h4>Makalah 1 &middot; Sistem Peringatan Dini Cerdas untuk Keterlambatan Pemasok</h4><p class="small">Pemodelan probabilistik dinamis yang dikalibrasi IoT pada rantai pasok engineer-to-order.</p><div class="map"><b>Gagasan</b>Membandingkan sistem peringatan ambang tetap dengan sistem adaptif. Ambang tetap menjaga alarm palsu tetap rendah dalam kondisi stabil; ambang adaptif lebih baik mendeteksi dalam kondisi berisiko tinggi.</div><div class="map"><b>Pemetaan</b>Toleransi per hub kami adalah baseline ambang tetap. Langkah berikutnya adalah menetapkannya dari variabilitas yang teramati pada setiap jalur.</div></div>
+      <div class="paper b"><h4>Makalah 2 &middot; Conformal Predictive Distributions for Order Fulfillment Time Forecasting</h4><p class="small">Meramalkan distribusi waktu pemenuhan, dengan aturan biaya untuk keputusan.</p><div class="map"><b>Gagasan</b>Aturan berbasis tabel yang statis gagal menangkap ketidakpastian. Distribusi prediksi lebih baik dalam mengidentifikasi pengiriman terlambat dan menjadi masukan bagi aturan keputusan berbasis biaya.</div><div class="map"><b>Pemetaan</b>Tabel pengiriman kami adalah baseline statis. Lapisan probabilitas di halaman ini adalah pengganti sederhana untuk distribusi prediksi.</div></div>
+      <div class="paper c"><h4>Makalah 3 &middot; Uncertainty-Aware Delivery Delay Duration Prediction via Multi-Task Deep Learning</h4><p class="small">Klasifikasikan keterlambatan terlebih dahulu, lalu prediksi durasinya.</p><div class="map"><b>Gagasan</b>Memprediksi berapa lama pengiriman terlambat, bukan hanya apakah terlambat, mendukung peramalan probabilistik.</div><div class="map"><b>Pemetaan</b>Empat label kami sesuai dengan langkah klasifikasi. Kolom hari keterlambatan di bagian 7 adalah langkah durasi dalam bentuk berbasis aturan.</div></div>
+      <div class="small">Catatan membaca: hanya abstrak dan pendahuluan makalah-makalah ini yang ditinjau, dan dua di antaranya adalah preprint. Kumpulan datanya (manufaktur engineer-to-order, e-commerce, pengiriman industri) berbeda dengan pesanan pembelian impor, sehingga angka akurasi yang dilaporkan tidak berlaku untuk data Anda.</div>
+    </div>
+  </div>
+</section>
+
+<section id="s10">
+  <h2><span class="num">10</span>Cara menyempurnakan model</h2>
+  <p class="lead">Sembilan celah, apa yang menutup masing-masing, dan apakah halaman ini sudah menampilkannya.</p>
+  <div class="tw"><table><thead><tr><th>#</th><th>Celah dalam model berbasis aturan</th><th>Peningkatan</th><th>Di halaman ini</th><th>Data yang dibutuhkan</th></tr></thead><tbody>
+    <tr><td>1</td><td class="k">Asumsi "vendor tepat waktu" membuat tahap vendor tampak aman</td><td>Probabilitas terlambat dari riwayat pemasok dan jalur, ditambah tanggal yang dikonfirmasi pemasok</td><td><span class="stp s-ProbablyOntime">Aktif (sebaran placeholder)</span></td><td>Tanggal konfirmasi, pengakuan, jumlah penjadwalan ulang</td></tr>
+    <tr><td>2</td><td class="k">Toleransi tetap untuk setiap pemasok dan jalur</td><td>Turunkan rentang dari persentil lead time historis per rute</td><td><span class="stp s-Received">Peta jalan</span></td><td>20 hingga 30 pengiriman selesai per rute</td></tr>
+    <tr><td>3</td><td class="k">Peramalan hub mengasumsikan keberangkatan hari ini</td><td>Gunakan tanggal konsolidasi atau cut-off yang direncanakan; uji skenario penahanan di hub</td><td><span class="stp s-ProbablyOntime">Tuas aktif</span></td><td>Jadwal booking dan kapal per rute</td></tr>
+    <tr><td>4</td><td class="k">Keterlambatan pencatatan GR tersembunyi di dalam keterlambatan pemasok</td><td>Catat tanggal penerimaan fisik 3PL dan pisahkan keterlambatannya</td><td><span class="stp s-ProbablyOntime">Aktif (kolom opsional)</span></td><td>Tanggal penerimaan fisik 3PL</td></tr>
+    <tr><td>5</td><td class="k">Pengiriman parsial dinilai sebagai satu kesatuan</td><td>Nilai logistik per penerimaan, lengkap per baris</td><td><span class="stp s-ProbablyOntime">Aktif</span></td><td>Kuantitas dan tanggal tingkat penerimaan</td></tr>
+    <tr><td>6</td><td class="k">Waktu pelayaran standar, tanpa sinyal kapal</td><td>Masukkan ETA kapal dan peristiwa pelabuhan begitu pengiriman berada di laut</td><td><span class="stp s-Received">Peta jalan</span></td><td>Umpan data pengangkut atau pelacakan</td></tr>
+    <tr><td>7</td><td class="k">Tidak ada umpan balik</td><td>Snapshot status harian per baris, lalu hit rate, bias, dan tracking signal dari error ETA</td><td><span class="stp s-Received">Peta jalan</span></td><td>Tabel snapshot dalam alur data</td></tr>
+    <tr><td>8</td><td class="k">Hanya label, tanpa prioritas</td><td>Tambahkan hari terlambat, nilai, tingkat kritikalitas, dan tanggal kebutuhan; urutkan berdasarkan risiko</td><td><span class="stp s-ProbablyOntime">Hari dan probabilitas aktif</span></td><td>Tanggal kebutuhan, nilai, kritikalitas</td></tr>
+    <tr><td>9</td><td class="k">Pengiriman keluar tidak diukur dengan cara yang sama</td><td>Jalankan mesin yang sama pada pengiriman yang meninggalkan lokasi</td><td><span class="stp s-ProbablyOntime">Aktif (sakelar arah)</span></td><td>Tanggal siap, penerimaan hub, keberangkatan kapal, penerimaan pelanggan</td></tr>
+  </tbody></table></div>
+  <h3>Rutin back-test untuk peningkatan 7</h3>
+  <p>Simpan satu baris per baris PO per hari beserta statusnya. Ketika suatu baris selesai, bandingkan statusnya pada hari T&minus;14 dengan hasilnya:</p>
+  <div class="eq">Hit rate (Kemungkinan terlambat) = baris berlabel Kemungkinan terlambat atau Terlambat pada T&minus;14 yang benar-benar terlambat &divide; baris berlabel demikian Terlewat = baris yang terlambat tetapi berstatus Tepat waktu atau Kemungkinan tepat waktu pada T&minus;14 Bias error ETA = rata-rata (kedatangan aktual &minus; kedatangan peramalan) Tracking signal = error ETA kumulatif &divide; MAD      <span class="c">selidiki ketika melewati &plusmn;4</span></div>
+  <p>Kalibrasi ulang setiap toleransi ketika hit rate bergeser. Toleransi yang lebih rendah menaikkan porsi label Terlambat dan menurunkan porsi baris yang terlewat; nilai yang tepat menyeimbangkan alarm palsu dengan peringatan yang terlewat untuk bisnis Anda.</p>
+  <h3>Urutan pembangunan yang disarankan</h3>
+  <ol><li>Catat tanggal penerimaan fisik 3PL dan tanggal konfirmasi pemasok (perubahan data kecil, manfaat atribusi besar).</li><li>Mulai snapshot harian sekarang; butuh berbulan-bulan untuk terisi dan setiap peningkatan berikutnya bergantung padanya.</li><li>Perkirakan sebaran per rute dari riwayat dan ganti sebaran placeholder.</li><li>Tambahkan tanggal keberangkatan yang direncanakan di hub, lalu ETA kapal.</li><li>Urutkan baris terbuka berdasarkan risiko, nilai, dan tanggal kebutuhan.</li></ol>
+</section>
+
+<section id="s11">
+  <h2><span class="num">11</span>Batasan dan sumber</h2>
+  <div class="warnbox"><b>Batasan.</b>
+  <ul style="margin:6px 0 0 18px">
+    <li>Semua nilai contoh (lead time, hub, toleransi, tanggal) adalah placeholder umum, bukan data perusahaan.</li>
+    <li>Peramalan berbasis aturan dengan lead time standar tetap. Tidak ada ETA kapal, tanggal konfirmasi pemasok, maupun riwayat lead time.</li>
+    <li>Lapisan probabilitas menggunakan sebaran yang Anda masukkan. Ini adalah ilustrasi gagasan, bukan model yang terkalibrasi.</li>
+    <li>Sebuah baris dihitung lengkap hanya ketika jumlah kuantitasnya mencapai kuantitas PO. Pengiriman berlebih dihitung lengkap; satuan harus sama.</li>
+    <li>GR Offsite terbaru digunakan sebagai tanggal lengkap. Jika penerimaan tambahan tiba setelah baris lengkap, tanggal ikut berubah.</li>
+    <li>Toleransi logistik adalah placeholder. Belum divalidasi dengan data aktual.</li>
+  </ul></div>
+  <h4>Sumber</h4>
+  <ul class="small"><li>Intelligent Early Warning System for Supplier Delays Using Dynamic IoT-Calibrated Probabilistic Modeling in Smart Engineer-to-Order Supply Chains (jurnal).</li><li>Conformal Predictive Distributions for Order Fulfillment Time Forecasting (preprint arXiv).</li><li>Uncertainty-Aware Delivery Delay Duration Prediction via Multi-Task Deep Learning (preprint arXiv).</li><li>Ukuran error peramalan (bias, MAD, tracking signal) dan metrik keandalan mengikuti praktik manajemen rantai pasok yang umum.</li></ul>
+</section>
+</main>
+<footer><div class="wrap">Model edukasi umum. Tanpa data perusahaan. Semua perhitungan berjalan secara lokal di browser Anda.</div></footer>
+
+<script>
+/* ===== ENGINE: PO arrival forecast (pure functions, no DOM) ===== */
+const DAY = 86400000, MONN = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+function pd(s) { if (!s) return null; const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(s)); if (!m) return null; return Math.round(Date.UTC(+m[1], +m[2] - 1, +m[3]) / DAY); }
+function fd(n) { if (n === null || n === undefined || !isFinite(n)) return '\u2014'; const d = new Date(n * DAY); return (d.getUTCDate() < 10 ? '0' : '') + d.getUTCDate() + ' ' + MONN[d.getUTCMonth()] + ' ' + String(d.getUTCFullYear()).slice(2); }
+function num(x) { const v = parseFloat(x); return isFinite(v) ? v : 0; }
+function hasN(x) { return x !== '' && x !== null && x !== undefined && isFinite(parseFloat(x)); }
+
+/* status band: slack = target - forecast (days); tol = tolerance (days). tol = 0 -> direct regions, no "Probably" classes */
+function band(s, t) {
+  if (t === 0) return s >= 0 ? 'Tepat waktu' : 'Terlambat';
+  if (s > t) return 'Tepat waktu';
+  if (s >= 0) return 'Kemungkinan tepat waktu';
+  if (s >= -t) return 'Kemungkinan terlambat';
+  return 'Terlambat';
+}
+const ORDER = { 'Terlambat': 0, 'Kemungkinan terlambat': 1, 'Kemungkinan tepat waktu': 2, 'Tepat waktu': 3 };
+
+function findHub(P, name) { for (let i = 0; i < P.hubs.length; i++) if (P.hubs[i].n === name) return P.hubs[i]; return null; }
+
+/* compute everything for a given set of levers.
+   lev = { vendorSlip, hubHold, transitSlip, horizon } (all days, default 0) */
+function compute(P, lev, todayN) {
+  lev = Object.assign({ vendorSlip: 0, hubHold: 0, transitSlip: 0, horizon: 0 }, lev || {});
+  const base = P.useToday ? todayN : pd(P.asof);
+  const map = {}, order = [];
+  P.rtns.forEach((r, i) => {
+    if (!r.po && !r.line) return;
+    const k = (r.po || '') + '-' + (r.line || '');
+    if (!map[k]) { map[k] = { key: k, rows: [], idx: [] }; order.push(k); }
+    map[k].rows.push(r); map[k].idx.push(i);
+  });
+  const lines = [], rtnOut = [];
+  order.forEach((k, li) => {
+    const g = map[k], f = g.rows[0], L = { key: k, n: li + 1, first: f, rows: g.rows, err: '', stage: '', status: '' };
+    L.hub = findHub(P, f.hub); L.poQty = num(f.poQty); L.poDate = pd(f.poDate); L.lt = num(f.lt);
+    const ov = g.rows.map(r => pd(r.asof)).filter(x => x !== null);
+    L.cutoff = ov.length ? Math.max.apply(null, ov) : base; L.evalDay = L.cutoff + lev.horizon;
+    if (!L.hub) L.err = 'Hub belum ditentukan';
+    else if (!(L.poQty > 0)) L.err = 'Kuantitas PO belum diisi';
+    else if (L.poDate === null) L.err = 'PO Delivery Date belum diisi';
+    else if (!(L.lt > 0)) L.err = 'Incoterm LT belum diisi';
+    L.cancel = g.rows.some(r => String(r.cancel || '').toUpperCase() === 'X');
+    L.nR = g.rows.length;
+    L.qHub = 0; L.qShip = 0; L.qSite = 0; L.groL = null; L.shipL = null; L.siteL = null;
+    g.rows.forEach(r => {
+      const q = num(r.qty), a = pd(r.gro), b = pd(r.ship), c = pd(r.onsite);
+      if (a !== null && a <= L.cutoff) { L.qHub += q; if (L.groL === null || a > L.groL) L.groL = a; }
+      if (b !== null && b <= L.cutoff) { L.qShip += q; if (L.shipL === null || b > L.shipL) L.shipL = b; }
+      if (c !== null && c <= L.cutoff) { L.qSite += q; if (L.siteL === null || c > L.siteL) L.siteL = c; }
+    });
+    if (L.err) { L.stage = 'Galat'; L.status = 'Periksa input'; lines.push(L); }
+    else {
+      L.due = L.poDate + L.lt; L.std = L.hub.std; L.rem = L.lt - L.std; L.latestDep = L.due - L.rem;
+      L.inFullHub = L.qHub >= L.poQty;
+      if (L.cancel) { L.stage = 'Dikecualikan'; L.status = 'Dikecualikan'; }
+      else if (L.qSite >= L.poQty) { L.stage = 'Diterima'; L.difot = L.siteL <= L.due ? 1 : 0; L.status = L.difot ? 'Tepat waktu' : 'Terlambat'; L.fc = L.siteL; L.slack = L.due - L.siteL; }
+      else {
+        if (L.qShip >= L.poQty) { L.stage = 'Di laut'; L.fc = L.shipL + L.rem + lev.transitSlip; L.tol = L.hub.sA; }
+        else if (L.inFullHub) { L.stage = 'Di hub'; L.fc = L.evalDay + L.rem + lev.hubHold + lev.transitSlip; L.tol = L.hub.sB; }
+        else { L.stage = 'Vendor'; L.fc = Math.max(L.evalDay, L.poDate + lev.vendorSlip) + L.lt + lev.hubHold + lev.transitSlip; L.tol = L.hub.sB; }
+        L.slack = L.due - L.fc; L.status = band(L.slack, L.tol);
+      }
+      lines.push(L);
+    }
+    /* logistics per RTN */
+    g.rows.forEach((r, j) => {
+      const o = { row: r, i: g.idx[j], line: L, rcv: pd(r.rcv), gro: pd(r.gro), ship: pd(r.ship), onsite: pd(r.onsite) };
+      if (L.err) { o.stage = 'Periksa input'; o.status = 'Periksa input'; rtnOut.push(o); return; }
+      if (L.cancel) { o.stage = 'Dikecualikan'; o.status = 'Dikecualikan'; rtnOut.push(o); return; }
+      if (o.gro === null || o.gro > L.cutoff) { o.stage = 'Tahap vendor'; o.status = 'Tahap vendor'; rtnOut.push(o); return; }
+      o.target = o.gro + L.lt;
+      const rc = (o.rcv !== null && o.rcv <= o.gro) ? o.rcv : o.gro;
+      o.vendorD = rc - L.poDate; o.grLag = o.gro - rc;
+      if (o.onsite !== null && o.onsite <= L.cutoff) {
+        o.stage = 'Diterima'; o.fc = o.onsite; o.slack = o.target - o.onsite; o.status = o.onsite <= o.target ? 'Tepat waktu' : 'Terlambat';
+        const sh = (o.ship !== null && o.ship <= L.cutoff) ? o.ship : o.gro;
+        o.hubD = sh - o.gro - L.std; o.sailD = o.onsite - sh - L.rem;
+      } else if (o.ship !== null && o.ship <= L.cutoff) {
+        o.stage = 'Di laut'; o.fc = o.ship + L.rem + lev.transitSlip; o.tol = L.hub.lA; o.slack = o.target - o.fc; o.status = band(o.slack, o.tol);
+        o.hubD = o.ship - o.gro - L.std; o.sailD = null;
+      } else {
+        o.stage = 'Di hub'; o.fc = L.evalDay + L.rem + lev.hubHold + lev.transitSlip; o.tol = L.hub.lB; o.slack = o.target - o.fc; o.status = band(o.slack, o.tol);
+        o.hubD = L.evalDay + lev.hubHold - o.gro - L.std; o.sailD = null;
+      }
+      rtnOut.push(o);
+    });
+  });
+  return { lines: lines, rtns: rtnOut, base: base, lev: lev };
+}
+
+/* -------- KPI chain from actual events (not affected by what-if levers) -------- */
+function kpis(res, P) {
+  const k = { rifotN: 0, rifotOK: 0, grN: 0, grOK: 0, conN: 0, conOK: 0, saN: 0, saOK: 0, logN: 0, logOK: 0, difN: 0, difOK: 0 };
+  res.lines.forEach(L => {
+    if (L.err || L.cancel) return;
+    if (L.inFullHub && L.groL !== null) { k.rifotN++; if (L.groL <= L.poDate) k.rifotOK++; }
+    if (L.stage === 'Diterima') { k.difN++; if (L.difot) k.difOK++; }
+  });
+  res.rtns.forEach(o => {
+    const L = o.line; if (L.err || L.cancel || o.gro === null || o.gro > L.cutoff) return;
+    const rc = (o.rcv !== null && o.rcv <= o.gro) ? o.rcv : o.gro;
+    k.grN++; if (o.gro - rc <= P.grKpi) k.grOK++;
+    if (o.ship !== null && o.ship <= L.cutoff) { k.conN++; if (o.ship - o.gro <= L.std) k.conOK++; }
+    if (o.stage === 'Diterima') { k.saN++; if (o.onsite - o.ship <= L.rem) k.saOK++; k.logN++; if (o.status === 'Tepat waktu') k.logOK++; }
+  });
+  return k;
+}
+
+/* -------- Monte Carlo extension (illustrative): probability that a PO line arrives after its due date -------- */
+function mulberry(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function mcLine(L, M, lev) {
+  if (L.err || L.stage === 'Dikecualikan') return null;
+  if (L.stage === 'Diterima') return L.difot ? 0 : 1;
+  const rnd = mulberry((M.seed | 0) + L.n * 7919);
+  function nrm() { let u = 0, v = 0; while (u === 0) u = rnd(); v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  let late = 0; const S = M.sims;
+  for (let s = 0; s < S; s++) {
+    let extra = 0;
+    if (L.stage === 'Vendor') extra += Math.max(0, M.sdVendor * nrm());
+    if (L.stage === 'Vendor' || L.stage === 'Di hub') extra += Math.max(0, M.sdHub * nrm());
+    extra += M.sdTransit * nrm();
+    if (L.fc + extra > L.due + 1e-9) late++;
+  }
+  return late / S;
+}
+
+/* -------- suggested action for one PO line -------- */
+function actionFor(L, lev) {
+  if (L.err) return L.err;
+  if (L.stage === 'Dikecualikan') return 'Baris dibatalkan, dikecualikan';
+  if (L.stage === 'Diterima') return L.difot ? 'Selesai: diterima tepat waktu dan lengkap' : 'Selesai: terlambat sebesar ' + (-L.slack) + ' d';
+  if (L.stage === 'Vendor') {
+    const d = L.poDate + (lev.vendorSlip || 0) - L.evalDay;
+    return d >= 0 ? 'Tanggal janji vendor dalam ' + d + ' hari: konfirmasi tanggal dan kuantitas' : 'Vendor ' + (-d) + ' hari melewati janji: eskalasi, setiap hari menggeser kedatangan satu hari';
+  }
+  if (L.stage === 'Di hub') {
+    const left = L.latestDep - L.evalDay - (lev.hubHold || 0);
+    return left >= 0 ? 'Harus berangkat paling lambat ' + fd(L.latestDep) + ' (' + left + ' hari tersisa): eskalasi konsolidasi' : 'Melewati keberangkatan terakhir sebesar ' + (-left) + ' hari: percepat pelayaran atau beri peringatan ke lokasi';
+  }
+  return L.slack >= 0 ? 'Di laut: pantau' : 'Di laut: tidak ada tuas tersisa, perkirakan ' + (-L.slack) + ' hari terlambat';
+}
+
+if (false) module.exports = { pd, fd, band, compute, kpis, mcLine, actionFor, findHub, ORDER };
+
+/* ===== PRESETS: generic example data (no company data) ===== */
+const HUBS = [
+  { n: 'Hub A', std: 21, sB: 7, sA: 3, lB: 7, lA: 3 },
+  { n: 'Hub B', std: 14, sB: 7, sA: 3, lB: 7, lA: 3 },
+  { n: 'Hub C', std: 7, sB: 2, sA: 3, lB: 2, lA: 3 },
+  { n: 'Langsung', std: 0, sB: 0, sA: 3, lB: 0, lA: 3 },
+  { n: '', std: 0, sB: 0, sA: 3, lB: 0, lA: 3 },
+  { n: '', std: 0, sB: 0, sA: 3, lB: 0, lA: 3 }
+];
+function R(o) { return Object.assign({ scen: '', po: '', line: 10, rtn: 'R1', hub: 'Hub A', poQty: 100, poDate: '', lt: 71, qty: 100, rcv: '', gro: '', ship: '', onsite: '', cancel: '', asof: '', expSite: '', expLog: '' }, o); }
+
+/* ---- Example portfolio: one as-of date (9 Oct 2026), mixed stages ---- */
+const PORTFOLIO = [
+  R({ scen: 'Tanggal janji vendor belum tercapai', po: 2001, poDate: '2026-10-20' }),
+  R({ scen: 'Vendor 4 hari melewati janji', po: 2002, poDate: '2026-10-05' }),
+  R({ scen: 'Vendor 11 hari melewati janji', po: 2003, poDate: '2026-09-28' }),
+  R({ scen: 'Di hub 17 hari, vendor tepat waktu', po: 2004, poDate: '2026-09-20', rcv: '2026-09-18', gro: '2026-09-22' }),
+  R({ scen: 'Di hub 29 hari, melewati keberangkatan terakhir', po: 2005, poDate: '2026-09-10', rcv: '2026-09-10', gro: '2026-09-10' }),
+  R({ scen: 'Di hub, baru melewati keberangkatan terakhir', po: 2006, poDate: '2026-09-15', rcv: '2026-09-17', gro: '2026-09-18' }),
+  R({ scen: 'Sebagian: RTN1 berlayar, RTN2 di hub', po: 2007, poDate: '2026-09-20', qty: 60, rcv: '2026-09-20', gro: '2026-09-20', ship: '2026-10-08' }),
+  R({ scen: '   RTN2 dari baris yang sama', po: 2007, rtn: 'R2', qty: 40, poDate: '2026-09-20', rcv: '2026-10-05', gro: '2026-10-06' }),
+  R({ scen: 'Di laut, berangkat tepat waktu', po: 2008, poDate: '2026-09-01', rcv: '2026-09-01', gro: '2026-09-01', ship: '2026-09-20' }),
+  R({ scen: 'Di laut, berangkat terlambat', po: 2009, poDate: '2026-09-01', rcv: '2026-09-02', gro: '2026-09-03', ship: '2026-09-27' }),
+  R({ scen: 'Hub B, vendor terlambat 2 hari', po: 2010, hub: 'Hub B', lt: 58, poDate: '2026-10-01', rcv: '2026-10-03', gro: '2026-10-03' }),
+  R({ scen: 'Diterima terlambat; logistik tepat waktu (penyebab vendor)', po: 2011, hub: 'Hub B', lt: 58, poDate: '2026-08-01', rcv: '2026-08-04', gro: '2026-08-05', ship: '2026-08-19', onsite: '2026-09-30' }),
+  R({ scen: 'Diterima tepat waktu', po: 2012, hub: 'Hub B', lt: 58, poDate: '2026-08-10', rcv: '2026-08-10', gro: '2026-08-10', ship: '2026-08-24', onsite: '2026-09-28' }),
+  R({ scen: 'Hub C, pelayaran tertinggal sehari', po: 2013, hub: 'Hub C', lt: 45, poDate: '2026-09-25', rcv: '2026-09-25', gro: '2026-09-25', ship: '2026-10-03' }),
+  R({ scen: 'Vendor 50 hari lebih awal, lama tinggal di hub', po: 2014, hub: 'Hub C', lt: 45, poDate: '2026-11-05', rcv: '2026-09-14', gro: '2026-09-15' }),
+  R({ scen: 'Rute langsung, segera jatuh tempo', po: 2015, hub: 'Langsung', lt: 20, poDate: '2026-10-12' }),
+  R({ scen: 'Rute langsung, vendor 5 hari terlambat', po: 2016, hub: 'Langsung', lt: 20, poDate: '2026-10-04' }),
+  R({ scen: 'Baris dibatalkan', po: 2017, poDate: '2026-10-01', gro: '2026-10-01', cancel: 'X' })
+];
+
+/* ---- Outbound example (same engine, mirrored vocabulary) ---- */
+const PORTFOLIO_OUT = [
+  R({ scen: 'Batch produk belum siap', po: 3001, hub: 'Hub A', lt: 55, poDate: '2026-10-18' }),
+  R({ scen: 'Pabrik 6 hari melewati tanggal siap', po: 3002, hub: 'Hub A', lt: 55, poDate: '2026-10-03' }),
+  R({ scen: 'Di hub, pemuatan menunggu kapal', po: 3003, hub: 'Hub A', lt: 55, poDate: '2026-09-18', rcv: '2026-09-17', gro: '2026-09-19' }),
+  R({ scen: 'Di hub, dalam KPI konsolidasi', po: 3004, hub: 'Hub B', lt: 45, poDate: '2026-09-30', rcv: '2026-09-30', gro: '2026-10-01' }),
+  R({ scen: 'Pelayaran, kapal berangkat terlambat', po: 3005, hub: 'Hub B', lt: 45, poDate: '2026-09-05', rcv: '2026-09-06', gro: '2026-09-07', ship: '2026-09-30' }),
+  R({ scen: 'Terkirim ke pelanggan tepat waktu', po: 3006, hub: 'Hub C', lt: 40, poDate: '2026-08-15', rcv: '2026-08-15', gro: '2026-08-16', ship: '2026-08-22', onsite: '2026-09-24' }),
+  R({ scen: 'Terkirim terlambat, waktu tinggal di hub melebihi batas', po: 3007, hub: 'Hub C', lt: 40, poDate: '2026-08-15', rcv: '2026-08-15', gro: '2026-08-16', ship: '2026-09-08', onsite: '2026-10-08' }),
+  R({ scen: 'Rute langsung, siap tepat waktu', po: 3008, hub: 'Langsung', lt: 18, poDate: '2026-10-10' })
+];
+
+/* ---- Test set: identical to the 19 PO lines / 22 RTNs of the Excel model v3 check. Expected statuses from that workbook ---- */
+function T(id, scen, po, rtn, poQty, qty, gro, ship, onsite, cancel, asof, expSite, expLog, hub, lt) {
+  return R({ scen: id + ' ' + scen, po: po, rtn: rtn, hub: hub || 'Hub A', lt: lt === undefined ? 71 : lt, poQty: poQty, qty: qty, poDate: '2026-10-01', gro: gro || '', ship: ship || '', onsite: onsite || '', cancel: cancel || '', asof: asof || '', expSite: expSite || '', expLog: expLog || '' });
+}
+const TESTSET = [
+  T('V1', 'Vendor belum jatuh tempo', 1001, 'R1', 100, 100, '', '', '', '', '2026-09-20', 'Kemungkinan tepat waktu', 'Tahap vendor'),
+  T('V2', 'Vendor terlambat 4 hari', 1002, 'R1', 100, 100, '', '', '', '', '2026-10-05', 'Kemungkinan terlambat', 'Tahap vendor'),
+  T('V3', 'Vendor terlambat 11 hari', 1003, 'R1', 100, 100, '', '', '', '', '2026-10-12', 'Terlambat', 'Tahap vendor'),
+  T('H1', 'Lengkap di hub 1 Okt, hari ke-8', 1004, 'R1', 100, 100, '2026-10-01', '', '', '', '2026-10-09', 'Tepat waktu', 'Tepat waktu'),
+  T('H3', 'Lengkap di hub 1 Okt, hari ke-24', 1005, 'R1', 100, 100, '2026-10-01', '', '', '', '2026-10-25', 'Kemungkinan terlambat', 'Kemungkinan terlambat'),
+  T('H5', 'Vendor terlambat 9 hari, hub 10 Okt', 1006, 'R1', 100, 100, '2026-10-10', '', '', '', '2026-10-24', 'Kemungkinan terlambat', 'Kemungkinan tepat waktu'),
+  T('H6', 'Vendor 30 hari lebih awal, 44 hari di hub', 1007, 'R1', 100, 100, '2026-09-01', '', '', '', '2026-10-15', 'Kemungkinan tepat waktu', 'Terlambat'),
+  T('W1', 'Berangkat 22 Okt', 1008, 'R1', 100, 100, '2026-10-01', '2026-10-22', '', '', '2026-10-25', 'Kemungkinan tepat waktu', 'Kemungkinan tepat waktu'),
+  T('W2', 'Berangkat 30 Okt', 1009, 'R1', 100, 100, '2026-10-01', '2026-10-30', '', '', '2026-11-02', 'Terlambat', 'Terlambat'),
+  T('R1', 'Diterima 10 Des (jatuh tempo 11 Des)', 1010, 'R1', 100, 100, '2026-10-01', '2026-10-22', '2026-12-10', '', '2026-12-12', 'Tepat waktu', 'Tepat waktu'),
+  T('R2', 'Diterima 15 Des (jatuh tempo 11 Des)', 1011, 'R1', 100, 100, '2026-10-01', '2026-10-30', '2026-12-15', '', '2026-12-20', 'Terlambat', 'Terlambat'),
+  T('P1', 'Sebagian 60/100 di hub, sisanya belum dikirim', 1012, 'R1', 100, 60, '2026-10-05', '', '', '', '2026-10-10', 'Terlambat', 'Tepat waktu'),
+  T('P2a', 'Dua RTN, lengkap di hub 15 Okt, RTN1 di laut', 1013, 'R1', 100, 60, '2026-10-01', '2026-10-22', '', '', '2026-10-25', 'Kemungkinan terlambat', 'Kemungkinan tepat waktu'),
+  T('P2b', 'RTN2 di hub', 1013, 'R2', 100, 40, '2026-10-15', '', '', '', '', '', 'Tepat waktu'),
+  T('P3a', 'Kedua RTN diterima; vendor terlambat pada RTN2', 1014, 'R1', 100, 60, '2026-10-01', '2026-10-22', '2026-12-10', '', '2026-12-26', 'Terlambat', 'Tepat waktu'),
+  T('P3b', 'RTN2 diterima 24 Des', 1014, 'R2', 100, 40, '2026-10-15', '2026-11-05', '2026-12-24', '', '', '', 'Tepat waktu'),
+  T('T1a', 'Seperti P2 tetapi tanggal acuan 10 Okt (RTN2 belum di hub)', 1015, 'R1', 100, 60, '2026-10-01', '2026-10-22', '', '', '2026-10-10', 'Terlambat', 'Tepat waktu'),
+  T('T1b', 'GR Offsite RTN2 setelah tanggal acuan, diabaikan', 1015, 'R2', 100, 40, '2026-10-15', '', '', '', '', '', 'Tahap vendor'),
+  T('O1', 'Kelebihan kirim 105 vs 100', 1016, 'R1', 100, 105, '2026-10-01', '', '', '', '2026-10-09', 'Tepat waktu', 'Tepat waktu'),
+  T('C1', 'Baris dibatalkan', 1017, 'R1', 100, 100, '2026-10-01', '', '', 'X', '2026-10-09', 'Dikecualikan', 'Dikecualikan'),
+  T('D1', 'Rute langsung, vendor jatuh tempo hari ini', 1018, 'R1', 100, 100, '', '', '', '', '2026-10-01', 'Tepat waktu', 'Tahap vendor', 'Langsung', 20),
+  T('D2', 'Rute langsung, vendor terlambat 2 hari', 1019, 'R1', 100, 100, '', '', '', '', '2026-10-03', 'Terlambat', 'Tahap vendor', 'Langsung', 20)
+];
+if (false) module.exports = { HUBS, PORTFOLIO, PORTFOLIO_OUT, TESTSET };
+
+/* ===================== UI ===================== */
+function $(id) { return document.getElementById(id); }
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+function esc(s) { return String(s === undefined || s === null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function setH(id, h) { const e = $(id); if (e) e.innerHTML = h; }
+function setT(id, t) { const e = $(id); if (e) e.textContent = t; }
+function getPath(o, p) { return p.split('.').reduce((a, k) => (a === undefined || a === null) ? undefined : a[k], o); }
+function setPath(o, p, v) { const ks = p.split('.'); let a = o; for (let i = 0; i < ks.length - 1; i++) a = a[ks[i]]; a[ks[ks.length - 1]] = v; }
+function f1(x, d) { if (!isFinite(x)) return '\u2014'; return x.toLocaleString('en-US', { maximumFractionDigits: d === undefined ? 0 : d, minimumFractionDigits: d === undefined ? 0 : d }); }
+function sg(n) { return n === null || n === undefined || !isFinite(n) ? '\u2014' : (n > 0 ? '+' + n : String(n)); }
+function pc(x, d) { return isFinite(x) ? (x * 100).toFixed(d === undefined ? 0 : d) + '%' : '\u2014'; }
+function chip(s) { const c = { 'Tepat waktu': 's-Ontime', 'Kemungkinan tepat waktu': 's-ProbablyOntime', 'Kemungkinan terlambat': 's-ProbablyLate', 'Terlambat': 's-Late', 'Diterima': 's-Received' }[s] || 's-gray'; return '<span class="stp ' + c + '">' + esc(s) + '</span>'; }
+const SC = { 'Tepat waktu': '#3E745A', 'Kemungkinan tepat waktu': '#7BA38D', 'Kemungkinan terlambat': '#D49A3A', 'Terlambat': '#B64D42' };
+
+const LAB = {
+  in: { order: 'PO', po: 'PO', line: 'Baris', rtn: 'RTN', poDate: 'PO Delivery Date', gro: 'GR Offsite', ship: 'Mulai Pengiriman', onsite: 'GR Onsite', rcv: 'Penerimaan fisik 3PL', qty: 'Kuantitas RTN', poQty: 'Kuantitas PO', due: 'Due Site Date', cancel: 'Dibatalkan (X)',
+    note: 'Satu baris per RTN (penerimaan barang). Baris PO yang muncul di beberapa baris dengan RTN berbeda dikirim secara bertahap.' },
+  out: { order: 'Pesanan', po: 'Pesanan', line: 'Baris', rtn: 'Pengiriman', poDate: 'Tanggal siap kirim', gro: 'Penerimaan di hub', ship: 'Keberangkatan kapal', onsite: 'Penerimaan pelanggan (POD)', rcv: 'Penerimaan fisik 3PL', qty: 'Kuantitas pengiriman', poQty: 'Kuantitas pesanan', due: 'Tanggal jatuh tempo pelanggan', cancel: 'Dibatalkan (X)',
+    note: 'Satu baris per pengiriman yang diserahkan ke hub. Baris pesanan yang muncul di beberapa baris dikirim secara bertahap. Label dicerminkan; perhitungannya sama.' }
+};
+let P = { dir: 'in', useToday: false, asof: '2026-10-09', grKpi: 2, hubs: clone(HUBS), rtns: clone(PORTFOLIO), mc: { sims: 2000, sdVendor: 3, sdHub: 4, sdTransit: 3, seed: 7 } };
+let LEV = { horizon: 0, vendorSlip: 0, hubHold: 0, transitSlip: 0 }, VIEW = 'wi', FLOW = 'in';
+const NUMF = { hubs: ['std', 'sB', 'sA', 'lB', 'lA'] };
+
+/* ---------- flow diagram ---------- */
+function flowSvg(dir) {
+  const L = dir === 'in' ?
+    { m: [['PO Delivery Date', '(janji pemasok)'], ['3PL fisik', 'penerimaan'], ['GR Offsite', 'dicatat di hub'], ['Pengiriman', 'Mulai'], ['GR Onsite', 'di lokasi']], ph: ['Lead time pemasok', 'pencatatan GR', 'Konsolidasi di hub', 'Pelayaran, kepabeanan, darat'], k: [['RIFOT', 'tiba sesuai tanggal PO, lengkap'], ['GR tepat waktu', '\u2264 hari KPI GR'], ['KPI konsolidasi', '\u2264 hari standar per hub'], ['Standar pelayaran', '= LT \u2212 konsolidasi standar']],
+      b: ['RIFOT: penerimaan hub vs PO Delivery Date, lengkap', 'Logistik tepat waktu (Penilaian 2): target = GR Offsite + LT', 'DIFOT / status lokasi (Penilaian 1): target = Due Site Date = PO Delivery Date + LT'] } :
+    { m: [['Tanggal siap kirim', '(janji pabrik)'], ['3PL fisik', 'penerimaan'], ['Penerimaan di hub', 'dicatat'], ['Kapal', 'keberangkatan'], ['Penerimaan pelanggan', '(POD)']], ph: ['Lead time pabrik', 'Pencatatan penerimaan', 'Pemuatan dan cut-off', 'Pelayaran, kepabeanan, last mile'], k: [['OTIF di asal', 'siap sesuai janji, lengkap'], ['Pencatatan tepat waktu', '\u2264 hari KPI GR'], ['KPI konsolidasi', '\u2264 hari standar per hub'], ['Standar pelayaran', '= LT \u2212 konsolidasi standar']],
+      b: ['OTIF di asal: penerimaan hub vs tanggal siap kirim, lengkap', 'Logistik tepat waktu (Penilaian 2): target = penerimaan hub + LT', 'OTIF ke pelanggan (Penilaian 1): target = tanggal jatuh tempo pelanggan = tanggal siap + LT'] };
+  const X = [70, 330, 505, 790, 1110], col = ['#B77A2B', '#4F9A9E', '#2E6E73', '#27403F'], W = 1180, H = 318;
+  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Business flow with KPIs" font-family="Segoe UI,Arial"><rect width="' + W + '" height="' + H + '" fill="#fff"/>';
+  for (let i = 0; i < 4; i++) {
+    s += '<rect x="' + X[i] + '" y="84" width="' + (X[i + 1] - X[i]) + '" height="30" fill="' + col[i] + '"/>';
+    s += '<text x="' + ((X[i] + X[i + 1]) / 2) + '" y="104" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">' + L.ph[i] + '</text>';
+    s += '<text x="' + ((X[i] + X[i + 1]) / 2) + '" y="140" text-anchor="middle" font-size="13.5" font-weight="700" fill="' + col[i] + '">' + L.k[i][0] + '</text>';
+    s += '<text x="' + ((X[i] + X[i + 1]) / 2) + '" y="157" text-anchor="middle" font-size="12" fill="#5B6568">' + L.k[i][1] + '</text>';
+  }
+  for (let j = 0; j < 5; j++) {
+    const an = j === 0 ? 'start' : (j === 4 ? 'end' : 'middle'), tx = j === 0 ? 18 : (j === 4 ? 1162 : X[j]);
+    s += '<line x1="' + X[j] + '" x2="' + X[j] + '" y1="58" y2="84" stroke="#151B1D" stroke-width="1.4"/><circle cx="' + X[j] + '" cy="99" r="8" fill="#fff" stroke="#151B1D" stroke-width="2.4"/>';
+    s += '<text x="' + tx + '" y="30" text-anchor="' + an + '" font-size="13.5" font-weight="700" fill="#151B1D">' + L.m[j][0] + '</text><text x="' + tx + '" y="47" text-anchor="' + an + '" font-size="12" fill="#5B6568">' + L.m[j][1] + '</text>';
+  }
+  const br = [[X[0], X[2], 200, '#B77A2B', L.b[0]], [X[2], X[4], 240, '#2E6E73', L.b[1]], [X[0], X[4], 280, '#1C2526', L.b[2]]];
+  br.forEach(b => { s += '<path d="M' + b[0] + ' ' + (b[2] - 8) + ' V' + b[2] + ' H' + b[1] + ' V' + (b[2] - 8) + '" fill="none" stroke="' + b[3] + '" stroke-width="2.4"/><text x="' + ((b[0] + b[1]) / 2) + '" y="' + (b[2] + 19) + '" text-anchor="middle" font-size="13" font-weight="700" fill="' + b[3] + '">' + b[4] + '</text>'; });
+  return s + '</svg>';
+}
+function flowTxt(dir) {
+  const a = dir === 'in' ? [
+    ['Lead time pemasok', 'Pemasok mengirim ke hub 3PL pada PO Delivery Date. RIFOT menanyakan apakah seluruh kuantitas tiba tepat waktu.'],
+    ['pencatatan GR', '3PL menerima barang dan mencatat penerimaan barang (GR Offsite). KPI GR tepat waktu membatasi jumlah hari di antara keduanya.'],
+    ['Konsolidasi di hub', 'Lot digabungkan dan dipesan pada kontainer atau kapal. Setiap hub memiliki jumlah hari standar. KPI konsolidasi memeriksa agar barang tidak tertahan lebih lama.'],
+    ['Pelayaran, kepabeanan, darat', 'Pengiriman berlayar, melewati kepabeanan, dan bergerak ke darat menuju lokasi, tempat GR Onsite dicatat. Standarnya adalah lead time dikurangi hari konsolidasi.']] : [
+    ['Lead time pabrik', 'Pabrik memproduksi dan menyerahkan batch ke 3PL pada tanggal siap kirim. OTIF di asal menanyakan apakah barang siap lengkap dan tepat waktu.'],
+    ['Pencatatan penerimaan', '3PL menerima produk dan mencatat penerimaan hub. KPI GR yang sama membatasi keterlambatan antara penerimaan fisik dan pencatatan.'],
+    ['Pemuatan dan cut-off', 'Produk dimuat ke dalam kontainer dan ditahan sampai batas waktu (cut-off) kapal. Hari standar hub adalah KPI konsolidasi.'],
+    ['Pelayaran, kepabeanan, last mile', 'Kapal berlayar, kargo dilepas dari bea cukai dan dikirim ke pelanggan. Bukti penerimaan menutup pesanan terhadap tanggal jatuh tempo pelanggan.']];
+  return '<div class="grid2">' + a.map((x, i) => '<div class="card" style="border-top-color:' + ['#B77A2B', '#4F9A9E', '#2E6E73', '#27403F'][i] + '"><h4>Fase ' + (i + 1) + ' &middot; ' + x[0] + '</h4><p class="small">' + x[1] + '</p></div>').join('') + '</div>';
+}
+
+/* ---------- tables for parameters ---------- */
+function tin(path, v, type, w) { return '<td><input data-p="' + path + '" type="' + (type || 'text') + '"' + (type === 'number' ? ' step="any"' : '') + ' value="' + esc(v) + '"' + (w ? ' style="min-width:' + w + 'px"' : '') + '></td>'; }
+function buildHubs() {
+  let h = '<thead><tr><th>Hub / rute</th><th>Konsolidasi standar (hari)</th><th>Toleransi lokasi sebelum pengiriman</th><th>Toleransi lokasi setelah pengiriman</th><th>Toleransi logistik sebelum pengiriman</th><th>Toleransi logistik setelah pengiriman</th></tr></thead><tbody>';
+  P.hubs.forEach((x, i) => { const b = 'hubs.' + i + '.'; h += '<tr>' + tin(b + 'n', x.n, 'text', 120) + tin(b + 'std', x.std, 'number') + tin(b + 'sB', x.sB, 'number') + tin(b + 'sA', x.sA, 'number') + tin(b + 'lB', x.lB, 'number') + tin(b + 'lA', x.lA, 'number') + '</tr>'; });
+  setH('t_hub', h + '</tbody>');
+}
+function buildRtns() {
+  const Lb = LAB[P.dir], names = P.hubs.map(x => x.n).filter(Boolean);
+  let h = '<thead><tr><th>Skenario / catatan</th><th>' + Lb.po + '</th><th>' + Lb.line + '</th><th>' + Lb.rtn + '</th><th>Hub</th><th>' + Lb.poQty + '</th><th>' + Lb.poDate + '</th><th>Lead time (hari)</th><th>' + Lb.qty + '</th><th>' + Lb.rcv + ' (opsional)</th><th>' + Lb.gro + '</th><th>' + Lb.ship + '</th><th>' + Lb.onsite + '</th><th>' + Lb.cancel + '</th><th>Penggantian tanggal acuan</th><th>Diharapkan di lokasi</th><th>Diharapkan logistik</th></tr></thead><tbody>';
+  P.rtns.forEach((r, i) => {
+    const b = 'rtns.' + i + '.'; let opt = names.map(n => '<option' + (n === r.hub ? ' selected' : '') + '>' + esc(n) + '</option>').join('');
+    if (r.hub && names.indexOf(r.hub) < 0) opt = '<option selected>' + esc(r.hub) + '</option>' + opt;
+    h += '<tr>' + tin(b + 'scen', r.scen, 'text', 230) + tin(b + 'po', r.po, 'text', 64) + tin(b + 'line', r.line, 'text', 52) + tin(b + 'rtn', r.rtn, 'text', 56) + '<td><select data-p="' + b + 'hub">' + opt + '</select></td>' + tin(b + 'poQty', r.poQty, 'number', 70) + tin(b + 'poDate', r.poDate, 'date', 130) + tin(b + 'lt', r.lt, 'number', 64) + tin(b + 'qty', r.qty, 'number', 70) + tin(b + 'rcv', r.rcv, 'date', 130) + tin(b + 'gro', r.gro, 'date', 130) + tin(b + 'ship', r.ship, 'date', 130) + tin(b + 'onsite', r.onsite, 'date', 130) + tin(b + 'cancel', r.cancel, 'text', 44) + tin(b + 'asof', r.asof, 'date', 130) + tin(b + 'expSite', r.expSite, 'text', 110) + tin(b + 'expLog', r.expLog, 'text', 110) + '</tr>';
+  });
+  setH('t_rtn', h + '</tbody>'); setT('rtnnote', Lb.note);
+}
+function syncStatic() { document.querySelectorAll('[data-p]').forEach(el => { if (el.closest('#t_hub,#t_rtn')) return; const v = getPath(P, el.dataset.p); el.value = el.dataset.type === 'bool' ? (v ? 'true' : 'false') : (v === undefined || v === null ? '' : v); }); }
+
+/* ---------- worked example ---------- */
+function renderWorked() {
+  const h = P.hubs.find(x => x.n && x.std > 0) || P.hubs[0]; if (!h) { setH('worked', ''); return; }
+  const po = pd('2026-10-01'), lt = 71, asof = pd('2026-10-09'), due = po + lt, rem = lt - h.std, fc = asof + rem, slack = due - fc, st = band(slack, h.sB);
+  setH('worked', '<b>' + esc(h.n) + ' &middot; barang dicatat di hub pada ' + fd(po) + ', belum dikirim, tanggal acuan ' + fd(asof) + ', lead time ' + lt + ' hari, konsolidasi standar ' + h.std + ' hari</b>' +
+    '<div class="eq">Due Site Date = ' + fd(po) + ' + ' + lt + ' = <b>' + fd(due) + '</b>\nSisa LT = ' + lt + ' &minus; ' + h.std + ' = ' + rem + ' hari\nPeramalan (hub) = ' + fd(asof) + ' + ' + rem + ' = <b>' + fd(fc) + '</b>\nSlack             = ' + fd(due) + ' &minus; ' + fd(fc) + ' = <b>' + sg(slack) + ' hari</b>   (toleransi ' + h.sB + ')\nStatus            = <b>' + st + '</b></div>' +
+    '<p class="small">Ubah tabel hub di bagian 6.2 dan contoh ini ikut berubah. Tanggal keberangkatan terakhir untuk baris ini adalah ' + fd(due - rem) + '.</p>');
+}
+
+/* ---------- results ---------- */
+function todayN() { const d = new Date(); return Math.round(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / DAY); }
+function isOpen(L) { return L.stage === 'Vendor' || L.stage === 'Di hub' || L.stage === 'Di laut'; }
+function drawTimeline(wi, base, order) {
+  const Ls = order.filter(L => !L.err && L.stage !== 'Dikecualikan').slice(0, 40); if (!Ls.length) { setH('c_time', '<p class="small" style="padding:16px">Tidak ada baris untuk ditampilkan.</p>'); return; }
+  const bm = {}; base.lines.forEach(L => { bm[L.key] = L; });
+  let lo = Infinity, hi = -Infinity; const upd = v => { if (v !== null && v !== undefined && isFinite(v)) { if (v < lo) lo = v; if (v > hi) hi = v; } };
+  Ls.forEach(L => { upd(L.poDate); upd(L.groL); upd(L.shipL); upd(L.siteL); upd(L.due); upd(L.fc); upd(L.evalDay); const b = bm[L.key]; if (b) upd(b.fc); });
+  lo -= 3; hi += 3; const W = 1180, LW = 230, RW = 14, PW = W - LW - RW, RH = 24, TOP = 40, H = TOP + Ls.length * RH + 14, X = v => LW + (v - lo) / (hi - lo) * PW;
+  let s = '<svg viewBox="0 0 ' + W + ' ' + H + '" font-family="Segoe UI,Arial"><rect width="' + W + '" height="' + H + '" fill="#fff"/>';
+  const span = hi - lo, step = span > 160 ? 28 : span > 90 ? 14 : 7;
+  for (let t = Math.ceil(lo / step) * step; t <= hi; t += step) s += '<line x1="' + X(t) + '" x2="' + X(t) + '" y1="' + (TOP - 8) + '" y2="' + (H - 8) + '" stroke="#ECE8DD"/><text x="' + X(t) + '" y="' + (TOP - 14) + '" text-anchor="middle" font-size="11" fill="#5B6568">' + fd(t).slice(0, 6) + '</text>';
+  Ls.forEach((L, i) => {
+    const y = TOP + i * RH, cy = y + RH / 2, hh = 11, y0 = cy - hh / 2, b = bm[L.key];
+    const col = SC[L.status] || '#6E7A7C';
+    s += '<text x="8" y="' + (cy + 4) + '" font-size="11.5" fill="#151B1D"><tspan font-weight="700">' + esc(L.key) + '</tspan> ' + esc((L.first.scen || '').trim().slice(0, 26)) + '</text>';
+    const rect = (a, c, fill, ex) => { if (a === null || c === null || c <= a) return ''; return '<rect x="' + X(a).toFixed(1) + '" y="' + y0 + '" width="' + Math.max(1, X(c) - X(a)).toFixed(1) + '" height="' + hh + '" fill="' + fill + '"' + (ex || '') + '/>'; };
+    let g = '<title>' + esc(L.key + '  ' + L.stage + '  ' + L.status + '\nJatuh tempo ' + fd(L.due) + (L.fc !== undefined ? '   Peramalan ' + fd(L.fc) : '') + (L.slack !== undefined ? '   Slack ' + sg(L.slack) + ' d' : '')) + '</title>';
+    if (L.groL !== null) g += rect(L.groL, L.shipL !== null ? L.shipL : L.evalDay, '#2E6E73');
+    if (L.shipL !== null) g += rect(L.shipL, L.siteL !== null ? L.siteL : L.evalDay, '#27403F');
+    if (isOpen(L)) {
+      const st = (L.stage === 'Vendor' ? Math.max(L.evalDay, L.poDate) : L.evalDay);
+      g += rect(Math.min(st, L.fc), Math.max(st, L.fc), col, ' opacity=".5" stroke="' + col + '" stroke-dasharray="3 2"');
+      if (VIEW === 'wi' && b && b.fc !== undefined && Math.abs(b.fc - L.fc) > 0.01) g += '<path d="M' + X(b.fc).toFixed(1) + ' ' + (cy - 7) + ' l4 7 l-4 7 l-4 -7z" fill="#fff" stroke="#6B7477" stroke-width="1.4"/>';
+    }
+    g += '<path d="M' + X(L.poDate).toFixed(1) + ' ' + (cy - 5) + ' l4 5 l-4 5 l-4 -5z" fill="#B77A2B"/>';
+    g += '<line x1="' + X(L.due).toFixed(1) + '" x2="' + X(L.due).toFixed(1) + '" y1="' + (y + 2) + '" y2="' + (y + RH - 2) + '" stroke="#151B1D" stroke-width="2.2"/>';
+    if (isOpen(L)) g += '<line x1="' + X(L.evalDay).toFixed(1) + '" x2="' + X(L.evalDay).toFixed(1) + '" y1="' + (y + 3) + '" y2="' + (y + RH - 3) + '" stroke="#B64D42" stroke-width="1.2" stroke-dasharray="2 2"/>';
+    s += g;
+  });
+  setH('c_time', s + '</svg>');
+  setH('c_time_leg', [['#2E6E73', 'Di hub (aktual)'], ['#27403F', 'Di laut (aktual)'], ['#D49A3A', 'Peramalan kedatangan, diwarnai menurut status'], ['#B77A2B', 'Tanggal janji pemasok'], ['#151B1D', 'Tanggal jatuh tempo'], ['#B64D42', 'Tanggal acuan (titik-titik)']].map(x => '<span><i style="background:' + x[0] + '"></i>' + x[1] + '</span>').join('') + (VIEW === 'wi' ? '<span>&#9671; Peramalan kedatangan dasar (saat what-if menggesernya)</span>' : ''));
+}
+function renderResults() {
+  const t = todayN(), base = compute(P, {}, t), wi = compute(P, LEV, t), Lb = LAB[P.dir];
+  const bm = {}; base.lines.forEach(L => { bm[L.key] = L; });
+  const lines = wi.lines; lines.forEach(L => { L.p = mcLine(L, P.mc, LEV); });
+  const open = lines.filter(isOpen);
+  const order = lines.slice().sort((a, b) => { const oa = isOpen(a) ? 0 : 1, ob = isOpen(b) ? 0 : 1; if (oa !== ob) return oa - ob; if (oa === 0) { const pa = a.p === null ? -1 : a.p, pb = b.p === null ? -1 : b.p; if (Math.abs(pb - pa) > 1e-9) return pb - pa; return (a.slack || 0) - (b.slack || 0); } return a.n - b.n; });
+  /* worst logistics per line */
+  const wrs = {}; wi.rtns.forEach(o => { if (!['Tepat waktu', 'Kemungkinan tepat waktu', 'Kemungkinan terlambat', 'Terlambat'].includes(o.status)) return; const k = o.line.key, c = wrs[k]; if (!c || ORDER[o.status] < ORDER[c]) wrs[k] = o.status; });
+  /* headline */
+  const late = open.filter(L => L.status === 'Terlambat').length, pl = open.filter(L => L.status === 'Kemungkinan terlambat').length;
+  const lb = base.lines.filter(L => isOpen(L) && L.status === 'Terlambat').length, plb = base.lines.filter(L => isOpen(L) && L.status === 'Kemungkinan terlambat').length;
+  const chg = lines.filter(L => bm[L.key] && bm[L.key].status !== L.status && isOpen(L)), expLate = open.reduce((s, L) => s + (L.p || 0), 0);
+  const hubL = open.filter(L => L.stage === 'Di hub'), dueSoon = hubL.filter(L => { const left = L.latestDep - L.evalDay - LEV.hubHold; return left >= 0 && left <= 7; });
+  let hd = '<ul class="res" style="margin:0;padding-left:18px">';
+  hd += '<li><b>' + open.length + '</b> baris PO masih terbuka. <b>' + (late + pl) + '</b> diperkirakan Terlambat atau Kemungkinan terlambat (dasar: ' + (lb + plb) + '), dari jumlah itu <b>' + late + '</b> sudah Terlambat bahkan pada waktu pelayaran standar (dasar: ' + lb + ').</li>';
+  const top = order.find(isOpen); if (top && top.p !== null) hd += '<li>Risiko tertinggi: <b>' + esc(top.key) + '</b>, ' + esc((top.first.scen || '').trim()) + ' (' + top.stage + ', ' + top.status + ', probabilitas terlambat ' + pc(top.p) + '). ' + esc(actionFor(top, LEV)) + '.</li>';
+  hd += '<li><b>' + hubL.length + '</b> baris berada di hub, tempat eskalasi masih dapat menggeser kedatangan; <b>' + dueSoon.length + '</b> di antaranya harus berangkat dalam 7 hari.</li>';
+  if (chg.length) hd += '<li>What-if Anda mengubah status <b>' + chg.length + '</b> baris terbuka' + (chg.length > 1 ? 's' : '') + ': ' + chg.slice(0, 6).map(L => esc(L.key) + ' (' + bm[L.key].status + ' \u2192 ' + L.status + ')').join(', ') + (chg.length > 6 ? ', ...' : '') + '.</li>';
+  hd += '</ul>'; setH('r_head', hd);
+  setH('r_kpis', '<div><b>' + open.length + '</b><span>Baris PO terbuka</span></div><div class="' + (late > lb ? 'bad' : '') + '"><b>' + late + '</b><span>Terlambat, what-if (dasar ' + lb + ')</span></div><div class="' + (pl > plb ? 'bad' : '') + '"><b>' + pl + '</b><span>Kemungkinan terlambat, what-if (dasar ' + plb + ')</span></div><div class="' + (chg.length ? 'bad' : '') + '"><b>' + chg.length + '</b><span>Baris terbuka yang statusnya berubah dibanding dasar</span></div><div><b>' + f1(expLate, 1) + '</b><span>Baris yang diperkirakan terlambat (lapisan probabilitas)</span></div>');
+  /* ranking */
+  let rk = '<thead><tr><th class="r">#</th><th>' + Lb.po + ' - baris</th><th>Skenario</th><th>Hub</th><th>Tahap</th><th>' + Lb.due + '</th><th>Peramalan / aktual</th><th class="r">Slack (hari)</th><th>Status lokasi</th><th>Dasar</th><th>P(terlambat)</th><th>Logistik terburuk</th><th>Tindakan yang disarankan</th></tr></thead><tbody>';
+  order.forEach((L, i) => {
+    if (L.err) { rk += '<tr><td class="r">' + (i + 1) + '</td><td class="k">' + esc(L.key) + '</td><td colspan="11"><span class="stp s-gray">Periksa input</span> ' + esc(L.err) + '</td></tr>'; return; }
+    const b = bm[L.key], ch = b && b.status !== L.status;
+    rk += '<tr><td class="r">' + (i + 1) + '</td><td class="k">' + esc(L.key) + '</td><td>' + esc((L.first.scen || '').trim()) + '</td><td>' + esc(L.hub.n) + '</td><td>' + L.stage + '</td><td>' + fd(L.due) + '</td><td>' + (L.fc !== undefined ? fd(L.fc) : '\u2014') + '</td><td class="r">' + (L.slack !== undefined ? sg(L.slack) : '\u2014') + '</td><td>' + chip(L.status) + '</td><td>' + (ch ? chip(b.status) : '<span class="small">same</span>') + '</td><td>' + (L.p === null ? '\u2014' : '<b>' + pc(L.p) + '</b>') + '</td><td>' + (wrs[L.key] ? chip(wrs[L.key]) : '<span class="small">n/a</span>') + '</td><td class="small">' + esc(actionFor(L, LEV)) + '</td></tr>';
+  });
+  setH('t_rank', rk + '</tbody>');
+  drawTimeline(wi, base, order);
+  /* distribution */
+  const ST = ['Tepat waktu', 'Kemungkinan tepat waktu', 'Kemungkinan terlambat', 'Terlambat'], cnt = (arr, f, s) => arr.filter(x => f(x) === s).length;
+  let dt = '<thead><tr><th>Status</th><th class="r">Lokasi, dasar</th><th class="r">Lokasi, what-if</th><th class="r">Perubahan</th><th class="r">Logistik, dasar</th><th class="r">Logistik, what-if</th><th class="r">Perubahan</th></tr></thead><tbody>';
+  ST.concat(['Tahap vendor', 'Dikecualikan']).forEach(s => {
+    const a = cnt(base.lines, L => L.status, s), b = cnt(wi.lines, L => L.status, s), c = cnt(base.rtns, o => o.status, s), d = cnt(wi.rtns, o => o.status, s), cl = (x) => x > 0 ? 'dn' : (x < 0 ? 'up' : '');
+    const bad = s === 'Terlambat' || s === 'Kemungkinan terlambat';
+    dt += '<tr><td>' + (s === 'Tahap vendor' ? '<span class="stp s-gray">Tahap vendor (logistik belum dimulai)</span>' : chip(s)) + '</td><td class="r">' + (s === 'Tahap vendor' ? '\u2014' : a) + '</td><td class="r">' + (s === 'Tahap vendor' ? '\u2014' : b) + '</td><td class="r ' + (bad ? cl(b - a) : '') + '">' + (s === 'Tahap vendor' ? '\u2014' : sg(b - a)) + '</td><td class="r">' + c + '</td><td class="r">' + d + '</td><td class="r ' + (bad ? cl(d - c) : '') + '">' + sg(d - c) + '</td></tr>';
+  });
+  setH('t_dist', dt + '</tbody>');
+  /* rtn table */
+  let rt = '<thead><tr><th>' + Lb.po + ' - baris - ' + Lb.rtn + '</th><th>Hub</th><th>Tahap</th><th>Target logistik</th><th>Peramalan / aktual</th><th class="r">Slack (hari)</th><th>Status</th><th>Dasar</th><th class="r">Pemasok vs janji</th><th class="r">Keterlambatan pencatatan</th><th class="r">Waktu tinggal di hub vs KPI</th><th class="r">Pelayaran vs standar</th></tr></thead><tbody>';
+  const bR = {}; base.rtns.forEach(o => { bR[o.i] = o; });
+  const cell = v => v === null || v === undefined ? '<td class="r small">\u2014</td>' : '<td class="r ' + (v > 0 ? 'dn' : (v < 0 ? 'up' : '')) + '">' + sg(v) + '</td>';
+  wi.rtns.forEach(o => {
+    const b = bR[o.i], L = o.line, ch = b && b.status !== o.status;
+    rt += '<tr><td class="k">' + esc(o.row.po + '-' + o.row.line + ' ' + o.row.rtn) + '</td><td>' + esc(o.row.hub) + '</td><td>' + o.stage + '</td><td>' + (o.target !== undefined ? fd(o.target) : '\u2014') + '</td><td>' + (o.fc !== undefined ? fd(o.fc) : '\u2014') + '</td><td class="r">' + (o.slack !== undefined ? sg(o.slack) : '\u2014') + '</td><td>' + (['Tahap vendor', 'Dikecualikan', 'Periksa input'].includes(o.status) ? '<span class="stp s-gray">' + o.status + '</span>' : chip(o.status)) + '</td><td>' + (ch ? chip(b.status) : '<span class="small">same</span>') + '</td>' + cell(o.vendorD) + (o.grLag === undefined ? '<td class="r small">\u2014</td>' : '<td class="r ' + (o.grLag > P.grKpi ? 'dn' : '') + '">' + o.grLag + '</td>') + cell(o.hubD) + cell(o.sailD) + '</tr>';
+  });
+  setH('t_rtn_res', rt + '</tbody>');
+  /* kpi chain */
+  const k = kpis(base, P), kr = (n, d, num, den) => '<tr><td class="k">' + n + '</td><td>' + d + '</td><td class="r">' + den + '</td><td class="r">' + num + '</td><td class="r"><b>' + (den ? pc(num / den) : '\u2014') + '</b></td></tr>';
+  setH('t_kpi', '<thead><tr><th>KPI</th><th>Definisi yang dipakai</th><th class="r">Diukur</th><th class="r">Tercapai</th><th class="r">Rasio</th></tr></thead><tbody>' +
+    kr('RIFOT', 'Baris lengkap di hub dengan ' + Lb.gro + ' terbaru pada atau sebelum ' + Lb.poDate, k.rifotOK, k.rifotN) +
+    kr('GR tepat waktu', 'Pengiriman dengan ' + Lb.gro + ' dikurangi penerimaan fisik \u2264 ' + P.grKpi + ' hari (penerimaan kosong dihitung 0)', k.grOK, k.grN) +
+    kr('KPI konsolidasi', 'Pengiriman terkirim dengan ' + Lb.ship + ' dikurangi ' + Lb.gro + ' \u2264 hari standar hub', k.conOK, k.conN) +
+    kr('Standar pelayaran', 'Pengiriman diterima dengan ' + Lb.onsite + ' dikurangi ' + Lb.ship + ' \u2264 LT dikurangi standar', k.saOK, k.saN) +
+    kr('Logistik tepat waktu', 'Pengiriman diterima pada atau sebelum ' + Lb.gro + ' + LT', k.logOK, k.logN) +
+    kr('DIFOT', 'Baris diterima lengkap pada atau sebelum ' + Lb.due, k.difOK, k.difN) + '</tbody>');
+  /* self check */
+  let sOK = 0, sN = 0, lOK = 0, lN = 0, mis = [];
+  base.lines.forEach(L => { const e = L.first.expSite; if (e) { sN++; if (e === L.status) sOK++; else mis.push(L.key + ' lokasi: ' + L.status + ' vs ' + e); } });
+  base.rtns.forEach(o => { const e = o.row.expLog; if (e) { lN++; if (e === o.status) lOK++; else mis.push(o.row.scen + ' logistik: ' + o.status + ' vs ' + e); } });
+  setH('selfcheck', sN + lN === 0 ? 'Belum ada status yang diharapkan pada data saat ini. Muat <b>Set uji</b> di bagian 6.1 untuk membandingkan halaman ini dengan model Excel (19 baris PO, 22 pengiriman).' :
+    '<b>Status lokasi: ' + sOK + ' dari ' + sN + ' cocok. Status logistik: ' + lOK + ' dari ' + lN + ' cocok.</b> Nilai yang diharapkan adalah hasil perhitungan manual dari model Excel. Kecocokan membuktikan halaman mengikuti aturan yang sama; ia tidak membuktikan bahwa aturannya benar.' + (mis.length ? '<br>Ketidaksesuaian: ' + esc(mis.slice(0, 8).join('; ')) : ''));
+  /* warnings */
+  const W = []; const names = P.hubs.map(x => x.n).filter(Boolean);
+  if (new Set(names).size !== names.length) W.push('Dua hub memiliki nama yang sama; yang pertama dipakai.');
+  lines.forEach(L => { if (L.err) W.push('Baris ' + L.key + ': ' + L.err + '.'); const f0 = L.first; L.rows.forEach(r => { if (r.hub !== f0.hub || String(r.poQty) !== String(f0.poQty) || r.poDate !== f0.poDate || String(r.lt) !== String(f0.lt)) { if (!L._w) { W.push('Baris ' + L.key + ': hub, kuantitas, tanggal janji, atau lead time berbeda antar baris; hanya baris pertama yang dipakai.'); L._w = 1; } } }); });
+  P.rtns.forEach((r, i) => { const a = pd(r.gro), b = pd(r.ship), c = pd(r.onsite), d = pd(r.rcv); if (a !== null && b !== null && b < a) W.push('Baris ' + (i + 1) + ': ' + Lb.ship + ' lebih awal daripada ' + Lb.gro + '.'); if (b !== null && c !== null && c < b) W.push('Baris ' + (i + 1) + ': ' + Lb.onsite + ' lebih awal daripada ' + Lb.ship + '.'); if (d !== null && a !== null && d > a) W.push('Baris ' + (i + 1) + ': penerimaan fisik lebih lambat daripada ' + Lb.gro + '; tanggal penerimaan diabaikan untuk baris itu.'); });
+  if (LEV.horizon > 0) W.push('Proyeksi ke depan ' + LEV.horizon + ' hari: peristiwa setelah tanggal acuan tetap diabaikan; hanya waktu yang bergerak.');
+  if (!P.useToday && P.rtns.some(r => r.asof)) W.push('Beberapa baris memiliki penggantian tanggal acuan sendiri (seperti di set uji). Tanggal umum hanya berlaku untuk baris tanpa penggantian.');
+  setH('r_warn', W.length ? '<ul style="margin:0;padding-left:18px">' + W.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>' : '<span style="color:#3E745A"><b>Tidak ada peringatan input.</b></span>');
+  renderWorked();
+}
+
+/* ---------- events ---------- */
+let pend = false; function run() { if (pend) return; pend = true; requestAnimationFrame(() => { pend = false; try { renderResults(); } catch (e) { if (window.console) console.error(e); setH('r_warn', 'Galat perhitungan: ' + esc(e.message)); } }); }
+function onEdit(e) {
+  const t = e.target, p = t.dataset && t.dataset.p; if (!p) return;
+  let v = t.value; if (t.dataset.type === 'bool') v = (v === 'true');
+  else if (/^hubs\.\d+\.(std|sB|sA|lB|lA)$/.test(p)) { v = parseFloat(v); if (!isFinite(v)) v = 0; }
+  else if (p === 'grKpi') { v = parseFloat(v); if (!isFinite(v)) v = 0; }
+  else if (/^mc\./.test(p)) { v = parseFloat(v); if (!isFinite(v)) v = 0; if (p === 'mc.sims') v = Math.min(10000, Math.max(200, Math.round(v) || 2000)); }
+  setPath(P, p, v);
+  if (e.type === 'change' && /^hubs\.\d+\.n$/.test(p)) buildRtns();
+  run();
+}
+function setDir(d, load) {
+  P.dir = d; document.querySelectorAll('[data-dir]').forEach(b => { b.classList.toggle('on', b.dataset.dir === d); b.classList.toggle('line', b.dataset.dir !== d); });
+  if (load) { P.rtns = clone(d === 'in' ? PORTFOLIO : PORTFOLIO_OUT); P.asof = '2026-10-09'; }
+  setT('dirnote', d === 'in' ? 'Inbound: purchase orders from suppliers to the site. Example portfolio loaded.' : 'Outbound: products from the site to customers, same engine with mirrored labels. Example outbound portfolio loaded.');
+  buildRtns(); syncStatic(); run();
+}
+function lev() {
+  LEV = { horizon: +$('l_hor').value, vendorSlip: +$('l_ven').value, hubHold: +$('l_hub').value, transitSlip: +$('l_tr').value };
+  setT('o_hor', LEV.horizon + ' d'); setT('o_ven', LEV.vendorSlip + ' d'); setT('o_hub', LEV.hubHold + ' d'); setT('o_tr', (LEV.transitSlip > 0 ? '+' : '') + LEV.transitSlip + ' d'); run();
+}
+function setFlow(d) { FLOW = d; document.querySelectorAll('[data-flow]').forEach(b => { b.classList.toggle('on', b.dataset.flow === d); b.classList.toggle('line', b.dataset.flow !== d); }); setH('flowsvg', flowSvg(d)); setH('flowtxt', flowTxt(d)); }
+function init() {
+  setH('flowsvg', flowSvg('in')); setH('flowtxt', flowTxt('in'));
+  buildHubs(); buildRtns(); syncStatic();
+  document.addEventListener('input', onEdit); document.addEventListener('change', onEdit);
+  ['l_hor', 'l_ven', 'l_hub', 'l_tr'].forEach(id => $(id).addEventListener('input', lev));
+  $('b_lvreset').addEventListener('click', () => { ['l_hor', 'l_ven', 'l_hub', 'l_tr'].forEach(id => { $(id).value = 0; }); lev(); });
+  document.querySelectorAll('[data-flow]').forEach(b => b.addEventListener('click', () => setFlow(b.dataset.flow)));
+  document.querySelectorAll('[data-dir]').forEach(b => b.addEventListener('click', () => setDir(b.dataset.dir, true)));
+  document.querySelectorAll('[data-view]').forEach(b => b.addEventListener('click', () => { VIEW = b.dataset.view; document.querySelectorAll('[data-view]').forEach(x => { x.classList.toggle('on', x === b); x.classList.toggle('line', x !== b); }); run(); }));
+  $('b_port').addEventListener('click', () => { P.rtns = clone(P.dir === 'in' ? PORTFOLIO : PORTFOLIO_OUT); P.asof = '2026-10-09'; buildRtns(); syncStatic(); run(); });
+  $('b_test').addEventListener('click', () => { P.dir = 'in'; P.hubs = clone(HUBS); P.rtns = clone(TESTSET); P.asof = '2026-10-09'; P.useToday = false; setDir('in', false); buildHubs(); syncStatic(); });
+  $('b_blank').addEventListener('click', () => { P.rtns = [R({})]; buildRtns(); run(); });
+  $('b_add').addEventListener('click', () => { if (P.rtns.length < 60) { P.rtns.push(R({ hub: (P.hubs[0] || {}).n || '' })); buildRtns(); run(); } });
+  $('b_del').addEventListener('click', () => { if (P.rtns.length > 1) { P.rtns.pop(); buildRtns(); run(); } });
+  setDir('in', false);
+}
+if (typeof document !== 'undefined') { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init(); }
+
+
+</script></body></html>

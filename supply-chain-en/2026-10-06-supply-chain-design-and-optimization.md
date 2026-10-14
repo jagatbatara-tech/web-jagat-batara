@@ -8,7 +8,7 @@ tags:
   - CSCP
 thumbnail: ''
 id_link: supply-chain/2026-10-06-desain-dan-optimalisasi-rantai-pasok
-article_url: supply-chain/Supply%20Chain%20Design%20%26%20Optimization_EN.html
+archive_url: "supply-chain-en/Supply%20Chain%20Design%20%26%20Optimization_EN.html"
 summary: A practical study summary on aligning supply chain network design with business strategy, balancing efficiency with responsiveness and resilience, and building a sound case for supply chain technology.
 ---
 

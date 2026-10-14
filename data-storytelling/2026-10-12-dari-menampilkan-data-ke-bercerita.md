@@ -4,7 +4,7 @@ archive_url: "data-storytelling/dari-menampilkan-data-ke-bercerita.html"
 kicker: Penceritaan Data · Panduan belajar mandiri
 date: 2026-10-12T00:00:00.000Z
 summary: >
-  Panduan belajar terpadu tentang data storytelling dan desain dasbor: enam pelajaran, sembilan perbaikan dasbor yang buruk, lab bagaimana jika, dan tujuh latihan memilih data. Berdasarkan Storytelling with Data karya Cole Nussbaumer Knaflic.
+  Panduan belajar terpadu tentang data storytelling dan desain dasbor: enam pelajaran, sembilan perbaikan dasbor yang buruk, lab bagaimana jika, dan tujuh latihan memilih data. Berdasarkan Storytelling with Data.
 tags:
   - Penceritaan Data
   - Visualisasi Data

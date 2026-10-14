@@ -4,7 +4,56 @@
   <title>Jagat Batara — Knowledge Sharing</title>
   <link>https://jagatbatara-tech.github.io/web-jagat-batara</link>
   <description>Artikel terbaru dari Jagat Batara: studi kasus, supply chain, data storytelling, automation, dan lainnya.</description>
-  <lastBuildDate>Tue, 13 Oct 2026 05:11:01 GMT</lastBuildDate>
+  <lastBuildDate>Wed, 14 Oct 2026 03:29:37 GMT</lastBuildDate>
+  <item>
+    <title>Pesanan pembelian mana yang kemungkinan terlambat tiba?</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/studi-kasus.html?post=2026-10-13-pesanan-pembelian-terlambat.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/studi-kasus.html?post=2026-10-13-pesanan-pembelian-terlambat.md</guid>
+    <pubDate>Tue, 13 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Pesanan pembelian tidak menjadi terlambat pada tanggal jatuh temponya. Ia terlambat lebih awal, di hub, ketika barang menunggu kontainer atau kapal. Telusuri alur fisiknya, KPI di setiap langkah, dan prakiraan berbasis aturan yang menandai pesanan yang mulai bergeser terlambat selagi Anda masih bisa bertindak. Berjalan di peramban Anda.</description>
+  </item>
+  <item>
+    <title>Pesanan pembelian mana yang kemungkinan terlambat tiba?</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/supply-chain.html?post=2026-10-13-pesanan-pembelian-terlambat.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/supply-chain.html?post=2026-10-13-pesanan-pembelian-terlambat.md</guid>
+    <pubDate>Tue, 13 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Pesanan pembelian tidak menjadi terlambat pada tanggal jatuh temponya. Ia terlambat lebih awal, di hub, ketika barang menunggu kontainer atau kapal. Telusuri alur fisiknya, KPI di setiap langkah, dan prakiraan berbasis aturan yang menandai pesanan yang mulai bergeser terlambat selagi Anda masih bisa bertindak. Berjalan di peramban Anda.</description>
+  </item>
+  <item>
+    <title>Bad Chart Clinic: 50 Grafik dan Dasbor untuk Didiagnosis dan Diperbaiki</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/data-storytelling.html?post=2026-10-13-klinik-grafik-buruk.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/data-storytelling.html?post=2026-10-13-klinik-grafik-buruk.md</guid>
+    <pubDate>Tue, 13 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Lima puluh grafik dan dasbor yang bermasalah. Untuk setiap grafik, Anda menemukan kesalahannya, memilih desain ulang yang akan Anda pakai, lalu melihat perbaikannya. Di akhir, Anda mendapat radar keterampilan dan level dari Newbie hingga Master. Semua data bersifat fiktif dan berjalan offline di peramban Anda.</description>
+  </item>
+  <item>
+    <title>Chart Advisor: Unggah Data Anda, Lihat Grafik Terbaik untuk Ceritanya</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/data-storytelling.html?post=2026-10-12-chart-advisor.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/data-storytelling.html?post=2026-10-12-chart-advisor.md</guid>
+    <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Unggah file Excel atau CSV, konfirmasi kolomnya, dan dapatkan dua rekomendasi grafik yang digambar dari data Anda sendiri, lengkap dengan alasan dan judul aksi. Berjalan sepenuhnya di peramban Anda.</description>
+  </item>
+  <item>
+    <title>Dari Menampilkan Data ke Bercerita</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/data-storytelling.html?post=2026-10-12-dari-menampilkan-data-ke-bercerita.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/data-storytelling.html?post=2026-10-12-dari-menampilkan-data-ke-bercerita.md</guid>
+    <pubDate>Mon, 12 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Panduan belajar terpadu tentang data storytelling dan desain dasbor: enam pelajaran, sembilan perbaikan dasbor yang buruk, lab bagaimana jika, dan tujuh latihan memilih data. Berdasarkan Storytelling with Data karya Cole Nussbaumer Knaflic.</description>
+  </item>
+  <item>
+    <title>Kapan Kemacetan Dermaga Membatasi Kapasitas?</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/studi-kasus.html?post=2026-10-09-kapasitas-dermaga.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/studi-kasus.html?post=2026-10-09-kapasitas-dermaga.md</guid>
+    <pubDate>Fri, 09 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Tambatan tidak penuh pada 100%. Kapal sudah mengantre jauh sebelum itu. Ubah okupansi tambatan, waktu layanan, atau jadwal tambatan, lalu lihat kapan kemacetan mulai terasa, dan uji apakah dermaga tambahan, transfer kapal-ke-kapal, atau jadwal yang lebih baik sepadan dengan investasinya. Berjalan di peramban Anda.</description>
+  </item>
+  <item>
+    <title>Kapan Kemacetan Dermaga Membatasi Kapasitas?</title>
+    <link>https://jagatbatara-tech.github.io/web-jagat-batara/supply-chain.html?post=2026-10-09-kapasitas-dermaga.md</link>
+    <guid isPermaLink="true">https://jagatbatara-tech.github.io/web-jagat-batara/supply-chain.html?post=2026-10-09-kapasitas-dermaga.md</guid>
+    <pubDate>Fri, 09 Oct 2026 00:00:00 GMT</pubDate>
+    <description>Tambatan tidak penuh pada 100%. Kapal sudah mengantre jauh sebelum itu. Ubah okupansi tambatan, waktu layanan, atau jadwal tambatan, lalu lihat kapan kemacetan mulai terasa, dan uji apakah dermaga tambahan, transfer kapal-ke-kapal, atau jadwal yang lebih baik sepadan dengan investasinya. Berjalan di peramban Anda.</description>
+  </item>
   <item>
     <title>Strategi Pertumbuhan Jasa Pertambangan: Studi Kasus Eksekutif STAR</title>
     <link>https://jagatbatara-tech.github.io/web-jagat-batara/studi-kasus.html?post=2026-10-08-strategi-pertumbuhan-jasa-pertambangan-star.md</link>

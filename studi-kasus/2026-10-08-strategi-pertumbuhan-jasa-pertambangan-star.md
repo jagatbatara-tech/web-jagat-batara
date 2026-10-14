@@ -54,7 +54,7 @@ Klien membutuhkan kontrak dan sumber pendapatan tambahan, tetapi pertumbuhan kon
 
 Tekanan utama meliputi volatilitas harga batu bara, berkurangnya volume pemindahan lapisan penutup, pemain lama berskala besar dengan kontrak jangka panjang, serta ekspektasi pelanggan yang meningkat terhadap transparansi biaya, keselamatan, keandalan produksi, dan struktur komersial yang fleksibel. Di sisi lain, diversifikasi berisiko mengalihkan fokus manajemen; kepemilikan di sepanjang rantai nilai dapat menambah risiko modal dan pelaksanaan; sementara masuk terlalu dini ke konstruksi atau EPC dapat memperlihatkan kesenjangan rekayasa, rekam jejak, dan tata kelola proyek.
 
-Prospek pasar dalam analisis awal menggunakan acuan produksi batu bara 421 Mt, ekspektasi pertumbuhan industri 2,0–2,5%, dan perkiraan sekitar 116 kontraktor dalam lanskap jasa pertambangan yang lebih luas. Angka-angka ini menggambarkan periode perencanaan yang dianalisis, bukan proyeksi terkini.
+Prospek pasar dalam analisis awal menggunakan acuan produksi batu bara 421 Mt, ekspektasi pertumbuhan industri 2.0–2.5%, dan perkiraan sekitar 116 kontraktor dalam lanskap jasa pertambangan yang lebih luas. Angka-angka ini menggambarkan periode perencanaan yang dianalisis, bukan proyeksi terkini.
 
 ### Hipotesis yang diuji
 

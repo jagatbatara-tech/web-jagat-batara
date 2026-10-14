@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How much safety stock is enough?</title>
+<meta name="description" content="Size safety stock with standard formulas, then stress-test it across hundreds of simulated years.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+4:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* Palette taken from jagatb.com tool pages (PO / Jetty) and index.html */
+:root{--bg:#F4F2ED;--ink:#151B1D;--muted:#5B6568;--line:#DDD8CC;--copper:#B77A2B;--gold:#C59B43;--gold-l:#F2D9A0;--dark:#1C2526;
+--green:#3E745A;--teal:#2E6E73;--amber:#D49A3A;--red:#B64D42;--card:#FFFFFF;--soft:#EEE9DD;--tsoft:#EAF3F3;
+--in-bg:#FFF8E1;--in-ink:#0000CC;--serif:'Source Serif 4',Georgia,'Times New Roman',serif;--sans:Inter,'Segoe UI',Calibri,Arial,sans-serif;
+--shadow:0 18px 46px rgba(23,35,36,.13);--ease:cubic-bezier(.2,.75,.25,1)}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.7 var(--sans);overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--serif);color:var(--dark);line-height:1.2;margin:0}
+p{margin:0}
+a{color:var(--teal)}
+button,input,select{font:inherit}
+:focus-visible{outline:3px solid var(--copper);outline-offset:2px}
+.wrap{max-width:1220px;margin:0 auto;padding:0 clamp(20px,4vw,40px)}
+.svg{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.lab{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:800;color:var(--copper)}
+
+/* ---------- Hero ---------- */
+.hero{position:relative;overflow:hidden;background:var(--dark);color:#EDEAE1;border-bottom:6px solid var(--copper)}
+.gridfx{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:52px 52px}
+.hero:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 78% 40%,rgba(46,110,115,.45),transparent 38%)}
+.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1fr);gap:48px;padding-top:clamp(64px,9vw,112px);padding-bottom:clamp(56px,8vw,96px);align-items:center}
+@media(min-width:1000px){.hero .wrap{grid-template-columns:1.25fr .9fr}}
+.hero .lab{color:var(--gold-l)}
+.hero h1{color:#fff;font-size:clamp(36px,5.2vw,60px);margin:18px 0 22px;letter-spacing:-.02em}
+.hero p.lead{font-size:clamp(17px,1.9vw,19.5px);color:#D6D2C6;max-width:640px}
+.meta{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.18);font-size:14px;color:#BDB8AA}
+.meta span{display:flex;align-items:center;gap:8px}
+.meta .svg{color:var(--gold-l)}
+.meta b{color:#F2D9A0;font-weight:700}
+.page-actions,.btns{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.page-action,.btn{display:inline-flex;align-items:center;gap:9px;min-height:46px;padding:11px 20px;border:1px solid var(--copper);border-radius:8px;background:var(--copper);color:#fff;text-decoration:none;font-size:15px;font-weight:700;cursor:pointer;transition:.2s}
+.page-action:hover,.btn:hover{background:#94601f;border-color:#94601f}
+.page-action.secondary,.btn.alt{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.45)}
+.page-action.secondary:hover,.btn.alt:hover{background:rgba(255,255,255,.18)}
+.page-actions{margin-top:0}
+.hero-vis{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:22px}
+.hero-vis svg{display:block;width:100%;height:auto}
+.hero-vis .cap{font-size:13px;color:#A9A496;margin-top:12px}
+@keyframes draw{to{stroke-dashoffset:0}}
+.drawline{stroke-dasharray:1600;stroke-dashoffset:1600;animation:draw 2.4s var(--ease) .3s forwards}
+
+/* ---------- TOC ---------- */
+nav.toc{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+nav.toc .wrap{display:flex;align-items:center;gap:12px}
+.toc-links{display:flex;gap:2px;overflow-x:auto;white-space:nowrap;flex:1;scrollbar-width:none}
+.toc-links a{display:block;padding:16px 12px;font-size:14px;text-decoration:none;color:var(--muted);font-weight:600;border-bottom:3px solid transparent}
+.toc-links a:hover{color:var(--dark);border-bottom-color:var(--copper)}
+.language{display:flex;align-items:center;gap:4px;padding-left:12px;border-left:1px solid var(--line)}
+.language .svg{color:var(--teal);margin-right:2px}
+.language button{border:1px solid transparent;background:none;border-radius:7px;padding:5px 9px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer}
+.language button[aria-pressed="true"]{background:var(--teal);border-color:var(--teal);color:#fff}
+
+/* ---------- Sections ---------- */
+section{padding:clamp(64px,8vw,104px) 0;border-bottom:1px solid var(--line)}
+section.white{background:#fff}
+h2{font-size:clamp(28px,3.4vw,40px);margin:12px 0 16px;letter-spacing:-.015em;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+h3{font-size:23px;margin:0 0 10px}
+h4{font-size:19px;margin:0 0 8px}
+.num{display:inline-grid;place-items:center;background:var(--copper);color:#fff;border-radius:50%;width:42px;height:42px;font-family:var(--serif);font-size:20px;flex:none}
+.lead{font-size:clamp(18px,1.8vw,20px);color:var(--muted);max-width:780px}
+.prose{max-width:780px;margin-top:20px}
+.prose p+p{margin-top:16px}
+.grid3,.grid2{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;margin-top:40px}
+@media(min-width:760px){.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr 1fr}}
+@media(min-width:1060px){.grid3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--copper);border-radius:12px;padding:28px 28px 30px;box-shadow:0 6px 20px rgba(23,35,36,.05)}
+.card p{color:var(--muted);font-size:16px}
+.card.teal{border-top-color:var(--teal)}
+.ic{width:50px;height:50px;display:grid;place-items:center;border-radius:12px;background:var(--tsoft);color:var(--teal);margin-bottom:18px}
+.ic .svg{width:26px;height:26px}
+.ic.cu{background:#F6ECDD;color:var(--copper)}
+.callout{background:var(--tsoft);border-left:5px solid var(--teal);border-radius:8px;padding:20px 24px;margin-top:32px;max-width:860px}
+.note{background:#FFFBF1;border:1px dashed var(--amber);border-radius:8px;padding:16px 20px;margin-top:24px;font-size:15.5px;max-width:860px}
+.note b{color:#8A5A12}
+.warnbox{background:#FBEDEB;border:1px solid #EBC8C3;border-left:5px solid var(--red);border-radius:8px;padding:14px 20px;font-size:15px}
+.diagram{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;margin-top:40px;overflow-x:auto}
+.diagram svg{display:block;width:100%;min-width:680px;height:auto}
+
+/* flow */
+.flow{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;margin-top:40px}
+@media(min-width:1000px){.flow{grid-template-columns:repeat(4,1fr)}}
+.step{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;padding:28px}
+.step .k{font-size:13px;font-weight:800;color:var(--copper);letter-spacing:.08em}
+.step h4{margin-top:6px}
+.step p{color:var(--muted);font-size:16px}
+@media(min-width:1000px){.step:not(:last-child):after{content:"";position:absolute;right:-17px;top:52px;width:14px;height:14px;border-top:2px solid var(--copper);border-right:2px solid var(--copper);transform:rotate(45deg);z-index:2}}
+ol.daily{margin:20px 0 0;padding-left:24px;max-width:820px}
+ol.daily li{margin:10px 0;padding-left:6px}
+
+/* formulas */
+.eqs{display:grid;grid-template-columns:minmax(0,1fr);gap:20px;margin-top:36px;max-width:920px}
+.eqb h4{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.eq{font-family:Consolas,"Courier New",monospace;font-size:15px;background:var(--dark);color:#EDEAE1;border-radius:10px;padding:18px 22px;overflow-x:auto;line-height:1.9;white-space:pre}
+.eq b{color:#F2D9A0;font-weight:600}
+.eq .c{color:#8FB3B5}
+.tw{overflow-x:auto;margin-top:32px;border:1px solid var(--line);border-radius:10px;background:#fff;max-width:920px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th{background:var(--dark);color:#fff;text-align:left;padding:12px 16px;font-weight:600;white-space:nowrap}
+td{padding:12px 16px;border-top:1px solid var(--line);vertical-align:top}
+td.k{font-weight:700;white-space:nowrap}
+
+/* ---------- Simulator ---------- */
+.toolbar{display:flex;flex-wrap:wrap;gap:20px 32px;align-items:center;margin-top:36px;padding:20px 24px;background:#fff;border:1px solid var(--line);border-radius:14px}
+.toolbar .tl{font-size:14px;font-weight:700;color:var(--muted);margin-right:6px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;padding:4px;background:var(--bg)}
+.seg button{border:0;background:transparent;padding:9px 18px;border-radius:7px;cursor:pointer;font-size:15px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--dark);color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:#fff;border-radius:99px;padding:9px 16px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink)}
+.chip .svg{color:var(--copper)}
+.chip:hover{border-color:var(--copper);background:#FBF6EE}
+.sim{display:grid;grid-template-columns:minmax(0,1fr);gap:40px;margin-top:40px}
+@media(min-width:1100px){.sim{grid-template-columns:390px minmax(0,1fr);gap:48px;align-items:start}.inputs{position:sticky;top:76px;max-height:calc(100vh - 96px);overflow:auto}}
+.inputs{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px 28px}
+.in-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-bottom:12px}
+.in-head h3{font-size:22px;margin:0}
+.link{display:inline-flex;align-items:center;gap:6px;background:none;border:0;padding:4px 0;color:var(--teal);cursor:pointer;font-size:14px;font-weight:700}
+.grp{border-top:1px solid var(--line)}
+.grp summary{list-style:none;cursor:pointer;padding:18px 0;display:flex;align-items:center;gap:12px;font-weight:700;font-size:16.5px;color:var(--dark)}
+.grp summary::-webkit-details-marker{display:none}
+.grp summary .gi{width:36px;height:36px;display:grid;place-items:center;border-radius:9px;background:var(--tsoft);color:var(--teal)}
+.grp summary .gi .svg{width:20px;height:20px}
+.grp summary .chev{margin-left:auto;color:var(--muted);transition:.2s}
+.grp[open] summary .chev{transform:rotate(180deg)}
+.fields{display:grid;gap:22px;padding:4px 0 26px}
+.fld label{display:block;font-size:15px;font-weight:700;color:var(--dark)}
+.fld .h{font-size:13.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+.fld input,.fld select{display:block;width:100%;margin-top:10px;padding:11px 13px;border:1px solid #CFC9BB;border-radius:7px;background:var(--in-bg);color:var(--in-ink);font-size:16px}
+.fld select{color:var(--ink);background:#fff}
+.fld input[aria-invalid="true"]{border-color:var(--red);background:#FBEDEB}
+.fld .err{color:var(--red);font-size:13.5px;margin-top:6px}
+.runbtn{width:100%;justify-content:center;margin-top:24px;font-size:16px;min-height:52px}
+.runbtn:disabled{opacity:.75;cursor:progress}
+.mode-basic .adv{display:none !important}
+[hidden]{display:none !important}
+.results{display:grid;grid-template-columns:minmax(0,1fr);gap:56px;min-width:0;transition:opacity .2s}
+.results[aria-busy="true"]{opacity:.55}
+.rec{position:relative;overflow:hidden;background:linear-gradient(145deg,var(--dark),#314749);color:#fff;border-radius:18px;padding:clamp(28px,4vw,44px)}
+.rec .lab{color:var(--gold-l);display:flex;align-items:center;gap:8px}
+.rec .ans{font-family:var(--serif);font-size:clamp(25px,3vw,36px);line-height:1.25;margin-top:16px;color:#fff;max-width:28ch}
+.rec .ans b{color:#F2D9A0}
+.rec .sub{margin-top:16px;color:#C9CFCC;font-size:15.5px;max-width:62ch}
+.rec .stats{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.rec .stats div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 16px;font-size:14px;color:#C9CFCC}
+.rec .stats b{display:block;font-family:var(--serif);font-size:22px;color:#fff}
+.notes{display:grid;gap:12px}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.kp>div{background:#fff;border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:10px;padding:22px 24px}
+.kp>div.bad{border-left-color:var(--red)}
+.kp>div.good{border-left-color:var(--green)}
+.kp .kl{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--muted)}
+.kp .kl .svg{color:var(--teal)}
+.kp .kv{font-family:var(--serif);font-size:36px;font-weight:700;color:var(--dark);line-height:1.1;margin-top:12px}
+.kp .ks{font-size:13.5px;color:var(--muted);margin-top:10px}
+.kp .ks.up{color:var(--green);font-weight:700}
+.kp .ks.dn{color:var(--red);font-weight:700}
+.kp .brk{margin-top:12px;display:grid;gap:4px;font-size:13.5px}
+.kp .brk div{display:flex;justify-content:space-between;gap:10px;color:var(--muted)}
+.kp .brk span:last-child{color:var(--ink);font-weight:600}
+.sh{display:flex;align-items:center;gap:12px;font-size:24px;margin-bottom:8px}
+.sh .ic{margin:0;width:42px;height:42px;border-radius:10px}
+.sh .ic .svg{width:22px;height:22px}
+.narr p{max-width:72ch}
+.narr p+p{margin-top:14px}
+.chart-h{display:flex;align-items:flex-start;gap:14px}
+.chart-h .ic{margin:0;width:42px;height:42px;border-radius:10px;flex:none}
+.chart-h .ic .svg{width:22px;height:22px}
+.chart-h h3{font-size:22px;margin-top:6px}
+.chart .cap{color:var(--muted);font-size:15px;margin-top:10px;max-width:72ch}
+.leg{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:13.5px;color:var(--muted);margin-top:16px}
+.leg i{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:6px;vertical-align:-2px}
+.leg i.dash{height:0;border-top:2px dashed;border-radius:0;width:18px;vertical-align:4px}
+.cbox{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 12px 8px;margin-top:20px;overflow-x:auto}
+.cbox svg{display:block;width:100%;min-width:560px;height:auto;font-family:var(--sans)}
+.cbox .gl{stroke:#ECE8DF;stroke-width:1}
+.cbox .ax{stroke:#B9B3A6;stroke-width:1}
+.cbox .tk{fill:var(--muted);font-size:13.5px}
+.cbox .al{fill:var(--muted);font-size:14px;font-weight:600}
+.cbox .vl{fill:var(--dark);font-size:14px;font-weight:700}
+.btn2{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border:1px solid var(--teal);border-radius:8px;background:#fff;color:var(--teal);font-weight:700;font-size:15px;cursor:pointer;margin-top:20px}
+.btn2:hover{background:var(--tsoft)}
+.livef{background:#fff;border:1px solid var(--line);border-radius:14px;padding:0 26px}
+.livef summary{cursor:pointer;padding:22px 0;font-weight:700;font-size:18px;display:flex;align-items:center;gap:10px;color:var(--dark)}
+.livef summary .svg{color:var(--teal)}
+.livef .eq{margin-bottom:26px;white-space:pre-wrap}
+ul.lim{margin:32px 0 0;padding:0;list-style:none;display:grid;gap:14px;max-width:860px}
+ul.lim li{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 20px}
+ul.lim .svg{color:var(--red);margin-top:4px}
+footer{padding:36px 0 64px;color:var(--muted);font-size:14px}
+@media(max-width:640px){body{font-size:16px}.inputs{padding:22px}.kp .kv{font-size:30px}.toolbar{padding:18px}.card{padding:24px}}
+@media(prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}.drawline{stroke-dashoffset:0}}
+</style>
+</head>
+<body class="mode-basic">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 19V5M4 19h16m-13-4 4-4 3 2 5-6"/></symbol>
+<symbol id="i-warehouse" viewBox="0 0 24 24"><path d="m3 10 9-6 9 6v10H3V10Z"/><path d="M7 20v-7h10v7"/></symbol>
+<symbol id="i-ship" viewBox="0 0 24 24"><path d="M4 13h16l-2 6H6l-2-6ZM8 13V7h8v6M3 21c2 1 4 1 6 0 2 1 4 1 6 0 2 1 4 1 6 0"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></symbol>
+<symbol id="i-chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5"/></symbol>
+<symbol id="i-tool" viewBox="0 0 24 24"><path d="M14 6a4 4 0 0 0-5 5L3 17l4 4 6-6a4 4 0 0 0 5-5l-3 3-3-3 2-4Z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></symbol>
+<symbol id="i-dice" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r=".9"/><circle cx="15" cy="15" r=".9"/><circle cx="15" cy="9" r=".9"/><circle cx="9" cy="15" r=".9"/></symbol>
+<symbol id="i-coins" viewBox="0 0 24 24"><ellipse cx="9" cy="7" rx="6" ry="3"/><path d="M3 7v4c0 1.7 2.7 3 6 3s6-1.3 6-3V7"/><path d="M9 17c0 1.7 2.7 3 6 3s6-1.3 6-3v-4c0-1.7-2.7-3-6-3"/></symbol>
+<symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+<symbol id="i-box" viewBox="0 0 24 24"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="M3 7v10l9 4 9-4V7M12 11v10"/></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></symbol>
+<symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></symbol>
+<symbol id="i-calc" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h2M12 11h2M16 11h0M8 15h2M12 15h2M8 18h2M12 18h2M16 15v3"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+<symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.5 20h19L12 4Z"/><path d="M12 10v4M12 17h0"/></symbol>
+<symbol id="i-trend" viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/></symbol>
+<symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-5l-2 2M4 13a8 8 0 0 0 14 5l2-2"/><path d="M4 4v4h4M20 20v-4h-4"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="m7 4 13 8-13 8V4Z"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5a4 4 0 0 1 4-1h4v16H8a4 4 0 0 0-4 1V5Zm16 0a4 4 0 0 0-4-1h-4v16h4a4 4 0 0 1 4 1V5Z"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6M15 9l-6 6"/></symbol>
+</svg>
+
+<header class="hero">
+  <div class="gridfx"></div>
+  <div class="wrap">
+    <div>
+      <div class="lab" data-i18n="hero.lab"></div>
+      <h1 data-i18n="hero.h1"></h1>
+      <p class="lead" data-i18n="hero.p"></p>
+      <div class="meta">
+        <span><svg class="svg"><use href="#i-box"/></svg><span data-i18n-html="hero.m1"></span></span>
+        <span><svg class="svg"><use href="#i-sliders"/></svg><span data-i18n-html="hero.m2"></span></span>
+        <span><svg class="svg"><use href="#i-lock"/></svg><span data-i18n-html="hero.m3"></span></span>
+      </div>
+      <div class="btns">
+        <a class="btn" href="#s5"><svg class="svg"><use href="#i-play"/></svg><span data-i18n="hero.b1"></span></a>
+        <a class="btn alt" href="#s3"><svg class="svg"><use href="#i-book"/></svg><span data-i18n="hero.b2"></span></a>
+      </div>
+      <div class="page-actions" style="margin-top:16px">
+        <a class="page-action secondary" id="archive-return" href="../supply-chain.html" data-i18n="hero.back"></a>
+        <a class="page-action secondary" id="home-return" href="../index.html" data-i18n="hero.home"></a>
+      </div>
+    </div>
+    <div class="hero-vis" aria-hidden="true">
+      <svg viewBox="0 0 480 300">
+        <defs><linearGradient id="hg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#C59B43" stop-opacity=".35"/><stop offset="1" stop-color="#C59B43" stop-opacity="0"/></linearGradient></defs>
+        <rect x="20" y="214" width="350" height="46" fill="rgba(46,110,115,.35)" rx="4"/>
+        <line x1="20" x2="370" y1="168" y2="168" stroke="#8FB3B5" stroke-dasharray="6 6" stroke-width="1.5"/>
+        <line x1="20" x2="370" y1="260" y2="260" stroke="rgba(255,255,255,.35)"/>
+        <path d="M20 54 L100 205 L100 60 L175 222 L175 70 L245 238 L245 58 L315 210 L315 64 L370 160" fill="none" stroke="#F2D9A0" stroke-width="3" stroke-linejoin="round" class="drawline"/>
+        <circle cx="245" cy="238" r="6" fill="#B64D42"/>
+        <text x="380" y="242" fill="#CFE3E4" font-size="13" font-weight="600" font-family="Inter,Segoe UI,sans-serif" id="hvSS"></text>
+        <text x="380" y="172" fill="#CFE3E4" font-size="13" font-weight="600" font-family="Inter,Segoe UI,sans-serif" id="hvROP"></text>
+      </svg>
+      <p class="cap" data-i18n="hero.vis"></p>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Contents">
+  <div class="wrap">
+    <div class="toc-links">
+      <a href="#sum" data-i18n="toc.0"></a><a href="#s1" data-i18n="toc.1"></a><a href="#s2" data-i18n="toc.2"></a><a href="#s3" data-i18n="toc.3"></a><a href="#s4" data-i18n="toc.4"></a><a href="#s5" data-i18n="toc.5"></a><a href="#s6" data-i18n="toc.6"></a><a href="#s7" data-i18n="toc.7"></a>
+    </div>
+    <div class="language" role="group" aria-label="Language / Bahasa">
+      <svg class="svg"><use href="#i-globe"/></svg>
+      <button type="button" data-lang="en">EN</button><button type="button" data-lang="id">ID</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+<section id="sum">
+  <div class="wrap">
+    <div class="lab" data-i18n="sum.lab"></div>
+    <h2 data-i18n="sum.h"></h2>
+    <div class="grid3" id="sumCards"></div>
+  </div>
+</section>
+
+<section id="s1" class="white">
+  <div class="wrap">
+    <h2><span class="num">1</span><span data-i18n="s1.h"></span></h2>
+    <p class="lead" data-i18n="s1.lead"></p>
+    <div class="prose"><p data-i18n="s1.p1"></p></div>
+    <div class="callout" data-i18n-html="s1.call"></div>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="wrap">
+    <h2><span class="num">2</span><span data-i18n="s2.h"></span></h2>
+    <p class="lead" data-i18n="s2.lead"></p>
+    <div class="diagram" id="conceptDiagram"></div>
+    <div class="grid3" id="conceptCards"></div>
+  </div>
+</section>
+
+<section id="s3" class="white">
+  <div class="wrap">
+    <h2><span class="num">3</span><span data-i18n="s3.h"></span></h2>
+    <p class="lead" data-i18n="s3.lead"></p>
+    <div class="flow" id="flow"></div>
+    <h3 style="margin-top:56px" data-i18n="s3.dayH"></h3>
+    <ol class="daily" id="daily"></ol>
+    <div class="note" data-i18n-html="s3.note"></div>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="wrap">
+    <h2><span class="num">4</span><span data-i18n="s4.h"></span></h2>
+    <p class="lead" data-i18n="s4.lead"></p>
+    <div class="eqs" id="eqs"></div>
+    <h3 style="margin-top:56px" data-i18n="s4.polH"></h3>
+    <div class="tw"><table id="polTable"></table></div>
+  </div>
+</section>
+
+<section id="s5" class="white">
+  <div class="wrap">
+    <h2><span class="num">5</span><span data-i18n="s5.h"></span></h2>
+    <p class="lead" data-i18n="s5.lead"></p>
+    <div class="toolbar">
+      <div><span class="tl" data-i18n="s5.mode"></span>
+        <div class="seg" role="group" data-i18n-aria="s5.mode">
+          <button type="button" data-mode="basic" data-i18n="modeBasic"></button><button type="button" data-mode="adv" data-i18n="modeAdv"></button>
+        </div>
+      </div>
+      <div class="chips"><span class="tl" data-i18n="presets"></span>
+        <button type="button" class="chip" data-preset="stable"><svg class="svg"><use href="#i-trend"/></svg><span data-i18n="p.stable"></span></button>
+        <button type="button" class="chip" data-preset="remote"><svg class="svg"><use href="#i-ship"/></svg><span data-i18n="p.remote"></span></button>
+        <button type="button" class="chip" data-preset="spare"><svg class="svg"><use href="#i-tool"/></svg><span data-i18n="p.spare"></span></button>
+      </div>
+    </div>
+
+    <div class="sim">
+      <aside class="inputs" aria-labelledby="inTitle">
+        <div class="in-head"><h3 id="inTitle" data-i18n="inputs"></h3>
+          <button type="button" class="link" id="resetBtn"><svg class="svg"><use href="#i-refresh"/></svg><span data-i18n="reset"></span></button></div>
+        <form id="form" novalidate></form>
+        <button type="button" class="btn runbtn" id="runBtn"><svg class="svg"><use href="#i-play"/></svg><span id="runTxt"></span></button>
+      </aside>
+
+      <div class="results" id="results" aria-busy="false">
+        <div class="rec">
+          <div class="lab"><svg class="svg"><use href="#i-shield"/></svg><span data-i18n="rec.lab"></span></div>
+          <p class="ans" id="answer"></p>
+          <p class="sub" id="answerSub"></p>
+          <div class="stats" id="recStats"></div>
+        </div>
+        <div class="notes" id="notes" hidden></div>
+        <div>
+          <h3 class="sh"><span class="ic"><svg class="svg"><use href="#i-dice"/></svg></span><span data-i18n="kpiH"></span></h3>
+          <div class="kp" id="kpis" style="margin-top:20px"></div>
+        </div>
+        <div class="callout narr" style="margin-top:0;max-width:none" id="narrBox">
+          <h4 data-i18n="narrH"></h4><div id="narr" style="margin-top:8px"></div>
+        </div>
+        <div class="chart"><div class="chart-h"><span class="ic"><svg class="svg"><use href="#i-chart"/></svg></span><h3 id="t1"></h3></div>
+          <p class="cap" data-i18n="cap1"></p><div class="leg" id="leg1"></div><div class="cbox" id="c1"></div></div>
+        <div class="chart"><div class="chart-h"><span class="ic"><svg class="svg"><use href="#i-alert"/></svg></span><h3 id="t2"></h3></div>
+          <p class="cap" data-i18n="cap2"></p><div class="cbox" id="c2"></div></div>
+        <div class="chart"><div class="chart-h"><span class="ic"><svg class="svg"><use href="#i-coins"/></svg></span><h3 id="t3"></h3></div>
+          <p class="cap" data-i18n="cap3"></p><div class="cbox" id="c3"></div></div>
+        <div class="chart"><div class="chart-h"><span class="ic"><svg class="svg"><use href="#i-calc"/></svg></span><h3 id="t4"></h3></div>
+          <p class="cap" data-i18n="cap4"></p><div class="cbox" id="c4"></div></div>
+        <div class="chart adv"><div class="chart-h"><span class="ic"><svg class="svg"><use href="#i-sliders"/></svg></span><h3 id="t5"></h3></div>
+          <p class="cap" data-i18n="cap5"></p>
+          <button type="button" class="btn2" id="sensBtn"><svg class="svg"><use href="#i-play"/></svg><span id="sensTxt"></span></button>
+          <div class="leg" id="leg5" hidden></div><div class="cbox" id="c5" hidden></div></div>
+        <details class="livef"><summary><svg class="svg"><use href="#i-calc"/></svg><span data-i18n="how"></span></summary><div class="eq" id="liveEq"></div></details>
+        <div><button type="button" class="btn2" id="exportBtn" style="margin-top:0"><svg class="svg"><use href="#i-download"/></svg><span data-i18n="export"></span></button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="wrap">
+    <h2><span class="num">6</span><span data-i18n="s6.h"></span></h2>
+    <p class="lead" data-i18n="s6.lead"></p>
+    <div class="grid3" id="readCards"></div>
+  </div>
+</section>
+
+<section id="s7" class="white">
+  <div class="wrap">
+    <h2><span class="num">7</span><span data-i18n="s7.h"></span></h2>
+    <p class="lead" data-i18n="s7.lead"></p>
+    <ul class="lim" id="limits"></ul>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap" data-i18n="foot"></div></footer>
+
+<script>
+function clamp(v,a,b){return Math.min(b,Math.max(a,v));}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function makeRng(seed){
+  const u=mulberry32(seed>>>0);let spare=null;
+  return {u,n(){if(spare!==null){const s=spare;spare=null;return s;}let a;do{a=u();}while(a<=1e-12);const b=u();const r=Math.sqrt(-2*Math.log(a));spare=r*Math.sin(2*Math.PI*b);return r*Math.cos(2*Math.PI*b);}};
+}
+function sampleLogn(r,m,s){if(m<=0)return 0;if(s<=0)return m;const v=Math.log(1+(s*s)/(m*m));return Math.exp(Math.log(m)-v/2+Math.sqrt(v)*r.n());}
+function samplePois(r,m){if(m<=0)return 0;if(m>30)return Math.max(0,Math.round(m+Math.sqrt(m)*r.n()));const L=Math.exp(-m);let k=0,p=1;do{k++;p*=r.u();}while(p>L);return k-1;}
+function phi(z){return Math.exp(-z*z/2)/Math.sqrt(2*Math.PI);}
+function Phi(z){const t=1/(1+0.2316419*Math.abs(z));const p=phi(z)*t*(0.319381530+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));return z>0?1-p:p;}
+function invPhi(p){
+  const a=[-39.69683028665376,220.9460984245205,-275.9285104469687,138.3577518672690,-30.66479806614716,2.506628277459239];
+  const b=[-54.47609879822406,161.5858368580409,-155.6989798598866,66.80131188771972,-13.28068155288572];
+  const c=[-0.007784894002430293,-0.3223964580411365,-2.400758277161838,-2.549732539343734,4.374664141464968,2.938163982698783];
+  const d=[0.007784695709041462,0.3224671290700398,2.445134137142996,3.754408661907416];
+  const pl=0.02425;let q,r;
+  if(p<pl){q=Math.sqrt(-2*Math.log(p));return(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);}
+  if(p<=1-pl){q=p-0.5;r=q*q;return(((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5])*q/(((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);}
+  q=Math.sqrt(-2*Math.log(1-p));return-(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+}
+function lossG(z){return phi(z)-z*(1-Phi(z));}
+function solveG(target){ // find z with G(z)=target (G is decreasing)
+  if(target<=lossG(6))return 6;
+  let lo=-4,hi=6;for(let i=0;i<80;i++){const m=(lo+hi)/2;if(lossG(m)>target)lo=m;else hi=m;}return(lo+hi)/2;
+}
+function applyLot(q,p){q=Math.max(q,p.moq||0);const l=p.lotMult>1?p.lotMult:1;return Math.max(l,Math.ceil(q/l-1e-9)*l);}
+
+function demandStats(p){
+  const m=p.dMean;let sd=p.dDist==='poisson'?Math.sqrt(m):p.dSd;const out={m};
+  if(p.dDist==='intermittent'){
+    const q=clamp(p.pOccur/100,0.01,1);const ms=m/q;const minSd=m*Math.sqrt(1/q-1);
+    if(sd<minSd){sd=minSd;out.sdRaised=minSd;}
+    const vs=Math.max(0,(sd*sd+m*m)/q-ms*ms);out.ms=ms;out.ss=Math.sqrt(vs);
+  }
+  out.sd=sd;return out;
+}
+function leadStats(p){
+  const L=p.ltMean,s=p.ltSd,q1=p.lateProb/100,a=p.lateDays,q2=p.disProb/100,b=p.disDays;
+  return {L,s,Lr:L+q1*a+q2*b,sr:Math.sqrt(s*s+q1*(1-q1)*a*a+q2*(1-q2)*b*b)};
+}
+function plan(p){
+  const d=demandStats(p),lt=leadStats(p);
+  const periodic=p.policy==='RS'||p.policy==='minmax';
+  const R=periodic?p.reviewR:0;
+  const D=d.m*365,H=p.unitCost*p.holdPct/100;
+  const eoq=(H>0&&p.orderCost>0)?Math.sqrt(2*D*p.orderCost/H):d.m*30;
+  const qBase=(p.qMode==='manual'&&p.policy!=='RS')?p.qManual:eoq;
+  const Q=applyLot(Math.max(1,qBase),p);
+  const sigSimple=d.sd*Math.sqrt(lt.L+R);
+  const sigComb=Math.sqrt((lt.L+R)*d.sd*d.sd+d.m*d.m*lt.s*lt.s);
+  const sigRisk=Math.sqrt((lt.Lr+R)*d.sd*d.sd+d.m*d.m*lt.sr*lt.sr);
+  let z;const cycleDemand=R>0?d.m*R:Q;
+  if(p.slType==='fill'){z=sigRisk>0?solveG((1-p.slTarget/100)*cycleDemand/sigRisk):0;}
+  else z=invPhi(clamp(p.slTarget/100,0.5,0.9999));
+  const zRaw=z;z=Math.max(0,z);
+  const ss=z*sigRisk,muDL=d.m*(lt.Lr+R),rop=muDL+ss;
+  const S=p.policy==='RS'?rop:(p.policy==='sQ'?null:rop+Q);
+  const ltShare=sigRisk>0?(d.m*d.m*lt.sr*lt.sr)/(sigRisk*sigRisk):0;
+  return {d,lt,R,D,H,eoq,qBase,Q,sigSimple,sigComb,sigRisk,z,zRaw,ss,muDL,rop,S,ltShare,cycleDemand};
+}
+function meanAt(p,day){
+  let m=p.dMean;
+  if(p.trendPct)m*=Math.pow(1+p.trendPct/100,Math.max(0,day)/30.44);
+  if(p.seasAmp){const doy=((day%365)+365)%365;m*=1+(p.seasAmp/100)*Math.cos(2*Math.PI*(doy/365-(p.seasPeak-0.5)/12));}
+  return Math.max(0,m);
+}
+function sampleDemand(r,p,ds,mu){
+  const f=ds.m>0?mu/ds.m:0;
+  if(p.dDist==='poisson')return samplePois(r,mu);
+  if(p.dDist==='intermittent'){if(r.u()>=p.pOccur/100)return 0;return sampleLogn(r,ds.ms*f,ds.ss*f);}
+  return Math.max(0,mu+ds.sd*f*r.n());
+}
+function sampleLead(r,p){
+  const m=p.ltMean,s=p.ltSd;let L;
+  if(p.ltDist==='uniform'){const h=s*Math.sqrt(3);L=m-h+2*h*r.u();}
+  else if(p.ltDist==='lognormal')L=sampleLogn(r,m,s);
+  else L=m+s*r.n();
+  if(p.lateProb>0&&r.u()<p.lateProb/100)L+=p.lateDays;
+  if(p.disProb>0&&r.u()<p.disProb/100)L+=p.disDays;
+  return Math.max(1,Math.round(L));
+}
+/* Simulate runs k0..k1-1. o.ss overrides safety stock. */
+function simulate(p,pl,o){
+  const H=p.horizon,W=p.warmup,T=H+W;
+  const ss=o.ss!=null?o.ss:pl.ss,Q=pl.Q,rop=pl.muDL+ss;
+  const sL=rop,SL=p.policy==='RS'?rop:rop+Q;
+  const periodic=p.policy==='RS'||p.policy==='minmax';
+  const R=Math.max(1,Math.round(p.reviewR));
+  const shelf=p.shelfLife>0?p.shelfLife:Infinity,cap=p.capacity>0?p.capacity:Infinity;
+  const lot=p.lotMult>1?p.lotMult:1;
+  const ds=demandStats(p),ann=365/H;
+  const n=o.k1-o.k0,trace=o.keepTrace?new Float32Array(n*H):null,out=[];
+  const mus=new Float64Array(T);for(let t=0;t<T;t++)mus[t]=meanAt(p,t-W);
+  for(let k=o.k0;k<o.k1;k++){
+    const r=makeRng((o.seed+k*7919)>>>0);
+    let start=Math.min(p.policy==='sQ'?rop+Q:SL,cap);
+    const bat=[{q:start,e:shelf}];const pipe=[];
+    let bo=0,onOrder=0,dem=0,fil=0,short=0,soDays=0,orders=0,sumOH=0,expd=0,cyc=0,okc=0,cso=false;
+    for(let t=0;t<T;t++){
+      const rec=t>=W;
+      for(let i=pipe.length-1;i>=0;i--){
+        if(pipe[i].a===t){let q=pipe[i].q;onOrder-=q;pipe.splice(i,1);
+          if(bo>0){const u=Math.min(bo,q);bo-=u;q-=u;}
+          if(q>0)bat.push({q,e:t+shelf});
+          if(rec){cyc++;if(!cso)okc++;}cso=false;}
+      }
+      if(shelf!==Infinity){while(bat.length&&bat[0].e<=t){if(rec)expd+=bat[0].q;bat.shift();}}
+      const D=sampleDemand(r,p,ds,mus[t]);let need=D;
+      while(need>1e-9&&bat.length){const b=bat[0];const u=Math.min(b.q,need);b.q-=u;need-=u;if(b.q<=1e-9)bat.shift();}
+      if(need>1e-6){if(p.unmet==='backorder')bo+=need;cso=true;if(rec){soDays++;short+=need;}}
+      if(rec){dem+=D;fil+=D-Math.max(0,need);}
+      let oh=0;for(let i=0;i<bat.length;i++)oh+=bat[i].q;
+      if(!periodic||t%R===0){
+        const pos=oh+onOrder-bo;let q=0;
+        if(p.policy==='sQ'){if(pos<=sL)q=(Math.floor((sL-pos)/Q)+1)*Q;}
+        else if(p.policy==='RS'){if(SL-pos>1e-9)q=SL-pos;}
+        else if(pos<=sL)q=SL-pos;
+        if(q>0){
+          q=applyLot(q,p);
+          if(cap!==Infinity){const room=cap-(oh+onOrder);if(q>room)q=Math.floor(Math.max(0,room)/lot)*lot;}
+          if(q>0){pipe.push({a:t+sampleLead(r,p),q});onOrder+=q;if(rec)orders++;}
+        }
+      }
+      if(rec){sumOH+=oh;if(trace)trace[(k-o.k0)*H+(t-W)]=oh;}
+    }
+    const avgOH=sumOH/H;
+    const hold=avgOH*p.unitCost*p.holdPct/100,ord=orders*p.orderCost*ann,so=short*p.stockoutCost*ann,ex=expd*p.unitCost*ann;
+    out.push({csl:cyc?okc/cyc:(soDays?0:1),fill:dem>0?fil/dem:1,soDays:soDays*ann,avgOH,turns:avgOH>0?dem*ann/avgOH:0,
+      hold,ord,so,ex,total:hold+ord+so+ex,expUnits:expd*ann,orders:orders*ann});
+  }
+  return {runs:out,trace};
+}
+function aggregate(runs){
+  const keys=Object.keys(runs[0]),o={};
+  for(const k of keys){let s=0;for(const r of runs)s+=r[k];o[k]=s/runs.length;}
+  o.noSo=runs.filter(r=>r.soDays===0).length/runs.length;return o;
+}
+function interpAt(sweep,key,target,field){ // value of `field` where sweep[key] reaches target
+  if(sweep[0][key]>=target)return sweep[0][field];
+  for(let i=1;i<sweep.length;i++){const a=sweep[i-1],b=sweep[i];
+    if(b[key]>=target){const w=(b[key]-a[key])>1e-9?(target-a[key])/(b[key]-a[key]):1;return a[field]+w*(b[field]-a[field]);}}
+  return null;
+}
+const SWEEP_Z=[0,0.25,0.5,0.84,1.04,1.28,1.48,1.64,1.88,2.05,2.33,2.58,3.09];
+
+
+const I18N_BASE={
+en:{
+ title:'Safety Stock Simulator',heroLabel:'Recommended policy',modeAria:'Mode',modeBasic:'Basic',modeAdv:'Advanced',
+ tagline:'Set demand, lead time and a service target. The tool sizes safety stock with standard formulas, then stress-tests it across hundreds of simulated years.',
+ presets:'Start from a scenario:','p.stable':'Stable fast-mover','p.remote':'Remote site, long and unreliable lead time','p.spare':'Intermittent spare part',
+ inputs:'Inputs',reset:'Reset to defaults',run:'Run simulation',running:'Simulating… {pct}%',
+ kpiH:'Simulated results',narrH:'What this means',how:'How it is calculated',export:'Export results (CSV)',
+ err:'Enter a value from {min} to {max}.',
+ 'g.demand':'Demand','g.lead':'Lead time','g.policy':'Inventory policy','g.service':'Service level','g.cost':'Costs','g.constraints':'Constraints','g.sim':'Simulation settings',
+ 'f.dDist.l':'Demand pattern','f.dDist.h':'Normal suits steady items. Poisson suits small, count-like demand. Intermittent suits spare parts with many zero days.',
+ 'f.dMean.l':'Average daily demand (units)','f.dMean.h':'Units used on a typical day.',
+ 'f.dSd.l':'Daily demand variability (std dev)','f.dSd.h':'How far daily demand swings around the average. Higher means more safety stock.',
+ 'f.pOccur.l':'Chance of demand on a given day (%)','f.pOccur.h':'Share of days that have any demand at all.',
+ 'f.trendPct.l':'Trend (% per month)','f.trendPct.h':'Growth or decline in demand. The policy stays fixed, so this tests how a static reorder point holds up.',
+ 'f.seasAmp.l':'Seasonal swing (±%)','f.seasAmp.h':'How far demand rises at the peak and falls at the low point.',
+ 'f.seasPeak.l':'Peak month (1–12)','f.seasPeak.h':'Month when demand is highest.',
+ 'f.ltDist.l':'Lead time pattern','f.ltDist.h':'Lognormal fits most real supply: usually close to plan, occasionally much later.',
+ 'f.ltMean.l':'Average lead time (days)','f.ltMean.h':'Days from placing an order to having the stock available.',
+ 'f.ltSd.l':'Lead time variability (std dev, days)','f.ltSd.h':'How far lead time swings. Often a bigger driver than demand.',
+ 'f.lateProb.l':'Chance a delivery is late (%)','f.lateProb.h':'The supplier misses the promised date.',
+ 'f.lateDays.l':'Typical delay when late (days)','f.lateDays.h':'Extra days added to a late order.',
+ 'f.disProb.l':'Chance of a major disruption (%)','f.disProb.h':'Rare events such as weather, port congestion or a cancelled vessel.',
+ 'f.disDays.l':'Disruption delay (days)','f.disDays.h':'Extra days added when a disruption hits.',
+ 'f.policy.l':'Replenishment policy','f.policy.h':'How and when orders are triggered.',
+ 'f.reviewR.l':'Review period (days)','f.reviewR.h':'Stock is checked only every R days.',
+ 'f.qMode.l':'Order quantity','f.qMode.h':'EOQ balances ordering cost against holding cost.',
+ 'f.qManual.l':'Manual order quantity (units)','f.qManual.h':'Fixed quantity per order.',
+ 'f.unmet.l':'When stock runs out','f.unmet.h':'Backorder: the customer waits. Lost sales: the demand is gone.',
+ 'f.slType.l':'Service level measure','f.slType.h':'Cycle service level: chance a replenishment cycle has no stockout. Fill rate: share of demand served straight from stock.',
+ 'f.slTarget.l':'Target service level (%)','f.slTarget.h':'Each extra point needs more stock than the one before.',
+ 'f.unitCost.l':'Unit cost','f.unitCost.h':'Purchase value of one unit, in any currency.',
+ 'f.holdPct.l':'Holding cost (% of value per year)','f.holdPct.h':'Capital, storage, insurance and obsolescence. 20–30% is common.',
+ 'f.orderCost.l':'Cost per order','f.orderCost.h':'Admin, transport and receiving for one order.',
+ 'f.stockoutCost.l':'Cost per unit short','f.stockoutCost.h':'Penalty, expediting or lost margin for each unit you cannot supply.',
+ 'f.moq.l':'Minimum order quantity','f.moq.h':'0 means no minimum.',
+ 'f.lotMult.l':'Order in multiples of','f.lotMult.h':'Pack or pallet size. 1 means any quantity.',
+ 'f.capacity.l':'Storage capacity (units)','f.capacity.h':'Orders are cut so stock on hand plus on order stays within this. 0 means unlimited.',
+ 'f.shelfLife.l':'Shelf life (days)','f.shelfLife.h':'Stock older than this is written off. 0 means it never expires.',
+ 'f.horizon.l':'Simulated days per run','f.horizon.h':'Each run simulates this many days.',
+ 'f.runs.l':'Number of runs','f.runs.h':'More runs give steadier results but take longer.',
+ 'f.seed.l':'Random seed','f.seed.h':'The same seed gives the same result. Change it to see a different random draw.',
+ 'f.warmup.l':'Warm-up days','f.warmup.h':'Days simulated before measuring, so the starting stock does not flatter the result.',
+ 'o.normal':'Normal','o.poisson':'Poisson','o.intermittent':'Intermittent (lumpy)','o.lognormal':'Lognormal','o.uniform':'Uniform',
+ 'o.sQ':'(s, Q) continuous review','o.sS':'(s, S) continuous review','o.RS':'(R, S) periodic review','o.minmax':'Min–max, periodic review',
+ 'o.eoq':'EOQ (automatic)','o.manual':'Manual','o.backorder':'Backorder','o.lost':'Lost sales','o.csl':'Cycle service level (α)','o.fill':'Fill rate (β)',
+ 'hero.sQ':'Hold {ss} units of safety stock and order {q} units whenever stock position falls to {rop}.',
+ 'hero.sS':'Hold {ss} units of safety stock. When stock position falls to {rop}, order up to {S}.',
+ 'hero.RS':'Hold {ss} units of safety stock. Every {R} days, order up to {S}.',
+ 'hero.minmax':'Hold {ss} units of safety stock. Every {R} days, if stock position is at or below {rop}, order up to {S}.',
+ 'hero.sub':'Risk-adjusted formula for a {target} {type} target, combining demand and lead time variability.',
+ 'type.csl':'cycle service level','type.fill':'fill rate',
+ 'k.csl':'Cycle service level','k.fill':'Fill rate','k.so':'Stockout days per year','k.oh':'Average stock on hand','k.turns':'Inventory turns','k.cost':'Total annual cost','k.exp':'Expired units per year',
+ 'k.target':'Target {t}','k.met':'On target','k.below':'{d} pts below target','k.above':'{d} pts above target','k.value':'{v} in value','k.perYear':'per year','k.noSo':'{p} of runs have none',
+ 'c.hold':'Holding','c.ord':'Ordering','c.so':'Shortage','c.ex':'Expiry',
+ 't1':'Stock dips into the safety buffer on {p} of days','cap1':'One sample run (line) and the middle 80% of all runs (band). Dashed lines mark safety stock and the reorder level.',
+ 't2':'{p} of simulated years have no stockout days','cap2':'How stockout days are spread across all runs.',
+ 't3':'Raising service from {a} to {b} adds {c} a year','t3s':'Raising service from {a} to {b} saves {c} a year, because shortages cost more than stock','t3b':'Cost barely moves across the service levels tested','cap3':'Each point is one safety stock level tested in simulation. The larger point is your current setting.',
+ 't4u':'The simple formula understates safety stock by {x}','t4o':'The simple formula overstates safety stock by {x}','t4z':'No safety stock is needed at this target',
+ 'cap4':'Simple ignores lead time variability. Combined adds it. Risk-adjusted also adds late deliveries and disruptions. Simulation-implied is the buffer that actually hit your target.',
+ 't5':'{param} moves total cost the most','t5n':'Which inputs move total cost the most?','cap5':'Change in total annual cost when each input moves 20% down or up, with the policy recalculated.',
+ sensRun:'Run sensitivity analysis',sensBusy:'Running…',
+ 'b.simple':'Simple','b.comb':'Combined','b.risk':'Risk-adjusted','b.sim':'Simulation-implied',
+ 'ax.day':'Day','ax.units':'Units on hand','ax.soDays':'Stockout days per year','ax.runs':'Runs','ax.service':'Achieved service level','ax.cost':'Total annual cost','ax.ss':'Safety stock (units)','ax.delta':'Change in total annual cost',
+ 'l.sample':'Sample run','l.band':'Middle 80% of runs','l.ss':'Safety stock','l.rop':'Reorder level','l.min':'Min level','l.tested':'Tested levels','l.current':'Current setting','l.down':'Input −20%','l.up':'Input +20%',
+ 'sh.dMean':'Demand average','sh.dSd':'Demand variability','sh.ltMean':'Lead time','sh.ltSd':'Lead time variability','sh.unitCost':'Unit cost','sh.holdPct':'Holding cost','sh.orderCost':'Order cost','sh.stockoutCost':'Shortage cost',
+ 'n.1':'With these settings the policy reaches a {csl} cycle service level and a {fill} fill rate, against a {target} {type} target.',
+ 'n.met':'The simulation confirms the formula: the target is met.',
+ 'n.below':'That is below target. The formula assumes bell-shaped demand and lead time, and the simulated reality needs about {imp} units of safety stock instead of {ss}.',
+ 'n.belowNull':'That is below target, and even the largest buffer tested ({max} units) does not reach it. Look at lead time reliability before adding more stock.',
+ 'n.above':'That is above target, so you could hold less: the simulation suggests about {imp} units of safety stock would do, instead of {ss}.',
+ 'n.lt':'{share} of the uncertainty during the replenishment window comes from lead time, not demand.',
+ 'n.cost':'Moving the target from {a} to {b} would add about {c} a year in total cost.',
+ 'n.costSave':'Moving the target from {a} to {b} would save about {c} a year, because avoided shortages outweigh the extra stock.',
+ 'w.intermittent':'Demand is intermittent, so bell-curve formulas are unreliable here. Trust the simulation-implied figure over the formula.',
+ 'w.sdRaised':'For this demand frequency, daily variability cannot be lower than {v}, so the tool used that value.',
+ 'w.trend':'Trend or seasonality is on, but the policy stays fixed. The results show how a static reorder level copes as demand shifts.',
+ 'w.cap':'Storage capacity ({c}) is below safety stock plus one order ({n}). Orders will be cut, and service will suffer.',
+ 'w.q':'MOQ or lot size moved the order quantity from {a} to {b}.',
+ 'w.z0':'The target is low enough that the formula needs no safety stock.',
+ 'w.chart':'Charts could not load. Check the connection and reload the page.',
+ 'fx.d':'Demand per day','fx.lt':'Lead time (days)','fx.ltr':'Lead time with delay risk','fx.R':'Review period','fx.simple':'Simple σ = σd × √(L + R)','fx.comb':'Combined σ = √((L + R)·σd² + d²·σL²)',
+ 'fx.risk':'Risk-adjusted σ = √((L′ + R)·σd² + d²·σL′²)','fx.zc':'z = Φ⁻¹(α)','fx.zf':'z solved from σ·G(z) = (1 − β) × cycle demand','fx.ss':'Safety stock = z × risk-adjusted σ',
+ 'fx.rop':'Reorder level = d × (L′ + R) + safety stock','fx.eoq':'EOQ = √(2 × annual demand × order cost ÷ holding cost per unit)','fx.q':'Order quantity after MOQ and lot size',
+ disclaimer:'Educational tool. All scenarios are illustrative and use no real company data. Results are estimates; validate them with your own data before making stocking decisions.'
+},
+id:{
+ title:'Simulator Safety Stock',heroLabel:'Rekomendasi kebijakan',modeAria:'Mode',modeBasic:'Basic',modeAdv:'Advanced',
+ tagline:'Atur demand, lead time, dan target service level. Tool ini menghitung safety stock dengan rumus standar, lalu mengujinya pada ratusan tahun simulasi.',
+ presets:'Mulai dari skenario:','p.stable':'Fast-mover stabil','p.remote':'Site terpencil, lead time panjang dan tidak pasti','p.spare':'Spare part intermittent',
+ inputs:'Input',reset:'Kembalikan ke default',run:'Jalankan simulasi',running:'Mensimulasikan… {pct}%',
+ kpiH:'Hasil simulasi',narrH:'Artinya',how:'Cara perhitungan',export:'Ekspor hasil (CSV)',
+ err:'Masukkan nilai {min} sampai {max}.',
+ 'g.demand':'Demand','g.lead':'Lead time','g.policy':'Kebijakan stok','g.service':'Service level','g.cost':'Biaya','g.constraints':'Batasan','g.sim':'Pengaturan simulasi',
+ 'f.dDist.l':'Pola demand','f.dDist.h':'Normal untuk item stabil. Poisson untuk demand kecil berbasis hitungan. Intermittent untuk spare part dengan banyak hari tanpa pemakaian.',
+ 'f.dMean.l':'Rata-rata demand harian (unit)','f.dMean.h':'Jumlah unit yang terpakai pada hari biasa.',
+ 'f.dSd.l':'Variabilitas demand harian (std dev)','f.dSd.h':'Seberapa jauh demand harian berayun dari rata-rata. Makin tinggi, makin besar safety stock.',
+ 'f.pOccur.l':'Peluang ada demand per hari (%)','f.pOccur.h':'Persentase hari yang memiliki demand.',
+ 'f.trendPct.l':'Tren (% per bulan)','f.trendPct.h':'Kenaikan atau penurunan demand. Kebijakan tetap statis, jadi ini menguji ketahanan reorder point yang tidak diubah.',
+ 'f.seasAmp.l':'Ayunan musiman (±%)','f.seasAmp.h':'Seberapa tinggi demand naik saat puncak dan turun saat titik terendah.',
+ 'f.seasPeak.l':'Bulan puncak (1–12)','f.seasPeak.h':'Bulan dengan demand tertinggi.',
+ 'f.ltDist.l':'Pola lead time','f.ltDist.h':'Lognormal paling mendekati kondisi nyata: biasanya dekat rencana, sesekali jauh terlambat.',
+ 'f.ltMean.l':'Rata-rata lead time (hari)','f.ltMean.h':'Hari sejak order dibuat hingga stok tersedia.',
+ 'f.ltSd.l':'Variabilitas lead time (std dev, hari)','f.ltSd.h':'Seberapa jauh lead time berayun. Sering lebih berpengaruh daripada demand.',
+ 'f.lateProb.l':'Peluang pengiriman terlambat (%)','f.lateProb.h':'Supplier meleset dari tanggal yang dijanjikan.',
+ 'f.lateDays.l':'Keterlambatan umum (hari)','f.lateDays.h':'Tambahan hari pada order yang terlambat.',
+ 'f.disProb.l':'Peluang gangguan besar (%)','f.disProb.h':'Kejadian jarang seperti cuaca, antrean pelabuhan, atau kapal batal.',
+ 'f.disDays.l':'Keterlambatan akibat gangguan (hari)','f.disDays.h':'Tambahan hari saat gangguan terjadi.',
+ 'f.policy.l':'Kebijakan replenishment','f.policy.h':'Cara dan waktu order dipicu.',
+ 'f.reviewR.l':'Periode review (hari)','f.reviewR.h':'Stok hanya dicek setiap R hari.',
+ 'f.qMode.l':'Kuantitas order','f.qMode.h':'EOQ menyeimbangkan biaya order dan biaya simpan.',
+ 'f.qManual.l':'Kuantitas order manual (unit)','f.qManual.h':'Kuantitas tetap per order.',
+ 'f.unmet.l':'Saat stok habis','f.unmet.h':'Backorder: pelanggan menunggu. Lost sales: demand hilang.',
+ 'f.slType.l':'Ukuran service level','f.slType.h':'Cycle service level: peluang satu siklus replenishment tanpa stockout. Fill rate: porsi demand yang langsung terlayani dari stok.',
+ 'f.slTarget.l':'Target service level (%)','f.slTarget.h':'Setiap tambahan satu poin butuh stok lebih banyak dari poin sebelumnya.',
+ 'f.unitCost.l':'Harga per unit','f.unitCost.h':'Nilai beli satu unit, dalam mata uang apa pun.',
+ 'f.holdPct.l':'Biaya simpan (% nilai per tahun)','f.holdPct.h':'Modal, gudang, asuransi, dan risiko usang. Umumnya 20–30%.',
+ 'f.orderCost.l':'Biaya per order','f.orderCost.h':'Biaya admin, transport, dan penerimaan untuk satu order.',
+ 'f.stockoutCost.l':'Biaya per unit kekurangan','f.stockoutCost.h':'Penalti, biaya ekspedisi, atau margin hilang untuk setiap unit yang tidak terpenuhi.',
+ 'f.moq.l':'Minimum order quantity (MOQ)','f.moq.h':'0 berarti tanpa minimum.',
+ 'f.lotMult.l':'Order dalam kelipatan','f.lotMult.h':'Ukuran kemasan atau palet. 1 berarti bebas.',
+ 'f.capacity.l':'Kapasitas gudang (unit)','f.capacity.h':'Order dipotong agar stok di gudang ditambah stok dalam pesanan tidak melebihi angka ini. 0 berarti tanpa batas.',
+ 'f.shelfLife.l':'Masa simpan (hari)','f.shelfLife.h':'Stok yang lebih tua dari ini dihapusbukukan. 0 berarti tidak kedaluwarsa.',
+ 'f.horizon.l':'Hari simulasi per run','f.horizon.h':'Setiap run mensimulasikan sejumlah hari ini.',
+ 'f.runs.l':'Jumlah run','f.runs.h':'Makin banyak run, hasil makin stabil tapi lebih lama.',
+ 'f.seed.l':'Random seed','f.seed.h':'Seed yang sama memberi hasil yang sama. Ganti untuk melihat undian acak yang berbeda.',
+ 'f.warmup.l':'Hari pemanasan','f.warmup.h':'Hari yang disimulasikan sebelum diukur, agar stok awal tidak membuat hasil terlihat lebih baik.',
+ 'o.normal':'Normal','o.poisson':'Poisson','o.intermittent':'Intermittent (lumpy)','o.lognormal':'Lognormal','o.uniform':'Uniform',
+ 'o.sQ':'(s, Q) review kontinu','o.sS':'(s, S) review kontinu','o.RS':'(R, S) review periodik','o.minmax':'Min–max, review periodik',
+ 'o.eoq':'EOQ (otomatis)','o.manual':'Manual','o.backorder':'Backorder','o.lost':'Lost sales','o.csl':'Cycle service level (α)','o.fill':'Fill rate (β)',
+ 'hero.sQ':'Simpan {ss} unit safety stock, lalu pesan {q} unit setiap posisi stok turun ke {rop}.',
+ 'hero.sS':'Simpan {ss} unit safety stock. Saat posisi stok turun ke {rop}, pesan hingga {S}.',
+ 'hero.RS':'Simpan {ss} unit safety stock. Setiap {R} hari, pesan hingga {S}.',
+ 'hero.minmax':'Simpan {ss} unit safety stock. Setiap {R} hari, jika posisi stok di bawah atau sama dengan {rop}, pesan hingga {S}.',
+ 'hero.sub':'Rumus risk-adjusted untuk target {type} {target}, menggabungkan variabilitas demand dan lead time.',
+ 'type.csl':'cycle service level','type.fill':'fill rate',
+ 'k.csl':'Cycle service level','k.fill':'Fill rate','k.so':'Hari stockout per tahun','k.oh':'Rata-rata stok di gudang','k.turns':'Perputaran persediaan','k.cost':'Total biaya per tahun','k.exp':'Unit kedaluwarsa per tahun',
+ 'k.target':'Target {t}','k.met':'Sesuai target','k.below':'{d} poin di bawah target','k.above':'{d} poin di atas target','k.value':'Nilai {v}','k.perYear':'per tahun','k.noSo':'{p} run tanpa stockout',
+ 'c.hold':'Simpan','c.ord':'Order','c.so':'Kekurangan','c.ex':'Kedaluwarsa',
+ 't1':'Stok masuk ke area safety stock pada {p} hari','cap1':'Satu contoh run (garis) dan 80% run di bagian tengah (pita). Garis putus-putus menandai safety stock dan level reorder.',
+ 't2':'{p} tahun simulasi tanpa hari stockout','cap2':'Sebaran hari stockout di semua run.',
+ 't3':'Menaikkan service dari {a} ke {b} menambah biaya {c} per tahun','t3s':'Menaikkan service dari {a} ke {b} menghemat {c} per tahun, karena kekurangan stok lebih mahal daripada stoknya','t3b':'Biaya hampir tidak berubah di semua level service yang diuji','cap3':'Setiap titik adalah satu level safety stock yang diuji dalam simulasi. Titik besar adalah pengaturanmu saat ini.',
+ 't4u':'Rumus sederhana menghitung safety stock {x} terlalu rendah','t4o':'Rumus sederhana menghitung safety stock {x} terlalu tinggi','t4z':'Target ini tidak membutuhkan safety stock',
+ 'cap4':'Sederhana mengabaikan variabilitas lead time. Gabungan memasukkannya. Risk-adjusted juga memasukkan keterlambatan dan gangguan. Hasil simulasi adalah buffer yang benar-benar mencapai target.',
+ 't5':'{param} paling memengaruhi total biaya','t5n':'Input mana yang paling memengaruhi total biaya?','cap5':'Perubahan total biaya per tahun saat setiap input turun atau naik 20%, dengan kebijakan dihitung ulang.',
+ sensRun:'Jalankan analisis sensitivitas',sensBusy:'Menjalankan…',
+ 'b.simple':'Sederhana','b.comb':'Gabungan','b.risk':'Risk-adjusted','b.sim':'Hasil simulasi',
+ 'ax.day':'Hari','ax.units':'Unit di gudang','ax.soDays':'Hari stockout per tahun','ax.runs':'Jumlah run','ax.service':'Service level tercapai','ax.cost':'Total biaya per tahun','ax.ss':'Safety stock (unit)','ax.delta':'Perubahan total biaya per tahun',
+ 'l.sample':'Contoh run','l.band':'80% run di tengah','l.ss':'Safety stock','l.rop':'Level reorder','l.min':'Level min','l.tested':'Level yang diuji','l.current':'Pengaturan saat ini','l.down':'Input −20%','l.up':'Input +20%',
+ 'sh.dMean':'Rata-rata demand','sh.dSd':'Variabilitas demand','sh.ltMean':'Lead time','sh.ltSd':'Variabilitas lead time','sh.unitCost':'Harga per unit','sh.holdPct':'Biaya simpan','sh.orderCost':'Biaya order','sh.stockoutCost':'Biaya kekurangan',
+ 'n.1':'Dengan pengaturan ini, kebijakan mencapai cycle service level {csl} dan fill rate {fill}, dengan target {type} {target}.',
+ 'n.met':'Simulasi mengonfirmasi rumus: target tercapai.',
+ 'n.below':'Hasil ini di bawah target. Rumus mengasumsikan demand dan lead time berbentuk kurva lonceng, sedangkan kondisi simulasi butuh sekitar {imp} unit safety stock, bukan {ss}.',
+ 'n.belowNull':'Hasil ini di bawah target, dan buffer terbesar yang diuji ({max} unit) pun tidak mencapainya. Perbaiki keandalan lead time sebelum menambah stok.',
+ 'n.above':'Hasil ini di atas target, jadi stok bisa dikurangi: simulasi menunjukkan sekitar {imp} unit safety stock sudah cukup, bukan {ss}.',
+ 'n.lt':'{share} ketidakpastian selama masa replenishment berasal dari lead time, bukan demand.',
+ 'n.cost':'Menaikkan target dari {a} ke {b} akan menambah total biaya sekitar {c} per tahun.',
+ 'n.costSave':'Menaikkan target dari {a} ke {b} akan menghemat sekitar {c} per tahun, karena kekurangan stok yang dihindari lebih mahal daripada tambahan stok.',
+ 'w.intermittent':'Demand bersifat intermittent, jadi rumus berbasis kurva lonceng kurang andal. Gunakan angka hasil simulasi, bukan rumus.',
+ 'w.sdRaised':'Untuk frekuensi demand ini, variabilitas harian tidak bisa lebih rendah dari {v}, jadi tool memakai nilai tersebut.',
+ 'w.trend':'Tren atau musiman aktif, tapi kebijakan tetap statis. Hasil menunjukkan ketahanan level reorder yang tidak diubah saat demand bergeser.',
+ 'w.cap':'Kapasitas gudang ({c}) lebih kecil dari safety stock ditambah satu order ({n}). Order akan dipotong dan service level akan turun.',
+ 'w.q':'MOQ atau ukuran lot mengubah kuantitas order dari {a} menjadi {b}.',
+ 'w.z0':'Target cukup rendah sehingga rumus tidak membutuhkan safety stock.',
+ 'w.chart':'Grafik gagal dimuat. Periksa koneksi lalu muat ulang halaman.',
+ 'fx.d':'Demand per hari','fx.lt':'Lead time (hari)','fx.ltr':'Lead time dengan risiko keterlambatan','fx.R':'Periode review','fx.simple':'σ sederhana = σd × √(L + R)','fx.comb':'σ gabungan = √((L + R)·σd² + d²·σL²)',
+ 'fx.risk':'σ risk-adjusted = √((L′ + R)·σd² + d²·σL′²)','fx.zc':'z = Φ⁻¹(α)','fx.zf':'z dicari dari σ·G(z) = (1 − β) × demand per siklus','fx.ss':'Safety stock = z × σ risk-adjusted',
+ 'fx.rop':'Level reorder = d × (L′ + R) + safety stock','fx.eoq':'EOQ = √(2 × demand tahunan × biaya order ÷ biaya simpan per unit)','fx.q':'Kuantitas order setelah MOQ dan ukuran lot',
+ disclaimer:'Tool edukasi. Semua skenario bersifat ilustratif dan tidak memakai data perusahaan. Hasil berupa estimasi; validasi dengan data sendiri sebelum mengambil keputusan stok.'
+}};
+
+
+const I18N_NEW={
+en:{
+ 'doc.title':'How much safety stock is enough?',
+ 'hero.lab':'Inventory education · Interactive simulation model',
+ 'hero.h1':'How much safety stock is enough?',
+ 'hero.p':'Safety stock is the buffer that absorbs what the plan cannot see: a busy week, a late vessel, a supplier that slips. Too little and operations stop; too much and cash sits on the shelf. This page explains the logic, then lets you size the buffer with standard formulas and stress-test it across hundreds of simulated years.',
+ 'hero.m1':'<b>Scope:</b> one item, one location',
+ 'hero.m2':'<b>Inputs:</b> editable, generic example loaded',
+ 'hero.m3':'<b>Runs:</b> in your browser, nothing is stored or sent',
+ 'hero.b1':'Go to the simulator','hero.b2':'Read the method first','hero.back':'Back to Supply Chain','hero.home':'Home',
+ 'hero.vis':'Stock falls, an order lands, stock jumps back. The shaded band is the safety stock; the red dot is a week when it was needed.',
+ 'hero.ss':'Safety stock','hero.rop':'Reorder point',
+ 'toc.0':'Summary','toc.1':'1 · The question','toc.2':'2 · Key concepts','toc.3':'3 · Method','toc.4':'4 · Formulas','toc.5':'5 · Simulator','toc.6':'6 · Reading results','toc.7':'7 · Limits',
+ 'sum.lab':'The short version','sum.h':'Six ideas behind this model',
+ 'sum.1h':'Safety stock buys time, not certainty','sum.1p':'It covers the gap between what you expect during the lead time and what actually happens. It cannot cover every extreme event.',
+ 'sum.2h':'Lead time is often the bigger risk','sum.2p':'A few days of delay on a high-volume item can outweigh months of demand noise. The formula here counts both.',
+ 'sum.3h':'Service level has two meanings','sum.3p':'Cycle service level counts cycles without a stockout. Fill rate counts units served from stock. The same buffer scores very differently on each.',
+ 'sum.4h':'Formulas assume a bell curve','sum.4p':'Real demand is lumpy and real delays are skewed. Simulation replays the year hundreds of times to check whether the formula holds.',
+ 'sum.5h':'The last few points cost the most','sum.5p':'Going from 95% to 99% can nearly double the buffer. Whether it pays depends on what a shortage costs you.',
+ 'sum.6h':'Every number is yours','sum.6p':'All example values are generic placeholders. Replace them with your own demand, lead times and costs before drawing conclusions.',
+ 's1.h':'The question',
+ 's1.lead':'What buffer keeps this item available at the service level we promised, at the lowest total cost?',
+ 's1.p1':'Many stocking rules are set once and copied forward: two weeks of cover, a minimum of 100, a number someone trusted years ago. They rarely say which risk they protect against or what they cost. This model turns that rule into an explicit trade-off you can see, test and defend.',
+ 's1.call':'<b>Three questions this page answers.</b> How much safety stock should we hold, and when should we reorder? Does that buffer really hit the target once demand and lead time behave like the real world? And what does each extra point of service cost?',
+ 's2.h':'Key concepts in one picture',
+ 's2.lead':'Stock falls as it is used. An order is placed at the reorder point, and the delivery arrives after the lead time. Safety stock is the floor meant to absorb the surprises in between.',
+ 'd.stock':'Stock on hand','d.time':'Time','d.q':'Order quantity (Q)','d.rop':'Reorder point','d.ss':'Safety stock','d.lt':'Lead time','d.order':'Order placed','d.arrive':'Delivery arrives','d.dip':'Demand above plan eats into the buffer',
+ 'c.1h':'Cycle stock','c.1p':'Stock used up between two deliveries. On average it is half of the order quantity.',
+ 'c.2h':'Safety stock','c.2p':'Extra stock held to absorb higher demand or later deliveries than planned.',
+ 'c.3h':'Reorder point','c.3p':'The stock position that triggers a new order: expected demand during the lead time plus safety stock.',
+ 'c.4h':'Stock position','c.4p':'On hand plus on order minus backorders. Orders are triggered on position, not on what sits on the shelf.',
+ 'c.5h':'Lead time','c.5p':'Days from placing an order to having usable stock, including hub handling, transport and receiving.',
+ 'c.6h':'Service level','c.6p':'Cycle service level (α) is the share of cycles without a stockout. Fill rate (β) is the share of demand served straight from stock.',
+ 's3.h':'Method',
+ 's3.lead':'From inputs to a buffer you can defend, in four steps that all run in your browser.',
+ 'f.1h':'Describe the item','f.1p':'Demand pattern, lead time and its risks, ordering policy, costs and constraints.',
+ 'f.2h':'Size the buffer','f.2p':'Standard formulas combine demand and lead time variability into one safety stock and reorder point.',
+ 'f.3h':'Stress-test it','f.3p':'A day-by-day Monte Carlo simulation replays the year hundreds of times with random demand and deliveries.',
+ 'f.4h':'Compare and decide','f.4p':'Achieved service, stockout days and total cost show whether the formula holds and what a higher target would cost.',
+ 'step':'STEP {n}',
+ 's3.dayH':'What happens on each simulated day',
+ 'day.1':'Deliveries due today arrive. They clear any backorders first.',
+ 'day.2':'Stock older than its shelf life is written off.',
+ 'day.3':'Demand is drawn at random and served from the oldest stock first. Any shortfall becomes a backorder or a lost sale.',
+ 'day.4':'Stock position is checked, every day or every R days, and the policy decides whether to order. MOQ, lot size and storage capacity are applied.',
+ 'day.5':'The lead time for that order is drawn, including any late delivery or major disruption.',
+ 's3.note':'<b>Warm-up and seed.</b> The first days are simulated but not measured, so the starting stock does not flatter the result. A fixed random seed makes every run repeatable; change it to see how much the results move.',
+ 's4.h':'Formulas',
+ 's4.lead':'Every calculation, in order. The simulator shows the same formulas with your numbers filled in.',
+ 'eq.1h':'1. Variability during the protection window',
+ 'eq.1c':'ignores lead time variability',
+ 'eq.1d':'adds lead time variability',
+ 'eq.2h':'2. Adding late deliveries and disruptions',
+ 'eq.2c':'average lead time including delay risk',
+ 'eq.2d':'its variance',
+ 'eq.3h':'3. Safety factor z from the service target',
+ 'eq.3c':'for a cycle service level target',
+ 'eq.3d':'for a fill rate target (cycle demand = Q, or d × R for periodic review)',
+ 'eq.4h':'4. Safety stock and order levels',
+ 'eq.4c':'for (s, Q), (s, S) and min–max',
+ 'eq.4d':'for (R, S): order up to this level every R days',
+ 'eq.5h':'5. Order quantity',
+ 'eq.5c':'H = unit cost × holding % per year, then rounded up to MOQ and lot size',
+ 'eq.6h':'Symbols',
+ 'eq.6c':'d = average daily demand, σd = its std dev, L = lead time, σL = its std dev, R = review period, p and Δ = probability and length of a late delivery or disruption, φ and Φ = standard normal density and distribution, D = annual demand, S = cost per order',
+ 's4.polH':'Four replenishment policies',
+ 'pol.th1':'Policy','pol.th2':'When to order','pol.th3':'How much',
+ 'pol.sQ1':'Stock position falls to s','pol.sQ2':'A fixed quantity Q (or a multiple of it)',
+ 'pol.sS1':'Stock position falls to s','pol.sS2':'Enough to bring the position back to S',
+ 'pol.RS1':'Every R days','pol.RS2':'Enough to bring the position back to S',
+ 'pol.mm1':'Every R days, only if the position is at or below min','pol.mm2':'Enough to bring the position back to max',
+ 's5.h':'Run the simulator',
+ 's5.lead':'Start from a scenario or enter your own values. Basic mode keeps to the essentials; Advanced opens every variable. Yellow fields are inputs.',
+ 's5.mode':'Mode',
+ 'rec.lab':'Recommended policy',
+ 'rs.ss':'Safety stock','rs.rop':'Reorder level','rs.q':'Order quantity','rs.S':'Order-up-to level','rs.cover':'Safety stock in days of demand',
+ 's6.h':'Reading the results',
+ 's6.lead':'Six things to look at before you trust a number.',
+ 'r.1h':'Target versus achieved','r.1p':'Well above target means you are paying for stock you do not need. Below target means the formula is optimistic for this item.',
+ 'r.2h':'The sawtooth','r.2p':'Watch how often the band dips below the safety stock line. Frequent dips mean the buffer is working hard; dips to zero are stockouts.',
+ 'r.3h':'Stockout days','r.3p':'A high average with many zero-stockout years means the risk comes from rare, large events such as disruptions, not daily noise.',
+ 'r.4h':'The cost curve','r.4p':'If cost falls as service rises, shortages cost more than stock: raise the target. If it climbs steeply, the last points are not worth it.',
+ 'r.5h':'Simple versus simulation','r.5p':'A big gap means lead time variability or the shape of demand matters. Do not rely on the textbook formula for this item.',
+ 'r.6h':'Sensitivity','r.6p':'Inputs at the top of the tornado deserve better data first. Improving them is often cheaper than holding more stock.',
+ 's7.h':'What this model cannot do',
+ 's7.lead':'Use it to reason about a buffer, not to replace a planning system.',
+ 'lim.1':'One item at one location. No multi-echelon effects, shared storage or substitution between items.',
+ 'lim.2':'Policy settings stay fixed for the whole horizon. Real planners update them as demand changes.',
+ 'lim.3':'Demand and lead time are drawn independently. In practice one disruption can hit several orders at once.',
+ 'lim.4':'Costs are linear. No quantity discounts, freight breaks or emergency premiums.',
+ 'lim.5':'Results come from a finite number of runs. Change the seed to see how much they move.',
+ 'foot':'Generic educational model. No company data. All calculations run locally in your browser.',
+ 'cap1':'One sample run (line) and the middle 80% of all runs (band), with safety stock and reorder level marked.',
+ 'cap3':'Each point is one safety stock level tested in simulation. The large point is your current setting.'
+},
+id:{
+ 'doc.title':'Berapa safety stock yang cukup?',
+ 'hero.lab':'Edukasi inventory · Model simulasi interaktif',
+ 'hero.h1':'Berapa safety stock yang cukup?',
+ 'hero.p':'Safety stock adalah penyangga untuk hal yang tidak terlihat di rencana: minggu yang sibuk, kapal yang terlambat, supplier yang meleset. Terlalu sedikit, operasi berhenti; terlalu banyak, uang mengendap di rak. Halaman ini menjelaskan logikanya, lalu membantumu menghitung buffer dengan rumus standar dan mengujinya pada ratusan tahun simulasi.',
+ 'hero.m1':'<b>Cakupan:</b> satu item, satu lokasi',
+ 'hero.m2':'<b>Input:</b> bisa diubah, contoh generik sudah dimuat',
+ 'hero.m3':'<b>Proses:</b> di browser, tidak ada data yang disimpan atau dikirim',
+ 'hero.b1':'Langsung ke simulator','hero.b2':'Baca metodologi dulu','hero.back':'Kembali ke Supply Chain','hero.home':'Beranda',
+ 'hero.vis':'Stok turun, order tiba, stok naik lagi. Area berwarna adalah safety stock; titik merah adalah minggu saat buffer itu terpakai.',
+ 'hero.ss':'Safety stock','hero.rop':'Reorder point',
+ 'toc.0':'Ringkasan','toc.1':'1 · Pertanyaan','toc.2':'2 · Konsep dasar','toc.3':'3 · Metodologi','toc.4':'4 · Rumus','toc.5':'5 · Simulator','toc.6':'6 · Membaca hasil','toc.7':'7 · Batasan',
+ 'sum.lab':'Versi singkat','sum.h':'Enam ide di balik model ini',
+ 'sum.1h':'Safety stock membeli waktu, bukan kepastian','sum.1p':'Ia menutup selisih antara perkiraan dan kenyataan selama lead time. Ia tidak bisa menutup semua kejadian ekstrem.',
+ 'sum.2h':'Lead time sering jadi risiko terbesar','sum.2p':'Keterlambatan beberapa hari pada item bervolume tinggi bisa lebih berat daripada fluktuasi demand berbulan-bulan. Rumus di sini menghitung keduanya.',
+ 'sum.3h':'Service level punya dua arti','sum.3p':'Cycle service level menghitung siklus tanpa stockout. Fill rate menghitung unit yang terlayani dari stok. Buffer yang sama bisa bernilai sangat berbeda di keduanya.',
+ 'sum.4h':'Rumus mengasumsikan kurva lonceng','sum.4p':'Demand nyata tidak merata dan keterlambatan nyata condong ke satu sisi. Simulasi memutar ulang setahun ratusan kali untuk menguji apakah rumus bertahan.',
+ 'sum.5h':'Beberapa poin terakhir paling mahal','sum.5p':'Naik dari 95% ke 99% bisa hampir melipatgandakan buffer. Layak atau tidak tergantung pada biaya kekurangan stok.',
+ 'sum.6h':'Semua angka milikmu','sum.6p':'Semua contoh bersifat generik. Ganti dengan demand, lead time, dan biaya sendiri sebelum menarik kesimpulan.',
+ 's1.h':'Pertanyaan',
+ 's1.lead':'Berapa buffer yang menjaga item ini tetap tersedia sesuai service level yang dijanjikan, dengan total biaya terendah?',
+ 's1.p1':'Banyak aturan stok ditetapkan sekali lalu terus disalin: cover dua minggu, minimum 100, angka yang dipercaya bertahun-tahun lalu. Aturan seperti itu jarang menyebut risiko apa yang dilindungi atau berapa biayanya. Model ini mengubah aturan tersebut menjadi trade-off yang jelas, bisa dilihat, diuji, dan dipertanggungjawabkan.',
+ 's1.call':'<b>Tiga pertanyaan yang dijawab halaman ini.</b> Berapa safety stock yang perlu disimpan, dan kapan harus reorder? Apakah buffer itu benar-benar mencapai target saat demand dan lead time berperilaku seperti dunia nyata? Dan berapa biaya setiap tambahan satu poin service level?',
+ 's2.h':'Konsep dasar dalam satu gambar',
+ 's2.lead':'Stok turun saat dipakai. Order dibuat di reorder point, lalu pengiriman tiba setelah lead time. Safety stock adalah lantai yang menyerap kejutan di antaranya.',
+ 'd.stock':'Stok di gudang','d.time':'Waktu','d.q':'Kuantitas order (Q)','d.rop':'Reorder point','d.ss':'Safety stock','d.lt':'Lead time','d.order':'Order dibuat','d.arrive':'Barang tiba','d.dip':'Demand di atas rencana memakai buffer',
+ 'c.1h':'Cycle stock','c.1p':'Stok yang terpakai di antara dua pengiriman. Rata-rata setengah dari kuantitas order.',
+ 'c.2h':'Safety stock','c.2p':'Stok tambahan untuk menyerap demand lebih tinggi atau pengiriman lebih lambat dari rencana.',
+ 'c.3h':'Reorder point','c.3p':'Posisi stok yang memicu order baru: perkiraan demand selama lead time ditambah safety stock.',
+ 'c.4h':'Posisi stok','c.4p':'Stok di gudang + stok dalam pesanan − backorder. Order dipicu oleh posisi stok, bukan stok di rak.',
+ 'c.5h':'Lead time','c.5p':'Hari sejak order dibuat hingga stok siap pakai, termasuk penanganan di hub, transportasi, dan penerimaan.',
+ 'c.6h':'Service level','c.6p':'Cycle service level (α) adalah porsi siklus tanpa stockout. Fill rate (β) adalah porsi demand yang langsung terlayani dari stok.',
+ 's3.h':'Metodologi',
+ 's3.lead':'Dari input ke buffer yang bisa dipertanggungjawabkan, dalam empat langkah yang semuanya berjalan di browser.',
+ 'f.1h':'Gambarkan item','f.1p':'Pola demand, lead time beserta risikonya, kebijakan order, biaya, dan batasan.',
+ 'f.2h':'Hitung buffer','f.2p':'Rumus standar menggabungkan variabilitas demand dan lead time menjadi satu angka safety stock dan reorder point.',
+ 'f.3h':'Uji ketahanan','f.3p':'Simulasi Monte Carlo harian memutar ulang setahun ratusan kali dengan demand dan pengiriman acak.',
+ 'f.4h':'Bandingkan dan putuskan','f.4p':'Service yang tercapai, hari stockout, dan total biaya menunjukkan apakah rumus bertahan dan berapa biaya target yang lebih tinggi.',
+ 'step':'LANGKAH {n}',
+ 's3.dayH':'Yang terjadi setiap hari simulasi',
+ 'day.1':'Pengiriman yang jatuh tempo hari ini tiba, dan langsung menutup backorder terlebih dahulu.',
+ 'day.2':'Stok yang melewati masa simpan dihapusbukukan.',
+ 'day.3':'Demand diundi secara acak dan dilayani dari stok paling lama. Kekurangan menjadi backorder atau lost sales.',
+ 'day.4':'Posisi stok dicek, setiap hari atau setiap R hari, dan kebijakan menentukan perlu order atau tidak. MOQ, ukuran lot, dan kapasitas gudang diterapkan.',
+ 'day.5':'Lead time order tersebut diundi, termasuk kemungkinan terlambat atau gangguan besar.',
+ 's3.note':'<b>Pemanasan dan seed.</b> Hari-hari awal disimulasikan tetapi tidak diukur, agar stok awal tidak membuat hasil terlihat lebih baik. Random seed yang tetap membuat setiap run bisa diulang; ganti seed untuk melihat seberapa besar hasilnya bergeser.',
+ 's4.h':'Rumus',
+ 's4.lead':'Semua perhitungan, berurutan. Simulator menampilkan rumus yang sama dengan angkamu.',
+ 'eq.1h':'1. Variabilitas selama masa perlindungan',
+ 'eq.1c':'mengabaikan variabilitas lead time',
+ 'eq.1d':'memasukkan variabilitas lead time',
+ 'eq.2h':'2. Memasukkan keterlambatan dan gangguan',
+ 'eq.2c':'rata-rata lead time termasuk risiko keterlambatan',
+ 'eq.2d':'variansnya',
+ 'eq.3h':'3. Faktor pengaman z dari target service',
+ 'eq.3c':'untuk target cycle service level',
+ 'eq.3d':'untuk target fill rate (demand per siklus = Q, atau d × R untuk review periodik)',
+ 'eq.4h':'4. Safety stock dan level order',
+ 'eq.4c':'untuk (s, Q), (s, S), dan min–max',
+ 'eq.4d':'untuk (R, S): pesan hingga level ini setiap R hari',
+ 'eq.5h':'5. Kuantitas order',
+ 'eq.5c':'H = harga per unit × % biaya simpan per tahun, lalu dibulatkan ke atas sesuai MOQ dan ukuran lot',
+ 'eq.6h':'Simbol',
+ 'eq.6c':'d = rata-rata demand harian, σd = std dev-nya, L = lead time, σL = std dev-nya, R = periode review, p dan Δ = peluang dan lama keterlambatan atau gangguan, φ dan Φ = densitas dan distribusi normal standar, D = demand tahunan, S = biaya per order',
+ 's4.polH':'Empat kebijakan replenishment',
+ 'pol.th1':'Kebijakan','pol.th2':'Kapan order','pol.th3':'Berapa banyak',
+ 'pol.sQ1':'Posisi stok turun ke s','pol.sQ2':'Kuantitas tetap Q (atau kelipatannya)',
+ 'pol.sS1':'Posisi stok turun ke s','pol.sS2':'Secukupnya untuk mengembalikan posisi ke S',
+ 'pol.RS1':'Setiap R hari','pol.RS2':'Secukupnya untuk mengembalikan posisi ke S',
+ 'pol.mm1':'Setiap R hari, hanya jika posisi di bawah atau sama dengan min','pol.mm2':'Secukupnya untuk mengembalikan posisi ke max',
+ 's5.h':'Jalankan simulator',
+ 's5.lead':'Mulai dari skenario atau masukkan angkamu sendiri. Mode Basic berisi hal pokok; Advanced membuka semua variabel. Kolom kuning adalah input.',
+ 's5.mode':'Mode',
+ 'rec.lab':'Rekomendasi kebijakan',
+ 'rs.ss':'Safety stock','rs.rop':'Level reorder','rs.q':'Kuantitas order','rs.S':'Level order-up-to','rs.cover':'Safety stock dalam hari demand',
+ 's6.h':'Membaca hasil',
+ 's6.lead':'Enam hal yang perlu dicek sebelum memercayai sebuah angka.',
+ 'r.1h':'Target versus tercapai','r.1p':'Jauh di atas target berarti kamu membayar stok yang tidak dibutuhkan. Di bawah target berarti rumus terlalu optimistis untuk item ini.',
+ 'r.2h':'Grafik sawtooth','r.2p':'Perhatikan seberapa sering pita turun di bawah garis safety stock. Sering turun berarti buffer bekerja keras; turun sampai nol berarti stockout.',
+ 'r.3h':'Hari stockout','r.3p':'Rata-rata tinggi dengan banyak tahun tanpa stockout berarti risikonya datang dari kejadian jarang dan besar seperti gangguan, bukan fluktuasi harian.',
+ 'r.4h':'Kurva biaya','r.4p':'Jika biaya turun saat service naik, kekurangan stok lebih mahal daripada stoknya: naikkan target. Jika naik tajam, poin terakhir tidak sepadan.',
+ 'r.5h':'Rumus sederhana versus simulasi','r.5p':'Selisih besar berarti variabilitas lead time atau bentuk demand berpengaruh. Jangan andalkan rumus buku teks untuk item ini.',
+ 'r.6h':'Sensitivitas','r.6p':'Input di bagian atas grafik tornado perlu data yang lebih baik lebih dulu. Memperbaikinya sering lebih murah daripada menambah stok.',
+ 's7.h':'Yang tidak bisa dilakukan model ini',
+ 's7.lead':'Gunakan untuk menalar sebuah buffer, bukan pengganti sistem perencanaan.',
+ 'lim.1':'Satu item di satu lokasi. Tidak ada efek multi-eselon, gudang bersama, atau substitusi antar item.',
+ 'lim.2':'Pengaturan kebijakan tetap sepanjang periode. Di lapangan, planner memperbaruinya saat demand berubah.',
+ 'lim.3':'Demand dan lead time diundi secara independen. Di lapangan, satu gangguan bisa mengenai beberapa order sekaligus.',
+ 'lim.4':'Biaya bersifat linear. Tidak ada diskon kuantitas, tarif freight bertingkat, atau premi pengiriman darurat.',
+ 'lim.5':'Hasil berasal dari jumlah run yang terbatas. Ganti seed untuk melihat seberapa besar hasilnya bergeser.',
+ 'foot':'Model edukasi generik. Tidak memakai data perusahaan. Semua perhitungan berjalan di browser.',
+ 'cap1':'Satu contoh run (garis) dan 80% run di bagian tengah (pita), dengan safety stock dan level reorder ditandai.',
+ 'cap3':'Setiap titik adalah satu level safety stock yang diuji dalam simulasi. Titik besar adalah pengaturanmu saat ini.'
+}};
+const I18N={en:Object.assign({},I18N_BASE.en,I18N_NEW.en),id:Object.assign({},I18N_BASE.id,I18N_NEW.id)};
+
+if(typeof document!=='undefined'){(function(){
+const DEFAULTS={dDist:'normal',dMean:100,dSd:25,pOccur:30,trendPct:0,seasAmp:0,seasPeak:7,
+  ltDist:'normal',ltMean:10,ltSd:3,lateProb:0,lateDays:5,disProb:0,disDays:14,
+  policy:'sQ',reviewR:7,qMode:'eoq',qManual:1000,unmet:'backorder',slType:'csl',slTarget:95,
+  unitCost:50,holdPct:25,orderCost:150,stockoutCost:20,moq:0,lotMult:1,capacity:0,shelfLife:0,
+  horizon:365,runs:500,seed:2026,warmup:30};
+const PRESETS={
+  stable:{adv:false,v:{dMean:200,dSd:30,ltMean:5,ltSd:1,slTarget:97,unitCost:20,holdPct:25,orderCost:80,stockoutCost:10}},
+  remote:{adv:true,v:{dMean:40,dSd:12,ltDist:'lognormal',ltMean:45,ltSd:12,lateProb:20,lateDays:10,disProb:5,disDays:30,
+    policy:'RS',reviewR:30,slTarget:98,unitCost:300,holdPct:20,orderCost:1500,stockoutCost:400}},
+  spare:{adv:true,v:{dDist:'intermittent',dMean:2,dSd:6,pOccur:15,ltDist:'lognormal',ltMean:60,ltSd:20,lateProb:10,lateDays:15,
+    policy:'sS',slTarget:95,unitCost:2500,holdPct:22,orderCost:400,stockoutCost:5000}}
+};
+const FIELDS=[
+  {id:'dDist',g:'demand',t:'sel',o:['normal','poisson','intermittent'],adv:1},
+  {id:'dMean',g:'demand',min:0.01,max:1e6},
+  {id:'dSd',g:'demand',min:0,max:1e6,show:p=>p.dDist!=='poisson'},
+  {id:'pOccur',g:'demand',min:1,max:100,adv:1,show:p=>p.dDist==='intermittent'},
+  {id:'trendPct',g:'demand',min:-20,max:20,adv:1},
+  {id:'seasAmp',g:'demand',min:0,max:90,adv:1},
+  {id:'seasPeak',g:'demand',min:1,max:12,int:1,adv:1,show:p=>p.seasAmp>0},
+  {id:'ltDist',g:'lead',t:'sel',o:['normal','lognormal','uniform'],adv:1},
+  {id:'ltMean',g:'lead',min:1,max:365},
+  {id:'ltSd',g:'lead',min:0,max:200},
+  {id:'lateProb',g:'lead',min:0,max:100,adv:1},
+  {id:'lateDays',g:'lead',min:0,max:365,adv:1,show:p=>p.lateProb>0},
+  {id:'disProb',g:'lead',min:0,max:100,adv:1},
+  {id:'disDays',g:'lead',min:0,max:365,adv:1,show:p=>p.disProb>0},
+  {id:'policy',g:'policy',t:'sel',o:['sQ','sS','RS','minmax']},
+  {id:'reviewR',g:'policy',min:1,max:180,int:1,show:p=>p.policy==='RS'||p.policy==='minmax'},
+  {id:'qMode',g:'policy',t:'sel',o:['eoq','manual'],show:p=>p.policy!=='RS'},
+  {id:'qManual',g:'policy',min:1,max:1e7,show:p=>p.policy!=='RS'&&p.qMode==='manual'},
+  {id:'unmet',g:'policy',t:'sel',o:['backorder','lost']},
+  {id:'slType',g:'service',t:'sel',o:['csl','fill'],adv:1},
+  {id:'slTarget',g:'service',min:50,max:99.9},
+  {id:'unitCost',g:'cost',min:0,max:1e7},
+  {id:'holdPct',g:'cost',min:0,max:200},
+  {id:'orderCost',g:'cost',min:0,max:1e7},
+  {id:'stockoutCost',g:'cost',min:0,max:1e7},
+  {id:'moq',g:'constraints',min:0,max:1e7},
+  {id:'lotMult',g:'constraints',min:1,max:1e6},
+  {id:'capacity',g:'constraints',min:0,max:1e8},
+  {id:'shelfLife',g:'constraints',min:0,max:3650,int:1},
+  {id:'horizon',g:'sim',min:90,max:1095,int:1},
+  {id:'runs',g:'sim',min:50,max:2000,int:1},
+  {id:'seed',g:'sim',min:1,max:1e9,int:1},
+  {id:'warmup',g:'sim',min:0,max:365,int:1}
+];
+const GROUPS=[{id:'demand'},{id:'lead'},{id:'policy',adv:1},{id:'service'},{id:'cost'},{id:'constraints',adv:1},{id:'sim',adv:1}];
+
+
+const GICON={demand:'i-trend',lead:'i-ship',policy:'i-refresh',service:'i-target',cost:'i-coins',constraints:'i-warehouse',sim:'i-dice'};
+const ico=(id,cls)=>'<svg class="svg'+(cls?' '+cls:'')+'" aria-hidden="true"><use href="#'+id+'"/></svg>';
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+const store={get(k){try{return localStorage.getItem(k);}catch(e){return null;}},set(k,v){try{localStorage.setItem(k,v);}catch(e){}}};
+const urlLang=(()=>{try{const v=new URLSearchParams(location.search).get('lang');return v==='id'||v==='en'?v:null;}catch(e){return null;}})();
+let lang=urlLang||store.get('sss-lang')||((document.documentElement.lang||'en').slice(0,2)==='id'?'id':'en');
+let mode=store.get('sss-mode')==='adv'?'adv':'basic';
+let state={...DEFAULTS},last=null,sens=null,runToken=0,timer=null;
+const openGroups=new Set(['demand']);
+
+function t(k,v){let s=(I18N[lang][k]??I18N.en[k]??k);if(v)for(const x in v)s=s.split('{'+x+'}').join(v[x]);return s;}
+const loc=()=>lang==='id'?'id-ID':'en-US';
+function fn(v,d=0){if(v==null||!isFinite(v))return '–';return new Intl.NumberFormat(loc(),{minimumFractionDigits:d,maximumFractionDigits:d}).format(v);}
+function fu(v){return fn(v,Math.abs(v)<10&&v!==0?1:0);}
+function fp(v,d=1){return fn(v*100,d)+'%';}
+const $=id=>document.getElementById(id);
+
+function effective(){
+  if(mode==='adv')return {...state};
+  return {...state,dDist:'normal',trendPct:0,seasAmp:0,ltDist:'normal',lateProb:0,disProb:0,policy:'sQ',qMode:'eoq',unmet:'backorder',
+    slType:'csl',moq:0,lotMult:1,capacity:0,shelfLife:0,horizon:365,runs:300,warmup:30};
+}
+
+/* ---------- Static content ---------- */
+function cards(el,items,cls){
+  $(el).innerHTML=items.map(it=>'<div class="card'+(cls?' '+cls:'')+'"><div class="ic'+(it.cu?' cu':'')+'">'+ico(it.i)+'</div><h4>'+t(it.h)+'</h4><p>'+t(it.p)+'</p></div>').join('');
+}
+function renderStatic(){
+  document.documentElement.lang=lang;document.title=t('doc.title');
+  $('archive-return').href=lang==='id'?'../supply-chain.html?lang=id':'../supply-chain.html';
+  $('home-return').href=lang==='id'?'../index-id.html':'../index.html';
+  document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.dataset.i18n);});
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.innerHTML=t(el.dataset.i18nHtml);});
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>el.setAttribute('aria-label',t(el.dataset.i18nAria)));
+  document.querySelectorAll('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===lang));
+  document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===mode));
+  document.body.className=mode==='adv'?'mode-adv':'mode-basic';
+  $('hvSS').textContent=t('hero.ss');$('hvROP').textContent=t('hero.rop');
+  cards('sumCards',[{i:'i-shield',h:'sum.1h',p:'sum.1p'},{i:'i-clock',h:'sum.2h',p:'sum.2p'},{i:'i-target',h:'sum.3h',p:'sum.3p'},
+    {i:'i-dice',h:'sum.4h',p:'sum.4p'},{i:'i-coins',h:'sum.5h',p:'sum.5p',cu:1},{i:'i-sliders',h:'sum.6h',p:'sum.6p',cu:1}]);
+  cards('conceptCards',[{i:'i-box',h:'c.1h',p:'c.1p'},{i:'i-shield',h:'c.2h',p:'c.2p'},{i:'i-flag',h:'c.3h',p:'c.3p'},
+    {i:'i-layers',h:'c.4h',p:'c.4p'},{i:'i-clock',h:'c.5h',p:'c.5p'},{i:'i-target',h:'c.6h',p:'c.6p'}],'teal');
+  cards('readCards',[{i:'i-target',h:'r.1h',p:'r.1p'},{i:'i-chart',h:'r.2h',p:'r.2p'},{i:'i-alert',h:'r.3h',p:'r.3p'},
+    {i:'i-coins',h:'r.4h',p:'r.4p'},{i:'i-calc',h:'r.5h',p:'r.5p'},{i:'i-sliders',h:'r.6h',p:'r.6p'}]);
+  const fl=[['i-sliders','f.1h','f.1p'],['i-calc','f.2h','f.2p'],['i-dice','f.3h','f.3p'],['i-check','f.4h','f.4p']];
+  $('flow').innerHTML=fl.map((f,i)=>'<div class="step"><div class="ic cu">'+ico(f[0])+'</div><div class="k">'+t('step',{n:i+1})+'</div><h4>'+t(f[1])+'</h4><p>'+t(f[2])+'</p></div>').join('');
+  $('daily').innerHTML=[1,2,3,4,5].map(i=>'<li>'+t('day.'+i)+'</li>').join('');
+  $('limits').innerHTML=[1,2,3,4,5].map(i=>'<li>'+ico('i-x')+'<span>'+t('lim.'+i)+'</span></li>').join('');
+  const c=k=>'<span class="c">// '+t(k)+'</span>';
+  const eqs=[
+    ['eq.1h','<b>σ_simple</b>   = σd × √(L + R)                         '+c('eq.1c')+'\n<b>σ_combined</b> = √( (L + R)·σd² + d²·σL² )              '+c('eq.1d')],
+    ['eq.2h','<b>L′</b>   = L + p_late·Δ_late + p_dis·Δ_dis               '+c('eq.2c')+'\n<b>σL′²</b> = σL² + p_late(1−p_late)·Δ_late² + p_dis(1−p_dis)·Δ_dis²   '+c('eq.2d')+'\n<b>σ_risk</b> = √( (L′ + R)·σd² + d²·σL′² )'],
+    ['eq.3h','<b>z</b> = Φ⁻¹(α)                                            '+c('eq.3c')+'\n<b>σ_risk · G(z)</b> = (1 − β) × cycle demand,  G(z) = φ(z) − z·(1 − Φ(z))\n'+c('eq.3d')],
+    ['eq.4h','<b>SS</b> = z × σ_risk\n<b>s</b>  = d × (L′ + R) + SS ,   <b>S</b> = s + Q          '+c('eq.4c')+'\n<b>S</b>  = d × (L′ + R) + SS                             '+c('eq.4d')],
+    ['eq.5h','<b>EOQ</b> = √( 2 × D × S / H )\n'+c('eq.5c')],
+    ['eq.6h','<span class="c">'+t('eq.6c')+'</span>']];
+  $('eqs').innerHTML=eqs.map(e=>'<div class="eqb"><h4>'+t(e[0])+'</h4><div class="eq"'+(e[0]==='eq.6h'?' style="white-space:normal"':'')+'>'+e[1]+'</div></div>').join('');
+  $('polTable').innerHTML='<thead><tr><th>'+t('pol.th1')+'</th><th>'+t('pol.th2')+'</th><th>'+t('pol.th3')+'</th></tr></thead><tbody>'+
+    [['o.sQ','pol.sQ1','pol.sQ2'],['o.sS','pol.sS1','pol.sS2'],['o.RS','pol.RS1','pol.RS2'],['o.minmax','pol.mm1','pol.mm2']]
+    .map(r=>'<tr><td class="k">'+t(r[0])+'</td><td>'+t(r[1])+'</td><td>'+t(r[2])+'</td></tr>').join('')+'</tbody>';
+  renderDiagram();setBusy(false);renderSensState();
+}
+function renderDiagram(){
+  const y=v=>340-v*1.1,ss=50,rop=120;
+  const path='M60 '+y(250)+' L340 '+y(50)+' L340 '+y(250)+' L620 '+y(20)+' L620 '+y(220)+' L900 '+y(45)+' L900 '+y(245)+' L960 '+y(205);
+  const T=(x,yy,s,a,c,w)=>'<text x="'+x+'" y="'+yy+'" text-anchor="'+(a||'start')+'" fill="'+(c||'#5B6568')+'" font-size="15" font-weight="'+(w||600)+'" font-family="Inter,Segoe UI,sans-serif">'+esc(s)+'</text>';
+  const xo=242;
+  $('conceptDiagram').innerHTML='<svg viewBox="0 0 1000 430" role="img" aria-label="'+esc(t('s2.h'))+'">'+
+    '<rect x="60" y="'+y(ss)+'" width="900" height="'+(y(0)-y(ss))+'" fill="#F6ECDD"/>'+
+    T(70,y(ss)+34,t('d.ss'),'start','#8A5A12',700)+
+    '<line x1="60" x2="960" y1="'+y(rop)+'" y2="'+y(rop)+'" stroke="#2E6E73" stroke-width="1.6" stroke-dasharray="7 6"/>'+
+    T(72,y(rop)-10,t('d.rop'),'start','#2E6E73',700)+
+    '<line x1="60" x2="60" y1="40" y2="340" stroke="#B9B3A6"/><line x1="60" x2="965" y1="340" y2="340" stroke="#B9B3A6"/>'+
+    '<text transform="translate(30 190) rotate(-90)" text-anchor="middle" fill="#5B6568" font-size="14" font-family="Inter,Segoe UI,sans-serif">'+esc(t('d.stock'))+'</text>'+
+    T(960,364,t('d.time'),'end')+
+    '<path d="'+path+'" fill="none" stroke="#1C2526" stroke-width="3" stroke-linejoin="round"/>'+
+    '<circle cx="'+xo+'" cy="'+y(rop)+'" r="7" fill="#2E6E73"/>'+T(xo-12,y(rop)+26,t('d.order'),'end','#2E6E73',700)+
+    '<circle cx="340" cy="'+y(250)+'" r="7" fill="#B77A2B"/>'+T(352,y(250)-12,t('d.arrive'),'start','#B77A2B',700)+
+    '<line x1="352" x2="352" y1="'+(y(250)+4)+'" y2="'+(y(50)-4)+'" stroke="#B77A2B" stroke-width="1.6" marker-start="url(#ar)" marker-end="url(#ar)"/>'+
+    T(332,y(200),t('d.q'),'end','#B77A2B',700)+
+    '<defs><marker id="ar" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B77A2B"/></marker>'+
+    '<marker id="ar2" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#2E6E73"/></marker></defs>'+
+    '<line x1="'+xo+'" x2="340" y1="392" y2="392" stroke="#2E6E73" stroke-width="1.6" marker-start="url(#ar2)" marker-end="url(#ar2)"/>'+
+    '<line x1="'+xo+'" x2="'+xo+'" y1="'+y(rop)+'" y2="400" stroke="#2E6E73" stroke-dasharray="3 4"/><line x1="340" x2="340" y1="340" y2="400" stroke="#2E6E73" stroke-dasharray="3 4"/>'+
+    T((xo+340)/2,418,t('d.lt'),'middle','#2E6E73',700)+
+    '<circle cx="620" cy="'+y(20)+'" r="7" fill="#B64D42"/>'+T(634,y(20)+5,t('d.dip'),'start','#B64D42',700)+
+    '</svg>';
+}
+
+/* ---------- Form ---------- */
+function buildForm(){
+  const f=$('form');
+  f.innerHTML='';
+  for(const g of GROUPS){
+    const det=document.createElement('details');det.className='grp'+(g.adv?' adv':'');det.dataset.g=g.id;det.open=openGroups.has(g.id);
+    det.innerHTML='<summary><span class="gi">'+ico(GICON[g.id])+'</span><span>'+t('g.'+g.id)+'</span>'+ico('i-chevron','chev')+'</summary>';
+    const box=document.createElement('div');box.className='fields';
+    for(const fd of FIELDS.filter(x=>x.g===g.id)){
+      const w=document.createElement('div');w.className='fld'+(fd.adv?' adv':'');w.dataset.f=fd.id;
+      const lid='f-'+fd.id,hid='h-'+fd.id,eid='e-'+fd.id;let ctrl;
+      if(fd.t==='sel')ctrl='<select id="'+lid+'" aria-describedby="'+hid+'">'+fd.o.map(o=>'<option value="'+o+'"'+(state[fd.id]===o?' selected':'')+'>'+t('o.'+o)+'</option>').join('')+'</select>';
+      else ctrl='<input id="'+lid+'" type="number" inputmode="decimal" step="any" min="'+fd.min+'" max="'+fd.max+'" value="'+state[fd.id]+'" aria-describedby="'+hid+' '+eid+'">';
+      w.innerHTML='<label for="'+lid+'">'+t('f.'+fd.id+'.l')+'</label><p class="h" id="'+hid+'">'+t('f.'+fd.id+'.h')+'</p>'+ctrl+'<p class="err" id="'+eid+'" hidden></p>';
+      box.appendChild(w);
+    }
+    det.appendChild(box);f.appendChild(det);
+    det.addEventListener('toggle',()=>{if(det.open)openGroups.add(g.id);else openGroups.delete(g.id);});
+  }
+  f.querySelectorAll('input,select').forEach(el=>el.addEventListener(el.tagName==='SELECT'?'change':'input',onField));
+  updateVisibility();
+}
+function onField(e){
+  const id=e.target.id.slice(2),fd=FIELDS.find(x=>x.id===id);
+  if(fd.t==='sel')state[id]=e.target.value;
+  else{
+    let v=parseFloat(e.target.value);const err=$('e-'+id);
+    if(!isFinite(v)||v<fd.min||v>fd.max){e.target.setAttribute('aria-invalid','true');err.textContent=t('err',{min:fn(fd.min,fd.min%1?2:0),max:fn(fd.max,0)});err.hidden=false;return;}
+    e.target.removeAttribute('aria-invalid');err.hidden=true;if(fd.int)v=Math.round(v);state[id]=v;
+  }
+  updateVisibility();changed();
+}
+function updateVisibility(){for(const fd of FIELDS){if(!fd.show)continue;const w=document.querySelector('[data-f="'+fd.id+'"]');if(w)w.hidden=!fd.show(state);}}
+function changed(){sens=null;renderSensState();const p=effective();renderPlan(p,plan(p));clearTimeout(timer);timer=setTimeout(runAll,550);}
+
+/* ---------- Plan ---------- */
+function renderPlan(p,pl){
+  const b=v=>'<b>'+fu(v)+'</b>';
+  $('answer').innerHTML=t('hero.'+p.policy,{ss:b(pl.ss),q:b(pl.Q),rop:b(pl.rop),S:b(pl.S),R:'<b>'+fn(p.reviewR)+'</b>'});
+  $('answerSub').textContent=t('hero.sub',{target:fn(p.slTarget,1)+'%',type:t('type.'+p.slType)});
+  const st=[['rs.ss',fu(pl.ss)]];
+  if(p.policy!=='RS')st.push([p.policy==='minmax'?'l.min':'rs.rop',fu(pl.rop)]);
+  if(p.policy==='sQ')st.push(['rs.q',fu(pl.Q)]);else st.push(['rs.S',fu(pl.S)]);
+  st.push(['rs.cover',fn(pl.d.m>0?pl.ss/pl.d.m:0,1)]);
+  $('recStats').innerHTML=st.map(s=>'<div><b>'+s[1]+'</b>'+t(s[0])+'</div>').join('');
+  const notes=[],ds=pl.d;
+  if(p.dDist==='intermittent')notes.push(t('w.intermittent'));
+  if(ds.sdRaised)notes.push(t('w.sdRaised',{v:fn(ds.sdRaised,2)}));
+  if(p.trendPct||p.seasAmp)notes.push(t('w.trend'));
+  if(p.capacity>0&&p.capacity<pl.ss+pl.Q)notes.push(t('w.cap',{c:fn(p.capacity),n:fu(pl.ss+pl.Q)}));
+  if(p.policy!=='RS'&&Math.abs(pl.Q-Math.max(1,pl.qBase))>0.5&&(p.moq>0||p.lotMult>1))notes.push(t('w.q',{a:fu(pl.qBase),b:fu(pl.Q)}));
+  if(pl.zRaw<=0)notes.push(t('w.z0'));
+  $('notes').innerHTML=notes.map(n=>'<p class="note" style="margin:0;max-width:none">'+n+'</p>').join('');$('notes').hidden=!notes.length;
+  const lt=pl.lt,L=[
+    '<span class="c">// '+t('fx.d')+'</span>','d = '+fu(ds.m)+'   σd = '+fu(ds.sd),
+    '<span class="c">// '+t('fx.lt')+'</span>','L = '+fu(lt.L)+'   σL = '+fu(lt.s)+'   R = '+fn(pl.R),
+    '<span class="c">// '+t('fx.ltr')+'</span>','L′ = '+fu(lt.Lr)+'   σL′ = '+fu(lt.sr),
+    '<b>σ_simple</b> = '+fu(pl.sigSimple)+'   <b>σ_combined</b> = '+fu(pl.sigComb)+'   <b>σ_risk</b> = '+fu(pl.sigRisk),
+    '<span class="c">// '+(p.slType==='csl'?t('fx.zc'):t('fx.zf'))+'</span>','<b>z</b> = '+fn(pl.z,3),
+    '<b>SS</b> = '+fn(pl.z,3)+' × '+fu(pl.sigRisk)+' = '+fu(pl.ss),
+    '<b>'+(p.policy==='RS'?'S':'s')+'</b> = '+fu(ds.m)+' × '+fu(lt.Lr+pl.R)+' + '+fu(pl.ss)+' = '+fu(pl.rop),
+    '<b>EOQ</b> = √(2 × '+fn(pl.D)+' × '+fn(p.orderCost)+' / '+fn(pl.H,2)+') = '+fu(pl.eoq)+'   →  <b>Q</b> = '+fu(pl.Q)];
+  $('liveEq').innerHTML=L.join('\n');
+}
+
+/* ---------- Run ---------- */
+const tick=()=>new Promise(r=>setTimeout(r,0));
+function setBusy(b,pct){$('runBtn').disabled=!!b;$('runTxt').textContent=b?t('running',{pct:Math.round(pct||0)}):t('run');$('results').setAttribute('aria-busy',b?'true':'false');}
+async function runAll(){
+  clearTimeout(timer);
+  const tok=++runToken,p=effective(),pl=plan(p);renderPlan(p,pl);
+  const N=p.runs,H=p.horizon,nS=Math.min(N,200),total=N+SWEEP_Z.length*nS;let done=0;
+  setBusy(true,0);await tick();
+  const runs=[],trace=new Float32Array(N*H),CH=50;
+  for(let k=0;k<N;k+=CH){const k1=Math.min(N,k+CH),r=simulate(p,pl,{seed:p.seed,k0:k,k1,keepTrace:true});
+    runs.push(...r.runs);trace.set(r.trace,k*H);done+=k1-k;setBusy(true,100*done/total);await tick();if(tok!==runToken)return;}
+  const sweep=[];
+  for(const z of SWEEP_Z){const ss=z*pl.sigRisk,r=simulate(p,pl,{seed:p.seed,k0:0,k1:nS,ss});
+    sweep.push({z,ss,...aggregate(r.runs)});done+=nS;setBusy(true,100*done/total);await tick();if(tok!==runToken)return;}
+  last={p,pl,agg:aggregate(runs),runs,trace,N,H,sweep};setBusy(false);renderResults();
+}
+
+/* ---------- Results ---------- */
+function renderResults(){
+  if(!last)return;const {p,pl,agg,sweep}=last;
+  const key=p.slType==='csl'?'csl':'fill',tgt=p.slTarget/100;
+  const card=(i,l,v,sub,cls)=>'<div class="'+(cls||'')+'"><div class="kl">'+ico(i)+l+'</div><div class="kv">'+v+'</div>'+(sub||'')+'</div>';
+  const stat=(v,on)=>{if(!on)return ['',''];const d=(v-tgt)*100;
+    if(Math.abs(d)<=1)return ['<p class="ks up">'+t('k.met')+'</p>','good'];
+    return d<0?['<p class="ks dn">'+t('k.below',{d:fn(-d,1)})+'</p>','bad']:['<p class="ks up">'+t('k.above',{d:fn(d,1)})+'</p>','good'];};
+  const s1=stat(agg.csl,key==='csl'),s2=stat(agg.fill,key==='fill');let h='';
+  h+=card('i-target',t('k.csl'),fp(agg.csl),(key==='csl'?'<p class="ks">'+t('k.target',{t:fp(tgt)})+'</p>':'')+s1[0],s1[1]);
+  h+=card('i-box',t('k.fill'),fp(agg.fill),(key==='fill'?'<p class="ks">'+t('k.target',{t:fp(tgt)})+'</p>':'')+s2[0],s2[1]);
+  h+=card('i-alert',t('k.so'),fn(agg.soDays,1),'<p class="ks">'+t('k.noSo',{p:fp(agg.noSo,0)})+'</p>',agg.soDays>5?'bad':'');
+  h+=card('i-warehouse',t('k.oh'),fu(agg.avgOH),'<p class="ks">'+t('k.value',{v:fn(agg.avgOH*p.unitCost)})+'</p>');
+  h+=card('i-refresh',t('k.turns'),fn(agg.turns,1),'<p class="ks">'+t('k.perYear')+'</p>');
+  const br=[['c.hold',agg.hold],['c.ord',agg.ord],['c.so',agg.so]];if(p.shelfLife>0)br.push(['c.ex',agg.ex]);
+  h+=card('i-coins',t('k.cost'),fn(agg.total),'<div class="brk">'+br.map(b=>'<div><span>'+t(b[0])+'</span><span>'+fn(b[1])+'</span></div>').join('')+'</div>');
+  if(p.shelfLife>0)h+=card('i-clock',t('k.exp'),fu(agg.expUnits));
+  $('kpis').innerHTML=h;
+  const imp=interpAt(sweep,key,tgt,'ss'),achieved=agg[key],n=[];
+  n.push(t('n.1',{csl:fp(agg.csl),fill:fp(agg.fill),target:fp(tgt),type:t('type.'+p.slType)}));
+  if(achieved<tgt-0.01)n.push(imp==null?t('n.belowNull',{max:fu(sweep[sweep.length-1].ss)}):t('n.below',{imp:fu(imp),ss:fu(pl.ss)}));
+  else if(achieved>tgt+0.01&&imp!=null)n.push(t('n.above',{imp:fu(imp),ss:fu(pl.ss)}));
+  else n.push(t('n.met'));
+  if(pl.sigRisk>0)n.push(t('n.lt',{share:fp(pl.ltShare,0)}));
+  const hiT=Math.min(0.99,sweep[sweep.length-1][key]);
+  if(tgt<hiT-0.005){const c0=interpAt(sweep,key,tgt,'total'),c1=interpAt(sweep,key,hiT,'total');
+    if(c0!=null&&c1!=null&&Math.abs(c1-c0)>0.01*c0)n.push(t(c1>c0?'n.cost':'n.costSave',{a:fp(tgt),b:fp(hiT),c:fn(Math.abs(c1-c0))}));}
+  $('narr').innerHTML=n.map(x=>'<p>'+x+'</p>').join('');
+  last.imp=imp;last.hiT=hiT;drawCharts();
+}
+
+/* ---------- SVG chart helpers ---------- */
+const C={ink:'#1C2526',teal:'#2E6E73',copper:'#B77A2B',gold:'#C59B43',red:'#B64D42',green:'#3E745A',muted:'#5B6568',grey:'#9AA3A6',band:'rgba(46,110,115,.18)'};
+function nice(min,max,n){const span=(max-min)||1,s0=span/(n||5),mag=Math.pow(10,Math.floor(Math.log10(s0)));
+  const st=[1,2,2.5,5,10].map(m=>m*mag).find(s=>s>=s0-1e-12);const a=Math.floor(min/st)*st,b=Math.ceil(max/st)*st;const tk=[];
+  for(let v=a;v<=b+st*1e-6;v+=st)tk.push(+v.toFixed(10));return {tk,min:a,max:b};}
+function frame(o){
+  const W=o.w||760,H=o.h||400,P=Object.assign({l:84,r:24,t:24,b:60},o.pad||{});
+  const sx=v=>P.l+(v-o.x0)/((o.x1-o.x0)||1)*(W-P.l-P.r),sy=v=>H-P.b-(v-o.y0)/((o.y1-o.y0)||1)*(H-P.t-P.b);
+  let g='';
+  for(const v of o.yt||[]){const yy=sy(v);g+='<line class="gl" x1="'+P.l+'" x2="'+(W-P.r)+'" y1="'+yy+'" y2="'+yy+'"/><text class="tk" x="'+(P.l-10)+'" y="'+(yy+4)+'" text-anchor="end">'+o.yf(v)+'</text>';}
+  for(const v of o.xt||[]){const xx=sx(v);g+='<text class="tk" x="'+xx+'" y="'+(H-P.b+22)+'" text-anchor="middle">'+o.xf(v)+'</text>';}
+  g+='<line class="ax" x1="'+P.l+'" x2="'+(W-P.r)+'" y1="'+(H-P.b)+'" y2="'+(H-P.b)+'"/>';
+  if(o.xl)g+='<text class="al" x="'+((P.l+W-P.r)/2)+'" y="'+(H-10)+'" text-anchor="middle">'+esc(o.xl)+'</text>';
+  if(o.yl)g+='<text class="al" transform="translate(16 '+((P.t+H-P.b)/2)+') rotate(-90)" text-anchor="middle">'+esc(o.yl)+'</text>';
+  return {sx,sy,g,W,H,P};
+}
+const svg=(f,body,label)=>'<svg viewBox="0 0 '+f.W+' '+f.H+'" role="img" aria-label="'+esc(label||'')+'">'+f.g+body+'</svg>';
+const leg=items=>items.map(i=>'<span><i class="'+(i.dash?'dash':'')+'" style="'+(i.dash?'border-color:':'background:')+i.c+'"></i>'+esc(i.l)+'</span>').join('');
+
+function drawCharts(){
+  if(!last)return;const {p,pl,trace,N,H,runs,sweep,agg}=last;const key=p.slType==='csl'?'csl':'fill';
+  // 1 sawtooth
+  const lo=new Float64Array(H),hi=new Float64Array(H),col=new Float64Array(N);let below=0,mx=0;
+  for(let d=0;d<H;d++){for(let k=0;k<N;k++){const v=trace[k*H+d];col[k]=v;if(v<pl.ss)below++;}
+    col.sort();lo[d]=col[Math.floor(.1*(N-1))];hi[d]=col[Math.floor(.9*(N-1))];if(hi[d]>mx)mx=hi[d];if(trace[d]>mx)mx=trace[d];}
+  mx=Math.max(mx,pl.rop);$('t1').textContent=t('t1',{p:fp(below/(N*H),0)});
+  const yn=nice(0,mx*1.05,5),xn=nice(1,H,6);
+  const f1=frame({x0:1,x1:H,y0:0,y1:yn.max,yt:yn.tk,xt:xn.tk.filter(v=>v>=1&&v<=H),yf:v=>fn(v),xf:v=>fn(v),xl:t('ax.day'),yl:t('ax.units'),pad:{r:112}});
+  let band='M';for(let d=0;d<H;d++)band+=(d?'L':'')+f1.sx(d+1).toFixed(1)+' '+f1.sy(hi[d]).toFixed(1);
+  for(let d=H-1;d>=0;d--)band+='L'+f1.sx(d+1).toFixed(1)+' '+f1.sy(lo[d]).toFixed(1);band+='Z';
+  let line='M'+f1.sx(1).toFixed(1)+' '+f1.sy(trace[0]).toFixed(1);
+  for(let d=1;d<H;d++){line+='H'+f1.sx(d+1).toFixed(1)+'V'+f1.sy(trace[d]).toFixed(1);}
+  const hl=(v,c,lab,dash)=>'<line x1="'+f1.P.l+'" x2="'+(f1.W-f1.P.r)+'" y1="'+f1.sy(v)+'" y2="'+f1.sy(v)+'" stroke="'+c+'" stroke-width="1.8" stroke-dasharray="'+dash+'"/><text x="'+(f1.W-f1.P.r+8)+'" y="'+(f1.sy(v)+4)+'" fill="'+c+'" font-size="13" font-weight="700">'+esc(lab)+'</text>';
+  let b1='<path d="'+band+'" fill="'+C.band+'"/><path d="'+line+'" fill="none" stroke="'+C.ink+'" stroke-width="1.5"/>'+hl(pl.ss,C.copper,t('l.ss'),'7 5');
+  const l1=[{c:C.ink,l:t('l.sample')},{c:C.band,l:t('l.band')},{c:C.copper,l:t('l.ss'),dash:1}];
+  if(p.policy!=='RS'){const lab=p.policy==='minmax'?t('l.min'):t('l.rop');b1+=hl(pl.rop,C.teal,lab,'3 4');l1.push({c:C.teal,l:lab,dash:1});}
+  $('c1').innerHTML=svg(f1,b1,t('t1',{p:''}));$('leg1').innerHTML=leg(l1);
+  // 2 histogram
+  const so=runs.map(r=>r.soDays),smx=Math.max(...so);let bins,lab;
+  if(smx<=12){const m=Math.ceil(smx);bins=new Array(m+1).fill(0);so.forEach(v=>bins[Math.round(v)]++);lab=bins.map((_,i)=>fn(i));}
+  else{const nb=9,w=Math.ceil(smx/nb);bins=new Array(nb+1).fill(0);so.forEach(v=>{const r=Math.round(v);bins[r===0?0:Math.min(nb,1+Math.floor((r-1)/w))]++;});
+    lab=bins.map((_,i)=>i===0?fn(0):(w===1?fn(i):fn((i-1)*w+1)+'–'+fn(i*w)));}
+  $('t2').textContent=t('t2',{p:fp(agg.noSo,0)});
+  const bmx=Math.max(...bins),yn2=nice(0,bmx*1.12,4),nb=bins.length;
+  const f2=frame({x0:0,x1:nb,y0:0,y1:yn2.max,yt:yn2.tk,xt:[],yf:v=>fn(v),xf:v=>'',xl:t('ax.soDays'),yl:t('ax.runs')});
+  const bw=(f2.sx(1)-f2.sx(0)),gap=Math.min(14,bw*.2);let b2='';
+  bins.forEach((v,i)=>{const x=f2.sx(i)+gap/2,w=bw-gap,yy=f2.sy(v),hh=f2.sy(0)-yy;
+    b2+='<rect x="'+x+'" y="'+yy+'" width="'+w+'" height="'+Math.max(0,hh)+'" rx="3" fill="'+(i===0?C.green:C.red)+'"><title>'+lab[i]+': '+fn(v)+'</title></rect>';
+    if(v>0)b2+='<text class="vl" x="'+(x+w/2)+'" y="'+(yy-8)+'" text-anchor="middle">'+fn(v)+'</text>';
+    b2+='<text class="tk" x="'+(x+w/2)+'" y="'+(f2.H-f2.P.b+22)+'" text-anchor="middle">'+lab[i]+'</text>';});
+  $('c2').innerHTML=svg(f2,b2,$('t2').textContent);
+  // 3 tradeoff
+  const pts=sweep.map(s=>({x:s[key]*100,y:s.total})),cur={x:agg[key]*100,y:agg.total};
+  const xs=pts.map(q=>q.x).concat(cur.x,p.slTarget),ys=pts.map(q=>q.y).concat(cur.y);
+  const xn3=nice(Math.min(...xs)-1,100,6),yn3=nice(0,Math.max(...ys)*1.08,5);
+  const f3=frame({x0:xn3.min,x1:Math.min(100,xn3.max),y0:0,y1:yn3.max,yt:yn3.tk,xt:xn3.tk.filter(v=>v<=100),yf:v=>fn(v),xf:v=>fn(v)+'%',xl:t('ax.service'),yl:t('ax.cost')});
+  const c0=interpAt(sweep,key,p.slTarget/100,'total'),c1=interpAt(sweep,key,last.hiT,'total');
+  const ok3=c0!=null&&c1!=null&&p.slTarget/100<last.hiT-0.005&&Math.abs(c1-c0)>0.01*c0;
+  $('t3').textContent=ok3?t(c1>c0?'t3':'t3s',{a:fp(p.slTarget/100),b:fp(last.hiT),c:fn(Math.abs(c1-c0))}):t('t3b');
+  let b3='<line x1="'+f3.sx(p.slTarget)+'" x2="'+f3.sx(p.slTarget)+'" y1="'+f3.P.t+'" y2="'+(f3.H-f3.P.b)+'" stroke="'+C.grey+'" stroke-dasharray="4 4"/>'+
+    '<text x="'+(f3.sx(p.slTarget)-6)+'" y="'+(f3.P.t+14)+'" text-anchor="end" class="tk">'+esc(t('k.target',{t:fn(p.slTarget,1)+'%'}))+'</text>';
+  b3+='<polyline fill="none" stroke="'+C.muted+'" stroke-width="1.8" points="'+pts.map(q=>f3.sx(q.x).toFixed(1)+','+f3.sy(q.y).toFixed(1)).join(' ')+'"/>';
+  pts.forEach((q,i)=>{b3+='<circle cx="'+f3.sx(q.x)+'" cy="'+f3.sy(q.y)+'" r="5" fill="#fff" stroke="'+C.muted+'" stroke-width="2"><title>SS '+fu(sweep[i].ss)+': '+fn(q.x,1)+'% → '+fn(q.y)+'</title></circle>';});
+  b3+='<circle cx="'+f3.sx(cur.x)+'" cy="'+f3.sy(cur.y)+'" r="11" fill="'+C.copper+'" stroke="#fff" stroke-width="3"/>'+
+    '<text x="'+(f3.sx(cur.x)-14)+'" y="'+(f3.sy(cur.y)-30)+'" text-anchor="end" fill="'+C.copper+'" font-size="14" font-weight="700">'+esc(t('l.current'))+'</text>';
+  $('c3').innerHTML=svg(f3,b3,$('t3').textContent);
+  // 4 comparison (horizontal)
+  const z=pl.z,vals=[pl.sigSimple*z,pl.sigComb*z,pl.ss,last.imp],labs=[t('b.simple'),t('b.comb'),t('b.risk'),t('b.sim')],cols=[C.grey,C.grey,C.teal,C.copper];
+  const ref=last.imp!=null?last.imp:pl.ss;
+  if(ref<=0.5)$('t4').textContent=t('t4z');else{const df=vals[0]/ref-1;$('t4').textContent=t(df<0?'t4u':'t4o',{x:fp(Math.abs(df),0)});}
+  const vmx=Math.max(1,...vals.filter(v=>v!=null)),xn4=nice(0,vmx*1.15,5);
+  const f4=frame({h:320,x0:0,x1:xn4.max,y0:0,y1:4,yt:[],xt:xn4.tk,yf:()=>'',xf:v=>fn(v),xl:t('ax.ss'),pad:{l:160,r:40,b:56}});
+  let b4='';xn4.tk.forEach(v=>{b4+='<line class="gl" x1="'+f4.sx(v)+'" x2="'+f4.sx(v)+'" y1="'+f4.P.t+'" y2="'+(f4.H-f4.P.b)+'"/>';});
+  const rh=(f4.H-f4.P.t-f4.P.b)/4;
+  vals.forEach((v,i)=>{const yy=f4.P.t+i*rh+rh*.2,hh=rh*.6;
+    b4+='<text x="'+(f4.P.l-14)+'" y="'+(yy+hh/2+5)+'" text-anchor="end" fill="'+C.ink+'" font-size="14" font-weight="600">'+esc(labs[i])+'</text>';
+    if(v==null){b4+='<text class="tk" x="'+(f4.P.l+8)+'" y="'+(yy+hh/2+5)+'">–</text>';return;}
+    b4+='<rect x="'+f4.P.l+'" y="'+yy+'" width="'+Math.max(0,f4.sx(v)-f4.P.l)+'" height="'+hh+'" rx="3" fill="'+cols[i]+'"/>'+
+      '<text class="vl" x="'+(f4.sx(v)+8)+'" y="'+(yy+hh/2+5)+'">'+fu(v)+'</text>';});
+  $('c4').innerHTML=svg(f4,b4,$('t4').textContent);
+  drawSens();
+}
+function renderSensState(){
+  $('sensBtn').disabled=false;$('sensTxt').textContent=t('sensRun');
+  if(!sens){$('c5').hidden=true;$('leg5').hidden=true;$('t5').textContent=t('t5n');}
+}
+async function runSens(){
+  if(!last)return;$('sensBtn').disabled=true;$('sensTxt').textContent=t('sensBusy');await tick();
+  const base=effective(),tok=runToken,keys=['dMean','dSd','ltMean','ltSd','unitCost','holdPct','orderCost','stockoutCost'].filter(k=>!(k==='dSd'&&base.dDist==='poisson'));
+  const nR=Math.min(base.runs,150),run=pp=>aggregate(simulate(pp,plan(pp),{seed:pp.seed,k0:0,k1:nR}).runs).total;
+  const c0=run(base),rows=[];
+  for(const k of keys){const lo={...base,[k]:base[k]*0.8},hi={...base,[k]:base[k]*1.2};if(k==='ltMean')lo.ltMean=Math.max(1,lo.ltMean);
+    rows.push({k,lo:run(lo)-c0,hi:run(hi)-c0});await tick();if(tok!==runToken){renderSensState();return;}}
+  rows.sort((a,b)=>Math.max(Math.abs(b.lo),Math.abs(b.hi))-Math.max(Math.abs(a.lo),Math.abs(a.hi)));
+  sens={rows};$('sensBtn').disabled=false;$('sensTxt').textContent=t('sensRun');drawSens();
+}
+function drawSens(){
+  if(!sens)return;const r=sens.rows;$('c5').hidden=false;$('leg5').hidden=false;
+  $('t5').textContent=t('t5',{param:t('sh.'+r[0].k)});
+  const m=Math.max(1,...r.map(x=>Math.max(Math.abs(x.lo),Math.abs(x.hi)))),xn=nice(-m*1.15,m*1.15,6);
+  const f=frame({h:80+r.length*52,x0:xn.min,x1:xn.max,y0:0,y1:1,yt:[],xt:xn.tk,yf:()=>'',xf:v=>(v>0?'+':'')+fn(v),xl:t('ax.delta'),pad:{l:170,r:30,t:16}});
+  let b='';xn.tk.forEach(v=>{b+='<line class="gl" x1="'+f.sx(v)+'" x2="'+f.sx(v)+'" y1="'+f.P.t+'" y2="'+(f.H-f.P.b)+'"/>';});
+  b+='<line x1="'+f.sx(0)+'" x2="'+f.sx(0)+'" y1="'+f.P.t+'" y2="'+(f.H-f.P.b)+'" stroke="'+C.ink+'" stroke-width="1.5"/>';
+  const rh=(f.H-f.P.t-f.P.b)/r.length;
+  r.forEach((x,i)=>{const y0=f.P.t+i*rh+rh*.18,hh=rh*.3;
+    b+='<text x="'+(f.P.l-14)+'" y="'+(y0+hh+4)+'" text-anchor="end" fill="'+C.ink+'" font-size="14" font-weight="600">'+esc(t('sh.'+x.k))+'</text>';
+    [[x.lo,C.grey,0],[x.hi,C.teal,1]].forEach(([v,c,j])=>{const a=f.sx(Math.min(0,v)),w=Math.abs(f.sx(v)-f.sx(0)),yy=y0+j*(hh+3);
+      b+='<rect x="'+a+'" y="'+yy+'" width="'+w+'" height="'+hh+'" rx="2" fill="'+c+'"><title>'+fn(v)+'</title></rect>';});});
+  $('c5').innerHTML=svg(f,b,$('t5').textContent);
+  $('leg5').innerHTML=leg([{c:C.grey,l:t('l.down')},{c:C.teal,l:t('l.up')}]);
+}
+
+/* ---------- Export ---------- */
+function exportCsv(){
+  if(!last)return;const {p,agg,pl}=last;const rows=[['section','key','value']];
+  for(const k in p)rows.push(['input',k,p[k]]);
+  [['safety_stock',pl.ss],['reorder_level',pl.rop],['order_quantity',pl.Q],['order_up_to',pl.S],['z',pl.z],['sigma_risk_adjusted',pl.sigRisk],['sim_implied_ss',last.imp]].forEach(r=>rows.push(['plan',r[0],r[1]]));
+  for(const k in agg)rows.push(['result',k,agg[k]]);
+  const csv=rows.map(r=>r.map(x=>'"'+String(x==null?'':x).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='safety-stock-results.csv';
+  document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+}
+
+/* ---------- Wiring ---------- */
+document.querySelectorAll('[data-lang]').forEach(b=>b.addEventListener('click',()=>{lang=b.dataset.lang;store.set('sss-lang',lang);if(urlLang){try{const u=new URL(location.href);u.searchParams.set('lang',lang);history.replaceState(null,'',u);}catch(e){}}renderStatic();buildForm();const p=effective();renderPlan(p,plan(p));renderResults();}));
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{if(mode===b.dataset.mode)return;mode=b.dataset.mode;store.set('sss-mode',mode);
+  document.body.className=mode==='adv'?'mode-adv':'mode-basic';document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.mode===mode));changed();}));
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>{
+  const pr=PRESETS[b.dataset.preset];state={...DEFAULTS,...pr.v,seed:state.seed};
+  if(pr.adv&&mode!=='adv'){mode='adv';store.set('sss-mode',mode);document.body.className='mode-adv';document.querySelectorAll('[data-mode]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.mode===mode));}
+  buildForm();changed();}));
+$('resetBtn').addEventListener('click',()=>{state={...DEFAULTS};buildForm();changed();});
+$('runBtn').addEventListener('click',runAll);
+$('sensBtn').addEventListener('click',runSens);
+$('exportBtn').addEventListener('click',exportCsv);
+$('form').addEventListener('submit',e=>{e.preventDefault();runAll();});
+
+renderStatic();buildForm();runAll();
+})();}
+
+</script>
+</body>
+</html>

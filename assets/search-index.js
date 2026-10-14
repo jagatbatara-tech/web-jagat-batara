@@ -9,7 +9,7 @@
 (function (global) {
   const REPO = 'jagatbatara-tech/web-jagat-batara';
   const BRANCH = 'main';
-  const CACHE_KEY = 'jb-search-index-v2';
+  const CACHE_KEY = 'jb-search-index-v3';
   const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
   // base -> { page, folderId, folderEn, labelId, labelEn }
@@ -20,6 +20,35 @@
     { base: 'ai', page: 'ai.html', labelId: 'n8n & Automation', labelEn: 'n8n & Automation' },
     { base: 'day-in-my-life', page: 'day-in-my-life.html', labelId: 'Day in My Life', labelEn: 'Day in My Life' }
   ];
+
+  // Standalone tool pages that have no .md file. One HTML file serves both
+  // languages, so it is listed here for the search index and the archive pages.
+  const EXTRA_ARTICLES = [
+    {
+      file: 'supply-chain-en/How much safety stock is enough.html',
+      collections: ['supply-chain', 'studi-kasus'],
+      icon: 'warehouse',
+      date: '2026-10-14',
+      en: {
+        title: 'How much safety stock is enough?',
+        kicker: 'Inventory education · Interactive simulation model',
+        summary: 'Size safety stock with standard formulas, then stress-test it across hundreds of simulated years.',
+        tags: ['Safety Stock', 'Inventory', 'Monte Carlo'],
+        keywords: 'safety stock, reorder point, min-max, EOQ, service level, fill rate, Monte Carlo, inventory policy'
+      },
+      id: {
+        title: 'Berapa safety stock yang cukup?',
+        kicker: 'Edukasi persediaan · Model simulasi interaktif',
+        summary: 'Hitung safety stock dengan rumus standar, lalu uji ketahanannya pada ratusan tahun simulasi.',
+        tags: ['Safety Stock', 'Persediaan', 'Monte Carlo'],
+        keywords: 'safety stock, reorder point, min-max, EOQ, service level, fill rate, Monte Carlo, inventory policy'
+      }
+    }
+  ];
+
+  function extraUrl(extra, lang) {
+    return extra.file.split('/').map(encodeURIComponent).join('/') + '?lang=' + lang;
+  }
 
   function parsePost(raw) {
     const match = raw.match(/^---\s*\n([\s\S]*?)\n---\s*\n?([\s\S]*)$/);
@@ -46,7 +75,8 @@
     } catch (e) { return []; }
 
     const articleFiles = files.filter(function (f) {
-      return f.name && /\.(md|html)$/i.test(f.name);
+      return f.name && /\.(md|html)$/i.test(f.name) &&
+        !EXTRA_ARTICLES.some(function (x) { return x.file === folder + '/' + f.name; });
     });
     const entries = [];
     await Promise.all(articleFiles.map(async function (file) {
@@ -102,6 +132,22 @@
 
     const results = await Promise.all(COLLECTIONS.map(function (c) { return fetchCollection(c, lang); }));
     const entries = [].concat.apply([], results);
+    COLLECTIONS.forEach(function (c) {
+      EXTRA_ARTICLES.forEach(function (x) {
+        if (x.collections.indexOf(c.base) === -1) return;
+        const text = x[lang];
+        entries.push({
+          title: text.title,
+          summary: text.summary,
+          tags: text.tags.join(' ') + ' ' + text.keywords,
+          kicker: text.kicker,
+          body: '',
+          date: x.date,
+          url: extraUrl(x, lang),
+          collectionLabel: lang === 'en' ? c.labelEn : c.labelId
+        });
+      });
+    });
 
     try { sessionStorage.setItem(cacheKey, JSON.stringify({ ts: Date.now(), entries: entries })); }
     catch (e) { /* storage full / disabled, ignore */ }
@@ -134,5 +180,5 @@
       .map(function (r) { return r.entry; });
   }
 
-  global.JBSearch = { buildIndex: buildIndex, search: search, COLLECTIONS: COLLECTIONS };
+  global.JBSearch = { buildIndex: buildIndex, search: search, COLLECTIONS: COLLECTIONS, EXTRA_ARTICLES: EXTRA_ARTICLES, extraUrl: extraUrl };
 })(window);

@@ -77,6 +77,7 @@
 <link rel="stylesheet" href="assets/inventory-theme.css">
 <link rel="stylesheet" href="assets/archive-cards.css">
 <script src="assets/archive-cards.js"></script>
+<script src="assets/search-index.js"></script>
 </head>
 <body>
   <div class="container">
@@ -201,6 +202,12 @@
         .catch(function(){ document.getElementById('loading-single').innerText = currentLang === 'id' ? 'Gagal memuat artikel.' : 'Failed to load article.'; });
 
     } else {
+      JBSearch.EXTRA_ARTICLES.forEach(function(x){
+        if (x.collections.indexOf('supply-chain') === -1) return;
+        const text = x[currentLang];
+        document.getElementById('archive-container').appendChild(ArchiveCards.build({ href: JBSearch.extraUrl(x, currentLang), kicker: text.kicker, title: text.title, excerpt: text.summary, tags: text.tags, icon: x.icon, openLabel: currentLang === 'id' ? 'Buka →' : 'Open →' }));
+      });
+
       fetch(listUrl)
         .then(function(res){
           if (res.status === 404) return [];
@@ -238,7 +245,6 @@
     }
   </script>
 <script src="assets/language-switcher.js"></script>
-<script src="assets/search-index.js"></script>
 <script src="assets/site-widgets.js"></script>
 <script src="assets/comments.js" data-collection="supply-chain"></script>
 </body>

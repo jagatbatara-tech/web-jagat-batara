@@ -6,7 +6,7 @@ date: 2026-10-12T00:00:00.000Z
 summary: >
   A hands-on guide to data storytelling and dashboard design: six lessons,
   nine bad-dashboard makeovers, a what-if lab, and seven exercises on choosing
-  the right data. Based on Storytelling with Data by Cole Nussbaumer Knaflic.
+  the right data. Based on Storytelling with Data.
 tags:
   - Data Storytelling
   - Data Visualization

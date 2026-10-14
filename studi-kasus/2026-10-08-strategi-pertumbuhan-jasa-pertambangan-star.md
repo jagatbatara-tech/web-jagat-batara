@@ -1,5 +1,6 @@
 ---
 title: "Strategi Pertumbuhan Jasa Pertambangan: Studi Kasus Eksekutif STAR"
+archive_url: "studi-kasus/strategi-pertumbuhan-jasa-pertambangan.html"
 kicker: "Studi Kasus Konsultasi Eksekutif · STAR + Bukti · Indonesia"
 date: 2026-10-08T00:00:00.000Z
 summary: >
@@ -83,7 +84,7 @@ Wawancara memberikan konteks yang tidak terlihat dari data publik: tekanan biaya
 
 ### 2. Menerjemahkan praktik pesaing menjadi cetak biru kepemimpinan biaya
 
-Tim meninjau utilisasi armada, kecepatan truk, jarak angkut, ketersediaan, umur aset, biaya bahan bakar dan tenaga kerja, pengeboran dan peledakan, pemeliharaan, suku cadang, penghentian operasi, model perbaikan, jenjang KPI, insentif, pelatihan, serta koordinasi rantai pasok. Implikasinya adalah meningkatkan dispatch dan pencocokan alat, menerapkan perhitungan biaya berbasis aktivitas dengan akuntabilitas yang jelas, membedakan program pemeliharaan dan perpanjangan umur aset, serta menjadikan kepemimpinan biaya sebagai sistem operasi—bukan kampanye penghematan sementara.
+Tim meninjau utilisasi armada, kecepatan truk, jarak angkut, ketersediaan, umur aset, biaya bahan bakar dan tenaga kerja, pengeboran dan peledakan, pemeliharaan, suku cadang, waktu henti (downtime), model perbaikan, jenjang KPI, insentif, pelatihan, serta koordinasi rantai pasok. Implikasinya adalah meningkatkan dispatch dan pencocokan alat, menerapkan perhitungan biaya berbasis aktivitas dengan akuntabilitas yang jelas, membedakan program pemeliharaan dan perpanjangan umur aset, serta menjadikan kepemimpinan biaya sebagai sistem operasi—bukan kampanye penghematan sementara.
 
 ### 3. Mengembangkan logika pelanggan dan perolehan kontrak
 

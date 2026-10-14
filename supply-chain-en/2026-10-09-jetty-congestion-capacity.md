@@ -11,4 +11,5 @@ tags:
   - Jetty
   - Logistics
 archive_url: supply-chain-en/Jetty%20Capacity%20What%20if%20Model.html
+id_link: "supply-chain/2026-10-09-kapasitas-dermaga"
 ---

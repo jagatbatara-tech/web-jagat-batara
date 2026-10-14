@@ -11,6 +11,7 @@ tags:
   - Data Storytelling
   - Data Visualization
   - Chart Selection
+id_link: "data-storytelling/2026-10-12-chart-advisor"
 ---
 
 [Open Chart Advisor](data-storytelling-en/Chart%20Advisor.html).

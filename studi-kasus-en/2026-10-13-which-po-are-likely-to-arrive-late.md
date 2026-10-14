@@ -12,6 +12,7 @@ tags:
   - Procurement
   - Logistics
   - Forecasting
+id_link: "studi-kasus/2026-10-13-pesanan-pembelian-terlambat"
 ---
 
 [Open the PO late-arrival case](studi-kasus-en/Which%20PO%20Are%20Likely%20to%20Arrive%20Late.html).

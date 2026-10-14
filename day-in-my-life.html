@@ -100,7 +100,7 @@
           if(raw===null){ document.getElementById('loading-single').style.display = 'none'; return; }
           document.getElementById('loading-single').style.display = 'none';
           const parsed = parsePost(raw);
-          const fm = parsed.fm; const body = parsed.body; const bodyHtml = marked.parse(body || '');
+          const fm = parsed.fm; if (fm.archive_url) { window.location.replace(fm.archive_url); return; } const body = parsed.body; const bodyHtml = marked.parse(body || '');
           const heroStatsHtml = renderStatGrid(fm.hero_stats, 'stats', 'stat');
           const badgesHtml = (fm.tags && fm.tags.length) ? ('<div class="badges">' + fm.tags.map(function(t){ return '<span class="badge">' + t + '</span>'; }).join('') + '</div>') : '';
           const hasRichFields = fm.kicker || fm.summary || (fm.tags && fm.tags.length) || (fm.hero_stats && fm.hero_stats.length);

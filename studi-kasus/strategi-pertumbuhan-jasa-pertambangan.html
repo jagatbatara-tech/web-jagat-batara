@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strategi Pertumbuhan Jasa Pertambangan | Studi Kasus Eksekutif</title>
+<meta name="description" content="Studi kasus konsultasi manajemen yang dianonimkan: ke mana kontraktor pertambangan Indonesia sebaiknya tumbuh ketika pasar intinya tertekan. Diagnosis masalah, kepemimpinan biaya, kontrak yang dapat diakses, langkah rantai nilai yang ringan modal, dan peta jalan yang berurutan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:wght@600;700&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{color-scheme:light;
+--bg:#F4F2ED;--paper:#FFFFFF;--ink:#172324;--ink2:#4A5557;--mute:#687276;--line:#DDD8CC;
+--teal:#2E6E73;--teal-bg:#EAF3F3;--amber:#9A6420;--amber-bg:#FBF6EA;--copper:#B77A2B;--gold:#D7B36A;--dark:#1C2526;
+--head:'Source Serif 4',Georgia,'Times New Roman',serif;--body:Inter,'Segoe UI',Arial,sans-serif;}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.65}
+a{color:var(--teal)}
+.top a:focus-visible{outline-color:var(--gold)}
+a:focus-visible,button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--head);font-weight:700;line-height:1.18;margin:0;letter-spacing:-0.015em}
+h1{font-size:clamp(30px,4.4vw,48px)}
+h2{font-size:clamp(23px,2.7vw,31px);max-width:30ch}
+h3{font-size:19px;font-weight:600}
+p{margin:0 0 1em;max-width:68ch}
+.top{position:sticky;top:0;z-index:5;background:rgba(28,37,38,.96);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.top .wrap{display:flex;gap:20px;align-items:center;overflow-x:auto;white-space:nowrap;padding-top:13px;padding-bottom:13px;font-size:14px}
+.top a{text-decoration:none;color:#D9D4C7}
+.top a:hover{color:#fff}
+.top .sp{flex:1}
+.hero{padding:56px 0 40px;border-top:4px solid var(--copper)}
+.hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:40px;align-items:start}
+.answer{font-size:19px;color:var(--ink);margin-top:20px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 22px;margin:22px 0 0;padding:0;list-style:none;font-size:14.5px;color:var(--ink2)}
+.meta b{color:var(--ink);font-weight:600}
+.page-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.page-action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border:1px solid var(--copper);border-radius:6px;background:var(--copper);color:#fff;text-decoration:none;font-size:14px;font-weight:700;transition:background .2s,border-color .2s}
+.page-action:hover,.page-action:focus-visible{background:var(--dark);border-color:var(--dark);outline:2px solid var(--gold);outline-offset:2px}
+.page-action.secondary{background:transparent;border-color:var(--ink2);color:var(--ink)}
+.page-action.secondary:hover,.page-action.secondary:focus-visible{background:var(--dark);border-color:var(--dark);color:#fff}
+.ex{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin:22px 0 8px}
+.ex-t{font-size:15px;font-weight:600;margin:0 0 4px;max-width:none}
+.ex-c{font-size:14px;color:var(--ink2);margin:0 0 14px;max-width:none}
+.ex-s{font-size:12.5px;color:var(--mute);margin:12px 0 0;max-width:none}
+section{padding:44px 0 8px;border-top:1px solid var(--line)}
+section>.wrap>p.lead{font-size:18px;margin-top:14px}
+.dv{display:grid;gap:12px}
+.dr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:12px;align-items:center}
+.dl{font-size:14.5px;line-height:1.3;margin:0}
+.ds{font-size:12.5px;color:var(--ink2);margin:1px 0 0}
+.trk{position:relative;height:24px}
+.ax{position:absolute;left:50%;top:-5px;bottom:-5px;border-left:1px solid var(--mute)}
+.b{position:absolute;top:4px;height:16px}
+.vl{position:absolute;top:3px;font-size:13.5px;font-weight:600;white-space:nowrap}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin:22px 0 0}
+.three div{border-top:3px solid var(--copper);padding-top:10px}
+.three b{display:block;font-family:var(--head);font-size:17px;margin-bottom:4px;font-weight:600}
+.three p{font-size:15.5px;margin:0}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--body);fill:var(--ink)}
+.t{font-size:14px;font-weight:600}.s{font-size:12px;fill:var(--ink2)}.lb{font-size:13px}
+.n-box{fill:var(--paper);stroke:var(--line)}.n-press{fill:var(--amber-bg);stroke:var(--amber)}.n-lev{fill:var(--teal-bg);stroke:var(--teal)}
+.cn{fill:none;stroke:var(--mute);stroke-width:1}
+.hy{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.hc{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:14px 16px}
+.hc h3{font-size:16.5px;margin-bottom:6px}
+.hc p{font-size:15px;margin:6px 0 0;color:var(--ink2)}
+.vd{display:inline-block;font-size:12.5px;font-weight:600;padding:2px 9px;border-radius:4px}
+.v-ok{background:var(--teal-bg);color:var(--teal)}.v-pt{background:var(--amber-bg);color:var(--amber)}
+.bar70{display:flex;height:34px;border-radius:4px;overflow:hidden;font-size:13.5px;font-weight:600}
+.bar70 span{display:flex;align-items:center;padding:0 12px}
+.lev{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.lev>div{border:1px solid var(--line);border-radius:6px;padding:14px 16px;background:var(--paper)}
+.lev i{font-size:26px;color:var(--teal)}
+.lev h3{font-size:16.5px;margin:6px 0 6px}
+.lev p{font-size:14.5px;color:var(--ink2);margin:0 0 8px}
+.lev .kp{font-size:13px;color:var(--ink);border-top:1px dashed var(--line);padding-top:8px;margin:8px 0 0}
+.fun{display:grid;gap:6px;margin:6px 0 0}
+.fun div{padding:10px 14px;border-radius:4px;font-size:15px;background:var(--teal-bg);color:var(--ink)}
+.fun div:nth-child(1){width:100%}.fun div:nth-child(2){width:88%}.fun div:nth-child(3){width:74%}.fun div:nth-child(4){width:60%;background:var(--teal);color:var(--paper);font-weight:600}
+.trig{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.trig div{border-left:3px solid var(--teal);padding:2px 0 2px 12px;font-size:15px}
+.trig b{display:block}
+.chain{display:flex;gap:14px;margin:6px 0 0}
+.tile{position:relative;flex:1;border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:14px 8px 12px;text-align:center}
+.tile:not(:last-child)::after{content:"";position:absolute;right:-11px;top:50%;width:9px;height:9px;border-top:2px solid var(--mute);border-right:2px solid var(--mute);transform:translateY(-50%) rotate(45deg)}
+.tile i{font-size:26px;color:var(--ink2)}
+.tile b{display:block;font-size:14px;font-weight:600;line-height:1.25;margin:6px 0 6px}
+.tile em{font-style:normal;font-size:12px;padding:2px 8px;border-radius:4px;background:var(--amber-bg);color:var(--amber)}
+.tile.f{border:2px solid var(--teal);background:var(--teal-bg)}
+.tile.f i{color:var(--teal)}.tile.f em{background:var(--teal);color:var(--paper)}
+.why{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 26px;margin-top:20px}
+.why div{border-left:3px solid var(--teal);padding-left:12px;font-size:15px}
+.why div.pr{border-left-color:var(--amber)}
+.why b{display:block}
+.pw{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+.pw:last-child{border-bottom:none}
+.pn{width:30px;height:30px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
+.pw h3{font-size:16.5px}
+.pw p{font-size:14.5px;color:var(--ink2);margin:2px 0 0}
+.ch{display:flex;flex-direction:column;gap:4px;min-width:104px}
+.chip{font-size:12.5px;padding:3px 9px;border-radius:4px;text-align:center;white-space:nowrap}
+.t1{background:color-mix(in srgb,var(--teal) 48%,transparent)}.t2{background:color-mix(in srgb,var(--teal) 26%,transparent)}.t3{background:color-mix(in srgb,var(--teal) 12%,transparent)}
+.e1{background:color-mix(in srgb,var(--amber) 14%,transparent)}.e2{background:color-mix(in srgb,var(--amber) 34%,transparent)}.e3{background:color-mix(in srgb,var(--amber) 56%,transparent)}
+.rm{display:grid;grid-template-columns:190px repeat(3,1fr);gap:6px;font-size:14px;align-items:stretch}
+.rm .hd{font-weight:600;padding:6px 4px;border-bottom:2px solid var(--ink);line-height:1.3}
+.rm .hd small{display:block;font-weight:400;color:var(--ink2);font-size:12.5px}
+.rm .rl{padding:10px 4px;display:flex;align-items:center}
+.rm .bar{padding:8px 10px;border-radius:4px;line-height:1.3;display:flex;align-items:center;font-size:13.5px}
+.rm .m{background:var(--teal);color:var(--paper);font-weight:600}
+.rm .c{background:var(--teal-bg);color:var(--ink)}
+.rm .m2{background:var(--teal);color:var(--paper);font-weight:600}
+.leg{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--ink2);margin-top:10px}
+.leg span{display:flex;align-items:center;gap:6px}
+.leg i{display:inline-block;width:12px;height:12px;border-radius:2px}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;border-bottom:2px solid var(--ink);font-size:13.5px}
+.tw{overflow-x:auto}
+.syn{font-size:13.5px;background:var(--amber-bg);color:var(--ink);padding:8px 12px;border-radius:4px;margin:0 0 14px;max-width:none}
+.rk{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 26px;margin-top:18px;font-size:14.5px}
+.rk div{border-left:3px solid var(--amber);padding-left:12px}
+.rk b{display:block}
+.take{display:grid;gap:12px;margin:16px 0 0;padding:0;list-style:none;counter-reset:k}
+.take li{counter-increment:k;display:grid;grid-template-columns:30px 1fr;gap:12px;max-width:72ch}
+.take li::before{content:counter(k);width:28px;height:28px;border-radius:50%;background:var(--teal-bg);color:var(--teal);font-weight:600;display:flex;align-items:center;justify-content:center;font-size:14px}
+.cb{font-size:14px;color:var(--ink2);border:1px dashed var(--mute);border-radius:6px;padding:10px 14px;margin:20px 0 0;max-width:none}
+footer{padding:40px 0 60px;color:var(--mute);font-size:14px;border-top:1px solid var(--line);margin-top:40px}
+@media (max-width:820px){
+.hero-grid,.hy,.lev,.trig,.why,.rk,.three{grid-template-columns:1fr}
+.chain{flex-direction:column;gap:18px}
+.tile:not(:last-child)::after{right:auto;left:50%;top:auto;bottom:-14px;transform:translateX(-50%) rotate(135deg)}
+.pw{grid-template-columns:30px 1fr}.pw .ch{grid-column:2;flex-direction:row}
+.rm{grid-template-columns:110px repeat(3,1fr);font-size:12.5px}
+.fun div{width:100%!important}
+}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap">
+<a href="https://jagatb.com/studi-kasus.html?lang=id">Studi kasus</a><a href="https://jagatb.com/index-id.html">Beranda</a><span class="sp"></span>
+<a href="#answer">Jawaban</a><a href="#problem">Masalah</a><a href="#cost">Biaya lebih dulu</a><a href="#grow">Ke mana tumbuh</a><a href="#roadmap">Peta jalan</a><a href="#hindsight">Refleksi</a><a href="#limits">Batasan</a>
+</div></div>
+
+<header class="hero" id="answer"><div class="wrap">
+<div class="hero-grid">
+<div>
+<h1>Ke mana kontraktor pertambangan sebaiknya tumbuh ketika pasar intinya tertekan?</h1>
+<p class="answer">Perbaiki basis biaya lebih dulu, menangkan kontrak yang benar-benar terbuka, dan masuk ke layanan terkait melalui kemitraan, dengan urutan yang sudah ditetapkan. Biaya adalah satu-satunya tuas yang dikendalikan kontraktor: pada 2013 pemain terbesar menggali lebih banyak batu bara, tetapi setiap ton membawa pekerjaan pengupasan yang lebih sedikit, dan pada Desember 2014 harga batu bara acuan 43% lebih rendah dibanding level Maret 2012.</p>
+<ul class="meta">
+<li><b>Peran</b> Business Analyst, tim konsultasi manajemen</li>
+<li><b>Durasi</b> sekitar 12 minggu, 2014</li>
+<li><b>Cakupan</b> Indonesia, terutama Kalimantan dan Sumatra</li>
+<li><b>Format</b> studi kasus publik yang dianonimkan</li>
+</ul>
+<div class="page-actions">
+<a class="page-action" id="archive-return" href="../studi-kasus.html?lang=id">Kembali ke Studi Kasus</a>
+<a class="page-action secondary" id="home-return" href="../index-id.html">Beranda</a>
+</div>
+</div>
+<div class="ex" style="margin:0">
+<p class="ex-t">Kontraktor terbesar, 2012 hingga 2013</p>
+<p class="ex-c">Batu bara yang ditambang lebih banyak, tetapi tanah yang dipindahkan kurang lebih sama, sehingga setiap ton berarti pekerjaan pengupasan lapisan penutup yang lebih sedikit.</p>
+<div class="dv">
+<div class="dr"><div><p class="dl">Batu bara ditambang</p></div><div class="trk"><div class="ax"></div><div class="b" style="left:50%;width:31%;background:var(--teal)"></div><div class="vl" style="left:calc(81% + 6px)">+11%</div></div></div>
+<div class="dr"><div><p class="dl">Lapisan penutup dipindahkan</p></div><div class="trk"><div class="ax"></div><div class="b" style="left:49%;width:2%;background:var(--mute)"></div><div class="vl" style="left:calc(51% + 8px);color:var(--ink2)">kurang lebih datar</div></div></div>
+<div class="dr"><div><p class="dl">Rasio pengupasan</p><p class="ds">BCM per ton, perkiraan</p></div><div class="trk"><div class="ax"></div><div class="b" style="right:50%;width:28%;background:var(--amber)"></div><div class="vl" style="right:calc(78% + 6px)">-10%</div></div></div>
+</div>
+<p class="ex-s">Sumber: data industri dan laporan tahunan kontraktor terbesar yang terdaftar, sebagaimana dihimpun dalam basis fakta engagement. Rasio pengupasan turun pada setiap pemain besar di 2013.</p>
+</div>
+</div>
+
+<div class="three">
+<div><b>Inti bisnis tertekan</b><p>Harga yang lebih rendah dan rasio pengupasan yang lebih kecil memangkas apa yang bersedia dibayar pemilik tambang dan seberapa banyak pekerjaan pemindahan tanah yang tercipta dari setiap ton.</p></div>
+<div><b>Biaya adalah tuasnya</b><p>Kontraktor tidak menetapkan harga atau rasio pengupasan. Sekitar 70% biaya operasi mereka berada di dua pos yang dapat mereka kelola.</p></div>
+<div><b>Pertumbuhan harus dapat diakses</b><p>Kejar kontrak yang sedang terbuka, layanan yang dapat dipisahkan oleh pembeli, dan bidang terkait sesuai urutan kesesuaian kapabilitas, dengan mitra bila modal terbatas.</p></div>
+</div>
+</div></header>
+
+<section id="problem"><div class="wrap">
+<h2>Inti bisnis tertekan dari tiga arah sekaligus</h2>
+<p class="lead">Klien harus tumbuh, tetapi jalur biasanya, yaitu menambah armada dan kontrak, semakin kurang menguntungkan. Tiga kekuatan menjelaskan alasannya.</p>
+<div class="three" style="margin-top:18px">
+<div><b>Harga turun</b><p>Harga acuan turun dari US$112.87 per ton pada Maret 2012 menjadi US$64.65 pada Desember 2014. Pemilik tambang meneruskan tekanan itu berupa pemotongan tarif.</p></div>
+<div><b>Pekerjaan per ton berkurang</b><p>Pemilik tambang memangkas rasio pengupasan untuk menurunkan biaya mereka sendiri. Pengupasan lapisan penutup adalah pendorong pendapatan utama kontraktor, sehingga pendapatan per ton batu bara turun.</p></div>
+<div><b>Pesaing yang sudah mapan</b><p>Sekitar 116 kontraktor bersaing, tetapi tujuh besar menguasai sekitar 60% produksi kontrak, sering kali melalui kontrak jangka panjang dan afiliasi dengan pemilik tambang.</p></div>
+</div>
+
+<figure class="ex" style="margin-top:26px">
+<p class="ex-t">Eksibit 1. Harga acuan batu bara sudah turun 43% ketika laporan ini ditulis</p>
+<p class="ex-c">Harga acuan pemerintah (HBA), US$ per ton, bulan-bulan terpilih. Bagian yang diarsir setelah laporan, ditampilkan sebagai konteks.</p>
+<svg viewBox="0 0 720 250" role="img" aria-label="Grafik garis harga acuan batu bara Indonesia yang turun dari 112.87 dolar per ton pada Maret 2012 menjadi 64.65 pada Desember 2014 dan 53.51 pada Desember 2015.">
+<rect x="490" y="14" width="180" height="196" style="fill:var(--line);opacity:.4"/>
+<text class="s" x="580" y="30" text-anchor="middle">Setelah laporan</text>
+<g style="stroke:var(--line)"><line x1="50" y1="210" x2="670" y2="210"/><line x1="50" y1="150" x2="670" y2="150"/><line x1="50" y1="90" x2="670" y2="90"/><line x1="50" y1="30" x2="670" y2="30"/></g>
+<text class="s" x="42" y="214" text-anchor="end">0</text><text class="s" x="42" y="154" text-anchor="end">40</text><text class="s" x="42" y="94" text-anchor="end">80</text><text class="s" x="42" y="34" text-anchor="end">120</text>
+<polygon points="50,40.7 170,87.4 330,89.5 490,113 490,210 50,210" style="fill:var(--amber);opacity:.12"/>
+<polyline points="50,40.7 170,87.4 330,89.5 490,113" fill="none" style="stroke:var(--amber)" stroke-width="2.5" stroke-linejoin="round"/>
+<polyline points="490,113 650,129.7" fill="none" style="stroke:var(--amber)" stroke-width="2.5" stroke-dasharray="6 4"/>
+<g style="fill:var(--amber);stroke:var(--paper)" stroke-width="2"><circle cx="50" cy="40.7" r="5"/><circle cx="170" cy="87.4" r="5"/><circle cx="330" cy="89.5" r="5"/><circle cx="490" cy="113" r="5"/><circle cx="650" cy="129.7" r="5"/></g>
+<text class="lb" x="58" y="28" font-weight="600">112.9</text>
+<text class="lb" x="170" y="76" text-anchor="middle">81.8</text>
+<text class="lb" x="330" y="78" text-anchor="middle">80.3</text>
+<text class="lb" x="490" y="102" text-anchor="middle" font-weight="600">64.7 (-43%)</text>
+<text class="lb" x="650" y="118" text-anchor="middle">53.5 (-53%)</text>
+<g class="s"><text x="50" y="234">Mar 2012</text><text x="170" y="234" text-anchor="middle">Des 2012</text><text x="330" y="234" text-anchor="middle">Des 2013</text><text x="490" y="234" text-anchor="middle">Des 2014</text><text x="650" y="234" text-anchor="middle">Des 2015</text></g>
+</svg>
+<p class="ex-s">Sumber: Kementerian ESDM, rilis HBA bulanan. Persentase dihitung terhadap Maret 2012.</p>
+</figure>
+
+<h3 style="margin-top:34px;max-width:44ch">Apa yang dapat dan tidak dapat diubah kontraktor</h3>
+<p style="margin-top:8px">Memecah margin menjadi pendorongnya menunjukkan bahwa tekanan terbesar berada di luar kendali kontraktor. Yang tersisa adalah biaya per BCM (bank cubic metre, meter kubik tanah yang dipindahkan).</p>
+<figure class="ex">
+<p class="ex-t">Eksibit 2. Dua pendorong ditentukan oleh pemilik tambang dan pasar; sisi biaya menjadi tanggung jawab kontraktor untuk dikelola</p>
+<p class="ex-c">Margin kontraktor per BCM, dirinci menurut pendorongnya.</p>
+<svg viewBox="0 0 720 390" role="img" aria-label="Pohon pendorong: margin per BCM terbagi menjadi pendapatan dan biaya operasi. Pendapatan tertekan oleh lapisan penutup yang lebih sedikit per ton dan tarif yang lebih rendah. Biaya operasi sekitar 70 persen adalah bahan bakar, pelumas, dan pemeliharaan, serta sekitar 30 persen lainnya, yang dapat dikelola kontraktor.">
+<rect class="n-box" x="20" y="150" width="130" height="64" rx="6"/><text class="t" x="85" y="174" text-anchor="middle">Margin</text><text class="s" x="85" y="194" text-anchor="middle">per BCM dipindahkan</text>
+<rect class="n-box" x="190" y="70" width="150" height="56" rx="6"/><text class="t" x="265" y="92" text-anchor="middle">Pendapatan</text><text class="s" x="265" y="110" text-anchor="middle">volume x tarif</text>
+<rect class="n-box" x="190" y="238" width="150" height="56" rx="6"/><text class="t" x="265" y="260" text-anchor="middle">Biaya operasi</text><text class="s" x="265" y="278" text-anchor="middle">per BCM</text>
+<rect class="n-press" x="390" y="20" width="310" height="60" rx="6" stroke-width="1"/><text class="t" x="545" y="42" text-anchor="middle">Lapisan penutup lebih sedikit per ton batu bara</text><text class="s" x="545" y="62" text-anchor="middle">Rasio pengupasan sekitar 9 menjadi sekitar 8 (2012 hingga 2013)</text>
+<rect class="n-press" x="390" y="100" width="310" height="60" rx="6" stroke-width="1"/><text class="t" x="545" y="122" text-anchor="middle">Tekanan pada tarif kontraktor</text><text class="s" x="545" y="142" text-anchor="middle">Harga acuan -43% (Mar 2012 hingga Des 2014)</text>
+<rect class="n-lev" x="390" y="210" width="310" height="60" rx="6" stroke-width="1.5"/><text class="t" x="545" y="232" text-anchor="middle">Bahan bakar, pelumas, perbaikan, dan pemeliharaan</text><text class="s" x="545" y="252" text-anchor="middle">Sekitar 70% biaya operasi</text>
+<rect class="n-lev" x="390" y="290" width="310" height="60" rx="6" stroke-width="1.5"/><text class="t" x="545" y="312" text-anchor="middle">Tenaga kerja, pengeboran dan peledakan, overhead</text><text class="s" x="545" y="332" text-anchor="middle">Sisa sekitar 30%</text>
+<path class="cn" d="M150 182H170V98H188M170 182V266H188"/><path class="cn" d="M340 98H365V50H388M365 98V130H388"/><path class="cn" d="M340 266H365V240H388M365 266V320H388"/>
+<rect x="40" y="368" width="12" height="12" rx="2" style="fill:var(--amber)"/><text class="s" x="60" y="378">Ditentukan oleh pemilik tambang dan pasar</text>
+<rect x="290" y="368" width="12" height="12" rx="2" style="fill:var(--teal)"/><text class="s" x="310" y="378">Dalam kendali kontraktor: sasaran kepemimpinan biaya</text>
+</svg>
+<p class="ex-s">Sumber: analisis engagement; pembagian biaya dari benchmark kompetitor dan wawancara.</p>
+</figure>
+
+<h3 style="margin-top:34px">Empat hipotesis menyusun pekerjaan</h3>
+<p style="margin-top:8px">Tim mengubah masalah menjadi hipotesis yang dapat diuji dan menggunakan wawancara untuk mengonfirmasi atau menolak masing-masing hipotesis. Klien juga menetapkan batas tegas: kapasitas kecil untuk investasi atau staf tambahan, sehingga strategi harus memberi dampak maksimal dengan dukungan minimal, dimulai dari kemenangan cepat.</p>
+<div class="hy" style="margin-top:14px">
+<div class="hc"><h3>H1. Kepemimpinan biaya harus didahulukan</h3><span class="vd v-ok">Didukung</span><p>Pemilik tambang memangkas rasio pengupasan dan menekan tarif, sementara pemain terdepan melaporkan margin operasi sekitar 22% serta pemangkasan biaya hingga 12% (sekitar US$31 juta) sepanjang 2013 hingga 2014.</p></div>
+<div class="hc"><h3>H2. Kontrak terbuka dapat diprediksi</h3><span class="vd v-ok">Didukung</span><p>Peluang terbuka saat kontrak berakhir, incumbent berkinerja buruk, atau konsesi baru yang melampaui kapasitas incumbent. Afiliasi dengan pemilik tambang adalah prediktor terkuat siapa yang memegang pekerjaan.</p></div>
+<div class="hc"><h3>H3. Diferensiasi membutuhkan kepemilikan penuh dari tambang hingga pelabuhan</h3><span class="vd v-pt">Sebagian ditolak</span><p>Pembeli dapat mengadakan pengeboran dan peledakan, pengangkutan, dan pelabuhan secara terpisah, dan spesialis berhasil dengan berfokus pada satu segmen. Dengan modal terbatas, kemitraan lebih unggul daripada kepemilikan.</p></div>
+<div class="hc"><h3>H4. Konstruksi adalah bidang terkait yang paling logis</h3><span class="vd v-ok">Didukung, secara bertahap</span><p>Hanya dua dari enam kontraktor terbesar yang memiliki eksposur konstruksi yang berarti. Infrastruktur pertambangan paling mudah dialihkan; pemancangan dan EPC membutuhkan mitra, referensi, dan kedalaman rekayasa.</p></div>
+</div>
+<p class="ex-s" style="margin-top:12px">Basis bukti: 50+ pemangku kepentingan (3+ pakar dan asosiasi, 10+ pemilik tambang, 15+ kontraktor, 5+ pedagang, 10+ perusahaan industri terkait, 5 hingga 10 pelaku konstruksi), ditambah riset sekunder dan benchmark kompetitor.</p>
+</div></section>
+
+<section id="cost"><div class="wrap">
+<h2>Biaya per BCM adalah satu-satunya tuas di tangan kontraktor</h2>
+<p class="lead">Kepemimpinan biaya bekerja ganda. Ia melindungi margin ketika pemilik tambang memangkas tarif, dan memungkinkan kontraktor menawar lebih rendah dari pesaing saat mengikuti tender kontrak baru. Pergeserannya ada pada tujuan operasi: dari produksi tertinggi menjadi produksi dengan biaya per BCM terendah.</p>
+<figure class="ex">
+<p class="ex-t">Eksibit 3. Sekitar 70% biaya operasi berada di dua pos, sehingga tiga tuas menyasar sebagian besar basis biaya</p>
+<p class="ex-c">Struktur biaya operasi dan tuas yang bekerja padanya.</p>
+<div class="bar70" role="img" aria-label="Biaya operasi: sekitar 70 persen bahan bakar, pelumas, perbaikan dan pemeliharaan; sekitar 30 persen lainnya.">
+<span style="width:70%;background:var(--teal);color:var(--paper)">Bahan bakar, pelumas, perbaikan dan pemeliharaan: sekitar 70%</span>
+<span style="width:30%;background:var(--bg);color:var(--ink2);border:1px solid var(--line)">Lainnya: sekitar 30%</span></div>
+<div class="lev">
+<div><i class="ti ti-gas-station" aria-hidden="true"></i><h3>Bakar lebih sedikit bahan bakar per BCM</h3><p>Sistem manajemen armada mengatur dispatch truk agar sesuai dengan excavator serta memangkas waktu menganggur dan siklus angkut yang terbuang.</p><p class="kp">Dipantau dengan: bahan bakar per BCM, kepatuhan dispatch, utilisasi</p></div>
+<div><i class="ti ti-tools" aria-hidden="true"></i><h3>Jaga aset tetap beroperasi lebih lama dengan biaya lebih rendah</h3><p>Program rekondisi komponen dan perpanjangan umur pakai, suku cadang yang disimpan berdasarkan tingkat kritikalitas, dan penghentian operasi terjadwal. Pemain lain memperpanjang umur aset 1 hingga 3 tahun.</p><p class="kp">Dipantau dengan: biaya pemeliharaan per jam, ketersediaan fisik</p></div>
+<div><i class="ti ti-users" aria-hidden="true"></i><h3>Jadikan biaya tanggung jawab semua orang</h3><p>Activity-based costing per BCM, KPI yang diturunkan ke tim lokasi, insentif yang dikaitkan dengan penurunan biaya, dan rantai pasok yang tersentralisasi.</p><p class="kp">Dipantau dengan: biaya per BCM, pipeline perbaikan, penanggung jawab per pendorong biaya</p></div>
+</div>
+<p class="ex-s">Sumber: benchmark kompetitor dan wawancara primer; pembagian biaya operasi sebagaimana diuraikan dalam rekomendasi engagement.</p>
+</figure>
+</div></section>
+
+<section id="grow"><div class="wrap">
+<h2>Tumbuh di tempat kontraktor dapat menang tanpa perang harga atau modal besar</h2>
+<p class="lead">Setiap opsi disaring dengan tujuh pertanyaan: Apakah pasarnya menarik? Apakah kapabilitas dapat dialihkan? Dapatkah klien menjangkau pelanggan? Berapa modal yang dibutuhkan? Seberapa cepat balik modalnya? Dapatkah menang di luar harga? Apa yang masih kurang untuk eksekusi?</p>
+
+<h3 style="margin-top:30px">1. Kejar kontrak yang sedang terbuka, bukan setiap konsesi</h3>
+<figure class="ex">
+<p class="ex-t">Eksibit 4. Penyaringan mempersempit pasar menjadi akun yang benar-benar memiliki peluang untuk beralih</p>
+<p class="ex-c">Logika penyaringan tingkat akun. Tidak ada jumlah atau nama yang diungkap.</p>
+<div class="fun">
+<div>Seluruh konsesi dalam cakupan</div>
+<div>Tidak terkunci oleh kontraktor afiliasi (afiliasi adalah penghalang terkuat)</div>
+<div>Mampu secara finansial untuk mendanai atau mengontrak pekerjaan</div>
+<div>Peluang terbuka: kontrak akan berakhir, incumbent berkinerja buruk, atau proyek baru</div>
+</div>
+<div class="trig">
+<div><b>Kontrak berakhir</b>Kontrak yang akan berakhir menciptakan momen alami untuk mengajukan penawaran.</div>
+<div><b>Incumbent berkinerja buruk</b>Pemilik yang tidak puas akan mendengarkan penawaran yang lebih baik dan lebih murah.</div>
+<div><b>Konsesi baru atau yang diperluas</b>Proyek greenfield dan ekspansi dapat melampaui kemampuan yang dapat ditangani incumbent.</div>
+</div>
+<p class="ex-s">Sumber: logika penyaringan pelanggan yang dikembangkan selama engagement, divalidasi melalui wawancara dengan pemilik tambang dan kontraktor.</p>
+</figure>
+
+<h3 style="margin-top:34px">2. Pisahkan rantai dari tambang hingga pelabuhan dan fokus pada tiga mata rantai</h3>
+<p style="margin-top:8px">Pembeli dapat membeli layanan secara terpisah. Pertanyaannya adalah mata rantai mana yang layak dimasuki. Jawabannya: yang belum diperebutkan pesaing dengan perang harga, dan yang modalnya dapat dibagi bersama mitra.</p>
+<figure class="ex">
+<p class="ex-t">Eksibit 5. Tiga mata rantai memberi ruang untuk berdiferensiasi; bagian tengah rantai adalah perang harga</p>
+<p class="ex-c">Rantai nilai layanan pertambangan batu bara, dari tambang hingga pelabuhan.</p>
+<div class="chain" role="list">
+<div class="tile f" role="listitem"><i class="ti ti-bomb" aria-hidden="true"></i><b>Pengeboran dan peledakan</b><em>Fokus</em></div>
+<div class="tile" role="listitem"><i class="ti ti-mountain" aria-hidden="true"></i><b>Pengupasan lapisan penutup</b><em>Perang harga</em></div>
+<div class="tile" role="listitem"><i class="ti ti-truck-loading" aria-hidden="true"></i><b>Penggalian batu bara</b><em>Perang harga</em></div>
+<div class="tile" role="listitem"><i class="ti ti-building-factory-2" aria-hidden="true"></i><b>Peremukan</b><em style="background:var(--bg);color:var(--ink2)">Bukan fokus</em></div>
+<div class="tile f" role="listitem"><i class="ti ti-truck" aria-hidden="true"></i><b>Pengangkutan</b><em>Fokus</em></div>
+<div class="tile f" role="listitem"><i class="ti ti-anchor" aria-hidden="true"></i><b>Pengelolaan pelabuhan</b><em>Fokus</em></div>
+</div>
+<div class="why">
+<div><b>Pengeboran dan peledakan: pasokan adalah hambatannya</b>Amonium nitrat bergantung pada impor hingga 2012, dan pemain besar mengunci pasokan jangka panjang, sehingga mengamankan mitra pemasok membuka peluang.</div>
+<div><b>Pengangkutan: pos biaya besar tanpa skala untuk tambang kecil</b>Klaster tambang yang berdekatan dapat berbagi armada dan jalan. Kontraktor lokal beroperasi sementara klien membawa manajemen armada dan praktik terbaik.</div>
+<div><b>Pengelolaan pelabuhan: kapasitas langka</b>Sebagian besar terminal dimiliki pemain besar secara privat, hanya tiga terminal serbaguna yang menangani volume besar, dan pemerintah merencanakan 14 terminal tambahan.</div>
+<div class="pr"><b>Pengupasan lapisan penutup dan penggalian batu bara: tempat harga menjadi satu-satunya senjata</b>Sekitar 116 kontraktor bersaing di sini. Kepemimpinan biaya (Eksibit 3) adalah yang berhasil di bagian rantai ini.</div>
+</div>
+<p class="ex-s">Sumber: wawancara kompetitor dan pelanggan, analisis pasar pelabuhan dan amonium nitrat. Peremukan tidak dipandang sebagai fokus persaingan dalam benchmark.</p>
+</figure>
+
+<h3 style="margin-top:34px">3. Masuk ke pasar terkait sesuai urutan kesesuaian kapabilitas</h3>
+<figure class="ex">
+<p class="ex-t">Eksibit 6. Infrastruktur pertambangan dan mineral terpilih lebih dulu; konstruksi spesialis dan EPC hanya setelah gerbang kapabilitas</p>
+<p class="ex-c">Bidang terkait menurut kesenjangan kapabilitas dan waktu hingga dampak.</p>
+<svg viewBox="0 0 720 330" role="img" aria-label="Matriks pasar terkait menurut kesenjangan kapabilitas dan waktu hingga dampak. Infrastruktur pertambangan dan mineral lain adalah kecocokan dekat dalam jangka dekat; pekerjaan sipil dan pemancangan berada di jangka menengah; baja struktural dan EPC memiliki kesenjangan besar dan berjangka panjang; semen diturunkan prioritasnya.">
+<rect x="40" y="40" width="640" height="130" style="fill:var(--teal-bg)"/><rect x="40" y="170" width="640" height="130" style="fill:var(--bg);stroke:var(--line)"/>
+<text class="s" x="50" y="58">Jangka dekat</text><text class="s" x="50" y="188">Jangka lebih panjang</text>
+<g style="fill:var(--teal);stroke:var(--paper)" stroke-width="2"><circle cx="170" cy="92" r="9"/><circle cx="290" cy="128" r="9"/><circle cx="440" cy="228" r="9"/><circle cx="610" cy="270" r="9"/></g>
+<circle cx="130" cy="262" r="9" fill="none" style="stroke:var(--mute)" stroke-width="2" stroke-dasharray="3 3"/>
+<text class="t" x="188" y="97">Infrastruktur pertambangan</text>
+<text class="t" x="308" y="133">Mineral lain</text>
+<text class="t" x="458" y="233">Pekerjaan sipil dan pemancangan</text>
+<text class="t" x="592" y="275" text-anchor="end">Baja struktural dan EPC</text>
+<text class="t" x="148" y="267" style="fill:var(--ink2)">Semen</text>
+<text class="s" x="148" y="283">Diturunkan prioritasnya: sedikit pekerjaan lapisan penutup, incumbent yang sudah mapan</text>
+<line x1="40" y1="312" x2="680" y2="312" class="cn"/>
+<text class="s" x="40" y="326">Kesenjangan kapabilitas lebih kecil</text><text class="s" x="680" y="326" text-anchor="end">Kesenjangan kapabilitas lebih besar</text>
+</svg>
+<p class="ex-s">Sumber: penilaian kedekatan kapabilitas terhadap aset, sumber daya manusia, akses pelanggan, modal, dan risiko eksekusi.</p>
+</figure>
+</div></section>
+
+<section id="roadmap"><div class="wrap">
+<h2>Enam jalur dalam urutan tetap menjaga inti tetap kuat sebelum hal baru didanai</h2>
+<p class="lead">Urutannya mengikuti kecepatan dan usaha: langkah cepat dan berbiaya rendah lebih dulu, hal yang membutuhkan kapabilitas baru di akhir.</p>
+<figure class="ex">
+<p class="ex-t">Eksibit 7. Setiap jalur memiliki alasan, kerangka waktu, dan tingkat usaha</p>
+<p class="ex-c">Portofolio pertumbuhan untuk klien.</p>
+<div>
+<div class="pw"><div class="pn">1</div><div><h3>Kepemimpinan biaya</h3><p>Harga sedang turun dan biaya adalah satu-satunya tuas yang dikendalikan kontraktor.</p></div><div class="ch"><span class="chip t1">Segera</span><span class="chip e1">Usaha rendah</span></div></div>
+<div class="pw"><div class="pn">2</div><div><h3>Perolehan kontrak</h3><p>Peluang terbuka pada kontrak yang akan berakhir atau berkinerja buruk memungkinkan kontraktor yang lebih kuat menggantikan yang lebih lemah.</p></div><div class="ch"><span class="chip t1">Segera</span><span class="chip e2">Usaha sedang</span></div></div>
+<div class="pw"><div class="pn">3</div><div><h3>Integrasi vertikal selektif</h3><p>Layanan pengeboran dan peledakan, pengangkutan, dan pelabuhan yang dipisahkan memberi diferensiasi tanpa harus memiliki seluruh rantai.</p></div><div class="ch"><span class="chip t2">Sekitar 1 tahun</span><span class="chip e2">Usaha sedang</span></div></div>
+<div class="pw"><div class="pn">4</div><div><h3>Kemitraan rantai nilai</h3><p>Kerja sama dengan pedagang memberi pemilik tambang jalur ke pasar dan memberi kontraktor alasan untuk dipilih.</p></div><div class="ch"><span class="chip t1">Segera</span><span class="chip e1">Usaha rendah</span></div></div>
+<div class="pw"><div class="pn">5</div><div><h3>Mineral lain</h3><p>Aktivitas alih daya seperti pengeboran, lapisan penutup, pemuatan, dan pengangkutan sesuai dengan kapabilitas yang sudah ada.</p></div><div class="ch"><span class="chip t3">1 hingga 2 tahun</span><span class="chip e1">Usaha rendah</span></div></div>
+<div class="pw"><div class="pn">6</div><div><h3>Konstruksi dan EPC</h3><p>Pasar yang tumbuh 8 hingga 13% per tahun, tetapi membutuhkan rekam jejak dan kapabilitas baru, sehingga dilakukan bertahap.</p></div><div class="ch"><span class="chip t3">Bertahap</span><span class="chip e3">Usaha tinggi</span></div></div>
+</div>
+<!-- VERIFY BEFORE PUBLISHING: effort levels for pathways 5 and 6 against the source recommendation slide -->
+<p class="ex-s">Warna: hijau makin pekat seiring kecepatan; kuning makin pekat seiring usaha. Sumber: rekomendasi strategis engagement.</p>
+</figure>
+
+<figure class="ex">
+<p class="ex-t">Eksibit 8. Tiga horizon: bertahan, berekspansi secara selektif, lalu bertransformasi</p>
+<p class="ex-c">Urutan enam jalur. Gerbang investasi berbeda untuk setiap horizon.</p>
+<div class="rm">
+<div></div>
+<div class="hd">0 hingga 12 bulan<small>Bertahan dan memperkuat</small></div>
+<div class="hd">1 hingga 2 tahun<small>Berekspansi secara selektif</small></div>
+<div class="hd">Jangka lebih panjang<small>Bertransformasi</small></div>
+
+<div class="rl">1. Kepemimpinan biaya</div><div class="bar m">Bangun program biaya</div><div class="bar c" style="grid-column:span 2">Pertahankan dan perluas ke setiap lokasi</div>
+<div class="rl">2. Perolehan kontrak</div><div class="bar m">Kualifikasi akun, ajukan tender</div><div class="bar c" style="grid-column:span 2">Konversi dan perpanjang kontrak</div>
+<div class="rl">3. Integrasi vertikal</div><div class="bar c">Siapkan izin, pemasok</div><div class="bar m">Uji coba, lalu skalakan</div><div></div>
+<div class="rl">4. Kemitraan</div><div class="bar m">Kerja sama dengan pedagang</div><div class="bar c">JV operasional</div><div></div>
+<div class="rl">5. Mineral lain</div><div></div><div class="bar m">Aktivitas alih daya</div><div></div>
+<div class="rl">6. Konstruksi, EPC</div><div></div><div class="bar m">Infrastruktur pertambangan, pekerjaan sipil</div><div class="bar m2">Pemancangan, struktur, EPC setelah gerbang</div>
+</div>
+<div class="leg"><span><i style="background:var(--teal)"></i>Upaya utama</span><span><i style="background:var(--teal-bg)"></i>Mempersiapkan atau melanjutkan</span></div>
+</figure>
+
+<h3 style="margin-top:34px">Bagaimana strategi dapat dikelola</h3>
+<figure class="ex">
+<p class="syn"><b>Sintesis penulis setelah engagement.</b> Kartu skor dan daftar risiko ini disusun setelahnya untuk menunjukkan bagaimana strategi dapat dijalankan. Keduanya bukan bagian dari hasil kerja awal.</p>
+<div class="tw"><table>
+<thead><tr><th>Inisiatif</th><th>Indikator awal</th><th>KPI hasil</th><th>Gerbang</th></tr></thead>
+<tbody>
+<tr><td>Kepemimpinan biaya</td><td>Pipeline perbaikan, penanggung jawab pendorong biaya, tindakan pemeliharaan yang tuntas</td><td>Biaya per BCM, bahan bakar per BCM, biaya pemeliharaan per jam</td><td>Tinjauan operasi bulanan</td></tr>
+<tr><td>Perolehan kontrak</td><td>Akun yang lolos kualifikasi, kontrak berakhir yang dipantau, akses ke pengambil keputusan</td><td>Nilai pipeline, konversi penawaran, margin</td><td>Komite ikut atau tidak ikut tender</td></tr>
+<tr><td>Pengeboran dan peledakan</td><td>Kesiapan izin, perjanjian pemasok</td><td>Margin proyek, utilisasi, insiden keselamatan</td><td>Uji coba, lalu skalakan</td></tr>
+<tr><td>Pengangkutan</td><td>Partisipasi klaster, perjanjian jalan, rencana armada</td><td>Biaya per ton-km, utilisasi truk</td><td>Studi kelayakan klaster</td></tr>
+<tr><td>Layanan pelabuhan</td><td>Akses terminal, pelanggan utama</td><td>Throughput, waktu putar, eksposur demurrage</td><td>Ambang volume pelanggan utama</td></tr>
+<tr><td>Bidang konstruksi terkait</td><td>Mitra diamankan, perekrutan kritis, referensi</td><td>Backlog, margin, ketepatan waktu pengiriman, pengerjaan ulang</td><td>Gerbang tahap kapabilitas</td></tr>
+</tbody></table></div>
+<div class="rk">
+<div><b>Pengenceran fokus manajemen</b>Batasi inisiatif aktif dan urutkan investasi.</div>
+<div><b>Risiko utilisasi</b>Beli armada hanya untuk volume yang sudah dikontrakkan atau sangat layak.</div>
+<div><b>Melampaui kapabilitas</b>Jadikan kedalaman rekayasa dan proyek referensi sebagai gerbang EPC.</div>
+<div><b>Tata kelola kemitraan</b>Sepakati hak keputusan, klausul kinerja, dan syarat keluar.</div>
+<div><b>Konsentrasi pelanggan</b>Tetapkan batas portofolio dan diversifikasi akun secara bertahap.</div>
+<div><b>Kualitas data</b>Standarkan definisi KPI dan pertahankan baseline yang dapat diaudit.</div>
+</div>
+</figure>
+</div></section>
+
+<section id="hindsight"><div class="wrap">
+<h2>Jika dilihat ke belakang, tesis tekanan bertahan hingga 2017, tetapi satu proyeksi titik tunggal melewatkan kenaikan</h2>
+<p class="lead">Bagian ini adalah pengamatan yang dibuat beberapa tahun kemudian, bukan klaim tentang dampak proyek. Bagian ini membandingkan proyeksi skenario dasar dalam analisis awal dengan apa yang ditunjukkan data kemudian.</p>
+<figure class="ex">
+<p class="ex-t">Eksibit 9. Produksi datar selama empat tahun, lalu melampaui proyeksi 2020 sebesar 12%</p>
+<p class="ex-c">Produksi batu bara Indonesia, juta ton (Mt), realisasi dibandingkan proyeksi yang digunakan dalam engagement.</p>
+<div class="leg" style="margin:0 0 6px"><span><i style="background:var(--teal)"></i>Realisasi (ESDM)</span><span><i style="background:var(--amber)"></i>Proyeksi dalam engagement</span><span><i style="background:var(--line)"></i>Periode datar, 2014 hingga 2017</span></div>
+<svg id="fva" viewBox="0 0 720 320" role="img" aria-label="Grafik garis produksi batu bara Indonesia dari 2006 hingga 2024: sekitar 194 juta ton pada 2006, 474 pada 2013, datar di sekitar 460 dari 2014 hingga 2017, 564 pada 2020 dibanding proyeksi 504, dan 836 pada 2024."></svg>
+<p class="ex-s">Sumber: produksi aktual dari data ESDM sebagaimana dilaporkan dalam rilis kementerian dan pemberitaan (angka 2006 hingga 2011 sesuai dengan data engagement; angka 2012 dan 2013 kemudian direvisi naik dari 383 dan 421 Mt menjadi sekitar 412 dan 474 Mt); proyeksi dari analisis awal.</p>
+</figure>
+<ul class="take">
+<li><span><b style="font-weight:600">Tekanannya nyata.</b> Produksi berada di kisaran 456 hingga 461 Mt dari 2014 hingga 2017 ketika harga acuan turun ke US$53.51 pada Desember 2015. Itulah lingkungan di mana kepemimpinan biaya tepat untuk diprioritaskan lebih dulu.</span></li>
+<li><span><b style="font-weight:600">Proyeksinya tidak memiliki rentang.</b> Skenario dasar tunggal sebesar 504 Mt untuk 2020 berada 12% di bawah 564 Mt yang terjadi kemudian. Lain kali saya akan menyajikan pita skenario, agar rencana tetap kokoh baik saat tekanan maupun saat kenaikan.</span></li>
+<li><span><b style="font-weight:600">Data awal perlu diberi catatan.</b> Angka 2013 yang digunakan saat itu (421 Mt) kemudian direvisi menjadi sekitar 474 Mt. Tandai versi data ketika basis fakta dibangun di atas angka awal.</span></li>
+</ul>
+</div></section>
+
+<section id="limits"><div class="wrap">
+<h2>Apa yang sebaiknya dipetik pembaca, dan apa yang tidak diklaim studi kasus ini</h2>
+<ul class="take">
+<li><span><b style="font-weight:600">Perbaiki inti sebelum diversifikasi.</b> Ekspansi tidak kredibel selama biaya, pemeliharaan, dan produktivitas armada belum tuntas.</span></li>
+<li><span><b style="font-weight:600">Saring berdasarkan aksesibilitas, bukan hanya daya tarik.</b> Kontrak yang berakhir, afiliasi, dan kinerja incumbent dapat lebih menentukan daripada ukuran pasar.</span></li>
+<li><span><b style="font-weight:600">Integrasi tidak sama dengan kepemilikan.</b> Kemitraan, layanan yang dipisahkan, dan JV operasional dapat menurunkan eksposur modal.</span></li>
+<li><span><b style="font-weight:600">Urutkan pembangunan kapabilitas.</b> Infrastruktur pertambangan berada lebih dekat dengan basis yang sudah ada dibanding baja struktural atau EPC penuh.</span></li>
+<li><span><b style="font-weight:600">Pisahkan keluaran dari hasil.</b> Strategi yang siap diputuskan adalah hasil konsultasi yang sah, tetapi bukan dampak finansial yang sudah terealisasi.</span></li>
+</ul>
+<div class="cb"><b>Integritas hasil.</b> Engagement ini menghasilkan keluaran strategis dan nilai keputusan. Engagement ini tidak mendokumentasikan pendapatan atau penghematan biaya yang terealisasi setelah implementasi, sehingga tidak ada yang diklaim di sini. Data pasar mencerminkan periode proyek 2014. Ekonomi kompetitor bergantung pada triangulasi karena data perusahaan swasta tidak lengkap, dan temuan wawancara mencerminkan perspektif pemangku kepentingan. <b>Kerahasiaan.</b> Identitas klien, target kemitraan atau akuisisi yang disebutkan namanya, kontak pribadi, detail tender, benchmark biaya yang persis, dan asumsi keuangan yang rahasia tidak disertakan.</div>
+</div></section>
+
+<footer><div class="wrap">Portofolio profesional Jagat Batara. Strategi pertumbuhan, keunggulan operasional, diversifikasi portofolio, eksekusi strategi.</div></footer>
+
+<script>
+(function(){
+var yrs=[],act=[194,217,240,254,275,353,412,474,458,461,456,461,557,610,564,614,687,775,836];
+for(var y=2006;y<=2024;y++)yrs.push(y);
+var L=56,R=700,T=30,B=270,MAX=900;
+function X(i){return L+i*(R-L)/18}
+function Y(v){return B-(v/MAX)*(B-T)}
+var s='';
+[0,300,600,900].forEach(function(v){s+='<line x1="'+L+'" y1="'+Y(v)+'" x2="'+R+'" y2="'+Y(v)+'" style="stroke:var(--line)"/><text class="s" x="'+(L-8)+'" y="'+(Y(v)+4)+'" text-anchor="end">'+v+'</text>';});
+var bx0=X(7.5),bx1=X(11.5);
+s+='<rect x="'+bx0+'" y="'+T+'" width="'+(bx1-bx0)+'" height="'+(B-T)+'" style="fill:var(--line);opacity:.5"/>';
+s+='<text class="s" x="'+((bx0+bx1)/2)+'" y="'+(T+16)+'" text-anchor="middle">2014 to 2017</text><text class="s" x="'+((bx0+bx1)/2)+'" y="'+(T+31)+'" text-anchor="middle">flat near 460</text>';
+var pts=act.map(function(v,i){return X(i)+','+Y(v)}).join(' ');
+s+='<polygon points="'+X(0)+','+B+' '+pts+' '+X(18)+','+B+'" style="fill:var(--teal);opacity:.1"/>';
+s+='<polyline points="'+pts+'" fill="none" style="stroke:var(--teal)" stroke-width="2.5" stroke-linejoin="round"/>';
+s+='<polyline points="'+X(7)+','+Y(421)+' '+X(14)+','+Y(504)+'" fill="none" style="stroke:var(--amber)" stroke-width="2.5" stroke-dasharray="6 4"/>';
+[[0,194],[7,474],[14,564],[18,836]].forEach(function(p){s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="5" style="fill:var(--teal);stroke:var(--paper)" stroke-width="2"/>';});
+[[7,421],[14,504]].forEach(function(p){s+='<circle cx="'+X(p[0])+'" cy="'+Y(p[1])+'" r="5" style="fill:var(--amber);stroke:var(--paper)" stroke-width="2"/>';});
+function T2(txt,x,y,a,w){s+='<text class="lb" x="'+x+'" y="'+y+'" text-anchor="'+a+'"'+(w?' font-weight="600"':'')+'>'+txt+'</text>';}
+T2('194',X(0)+2,Y(194)-10,'start');
+T2('474',X(7),Y(474)-10,'middle');
+T2('421 (forecast base)',X(7)+10,Y(421)+20,'start');
+T2('564',X(14),Y(564)-12,'middle',1);
+T2('504 (forecast)',X(14),Y(504)+22,'middle');
+T2('836',X(18),Y(836)-10,'end',1);
+yrs.forEach(function(yr,i){if(i%3===0||i===18)s+='<text class="s" x="'+X(i)+'" y="'+(B+20)+'" text-anchor="middle">'+yr+'</text>';});
+document.getElementById('fva').innerHTML=s;
+})();
+</script>
+</body>
+</html>

@@ -13,6 +13,7 @@
   function currentLang() {
     const params = new URLSearchParams(window.location.search);
     if (params.get('lang') === 'id') return 'id';
+    if (document.documentElement.lang === 'id') return 'id';
     return 'en';
   }
 

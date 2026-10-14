@@ -159,6 +159,7 @@
         .then(async function(raw){
           document.getElementById('loading-single').style.display = 'none';
           const parsed = parsePost(raw);
+          if (parsed.fm.archive_url) { window.location.replace(parsed.fm.archive_url); return; }
           const fm = await getTranslatedFrontMatter(parsed.fm);
           const body = await getTranslatedBody(parsed.body);
           const bodyHtml = marked.parse(body || '');

@@ -11,6 +11,7 @@ summary: >
 tags:
   - Data Storytelling
   - Data Visualization
+id_link: "data-storytelling/2026-10-13-klinik-grafik-buruk"
 ---
 
 [Open Bad Chart Clinic](data-storytelling-en/Bad%20Chart%20Clinic.html).

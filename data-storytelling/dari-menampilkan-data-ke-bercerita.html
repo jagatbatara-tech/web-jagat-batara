@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dari Menampilkan Data ke Bercerita — Panduan Praktis Data Storytelling &amp; Desain Dasbor</title>
+<meta name="description" content="Halaman belajar terpadu tentang data storytelling dan visualisasi data: enam pelajaran, sembilan perbaikan dasbor yang buruk, lab bagaimana jika, dan tujuh latihan memilih data yang tepat untuk dasbor. Berdasarkan Storytelling with Data karya Cole Nussbaumer Knaflic.">
+<style>
+:root{
+  --bg:#F4F2ED; --ink:#151B1D; --muted:#5B6568; --line:#DDD8CC;
+  --copper:#B77A2B; --gold:#C59B43; --dark:#1C2526; --green:#3E745A;
+  --teal:#2E6E73; --amber:#D49A3A; --red:#B64D42; --card:#FFFFFF;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",Calibri,Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.65;font-size:17px;overflow-x:hidden}
+h1,h2,h3,h4{font-family:Georgia,"Times New Roman",serif;line-height:1.2;color:var(--dark);margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+@media(max-width:600px){.wrap{padding:0 18px}body{font-size:16px}}
+a{color:var(--teal)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;color:#fff;min-height:580px;display:flex;align-items:flex-end;background:linear-gradient(135deg,#0F1415 0%,#1C2526 58%,#27312F 100%)}
+.hero-art{position:absolute;right:-10px;top:80px;width:min(400px,32%);opacity:.9}
+.hero-shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(16,21,22,.05) 0%,rgba(16,21,22,.72) 100%)}
+.hero .wrap{position:relative;padding-bottom:56px;padding-top:130px}
+@media(max-width:1100px){.hero-art{display:none}}
+@media(max-width:600px){.hero{min-height:500px}.hero .wrap{padding-top:90px;padding-bottom:36px}}
+.page-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.page-action{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 16px;border:1px solid var(--copper);border-radius:6px;background:var(--copper);color:#fff;text-decoration:none;font-size:14px;font-weight:700;transition:background .2s,border-color .2s}
+.page-action:hover,.page-action:focus-visible{background:var(--dark);border-color:#fff;outline:2px solid var(--gold);outline-offset:2px}
+.page-action.secondary{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.55)}
+.page-action.secondary:hover,.page-action.secondary:focus-visible{background:rgba(255,255,255,.2)}
+.kicker{letter-spacing:.18em;text-transform:uppercase;font-size:12.5px;color:var(--gold);font-weight:700}
+.hero h1{color:#fff;font-size:clamp(32px,5.4vw,58px);margin:14px 0 16px;max-width:760px}
+.hero p.lead{font-size:clamp(17px,2vw,20px);max-width:700px;color:#E8E4DA;margin:0 0 26px}
+.meta{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:13.5px;color:#CFCABD;border-top:1px solid rgba(255,255,255,.25);padding-top:16px}
+.meta b{color:#fff}
+
+/* NAV */
+nav.toc{position:sticky;top:0;z-index:20;background:rgba(28,37,38,.96);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+nav.toc .wrap{display:flex;gap:4px;overflow-x:auto;padding-top:0;padding-bottom:0;-webkit-overflow-scrolling:touch}
+nav.toc a{color:#D9D4C7;text-decoration:none;font-size:13.5px;padding:14px 13px;white-space:nowrap;border-bottom:3px solid transparent}
+nav.toc a:hover{color:#fff;border-bottom-color:var(--copper)}
+
+/* SECTIONS */
+section{padding:64px 0 8px;scroll-margin-top:56px}
+@media(max-width:600px){section{padding:44px 0 4px}}
+.sec-label{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.sec-num{font-family:Georgia,serif;font-size:54px;color:var(--copper);line-height:1;font-weight:700}
+.sec-label span.t{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700}
+h2{font-size:clamp(26px,3.6vw,40px);margin-bottom:8px}
+.takeaway{font-family:Georgia,serif;font-size:clamp(18px,2vw,21px);line-height:1.45;color:var(--dark);border-left:5px solid var(--copper);padding:6px 0 6px 20px;margin:18px 0 26px;max-width:900px}
+p{margin:0 0 14px}
+h3{font-size:22px;margin:32px 0 10px}
+h4{font-size:17px;margin:0 0 6px;font-family:"Segoe UI",Roboto,Arial,sans-serif;color:var(--dark)}
+.small{font-size:14px;color:var(--muted)}
+.mt{margin-top:22px}
+
+/* EXEC */
+.exec{background:var(--dark);color:#EDEAE1;padding:56px 0}
+.exec h2{color:#fff}
+.exec .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:26px}
+@media(max-width:820px){.exec .grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.exec .grid{grid-template-columns:1fr}}
+.exec .c{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-top:3px solid var(--copper);padding:18px;border-radius:4px}
+.exec .c b{display:block;color:var(--gold);font-family:Georgia,serif;font-size:28px;margin-bottom:6px}
+.exec .c em{display:block;font-style:normal;font-weight:700;color:#fff;font-size:15px;margin-bottom:4px}
+.exec .c p{margin:0;font-size:14.5px;color:#D9D4C7}
+.exec .lead2{max-width:820px;color:#D9D4C7}
+
+/* STATS / GRID / CARDS */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:14px;margin:30px 0 0}
+.stat{background:#fff;border:1px solid var(--line);border-top:4px solid var(--copper);border-radius:6px;padding:16px 18px}
+.stat b{display:block;font-family:Georgia,serif;font-size:30px;color:var(--copper);line-height:1.1;margin-bottom:4px}
+.stat span{font-size:13.5px;color:var(--muted);line-height:1.4;display:block}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr))}
+.g3x{grid-template-columns:repeat(3,1fr)}
+@media(max-width:900px){.g3x{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.g3x{grid-template-columns:1fr}}
+.g2x{grid-template-columns:repeat(2,1fr)}
+@media(max-width:640px){.g2x{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:20px 22px}
+.card.top{border-top:4px solid var(--teal)}
+.card.copper{border-top:4px solid var(--copper)}
+.card.green{border-top:4px solid var(--green)}
+.card.red{border-top:4px solid var(--red)}
+.card.amber{border-top:4px solid var(--amber)}
+.card p:last-child{margin-bottom:0}
+.num{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--copper);color:#fff;font-weight:700;font-size:14px;margin-bottom:10px}
+ul.tight{margin:6px 0 0;padding-left:20px}
+ul.tight li{margin:4px 0}
+
+/* CALLOUT */
+.callout{background:#FBF6EA;border:1px solid #E7D9B3;border-left:5px solid var(--gold);padding:16px 20px;border-radius:4px;margin:22px 0}
+.callout.teal{background:#EAF3F3;border-color:#C5DDDD;border-left-color:var(--teal)}
+.callout.red{background:#FBEDEB;border-color:#EBC8C3;border-left-color:var(--red)}
+.callout.green{background:#EEF6F1;border-color:#C9DFD2;border-left-color:var(--green)}
+.callout b.h{display:block;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px;color:var(--muted)}
+.callout p:last-child{margin-bottom:0}
+
+/* FIGURE / SPLIT / SVG */
+figure{margin:26px 0}
+figure svg{display:block;max-width:100%;height:auto;width:100%}
+figcaption{font-size:13px;color:var(--muted);padding-top:8px}
+.split{display:grid;grid-template-columns:1.05fr 1fr;gap:34px;align-items:center}
+.split.rev{grid-template-columns:1fr 1.05fr}
+@media(max-width:820px){.split,.split.rev{grid-template-columns:1fr;gap:20px}}
+.svgbox{background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px}
+.svgbox svg{display:block;width:100%;height:auto}
+
+/* TABLE */
+.tbl{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:8px 0}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);font-size:15.5px;min-width:560px}
+th{background:var(--dark);color:#fff;text-align:left;padding:12px 14px;font-weight:600}
+td{padding:11px 14px;border-top:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#FAF8F3}
+td.k{font-weight:700;color:var(--dark);width:24%}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.05em;padding:2px 9px;border-radius:20px;color:#fff;background:var(--teal)}
+.tag.c{background:var(--copper)}.tag.g{background:var(--green)}.tag.r{background:var(--red)}.tag.a{background:var(--amber);color:#1C2526}.tag.d{background:var(--dark)}
+.lt{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;padding:2px 8px;border-radius:20px;background:var(--dark);color:#fff;margin:0 4px 4px 0;cursor:help}
+
+/* PHASE + STEPS (reused for "how it works") */
+.phase{display:flex;align-items:center;gap:12px;margin:34px 0 14px}
+.phase .p{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:#fff;background:var(--dark);padding:5px 12px;border-radius:20px}
+.phase .p.b{background:var(--copper)}
+.phase h3{margin:0}
+.steps7{display:grid;gap:14px}
+.sc{display:grid;grid-template-columns:54px 1fr auto;gap:0 18px;align-items:center;background:#fff;border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:6px;padding:16px 20px}
+.sc.b{border-left-color:var(--copper)}
+.sc .n{font-family:Georgia,serif;font-size:38px;font-weight:700;color:var(--teal);line-height:1}
+.sc.b .n{color:var(--copper)}
+.sc h4{margin:0 0 2px}
+.sc p{margin:0;font-size:14.5px;color:var(--muted)}
+.sc .eq{font-family:Consolas,"Courier New",monospace;font-size:14px;background:#F4F2ED;border:1px solid var(--line);border-radius:4px;padding:3px 8px;display:inline-block;margin-top:6px;color:var(--dark)}
+.sc .res{text-align:right;min-width:120px}
+.sc .res b{display:block;font-family:Georgia,serif;font-size:26px;color:var(--dark);line-height:1.1}
+.sc .res span{font-size:12px;color:var(--muted)}
+@media(max-width:640px){.sc{grid-template-columns:40px 1fr;gap:6px 12px}.sc .res{grid-column:1 / -1;text-align:left;border-top:1px dashed var(--line);padding-top:8px}.sc .res b{display:inline;font-size:22px;margin-right:6px}.sc .n{font-size:30px}}
+
+/* FORMULA-STYLE DARK PANEL */
+.formula{background:var(--dark);color:#EDEAE1;border-radius:6px;padding:20px 24px;margin:22px 0}
+.formula .eqn{font-family:Georgia,serif;font-size:clamp(17px,2.2vw,22px);line-height:1.8;text-align:center;overflow-x:auto}
+.formula .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:6px 22px;margin-top:14px;font-size:14px;color:#CFCABD}
+.formula .legend b{color:#F2D9A0;font-family:Georgia,serif}
+
+/* CALCULATOR / LAB */
+.calc{background:#fff;border:1px solid var(--line);border-top:5px solid var(--copper);border-radius:6px;padding:24px;margin:20px 0}
+.calc h3{margin-top:0}
+.calc .inputs,.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr));gap:14px 18px}
+.calc label{display:block;font-size:13.5px;font-weight:600;color:var(--dark)}
+.calc label small{display:block;font-weight:400;color:var(--muted);font-size:12px}
+.calc input[type=number],.calc input[type=text],.calc select,.calc textarea{width:100%;margin-top:4px;padding:9px 10px;border:1px solid #C9C3B4;border-radius:4px;font-size:16px;font-family:inherit;background:#FDFCFA;color:var(--ink)}
+.calc textarea{min-height:76px;resize:vertical}
+.calc input:focus,.calc select:focus,.calc textarea:focus{outline:2px solid var(--teal);border-color:var(--teal)}
+.calc input[type=range]{width:100%;accent-color:var(--copper);margin-top:8px}
+.calc .btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+button,.btn{background:var(--dark);color:#fff;border:0;border-radius:4px;padding:9px 16px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+button:hover{background:var(--teal)}
+button.alt{background:#fff;color:var(--dark);border:1px solid #C9C3B4}
+button.alt:hover{background:#F4F2ED;color:var(--dark)}
+button.cu{background:var(--copper)}
+button.cu:hover{background:#9C6620}
+.calc .msg,.msg{font-size:13.5px;color:var(--red);font-weight:600}
+.calc .out{margin-top:20px}
+.big{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0}
+.big div{flex:1 1 190px;background:var(--dark);color:#fff;border-radius:6px;padding:14px 18px}
+.big b{display:block;font-family:Georgia,serif;font-size:30px;color:var(--gold);line-height:1.1}
+.big span{font-size:13px;color:#D9D4C7}
+.calc table{min-width:520px}
+.stage{background:#fff;border:1px solid var(--line);border-radius:6px;padding:8px;overflow:hidden}
+.stage svg{display:block;width:100%;height:auto}
+.stage.dark{background:#0E1213;border-color:#0E1213}
+.grid>*,.case .row>*,.split>*,.ctl>*{min-width:0}
+.stage{max-width:100%}
+@media(max-width:700px){.stage{overflow-x:auto;-webkit-overflow-scrolling:touch}.stage svg[viewBox^="0 0 640"]{min-width:540px}}
+
+/* SEGMENTED TOGGLE */
+.seg{display:inline-flex;border:1px solid #C9C3B4;border-radius:6px;overflow:hidden;background:#fff}
+.seg button{border-radius:0;background:#fff;color:var(--dark);padding:8px 16px;border:0}
+.seg button:hover{background:#F4F2ED;color:var(--dark)}
+.seg button.on{background:var(--dark);color:#fff}
+.seg button.on.after{background:var(--copper)}
+
+/* CASES (BAD DASHBOARD CLINIC) */
+.case{background:#fff;border:1px solid var(--line);border-top:5px solid var(--copper);border-radius:6px;padding:22px;margin:28px 0}
+.case-h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px;margin-bottom:8px}
+.case-n{font-family:Georgia,serif;font-size:44px;color:var(--copper);font-weight:700;line-height:1}
+.case h3{margin:0;font-size:24px}
+.case .ctx{color:var(--muted);font-size:15px;margin:0 0 14px}
+.case .row{display:grid;grid-template-columns:1.25fr 1fr;gap:24px;align-items:start}
+@media(max-width:900px){.case .row{grid-template-columns:1fr}}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:5px;background:#FDFCFA;margin:6px 0;cursor:pointer;font-size:14.5px;line-height:1.45}
+.chk input{margin-top:4px;accent-color:var(--copper);flex:0 0 auto}
+.chk.ok{border-color:var(--green);background:#EEF6F1}
+.chk.bad{border-color:var(--red);background:#FBEDEB}
+.chk.miss{border-color:var(--amber);background:#FFFBF1}
+.chk .why{display:block;font-size:13px;color:var(--muted);margin-top:2px}
+.fb{font-size:14.5px;margin-top:10px;padding:10px 14px;border-radius:5px;background:#F4F2ED;border:1px solid var(--line);display:none}
+.fb.show{display:block}
+.chg{display:none;margin-top:14px}
+.chg.show{display:block}
+.chg ul{margin:6px 0 0;padding-left:20px}
+.chg li{margin:4px 0;font-size:14.5px}
+
+/* WALL OF TILES + TABLES USED IN CASES */
+.wall{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px;background:#2a2a2a}
+.wall .tile{border-radius:4px;padding:10px 8px;text-align:center;color:#fff;font-weight:700;border:2px solid #fff;box-shadow:2px 2px 6px rgba(0,0,0,.5)}
+.wall .tile span{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.02em;margin-bottom:4px}
+.wall .tile b{display:block;font-family:Georgia,serif;font-size:24px}
+@media(max-width:560px){.wall{grid-template-columns:repeat(3,1fr)}.wall .tile b{font-size:18px}}
+.kpi3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:6px 4px 4px}
+.kpi3 .k{border-left:4px solid var(--grey,#B9B5AA);padding:4px 0 4px 12px}
+.kpi3 .k.hot{border-left-color:var(--copper)}
+.kpi3 .k small{display:block;color:var(--muted);font-size:12px;min-height:34px}
+.kpi3 .k b{display:block;font-family:Georgia,serif;font-size:36px;color:#8C8A82;line-height:1.1}
+.kpi3 .k.hot b{color:var(--copper)}
+.kpi3 .k i{font-style:normal;font-size:12px;color:var(--muted)}
+@media(max-width:560px){.kpi3{grid-template-columns:1fr}}
+.ttl{font-family:Georgia,serif;font-weight:700;font-size:19px;line-height:1.3;color:var(--dark);margin:6px 6px 2px}
+.sub{font-size:13px;color:var(--muted);margin:0 6px 8px}
+.srcn{font-size:11.5px;color:var(--muted);margin:8px 6px 2px}
+.tb-bad{border-collapse:collapse;min-width:0;width:100%;font-size:12.5px;border:3px solid #000;background:#fff}
+.tb-bad th{background:#4472C4;color:#fff;border:2px solid #000;padding:5px;text-align:center}
+.tb-bad td{border:2px solid #000;padding:5px;text-align:center;font-weight:700;background:#fff!important}
+.tb-good{border-collapse:collapse;min-width:0;width:100%;font-size:13.5px;border:0;background:#fff}
+.tb-good th{background:#fff;color:var(--muted);font-weight:600;border-bottom:1.5px solid #8C8A82;padding:6px 8px;text-align:right;font-size:12px}
+.tb-good th:first-child{text-align:left}
+.tb-good td{border:0;border-top:1px solid #ECE8DD;padding:6px 8px;text-align:right;color:#6E6C65;background:#fff!important}
+.tb-good td:first-child{text-align:left}
+.tb-good tr.hot td{color:var(--dark);font-weight:700;background:#FBF6EA!important}
+.tb-good tr.hot td.cu{color:var(--copper)}
+.tb-good tr.tot td{border-top:1.5px solid #8C8A82;color:var(--dark);font-weight:700}
+
+/* QUIZ */
+.quiz{background:#fff;border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:6px;padding:18px 22px;margin:28px 0 8px}
+.quiz h4{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.quiz .q{margin:0 0 16px;padding-bottom:14px;border-bottom:1px dashed var(--line)}
+.quiz .q:last-of-type{border-bottom:0;margin-bottom:6px}
+.quiz .qt{font-weight:700;margin-bottom:6px}
+.opt{display:block;padding:8px 12px;border:1px solid var(--line);border-radius:5px;margin:5px 0;cursor:pointer;font-size:15px;background:#FDFCFA}
+.opt:hover{border-color:var(--teal)}
+.opt.ok{border-color:var(--green);background:#EEF6F1}
+.opt.bad{border-color:var(--red);background:#FBEDEB}
+.opt[disabled]{cursor:default}
+.qwhy{display:none;font-size:14px;color:var(--muted);margin:6px 0 0;padding-left:2px}
+.qwhy.show{display:block}
+
+/* EXERCISE STUDIO */
+.score{display:flex;flex-wrap:wrap;gap:14px;margin:14px 0 8px}
+.score .s{flex:1 1 170px;background:var(--dark);color:#fff;border-radius:6px;padding:14px 18px}
+.score .s b{display:block;font-family:Georgia,serif;font-size:32px;color:var(--gold);line-height:1.1}
+.score .s span{font-size:13px;color:#D9D4C7}
+.prog{height:10px;background:#E6E1D4;border-radius:6px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--copper);width:0;transition:width .4s}
+.sx{background:#fff;border:1px solid var(--line);border-top:5px solid var(--teal);border-radius:6px;padding:22px;margin:26px 0}
+.sx-h{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-bottom:10px}
+.sx-n{font-family:Georgia,serif;font-size:40px;color:var(--teal);font-weight:700;line-height:1}
+.sx h3{margin:0;font-size:23px}
+.ctxgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:12px;margin:10px 0 16px}
+.ctxgrid div{background:#F4F2ED;border:1px solid var(--line);border-radius:5px;padding:10px 14px;font-size:14.5px}
+.ctxgrid div b{display:block;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.step-h{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--copper);font-weight:700;margin:18px 0 6px}
+.res-box{display:none;margin-top:16px;border:2px solid var(--teal);border-radius:6px;padding:16px 20px;background:#F6FAFA}
+.res-box.show{display:block}
+.res-box .tot{font-family:Georgia,serif;font-size:34px;color:var(--teal);font-weight:700}
+
+/* RULES / HYP */
+.rules{counter-reset:r;margin:0;padding:0;list-style:none}
+.rules li{counter-increment:r;background:#fff;border:1px solid var(--line);border-left:5px solid var(--copper);padding:14px 18px 14px 58px;margin:10px 0;border-radius:4px;position:relative}
+.rules li::before{content:counter(r);position:absolute;left:16px;top:10px;font-family:Georgia,serif;font-size:28px;color:var(--copper);font-weight:700}
+.hyp{border:2px dashed var(--amber);background:#FFFBF1;border-radius:6px;padding:20px 24px;margin-top:20px}
+.hyp .tag{background:var(--amber);color:#1C2526}
+
+/* PALETTE SWATCHES */
+.sw{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.sw div{width:96px;font-size:11.5px;color:var(--muted);text-align:center}
+.sw i{display:block;height:44px;border-radius:5px;border:1px solid rgba(0,0,0,.12);margin-bottom:4px}
+
+/* STICKY NOTES (storyboard) */
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,100%),1fr));gap:12px}
+.note{background:#FBF1C7;border:1px solid #E7D9B3;border-radius:2px;padding:12px 12px 14px;font-size:14px;box-shadow:2px 3px 0 rgba(0,0,0,.08);transform:rotate(-.6deg)}
+.note:nth-child(even){transform:rotate(.7deg);background:#F6E7B8}
+.note b{display:block;font-family:Georgia,serif;color:var(--copper);margin-bottom:2px}
+
+/* CHECKLIST */
+.cl{list-style:none;margin:0;padding:0}
+.cl li{margin:6px 0}
+.cl label{display:flex;gap:10px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:5px;padding:9px 12px;cursor:pointer;font-size:15px}
+.cl input{margin-top:4px;accent-color:var(--copper)}
+
+footer{background:var(--dark);color:#CFCABD;padding:40px 0;margin-top:70px;font-size:14px}
+footer b{color:#fff}
+footer p{margin:0 0 10px}
+
+@media print{
+  nav.toc{display:none}
+  .hero{min-height:360px}
+  section{page-break-inside:avoid}
+  button,.btns,.seg{display:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <svg class="hero-art" viewBox="0 0 560 340" aria-hidden="true" role="img">
+    <g fill="none" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" opacity=".55">
+      <polyline stroke="#E15759" points="10,210 50,150 90,230 130,120 170,200 210,140 250,190"/>
+      <polyline stroke="#4E79A7" points="10,120 50,200 90,100 130,180 170,90 210,170 250,110"/>
+      <polyline stroke="#59A14F" points="10,260 50,190 90,250 130,170 170,240 210,160 250,230"/>
+      <polyline stroke="#B07AA1" points="10,160 50,110 90,170 130,80 170,150 210,100 250,170"/>
+      <polyline stroke="#EDC948" points="10,90 50,140 90,70 130,150 170,60 210,130 250,80"/>
+    </g>
+    <g stroke="#3a4547" stroke-dasharray="4 5"><line x1="10" y1="40" x2="250" y2="40"/><line x1="10" y1="300" x2="250" y2="300"/></g>
+    <line x1="280" y1="30" x2="280" y2="310" stroke="#C59B43" stroke-width="1.5" stroke-dasharray="3 6"/>
+    <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <polyline stroke="#6A7678" stroke-width="2.4" points="310,200 350,196 390,202 430,198 470,203 510,199 550,201"/>
+      <polyline stroke="#6A7678" stroke-width="2.4" points="310,150 350,155 390,148 430,153 470,150 510,154 550,151"/>
+      <polyline stroke="#B77A2B" stroke-width="5" points="310,230 350,222 390,205 430,170 470,120 510,80 550,52"/>
+    </g>
+    <circle cx="550" cy="52" r="7" fill="#C59B43"/>
+    <text x="316" y="268" font-family="Georgia,serif" font-size="15" fill="#F2D9A0">Satu hal yang perlu dilihat.</text>
+    <text x="316" y="288" font-family="Segoe UI,Arial" font-size="12" fill="#9FA9AB">Semua yang lain dibiarkan tenang.</text>
+    <text x="14" y="334" font-family="Segoe UI,Arial" font-size="12" fill="#9FA9AB">Menampilkan data</text>
+    <text x="316" y="334" font-family="Segoe UI,Arial" font-size="12" fill="#F2D9A0">Bercerita</text>
+  </svg>
+  <div class="hero-shade"></div>
+  <div class="wrap">
+    <div class="kicker">Data Storytelling &amp; Visualisasi Data · Panduan belajar mandiri</div>
+    <h1>Dari Menampilkan Data ke Bercerita</h1>
+    <p class="lead">Bingung apa yang harus ditampilkan di dasbor, grafik mana yang harus dipilih, atau mengapa tidak ada yang bertindak atas laporan Anda? Halaman ini membimbing Anda dari dasar hingga praktik langsung: enam pelajaran, sembilan dasbor buruk untuk diperbaiki, lab bagaimana jika, dan tujuh latihan memilih data yang tepat.</p>
+    <div class="meta">
+      <span><b>Metode:</b> <i>Storytelling with Data</i> — C. Nussbaumer Knaflic (Wiley, 2015)</span>
+      <span><b>Isi:</b> 6 pelajaran · 9 perbaikan · 6 lab · 7 latihan</span>
+      <span><b>Data:</b> semua contoh bersifat fiktif</span>
+    </div>
+    <div class="page-actions">
+      <a class="page-action" id="archive-return" href="../data-storytelling.html?lang=id">Kembali ke Penceritaan Data</a>
+      <a class="page-action secondary" id="home-return" href="../index-id.html">Beranda</a>
+    </div>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Daftar isi"><div class="wrap">
+  <a href="#overview">Ikhtisar</a><a href="#s0">Mulai di sini</a><a href="#s1">1 Konteks</a><a href="#s2">2 Visual</a><a href="#s3">3 Kekacauan</a><a href="#s4">4 Fokus</a><a href="#s5">5 Desain</a><a href="#s6">6 Cerita</a><a href="#s7">Klinik</a><a href="#s8">Lab Bagaimana Jika</a><a href="#s9">Latihan</a><a href="#s10">Kit alat</a>
+</div></nav>
+
+<div class="exec" id="overview"><div class="wrap">
+  <div class="kicker">Seluruh metode dalam satu layar</div>
+  <h2>Enam pelajaran mengubah grafik menjadi keputusan</h2>
+  <p class="lead2">Alat Anda tidak mengetahui cerita Anda. Analis yang mengetahuinya. Ikuti enam pelajaran secara berurutan, karena setiap pelajaran dibangun di atas yang sebelumnya.</p>
+  <div class="grid">
+    <div class="c"><b>1</b><em>Pahami konteksnya</em><p>Siapa yang memutuskan? Apa yang harus mereka lakukan? Data mana yang membuktikannya?</p></div>
+    <div class="c"><b>2</b><em>Pilih visual yang tepat</em><p>Sekitar selusin visual mencakup hampir semua kebutuhan. Tinggalkan diagram lingkaran, 3D, dan dua sumbu.</p></div>
+    <div class="c"><b>3</b><em>Hilangkan kekacauan</em><p>Setiap elemen menyita perhatian. Hapus apa pun yang tidak membawa informasi.</p></div>
+    <div class="c"><b>4</b><em>Fokuskan perhatian</em><p>Abu-abu untuk konteks, satu warna aksen untuk poin utama.</p></div>
+    <div class="c"><b>5</b><em>Berpikirlah seperti desainer</em><p>Buat agar jelas cara membacanya. Gunakan kata-kata, rapikan penataan, dan beri ruang kosong.</p></div>
+    <div class="c"><b>6</b><em>Ceritakan sebuah cerita</em><p>Pembukaan, konflik, resolusi, lalu ajakan bertindak yang jelas.</p></div>
+  </div>
+</div></div>
+
+<!-- ========== START ========== -->
+<section id="s0"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">0</div><span class="t">Mulai di sini</span></div>
+  <h2>Cara menggunakan halaman ini</h2>
+  <div class="takeaway">Baca satu pelajaran, uji diri Anda, perbaiki dasbor buruk yang nyata, lalu latih memilih data di bawah batasan yang realistis.</div>
+
+  <div class="stats">
+    <div class="stat"><b>6</b><span>pelajaran dengan aturan praktis dan contoh logistik</span></div>
+    <div class="stat"><b>9</b><span>dasbor buruk untuk didiagnosis dan dibangun ulang, sebelum dan sesudah</span></div>
+    <div class="stat"><b>6</b><span>lab bagaimana jika: ubah masukan, lihat ceritanya berubah</span></div>
+    <div class="stat"><b>7</b><span>skenario memilih data, visual, dan judul, dengan penilaian</span></div>
+  </div>
+
+  <h3>Pilih jalur belajar</h3>
+  <div class="grid g3">
+    <div class="card copper"><span class="tag c">20 menit</span><h4 style="margin-top:8px">Mulai cepat</h4>
+      <ul class="tight"><li>Pindai enam kartu pelajaran di atas</li><li>Buka 2 kasus di <a href="#s7">Klinik</a></li><li>Mainkan <a href="#lab-d">Lab Hilangkan Kekacauan</a></li></ul></div>
+    <div class="card top"><span class="tag">90 menit</span><h4 style="margin-top:8px">Standar</h4>
+      <ul class="tight"><li>Baca Pelajaran 1–6 dan kerjakan setiap kuis</li><li>Diagnosis 4 kasus Klinik sebelum membuka jawaban</li><li>Selesaikan 3 latihan di <a href="#s9">Studio</a></li></ul></div>
+    <div class="card green"><span class="tag g">Setengah hari</span><h4 style="margin-top:8px">Kursus lengkap</h4>
+      <ul class="tight"><li>Semua di atas, ditambah 9 kasus</li><li>Enam lab dan tujuh latihan</li><li>Rancang ulang salah satu dasbor Anda sendiri dengan <a href="#s10">Kit alat</a></li></ul></div>
+  </div>
+
+  <div class="callout teal"><b class="h">Tentang data dan sumbernya</b>
+    <p>Setiap angka, hub, vendor, dan zona di halaman ini bersifat <b>fiktif</b> dan dibuat untuk pengajaran. Metode, konsep, dan aturan berasal dari <i>Storytelling with Data</i> karya Cole Nussbaumer Knaflic (Wiley, 2015). Halaman ini adalah panduan belajar orisinal, bukan salinan buku, jadi belilah bukunya untuk pembahasan lengkap dan contoh-contoh aslinya.</p>
+    <p>Dua label muncul di seluruh halaman. <span class="tag a">Catatan penerapan</span> menandai saran saya sendiri tentang menerapkan buku ini pada dasbor. <span class="tag a">Heuristik pengajaran</span> menandai aturan penilaian sederhana yang saya buat untuk latihan; aturan ini tidak berasal dari buku.</p></div>
+</div></section>
+
+<!-- ========== LESSON 1 ========== -->
+<section id="s1"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">1</div><span class="t">Pelajaran 1 · Konteks</span></div>
+  <h2>Pahami konteksnya sebelum menyentuh grafik</h2>
+  <div class="takeaway">Keberhasilan dimulai sebelum visualisasi. Ketahui siapa yang memutuskan, apa yang Anda inginkan dari mereka, dan data mana yang membuktikannya.</div>
+
+  <h3>Analisis eksploratif vs. eksplanatoris</h3>
+  <p>Kerja eksploratif adalah cara <i>Anda</i> menemukan apa yang menarik. Kerja eksplanatoris adalah cara Anda membantu <i>orang lain</i> memahami satu hal yang sudah Anda ketahui. Gambaran dari buku: buka 100 tiram untuk menemukan dua mutiara, lalu tunjukkan mutiaranya kepada audiens, bukan tiramnya.</p>
+  <div class="tbl"><table>
+    <tr><th></th><th>Eksploratif</th><th>Eksplanatoris</th></tr>
+    <tr><td class="k">Tujuan</td><td>Menemukan apa yang mungkin menarik</td><td>Menjelaskan satu poin spesifik</td></tr>
+    <tr><td class="k">Audiens</td><td>Anda dan sesama analis</td><td>Pengambil keputusan yang jelas</td></tr>
+    <tr><td class="k">Keluaran</td><td>Banyak tampilan cepat dan kasar</td><td>Satu atau dua tampilan yang rapi dengan pesan</td></tr>
+    <tr><td class="k">Kesalahan umum</td><td>Mengirim tampilan kasar ke atasan</td><td>Menyembunyikan kesimpulan dan membuat mereka menemukannya sendiri</td></tr>
+    <tr><td class="k">Dalam logistik</td><td>Tabel pivot dengan 40 filter</td><td>Halaman mingguan yang dibuka dengan "apa yang berubah, apa yang harus dilakukan"</td></tr>
+  </table></div>
+
+  <h3>Siapa, Apa, dan Bagaimana</h3>
+  <div class="grid g3">
+    <div class="card top"><div class="num">1</div><h4>Siapa</h4><p>Spesifiklah tentang audiens. "Pemangku kepentingan internal dan eksternal" bukanlah audiens; "Direktur Operasi yang menandatangani kontrak sewa" adalah audiens. Sebutkan pengambil keputusannya, dan pikirkan apakah mereka sudah mempercayai Anda sebagai ahli.</p></div>
+    <div class="card copper"><div class="num">2</div><h4>Apa</h4><p>Nyatakan apa yang seharusnya <b>mereka ketahui atau lakukan</b>: menyetujui, mendanai, menghentikan, meningkatkan, atau mengubah. Jika Anda tidak bisa menyebut suatu tindakan, tanyakan apakah Anda perlu berkomunikasi sama sekali. Jika Anda hanya menyajikan data, orang akan berkata "menarik" lalu berlalu.</p></div>
+    <div class="card green"><div class="num">3</div><h4>Bagaimana</h4><p>Baru sekarang tanyakan data mana yang mendukung poin ini. Data adalah bukti bagi cerita, bukan ceritanya. Jangan sembunyikan bukti yang berlawanan; pembaca yang jeli akan menemukannya dan meragukan semua yang lain.</p></div>
+  </div>
+
+  <h3>Mekanisme dan nada</h3>
+  <div class="grid g3">
+    <div class="card"><span class="tag">Presentasi langsung</span><p style="margin-top:8px">Anda mengendalikan tempo dan perhatian, dan Anda hadir untuk menjawab pertanyaan. Buat slide seminimal mungkin dan jangan jadikan slide sebagai teleprompter.</p></div>
+    <div class="card"><span class="tag a">Slideument</span><p style="margin-top:8px">Satu berkas untuk presentasi sekaligus dokumen yang dibaca sendiri. Tidak ada yang terpenuhi sepenuhnya; pelajaran berikutnya menunjukkan cara mengatasinya.</p></div>
+    <div class="card"><span class="tag c">Tertulis / dasbor</span><p style="margin-top:8px">Pembaca mengendalikan tempo dan tidak ada yang hadir untuk menjelaskan, jadi judul, label, dan catatan harus berbicara sendiri.</p></div>
+  </div>
+  <p class="mt">Tentukan juga <b>nada</b>: merayakan keberhasilan, membangkitkan semangat, atau melaporkan dengan tenang. Nada memengaruhi pilihan selanjutnya, seperti warna dan tata letak.</p>
+  <div class="callout"><b class="h">Catatan penerapan</b><p>Dasbor layanan mandiri berada di ujung "tertulis". Tidak ada orang di ruangan, sehingga setiap halaman membutuhkan judul yang menyatakan kesimpulan, bukan sekadar label topik.</p></div>
+
+  <h3>Big Idea dan cerita 3 menit</h3>
+  <div class="split">
+    <div>
+      <p>Sebuah <b>cerita 3 menit</b> adalah apa yang akan Anda katakan jika hanya punya tiga menit. Sebuah <b>Big Idea</b> memadatkannya menjadi satu kalimat. Singkat itu lebih sulit daripada panjang, dan membebaskan Anda dari ketergantungan pada slide.</p>
+      <p>Sebuah Big Idea harus (1) menyatakan sudut pandang unik Anda, (2) menjelaskan apa yang dipertaruhkan, dan (3) berupa kalimat utuh.</p>
+    </div>
+    <div class="card copper">
+      <h4>Contoh (fiktif)</h4>
+      <p><i>"Kebutuhan penyimpanan akan melampaui gudang kita yang sekarang pada tahun ke-3. Kami merekomendasikan pengamanan ruang tambahan sekarang, karena menunggu membahayakan proyek; mohon setujui studi sewa."</i></p>
+      <p class="small">Sudut pandang: sewa sekarang. Taruhan: proyek terancam. Kalimat utuh dengan permintaan.</p>
+    </div>
+  </div>
+
+  <h3>Pertanyaan untuk diajukan kepada peminta pekerjaan</h3>
+  <ul class="rules">
+    <li>Informasi latar belakang apa yang wajib diketahui?</li>
+    <li>Siapa audiens atau pengambil keputusannya, dan apa yang sudah kita ketahui tentang mereka?</li>
+    <li>Bias apa yang mungkin membuat mereka mendukung atau menolak pesan ini?</li>
+    <li>Data apa yang akan memperkuat argumen, dan apakah data itu sudah mereka kenal?</li>
+    <li>Di mana risiko yang bisa melemahkan argumen?</li>
+    <li>Seperti apa hasil yang berhasil?</li>
+    <li>Jika hanya boleh satu kalimat, apa yang akan Anda katakan?</li>
+  </ul>
+
+  <h3>Buat papan cerita di kertas dulu</h3>
+  <p>Jangan mulai di perangkat lunak presentasi; itu membawa Anda ke mode membuat slide dan membuat Anda terikat pada yang sudah dibuat. Gunakan kertas tempel atau kertas biasa agar ide mudah dipindah atau dibuang. Berikut papan cerita untuk kasus gudang fiktif.</p>
+  <div class="notes">
+    <div class="note"><b>1 · Konteks</b>Mengapa kita memperkirakan ruang: keputusan membangun atau menyewa itu mahal dan sulit dibatalkan.</div>
+    <div class="note"><b>2 · Masalah</b>Permintaan perkiraan melampaui kapasitas saat ini pada tahun ke-3.</div>
+    <div class="note"><b>3 · Bukti</b>Satu grafik garis: perkiraan vs kapasitas, selisihnya diarsir.</div>
+    <div class="note"><b>4 · Opsi</b>Sewa sekarang, bangun nanti, atau tingkatkan pemanfaatan.</div>
+    <div class="note"><b>5 · Permintaan</b>Setujui studi sewa kuartal ini.</div>
+  </div>
+  <p class="small mt">Audiens yang sibuk dan sudah mempercayai Anda? Pindahkan catatan 5 ke depan dan mulai dengan permintaannya.</p>
+
+  <div class="calc" id="canvasBox">
+    <h3>Coba: Kanvas Konteks</h3>
+    <p class="small">Isi apa yang sudah Anda ketahui. Kanvas akan menyusun draf Big Idea dan kerangka cerita 3 menit, serta memberi tahu apa yang masih kurang. Tidak ada yang meninggalkan peramban Anda.</p>
+    <div class="inputs">
+      <label>Audiens (pengambil keputusan)<small>Peran yang jelas, bukan "pemangku kepentingan"</small><input type="text" id="cv_aud" placeholder="misalnya Direktur Operasi"></label>
+      <label>Tindakan yang Anda inginkan dari mereka<small>Kata kerja + objek</small><input type="text" id="cv_act" placeholder="misalnya menyetujui studi sewa"></label>
+      <label>Bukti (data)<small>Satu atau dua fakta yang membuktikannya</small><input type="text" id="cv_ev" placeholder="misalnya permintaan perkiraan melampaui kapasitas pada tahun ke-3"></label>
+      <label>Apa yang dipertaruhkan?<small>Apa yang terjadi jika tidak ada yang berubah</small><input type="text" id="cv_stake" placeholder="misalnya proyek tertunda dan kita membayar tarif puncak"></label>
+      <label>Bagaimana Anda akan mengomunikasikannya?<select id="cv_mech"><option value="live">Presentasi langsung</option><option value="read">Tertulis / dasbor (dibaca sendiri)</option><option value="both">Keduanya (slideument)</option></select></label>
+      <label>Nada<select id="cv_tone"><option>Mendesak, tetapi tenang</option><option>Merayakan</option><option>Serius dan faktual</option><option>Ringan dan menarik</option></select></label>
+    </div>
+    <div class="btns"><button id="cv_go" class="cu">Susun cerita saya</button><button id="cv_ex" class="alt">Isi dengan contoh</button><span class="msg" id="cv_msg"></span></div>
+    <div class="out" id="cv_out"></div>
+  </div>
+
+  <div class="quiz" id="quiz-1"></div>
+</div></section>
+
+<!-- ========== LESSON 2 ========== -->
+<section id="s2"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">2</div><span class="t">Pelajaran 2 · Pilih visual</span></div>
+  <h2>Pilih grafik yang paling cepat dibaca audiens Anda</h2>
+  <div class="takeaway">Sekitar selusin jenis visual mencakup hampir setiap kebutuhan bisnis. Yang tepat adalah yang paling mudah dibaca audiens Anda.</div>
+
+  <p>Tabel berinteraksi dengan <b>verbal</b> sistem kita: kita membacanya. Grafik berinteraksi dengan <b>visual</b> sistem kita, yang lebih cepat. Satu gagasan itu menjelaskan sebagian besar saran di bawah.</p>
+
+  <h3>Pilih berdasarkan pesan, bukan alatnya</h3>
+  <div class="tbl"><table id="pickTable"></table></div>
+
+  <div class="calc" id="pickBox">
+    <h3>Coba: Pemilih Grafik</h3>
+    <p class="small">Pilih apa yang ingin Anda sampaikan. Pemilih akan merekomendasikan visual dan memberi tahu apa yang harus dihindari.</p>
+    <label style="max-width:560px">Pesan saya tentang…<select id="pk_sel"></select></label>
+    <div class="out" id="pk_out"></div>
+  </div>
+
+  <h3>Empat visual yang harus ditinggalkan</h3>
+  <div class="grid g4">
+    <div class="card red"><h4>Diagram lingkaran</h4><p>Mata tidak dapat menilai sudut dan luas dengan baik. Saat irisan berdekatan, Anda tidak bisa memeringkatnya sama sekali.</p><p class="small"><b>Ganti dengan:</b> batang horizontal terurut. Coba di <a href="#lab-b">Lab B</a>.</p></div>
+    <div class="card red"><h4>Diagram donat</h4><p>Pembaca diminta membandingkan panjang busur, yang bahkan lebih sulit daripada diagram lingkaran.</p><p class="small"><b>Ganti dengan:</b> batang, atau hanya angkanya.</p></div>
+    <div class="card red"><h4>3D</h4><p>Gunakan 3D hanya jika Anda benar-benar memplot dimensi ketiga. Jika tidak, grafik itu memiringkan nilai; dalam buku, batang bernilai 1 terbaca sekitar 0.8.</p><p class="small"><b>Ganti dengan:</b> 2D datar.</p></div>
+    <div class="card red"><h4>Sumbu-y sekunder</h4><p>Pembaca harus mencari tahu sumbu mana yang dipakai setiap seri, dan pasangan itu menyiratkan hubungan yang mungkin tidak ada.</p><p class="small"><b>Ganti dengan:</b> label langsung atau dua panel yang berbagi sumbu-x. Coba <a href="#lab-c">Lab C</a>.</p></div>
+  </div>
+  <div class="callout"><b class="h">Jika Anda tetap ingin memakai diagram lingkaran</b><p>Berhenti dan tanyakan mengapa. Jika bisa menjawab, beri label nilainya dan buat datar. Jangan pernah menjadikannya grafik pertama yang Anda pilih.</p></div>
+
+  <h3>Aturan untuk dua visual andalan</h3>
+  <div class="grid g2">
+    <div class="card copper"><h4>Grafik batang</h4>
+      <ul class="tight">
+        <li><b>Garis dasar nol, selalu.</b> Mata membandingkan ujung batang, sehingga sumbu yang dipotong menciptakan selisih palsu. Uji di <a href="#lab-a">Lab A</a>.</li>
+        <li>Batang lebih lebar daripada jarak di antaranya, tetapi tidak terlalu lebar sehingga pembaca membandingkan luas.</li>
+        <li>Urutan alami jika ada (kelompok usia, bulan); jika tidak, urutkan, yang terbesar atau paling penting lebih dulu.</li>
+        <li>Batang horizontal saat label panjang: teks terbaca dari kiri ke kanan dan label muncul sebelum datanya.</li>
+        <li>Batang bertumpuk: hanya segmen bawah yang berbagi garis dasar, jadi letakkan seri yang Anda pedulikan di sana.</li>
+      </ul></div>
+    <div class="card top"><h4>Grafik garis</h4>
+      <ul class="tight">
+        <li>Gunakan untuk data kontinu, biasanya waktu. Garis menyiratkan titik-titiknya terhubung.</li>
+        <li>Jaga langkah waktu tetap merata. Mencampur dekade dan tahun tunggal akan mendistorsi bentuknya.</li>
+        <li>Garis dasar tidak nol diperbolehkan, tetapi sebutkan dan hindari memperbesar perubahan kecil secara berlebihan.</li>
+        <li>Tampilkan perkiraan sebagai garis putus-putus yang lebih tipis dengan arsiran terang, jangan pernah sebagai garis padat yang sama dengan data aktual.</li>
+        <li>Beri label langsung pada garis, bukan memakai legenda.</li>
+      </ul></div>
+  </div>
+  <div class="grid g2 mt">
+    <div class="card"><h4>Tabel</h4><p>Cocok untuk audiens campuran yang masing-masing mencari barisnya sendiri, atau saat satuannya berbeda. Biarkan data memimpin: bingkai terang atau tanpa bingkai, angka rata kanan, desimal yang konsisten. Dalam presentasi langsung, tabel menarik perhatian dari Anda.</p></div>
+    <div class="card"><h4>Sumbu atau label data?</h4><p>Jika tren besar lebih penting, pertahankan sumbu abu-abu terang. Jika nilai pastinya yang penting, beri label pada titik data dan hapus sumbu, karena menampilkan keduanya itu berlebihan.</p></div>
+  </div>
+  <div class="callout red"><b class="h">Etika</b><p>Memanipulasi skala karena mendukung poin Anda tidak dapat diterima, dan itu berisiko: satu pembaca yang jeli akan menyadarinya dan kredibilitas Anda ikut hilang.</p></div>
+
+  <div class="quiz" id="quiz-2"></div>
+</div></section>
+
+<!-- ========== LESSON 3 ========== -->
+<section id="s3"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">3</div><span class="t">Pelajaran 3 · Kekacauan</span></div>
+  <h2>Kekacauan visual adalah musuh Anda</h2>
+  <div class="takeaway">Setiap elemen yang Anda tambahkan menyita daya pikir audiens. Pertahankan yang membawa informasi; hapus yang tidak.</div>
+
+  <div class="grid g3">
+    <div class="card top"><h4>Beban kognitif</h4><p>Usaha mental yang dibutuhkan untuk menyerap informasi baru. Beban ekstrinsik adalah usaha yang tidak membantu pemahaman.</p></div>
+    <div class="card copper"><h4>Beban yang dirasakan</h4><p>Yang paling penting adalah seberapa sulit audiens Anda <i>menganggapnya</i> akan terasa. Diputuskan dalam sekejap, sering kali tanpa disadari. Jika terlihat sulit, banyak yang tidak akan mencoba.</p></div>
+    <div class="card green"><h4>Sinyal vs. derau</h4><p>Sinyal adalah pesannya; derau adalah apa pun yang tidak menambah pesan atau malah mengurangi. Maksimalkan porsi tinta yang dipakai untuk data.</p></div>
+  </div>
+
+  <h3>Prinsip Gestalt: cara orang mengelompokkan apa yang mereka lihat</h3>
+  <p>Enam prinsip ini menunjukkan apa yang akan dikelompokkan oleh pemirsa, sehingga elemen tambahan mana yang aman untuk dihapus.</p>
+  <div class="grid g3x">
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Tiga kelompok titik"><g fill="#5B6568"><circle cx="20" cy="28" r="5"/><circle cx="36" cy="28" r="5"/><circle cx="52" cy="28" r="5"/><circle cx="20" cy="50" r="5"/><circle cx="36" cy="50" r="5"/><circle cx="52" cy="50" r="5"/><circle cx="90" cy="28" r="5"/><circle cx="106" cy="28" r="5"/><circle cx="122" cy="28" r="5"/><circle cx="90" cy="50" r="5"/><circle cx="106" cy="50" r="5"/><circle cx="122" cy="50" r="5"/><circle cx="160" cy="28" r="5"/><circle cx="176" cy="28" r="5"/><circle cx="160" cy="50" r="5"/><circle cx="176" cy="50" r="5"/></g></svg>
+      <h4>Kedekatan</h4><p>Hal yang berdekatan termasuk dalam satu kelompok. <b>Gunakan:</b> kelompokkan KPI yang terkait; letakkan label di samping data yang dijelaskannya.</p></div>
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Baris lingkaran dan kotak"><g fill="#2E6E73"><circle cx="24" cy="18" r="6"/><circle cx="56" cy="18" r="6"/><circle cx="88" cy="18" r="6"/><circle cx="120" cy="18" r="6"/><circle cx="152" cy="18" r="6"/><circle cx="184" cy="18" r="6"/></g><g fill="#B9B5AA"><rect x="18" y="37" width="12" height="12"/><rect x="50" y="37" width="12" height="12"/><rect x="82" y="37" width="12" height="12"/><rect x="114" y="37" width="12" height="12"/><rect x="146" y="37" width="12" height="12"/><rect x="178" y="37" width="12" height="12"/></g><g fill="#2E6E73"><circle cx="24" cy="64" r="6"/><circle cx="56" cy="64" r="6"/><circle cx="88" cy="64" r="6"/><circle cx="120" cy="64" r="6"/><circle cx="152" cy="64" r="6"/><circle cx="184" cy="64" r="6"/></g></svg>
+      <h4>Kemiripan</h4><p>Warna, bentuk, atau ukuran yang sama berarti terkait. <b>Gunakan:</b> beri label warna sesuai garisnya; tidak perlu bingkai untuk menunjukkan baris.</p></div>
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Titik dengan area beranjak di sekitar tiga titik kanan"><rect x="104" y="8" width="88" height="64" rx="6" fill="#EFE6CF"/><g fill="#5B6568"><circle cx="24" cy="40" r="6"/><circle cx="52" cy="40" r="6"/><circle cx="80" cy="40" r="6"/><circle cx="124" cy="40" r="6"/><circle cx="150" cy="40" r="6"/><circle cx="176" cy="40" r="6"/></g></svg>
+      <h4>Penutupan area</h4><p>Hal di dalam sebuah batas membentuk satu kelompok, bahkan jika batasnya samar. <b>Gunakan:</b> beri arsiran terang untuk memisahkan perkiraan dari aktual.</p></div>
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Lingkaran putus-putus yang dipersepsikan sebagai satu kesatuan"><circle cx="100" cy="40" r="28" fill="none" stroke="#B77A2B" stroke-width="7" stroke-dasharray="18 8"/></svg>
+      <h4>Penutupan</h4><p>Kita mengisi celah untuk melihat satu bentuk utuh. <b>Gunakan:</b> hapus bingkai dan isian latar grafik; grafiknya tetap tampak lengkap.</p></div>
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Dua jalur putus-putus yang bersilangan"><g fill="#5B6568"><circle cx="20" cy="66" r="4"/><circle cx="46" cy="57" r="4"/><circle cx="73" cy="48" r="4"/><circle cx="100" cy="39" r="4"/><circle cx="126" cy="31" r="4"/><circle cx="153" cy="22" r="4"/><circle cx="180" cy="13" r="4"/></g><g fill="#B77A2B"><circle cx="20" cy="14" r="4"/><circle cx="46" cy="22" r="4"/><circle cx="73" cy="31" r="4"/><circle cx="126" cy="48" r="4"/><circle cx="153" cy="57" r="4"/><circle cx="180" cy="66" r="4"/></g></svg>
+      <h4>Kesinambungan</h4><p>Mata mengikuti jalur yang paling mulus. <b>Gunakan:</b> hapus garis sumbu vertikal; label dan batang yang rata sudah menyiratkannya.</p></div>
+    <div class="card"><svg viewBox="0 0 200 80" role="img" aria-label="Lingkaran yang dihubungkan dengan garis"><g stroke="#B77A2B" stroke-width="2.5"><line x1="30" y1="22" x2="170" y2="22"/><line x1="30" y1="58" x2="170" y2="58"/></g><circle cx="30" cy="22" r="8" fill="#2E6E73"/><circle cx="170" cy="22" r="8" fill="#B9B5AA"/><circle cx="30" cy="58" r="8" fill="#B9B5AA"/><circle cx="170" cy="58" r="8" fill="#2E6E73"/></svg>
+      <h4>Keterhubungan</h4><p>Hal yang terhubung dikelompokkan, bahkan lintas warna. <b>Gunakan:</b> garis pada grafik garis menghubungkan titik menjadi satu seri.</p></div>
+  </div>
+
+  <h3>Urutan visual: penataan, ruang kosong, kontras</h3>
+  <div class="grid g3">
+    <div class="card copper"><h4>Penataan</h4><p>Buat garis yang bersih. Rata kiri untuk teks; blok rata tengah membuat tepi tidak rapi dan terlihat ceroboh. Letakkan judul, judul sumbu, dan legenda di kiri atas agar pembaca belajar cara membaca sebelum melihat data. Hindari teks diagonal: sebuah studi yang dikutip buku menemukan teks 45° sekitar 52% lebih lambat dibaca dan teks 90° sekitar 205% lebih lambat.</p></div>
+    <div class="card top"><h4>Ruang kosong</h4><p>Orang takut pada ruang kosong, padahal ia bekerja seperti jeda dalam presentasi. Jaga margin tetap lapang, jangan meregangkan grafik untuk memenuhi halaman, dan jangan pernah menambah data hanya karena masih ada ruang. Jika ada satu hal yang paling penting, jadikan itu satu-satunya hal di halaman.</p></div>
+    <div class="card green"><h4>Kontras</h4><p>Mudah menemukan elang di langit penuh merpati, dan sulit ketika ada banyak jenis burung. Semakin banyak hal yang Anda buat berbeda, semakin kecil satu hal menonjol. Gunakan kontras hanya untuk poin utama.</p></div>
+  </div>
+
+  <h3>Hilangkan kekacauan dalam enam langkah</h3>
+  <div class="steps7">
+    <div class="sc"><div class="n">1</div><div><h4>Hapus bingkai grafik</h4><p>Penutupan: grafik tetap terbaca sebagai satu kesatuan.</p></div><div class="res"><b>Hapus</b><span>bingkai</span></div></div>
+    <div class="sc"><div class="n">2</div><div><h4>Hapus garis kisi</h4><p>Atau buat tipis dan abu-abu terang agar tidak pernah bersaing.</p></div><div class="res"><b>Hapus</b><span>garis kisi</span></div></div>
+    <div class="sc"><div class="n">3</div><div><h4>Hapus penanda data</h4><p>Garis sudah menunjukkan datanya; gunakan penanda dengan sengaja, bukan secara otomatis.</p></div><div class="res"><b>Hapus</b><span>penanda</span></div></div>
+    <div class="sc"><div class="n">4</div><div><h4>Rapikan label sumbu</h4><p>Buang angka nol di belakang, singkat nama bulan, dan jaga teks tetap horizontal.</p></div><div class="res"><b>Buang</b><span>label</span></div></div>
+    <div class="sc b"><div class="n">5</div><div><h4>Beri label data secara langsung</h4><p>Kedekatan: letakkan nama di samping garis dan hapus legenda.</p></div><div class="res"><b>Beri</b><span>label langsung</span></div></div>
+    <div class="sc b"><div class="n">6</div><div><h4>Gunakan warna yang konsisten</h4><p>Kemiripan: beri warna label sesuai datanya.</p></div><div class="res"><b>Sesuaikan</b><span>warna</span></div></div>
+  </div>
+  <div class="callout teal"><b class="h">Pengecualian: redundansi yang membantu</b><p>Sertakan $, % dan pemisah ribuan pada angkanya sendiri. Grafik berjudul "$ juta" dengan angka sumbu tanpa satuan memaksa pembaca mengingat satuannya.</p></div>
+  <p><a href="#lab-d"><b>Coba keenam langkah di lab Hilangkan Kekacauan →</b></a></p>
+
+  <div class="quiz" id="quiz-3"></div>
+</div></section>
+
+<!-- ========== LESSON 4 ========== -->
+<section id="s4"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">4</div><span class="t">Pelajaran 4 · Fokus</span></div>
+  <h2>Fokuskan perhatian audiens Anda</h2>
+  <div class="takeaway">Gunakan ukuran, warna, dan posisi secukupnya agar orang melihat hal yang penting sebelum mereka sadar sedang melihat.</div>
+
+  <h3>Cara orang melihat dan mengingat</h3>
+  <div class="grid g3">
+    <div class="card top"><h4>Memori ikonik</h4><p>Bertahan sepersekian detik dan peka terhadap <i>perbedaan</i>. Di sinilah atribut pra-atentif bekerja.</p></div>
+    <div class="card copper"><h4>Memori jangka pendek</h4><p>Hanya memuat sekitar empat kelompok sekaligus. Sepuluh seri berwarna ditambah legenda akan membebaninya. Beri label langsung dan kelompokkan informasi menjadi kelompok yang lebih besar.</p></div>
+    <div class="card green"><h4>Memori jangka panjang</h4><p>Gambar membantu mengingat kata, dan pengulangan membuat sesuatu melekat. Padukan visual dengan kata-kata.</p></div>
+  </div>
+
+  <h3>Atribut pra-atentif</h3>
+  <p>Ini adalah fitur yang diperhatikan otak tanpa usaha. Sebagian dapat menyandikan <b>kuantitas</b>; yang lain hanya memisahkan <b>kategori</b>.</p>
+  <div class="tbl"><table>
+    <tr><th>Atribut</th><th>Kuantitas atau kategori?</th><th>Penggunaan dasbor</th></tr>
+    <tr><td class="k">Posisi, panjang garis</td><td><span class="tag g">Kuantitas</span> dapat menyandikan nilai</td><td>Mengapa batang dan garis mudah dibaca.</td></tr>
+    <tr><td class="k">Lebar garis, ukuran, intensitas warna</td><td><span class="tag a">Kuantitas</span> sampai batas tertentu</td><td>Ukuran menandakan kepentingan; saturasi membuat peta panas.</td></tr>
+    <tr><td class="k">Rona warna, bentuk, orientasi, kelengkungan, batas</td><td><span class="tag d">Kategori</span></td><td>Pisahkan seri atau sorot satu; "mana yang lebih besar, merah atau biru?" tidak bermakna.</td></tr>
+    <tr><td class="k">Penanda tambahan (label, penanda, garis bawah)</td><td><span class="tag d">Kategori</span></td><td>Isyarat "lihat sini", misalnya penanda dan label pada titik terakhir.</td></tr>
+    <tr><td class="k">Tebal, miring, garis bawah (teks)</td><td><span class="tag d">Kategori</span></td><td>Tebal adalah yang paling bersih; miring cukup halus; garis bawah menambah derau.</td></tr>
+    <tr><td class="k">Gerakan, berkedip</td><td><span class="tag r">Hindari</span></td><td>Berkedip lebih mengganggu daripada membantu. Dalam presentasi langsung, kemunculan dan penghilangan sederhana dapat memandu perhatian; hindari efek terbang dan memudar.</td></tr>
+  </table></div>
+
+  <h3>Resepnya: semuanya abu-abu, lalu satu aksen</h3>
+  <ol class="rules">
+    <li><b>Dorong semuanya ke latar belakang.</b> Sumbu abu-abu, label abu-abu, seri konteks abu-abu.</li>
+    <li><b>Buat datanya menonjol.</b> Data lebih tebal dan lebih besar daripada sumbu dan label.</li>
+    <li><b>Pilih satu hal.</b> Satu seri, satu batang, atau satu kuadran membawa warna aksen.</li>
+    <li><b>Tambahkan penanda secukupnya.</b> Beri label hanya pada titik yang menceritakan kisahnya; memberi label pada semuanya menciptakan kekacauan.</li>
+    <li><b>Sampaikan dengan kata-kata.</b> Buat judul menyebutkan apa yang harus dilihat, dan samakan warnanya dengan data yang dijelaskannya.</li>
+  </ol>
+  <div class="callout"><b class="h">Uji "ke mana mata Anda tertuju?"</b><p>Selesaikan visualnya, alihkan pandangan, lalu lihat kembali, dan catat di mana mata Anda mendarat pertama kali. Mintalah rekan menjelaskannya kepada Anda. Jika mereka mendarat di tempat lain, ubah penekanannya.</p></div>
+  <div class="callout red"><b class="h">Penyorotan memiliki biaya</b><p>Menyorot satu titik membuat yang lain sulit terlihat, jadi hindari selama eksplorasi. Selain itu, batasi elemen yang disorot pada sebagian kecil desain; buku ini mengutip pedoman sekitar paling banyak 10%.</p></div>
+
+  <h3>Aturan warna</h3>
+  <div class="grid g2">
+    <div class="card"><h4>Gunakan secukupnya dan konsisten</h4><p>Pelangi berarti tidak ada yang menonjol. Gunakan satu skema di seluruh komunikasi agar pembaca belajar bahwa, misalnya, tembaga berarti "lihat sini". Ubah warna hanya untuk menandakan perubahan yang nyata. Jika wilayah punya warna, jaga agar tetap sama di mana pun.</p>
+      <div class="sw"><div><i style="background:#B9B5AA"></i>Dasar abu-abu</div><div><i style="background:#B77A2B"></i>Aksen</div><div><i style="background:#2E6E73"></i>Positif / info</div><div><i style="background:#B64D42"></i>Masalah</div></div></div>
+    <div class="card"><h4>Desain untuk buta warna</h4><p>Sekitar 8% pria dan 0.5% wanita kesulitan dengan merah dan hijau. Hindari menempatkannya berdampingan, atau tambahkan isyarat kedua seperti tebal, saturasi, atau tanda + / −. Biru dan oranye adalah pasangan positif/negatif yang aman.</p></div>
+    <div class="card"><h4>Perhatikan nadanya</h4><p>Warna menentukan suasana. Laporan klinis dan fitur yang ringan membutuhkan palet yang berbeda. Periksa makna budaya warna untuk audiens internasional.</p></div>
+    <div class="card"><h4>Warna merek</h4><p>Pilih satu atau dua warna merek sebagai isyarat "lihat sini" dan jaga sisanya tetap abu-abu. Jika warna merek terlalu pucat untuk menonjol, gunakan hitam tebal atau warna lain yang tidak bertabrakan.</p></div>
+  </div>
+
+  <h3>Ukuran dan posisi</h3>
+  <div class="grid g2">
+    <div class="card copper"><h4>Ukuran = kepentingan</h4><p>Berikan item dengan kepentingan yang sama ukuran yang sama. Buku ini menceritakan sebuah dasbor di mana data yang kebetulan tersedia memakan sekitar 60% ruang dan hampir mengarahkan keputusan. Jadikan desain sebagai keputusan, bukan kebetulan.</p></div>
+    <div class="card top"><h4>Posisi = urutan baca</h4><p>Tanpa isyarat, pembaca mulai dari kiri atas dan bergerak zigzag membentuk huruf "Z". Letakkan hal yang paling penting di kiri atas, dan jangan melawan kebiasaan seperti negatif di kiri, positif di kanan.</p></div>
+  </div>
+  <p class="mt"><a href="#lab-e"><b>Rasakan sendiri atribut pra-atentif di lab Hitung Angka 3 →</b></a></p>
+
+  <div class="quiz" id="quiz-4"></div>
+</div></section>
+<!-- ========== LESSON 5 ========== -->
+<section id="s5"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">5</div><span class="t">Pelajaran 5 · Berpikirlah seperti desainer</span></div>
+  <h2>Buat agar jelas cara membacanya</h2>
+  <div class="takeaway">Bentuk mengikuti fungsi: putuskan apa yang harus audiens <i>lakukan</i> dengan data, lalu rancang agar mereka dapat melakukannya dengan mudah.</div>
+
+  <h3>Affordance: visual memberi tahu cara menggunakannya</h3>
+  <p>Gagang pintu menunjukkan Anda harus menarik. Visual yang baik menunjukkan ke mana harus melihat. Tiga langkah menciptakannya.</p>
+  <div class="grid g3">
+    <div class="card copper"><div class="num">1</div><h4>Sorot hal yang penting</h4><p>Terapkan ukuran, warna, dan tebal pada satu hal yang paling penting. Jaga bagian yang disorot tetap kecil.</p></div>
+    <div class="card red"><div class="num">2</div><h4>Hilangkan gangguan</h4><p>Tanyakan untuk setiap item: <i>apakah menghapusnya akan mengubah sesuatu?</i> Jika tidak, hapus. Ringkas detail yang tidak dibutuhkan audiens; pindahkan sisanya ke lampiran.</p></div>
+    <div class="card top"><div class="num">3</div><h4>Buat hierarki visual</h4><p>Urutkan hal berdasarkan kepentingan dengan ukuran, warna, dan posisi. Kategori induk (misalnya Usia / Wilayah / Pendapatan) memberi pembaca sebuah kerangka.</p></div>
+  </div>
+
+  <h3>Aksesibilitas: dapat digunakan oleh orang dengan kemampuan berbeda</h3>
+  <div class="grid g2">
+    <div class="card"><h4>Jangan terlalu rumit</h4>
+      <p>Penelitian yang dikutip buku menemukan bahwa instruksi dengan huruf yang rumit dinilai lebih sulit, dan orang kurang mungkin mencobanya. Semakin rumit tampilannya, semakin kecil kemungkinan orang meluangkan waktu untuknya.</p>
+      <ul class="tight"><li>Gunakan satu huruf dan ukuran yang mudah dibaca.</li><li>Utamakan kata-kata sederhana; tuliskan kepanjangan akronim pada kemunculan pertama.</li><li>Jika ragu, pilih opsi yang lebih sederhana.</li><li>Jika pembaca kesulitan, desainlah yang salah, bukan pembacanya.</li></ul></div>
+    <div class="card"><h4>Teks adalah sahabat Anda</h4>
+      <p>Setiap grafik membutuhkan judul dan setiap sumbu membutuhkan judul. Nyatakan kesimpulannya dengan kata-kata, karena dua orang bisa membaca grafik yang sama dan menarik kesimpulan berbeda. Beri anotasi untuk menjelaskan lonjakan, perubahan kebijakan, atau gangguan.</p>
+      <p class="small">Pengecualian yang jarang: ketika Anda ingin pembaca fokus pada puncak dan lembah, bukan pada metrik persisnya, Anda boleh sengaja menghapus label sumbu vertikal.</p></div>
+  </div>
+
+  <h3>Judul aksi lebih baik daripada label topik</h3>
+  <p>Judul adalah properti utama. Gunakan untuk kesimpulan atau permintaan.</p>
+  <div class="tbl"><table>
+    <tr><th>Deskriptif (label topik)</th><th>Judul aksi (kesimpulan)</th></tr>
+    <tr><td>OTIF masuk per minggu</td><td>OTIF masuk turun di bawah target 90% pada 3 dari 4 minggu terakhir</td></tr>
+    <tr><td>Utilisasi gudang</td><td>Zona A dan C melampaui batas perencanaan 85%; B dan D masih punya ruang</td></tr>
+    <tr><td>Waktu tunggu kapal, Q3</td><td>Waktu tunggu kapal naik dua kali lipat pada Q3, sebagian besar karena dermaga terisi</td></tr>
+    <tr><td>Belanja per vendor</td><td>Tiga vendor menguasai 60% belanja: konsolidasikan sebelum kontrak diperpanjang</td></tr>
+    <tr><td>Tren insiden</td><td>Insiden di Area 3 naik empat bulan berturut-turut; area lain datar</td></tr>
+    <tr><td>Kapasitas tim penerimaan</td><td>Penerimaan sudah tertinggal dari volume masuk sejak Juni; dua tambahan personel akan menutup celah</td></tr>
+  </table></div>
+
+  <div class="calc" id="ttlBox">
+    <h3>Coba: Pemeriksa Judul Aksi</h3>
+    <div class="callout" style="margin:0 0 14px"><b class="h">Heuristik pengajaran</b><p>Pemeriksaan ini adalah aturan praktis saya sendiri untuk latihan. Pemeriksaan ini tidak dapat menilai apakah judul Anda <i>benar</i> atau berguna.</p></div>
+    <label>Tempel atau ketik judul slide atau dasbor<input type="text" id="tt_in" placeholder="misalnya Utilisasi gudang"></label>
+    <div class="btns"><button id="tt_go" class="cu">Periksa judul saya</button><button id="tt_ex" class="alt">Muat contoh yang lemah</button></div>
+    <div class="out" id="tt_out"></div>
+  </div>
+
+  <h3>Estetika: cantik itu fungsional</h3>
+  <p>Orang menilai desain yang menarik lebih mudah digunakan, lebih mudah diterima, dan lebih toleran terhadap kekurangannya. Tiga kebiasaan menciptakannya tanpa harus menjadi desainer: <b>gunakan warna dengan sengaja</b>, <b>sejajarkan elemen</b> pada garis yang bersih, dan <b>gunakan ruang kosong</b> dengan sengaja. Saat Anda menemukan grafik yang Anda sukai, tanyakan mengapa, dan simpan koleksi untuk dipinjam.</p>
+
+  <h3>Membuat desain baru diterima</h3>
+  <p>Keakraban menumbuhkan kenyamanan, jadi desain yang lebih baik pun bisa menemui penolakan. Empat taktik membantu.</p>
+  <div class="grid g4">
+    <div class="card"><h4>Jelaskan manfaatnya</h4><p>Sampaikan mengapa tampilannya akan berbeda dan apa yang diperoleh pembaca.</p></div>
+    <div class="card"><h4>Tampilkan berdampingan</h4><p>Sebelum dan sesudah membuat peningkatannya terlihat.</p></div>
+    <div class="card"><h4>Tawarkan opsi</h4><p>Buat dua atau tiga versi dan mintalah masukan.</p></div>
+    <div class="card"><h4>Ajak sekutu</h4><p>Yakinkan pembaca berpengaruh secara personal.</p></div>
+  </div>
+  <p class="small mt">Jika penolakan berlanjut, uji dengan seseorang yang netral: masalahnya mungkin ada pada desain Anda, bukan kebiasaan mereka.</p>
+
+  <div class="quiz" id="quiz-5"></div>
+</div></section>
+
+<!-- ========== LESSON 6 ========== -->
+<section id="s6"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">6</div><span class="t">Pelajaran 6 · Ceritakan sebuah cerita</span></div>
+  <h2>Beri data awal, tengah, dan akhir</h2>
+  <div class="takeaway">Cerita melekat dengan cara yang tidak bisa dicapai fakta saja. Bangun ketegangan antara apa yang <i>adalah</i> dan apa yang <i>bisa menjadi</i>, lalu akhiri dengan ajakan bertindak yang jelas.</div>
+
+  <h3>Struktur tiga babak yang diterapkan pada cerita data</h3>
+  <div class="grid g3">
+    <div class="card top"><span class="tag">Awal · Alur</span>
+      <p style="margin-top:8px">Siapkan panggung dan jawab "mengapa saya harus peduli?" Lima pertanyaan membantu:</p>
+      <ul class="tight"><li>Latar: kapan dan di mana?</li><li>Tokoh utama: <b>audiens Anda</b></li><li>Ketidakseimbangan: apa yang berubah?</li><li>Keseimbangan: apa yang seharusnya terjadi?</li><li>Solusi: bagaimana kita sampai ke sana?</li></ul></div>
+    <div class="card copper"><span class="tag c">Tengah · Liku</span>
+      <p style="margin-top:8px">Susun argumen untuk "apa yang bisa terjadi":</p>
+      <ul class="tight"><li>Latar belakang dan perbandingan eksternal</li><li>Contoh dan data yang menunjukkan masalahnya</li><li>Apa yang terjadi jika tidak ada yang berubah</li><li>Opsi dan manfaat pilihan Anda</li><li>Mengapa mereka orang yang tepat untuk bertindak</li></ul></div>
+    <div class="card green"><span class="tag g">Akhir · Ajakan bertindak</span>
+      <p style="margin-top:8px">Nyatakan dengan tepat apa yang Anda inginkan agar mereka lakukan <b>lakukan</b>. Penutup klasik kembali ke masalah pembuka dan menegaskan kembali urgensinya.</p></div>
+  </div>
+  <div class="callout"><b class="h">Mengapa poin-poin saja tidak cukup</b><p>Kumpulan fakta berpoin hanya meyakinkan secara intelektual, dan audiens berdebat dengan Anda dalam kepala mereka. Cerita menghubungkan gagasan dengan emosi dan memberi orang alasan untuk bertindak. Jika Anda berpikir "saya tidak punya masalah untuk dibingkai", periksa lagi: konflik adalah yang menahan perhatian, dan cerita yang semuanya baik-baik saja jarang menggerakkan siapa pun.</p></div>
+
+  <h3>Alur naratif: pilih urutannya</h3>
+  <div class="tbl"><table>
+    <tr><th>Pesanan</th><th>Paling cocok saat…</th><th>Bagaimana</th></tr>
+    <tr><td class="k">Kronologis</td><td>Anda harus membangun kredibilitas, atau audiens peduli pada metode Anda</td><td>Masalah → data → analisis → temuan → rekomendasi</td></tr>
+    <tr><td class="k">Mulai dari akhir</td><td>Audiens sudah mempercayai Anda, sedang sibuk, atau ingin tahu "jadi apa"</td><td>Mulai dengan permintaan, lalu dukung dengan bukti terkuat</td></tr>
+  </table></div>
+  <p class="small">Beri tahu audiens langsung struktur yang Anda gunakan ("Saya akan mulai dari apa yang saya butuhkan dari Anda"). Dalam laporan tertulis, kata-kata di setiap halaman harus menyampaikan poinnya sendiri.</p>
+
+  <h3>Empat taktik untuk memastikan cerita jelas</h3>
+  <div class="grid g2">
+    <div class="card top"><h4>Logika horizontal</h4><p>Baca hanya judul slide atau bagian. Bersama-sama, judul-judul itu harus menceritakan seluruh cerita. Ini membutuhkan judul aksi. Ringkasan eksekutif di depan, yang dicerminkan oleh judul-judul berikutnya, membuat alurnya terlihat.</p></div>
+    <div class="card copper"><h4>Logika vertikal</h4><p>Semua yang ada di satu halaman saling memperkuat: judul mendukung visual, kata-kata mendukung grafik, tidak ada yang tidak berkaitan. Memangkas atau memindahkan ke lampiran sama pentingnya dengan menambah.</p></div>
+    <div class="card green"><h4>Papan cerita terbalik</h4><p>Bolak-balik deck yang sudah jadi dan tulis poin utama setiap halaman. Daftarnya seharusnya menyerupai papan cerita asli Anda. Jika tidak, pindahkan, tambahkan, atau hapus halaman.</p></div>
+    <div class="card"><h4>Perspektif segar</h4><p>Berikan kepada seseorang tanpa konteks dan tanyakan apa yang mereka perhatikan, apa yang penting, dan apa yang tidak jelas. Anda terlalu dekat untuk melihatnya seperti audiens Anda.</p></div>
+  </div>
+
+  <h3>Pengulangan: Bing, Bang, Bongo</h3>
+  <div class="grid g3">
+    <div class="card"><div class="num">1</div><h4>Bing</h4><p>Sampaikan apa yang akan Anda sampaikan: ringkasan eksekutif.</p></div>
+    <div class="card"><div class="num">2</div><h4>Bang</h4><p>Sampaikan: isi yang terperinci.</p></div>
+    <div class="card"><div class="num">3</div><h4>Bongo</h4><p>Sampaikan apa yang sudah Anda sampaikan: rekap, dengan tindakan yang Anda butuhkan.</p></div>
+  </div>
+  <p class="small mt">Kutipan singkat yang mudah diulang membantu pesan Anda menyebar tanpa Anda.</p>
+
+  <div class="calc" id="seqBox">
+    <h3>Coba: Pengurut Cerita</h3>
+    <p class="small">Keenam judul ini milik satu deck, tetapi teracak. Klik sesuai urutan yang membentuk cerita terbaik. Membaca judulnya saja adalah uji logika horizontal.</p>
+    <div id="seq_pool" class="grid g2"></div>
+    <h4 style="margin-top:16px">Urutan Anda</h4>
+    <ol id="seq_mine" class="rules"></ol>
+    <div class="btns"><button id="seq_chk" class="cu">Periksa urutan</button><button id="seq_rst" class="alt">Atur ulang</button></div>
+    <div class="out" id="seq_out"></div>
+  </div>
+
+  <div class="callout teal"><b class="h">Catatan penerapan · dasbor adalah cerita yang disampaikan dalam lapisan</b>
+    <p>Halaman dasbor yang baik bekerja seperti cerita pendek yang bisa dibaca dalam tiga kedalaman: sebuah <b>judul</b> yang menyatakan kesimpulan, beberapa <b>visual pendukung</b> yang menunjukkan alasannya, dan <b>rincian sesuai kebutuhan</b> bagi yang ingin memeriksa. Gambar <a href="#s10">Kit alat</a> menampilkan tata letak halaman yang dibangun dengan cara ini.</p></div>
+
+  <div class="quiz" id="quiz-6"></div>
+</div></section>
+
+<!-- ========== CLINIC ========== -->
+<section id="s7"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">7</div><span class="t">Latihan · Klinik Dasbor Buruk</span></div>
+  <h2>Sembilan dasbor buruk, didiagnosis dan dibangun ulang</h2>
+  <div class="takeaway">Visual yang buruk ada di mana-mana, dan tidak ada yang sengaja membuatnya. Pelajari cara mengenali kekeliruannya, lalu perbaiki dengan enam pelajaran.</div>
+  <div class="grid g3">
+    <div class="card top"><div class="num">1</div><h4>Diagnosis dulu</h4><p>Pelajari "sebelum". Centang setiap kekeliruan yang bisa Anda lihat. Hati-hati: beberapa kekeliruan yang tercantum adalah umpan.</p></div>
+    <div class="card copper"><div class="num">2</div><h4>Periksa diagnosis Anda</h4><p>Centang yang benar menjadi hijau, centang yang salah menjadi merah, dan kekeliruan yang terlewat menjadi kuning, masing-masing dengan alasan.</p></div>
+    <div class="card green"><div class="num">3</div><h4>Lihat perbaikannya</h4><p>Beralih ke "Sesudah" dan baca apa yang berubah. Setiap kekeliruan diberi tag dengan pelajaran yang memperbaikinya.</p></div>
+  </div>
+  <div class="callout"><b class="h">Pengingat</b><p>Semua data dalam kasus bersifat fiktif. Judul pada tampilan "sesudah" dihitung dari data yang ditampilkan, sehingga klaimnya sesuai dengan grafik.</p></div>
+  <div id="clinic"></div>
+  <h3>Sembilan pola, satu bahasa pola</h3>
+  <div class="tbl"><table id="clinicSummary"></table></div>
+</div></section>
+
+<!-- ========== WHAT-IF LAB ========== -->
+<section id="s8"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">8</div><span class="t">Latihan · Lab Bagaimana Jika</span></div>
+  <h2>Ubah satu hal dan lihat ceritanya berubah</h2>
+  <div class="takeaway">Datanya tetap sama di setiap lab. Yang berubah hanyalah pilihan desain, yang menunjukkan seberapa besar kuasa desainer, dan tanggung jawab yang menyertainya.</div>
+
+  <div class="calc" id="lab-a">
+    <h3>Lab A · Di mana sumbu dimulai? <span class="tag a">Pelajaran 2</span></h3>
+    <p class="small">Lima hub mencapai pengiriman tepat waktu antara 93.8% dan 96.1%. Geser garis dasar grafik batang dan bandingkan apa yang dilihat mata dengan apa yang dikatakan angkanya.</p>
+    <div class="ctl">
+      <label>Sumbu dimulai dari <span id="la_v">93</span>%<input type="range" id="la_min" min="0" max="93" step="1" value="93"></label>
+      <label style="display:flex;align-items:center;gap:8px;margin-top:22px"><input type="checkbox" id="la_tgt" style="width:auto;margin:0"> Tampilkan garis target 95%</label>
+    </div>
+    <div class="stage" id="la_chart" style="margin-top:12px"></div>
+    <div class="big" id="la_big"></div>
+    <p class="small" id="la_msg"></p>
+  </div>
+
+  <div class="calc" id="lab-b">
+    <h3>Lab B · Diagram lingkaran atau batang? <span class="tag a">Pelajaran 2</span></h3>
+    <p class="small">Masukkan porsi keterlambatan menurut penyebab (angka apa pun; akan dikonversi ke persentase). Coba peringkatkan irisan diagram lingkaran, lalu lihat batangnya.</p>
+    <div class="inputs" id="lb_in"></div>
+    <div class="btns"><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="lb_3d" style="width:auto;margin:0"> Tambahkan kemiringan 3D</label><label style="display:flex;align-items:center;gap:8px;font-weight:600"><input type="checkbox" id="lb_pct" style="width:auto;margin:0"> Tampilkan % pada irisan diagram lingkaran</label><button id="lb_rst" class="alt">Atur ulang nilai</button></div>
+    <div class="grid g2" style="margin-top:12px"><div class="stage" id="lb_pie"></div><div class="stage" id="lb_bar"></div></div>
+    <div class="big" id="lb_big"></div>
+    <p class="small" id="lb_msg"></p>
+  </div>
+
+  <div class="calc" id="lab-c">
+    <h3>Lab C · Data yang sama, dua cerita pada sumbu ganda <span class="tag a">Pelajaran 2, 4</span></h3>
+    <p class="small">Volume bulanan (batang, sumbu kiri) dan keberangkatan tepat waktu (garis, sumbu kanan). Geser rentang sumbu kanan dan hubungannya tampak berubah. Angkanya tidak pernah berubah.</p>
+    <div class="ctl">
+      <label>Nilai minimum sumbu kanan <span id="lc_v1">80</span><input type="range" id="lc_min" min="0" max="84" step="1" value="80"></label>
+      <label>Nilai maksimum sumbu kanan <span id="lc_v2">100</span><input type="range" id="lc_max" min="96" max="400" step="2" value="100"></label>
+    </div>
+    <div class="btns"><button class="alt" data-lc="honest">Rentang yang wajar</button><button class="alt" data-lc="hide">Sembunyikan penurunan</button><button class="alt" data-lc="exag">Lebih-lebihkan penurunan</button><button class="cu" data-lc="split">Pisahkan panelnya (direkomendasikan)</button></div>
+    <div class="stage" id="lc_chart" style="margin-top:12px"></div>
+    <div class="big" id="lc_big"></div>
+    <p class="small" id="lc_msg"></p>
+  </div>
+
+  <div class="calc" id="lab-d">
+    <h3>Lab D · Hilangkan kekacauan dan fokus <span class="tag a">Pelajaran 3, 4, 5</span></h3>
+    <p class="small">Palet masuk yang diterima vs. diproses per hari, per bulan. Aktifkan dan nonaktifkan kekacauan, lalu tambahkan alat bantu fokus. Perhatikan kapan ceritanya mulai terlihat.</p>
+    <div class="grid g2">
+      <div><h4>Kekacauan</h4><div id="ld_clutter"></div></div>
+      <div><h4>Alat bantu fokus</h4><div id="ld_focus"></div></div>
+    </div>
+    <div class="btns"><button class="alt" id="ld_all">Tambahkan kekacauan pada semuanya</button><button class="alt" id="ld_none">Hilangkan kekacauan pada semuanya</button><button class="cu" id="ld_best">Hilangkan kekacauan + fokus</button></div>
+    <div class="stage" id="ld_chart" style="margin-top:12px"></div>
+    <div class="big" id="ld_big"></div>
+    <p class="small" id="ld_msg"></p>
+  </div>
+
+  <div class="calc" id="lab-e">
+    <h3>Lab E · Hitung angka 3 <span class="tag a">Pelajaran 4</span></h3>
+    <p class="small">Dua putaran, tugas yang sama: hitung berapa kali angka 3 muncul. Pada putaran 2 ditambahkan satu isyarat visual. Waktu Anda sendiri adalah datanya. Hasil bervariasi tergantung orang dan layar; ini hanya demonstrasi, bukan studi.</p>
+    <div class="btns"><button id="le_start" class="cu">Mulai putaran 1</button><span class="msg" id="le_msg" style="color:var(--muted)"></span></div>
+    <div class="stage" id="le_grid" style="margin-top:12px;display:none"></div>
+    <div id="le_ans" style="display:none;margin-top:12px" class="btns"><input type="number" id="le_in" min="0" max="99" placeholder="Berapa banyak angka 3?" style="padding:9px 10px;border:1px solid #C9C3B4;border-radius:4px;font-size:16px;width:170px"><button id="le_sub">Kirim</button></div>
+    <div class="big" id="le_big"></div>
+    <p class="small" id="le_res"></p>
+  </div>
+
+  <div class="calc" id="lab-f">
+    <h3>Lab F · Satu dataset, tiga audiens <span class="tag a">Pelajaran 1, 5, 6</span></h3>
+    <p class="small">Pengiriman terlambat per hub selama empat minggu terakhir. Pilih audiens: datanya tetap, tetapi judul, sorotan, dan permintaannya berubah mengikuti pengambil keputusan.</p>
+    <div class="seg" id="lf_seg" role="group" aria-label="Pilih audiens"></div>
+    <div class="stage" id="lf_chart" style="margin-top:12px"></div>
+    <div class="grid g2" style="margin-top:12px" id="lf_info"></div>
+  </div>
+</div></section>
+
+<!-- ========== EXERCISE STUDIO ========== -->
+<section id="s9"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">9</div><span class="t">Latihan · Studio Latihan</span></div>
+  <h2>Data mana yang sebenarnya pantas ada di dasbor?</h2>
+  <div class="takeaway">Untuk setiap skenario, pilih apa yang akan ditampilkan, pilih visual utama, dan pilih judulnya. Bagian tersulit dari dasbor yang baik adalah membuang hal-hal yang tidak perlu.</div>
+
+  <div class="callout"><b class="h">Cara kerja penilaian</b>
+    <p>Setiap latihan bernilai 100 poin: 50 untuk data yang Anda pilih, 25 untuk visual, dan 25 untuk judul. Untuk data, setiap <b>inti</b> item yang Anda sertakan mendapat nilai penuh, <b>pendukung</b> item mendapat setengah nilai, dan <b>derau</b> atau <b>menyesatkan</b> item mengurangi poin. Melewatkan item inti akan mengurangi poin yang seharusnya didapat item tersebut.</p>
+    <p><span class="tag a">Heuristik pengajaran</span> Ini adalah skema penilaian saya sendiri untuk latihan. Dalam proyek nyata, jawaban yang tepat bergantung pada audiens dan keputusan Anda, jadi gunakan penjelasannya, bukan angkanya.</p></div>
+
+  <div class="score">
+    <div class="s"><b id="sc_done">0 / 7</b><span>latihan dinilai</span></div>
+    <div class="s"><b id="sc_avg">–</b><span>rata-rata skor</span></div>
+    <div class="s"><b id="sc_best">–</b><span>skor terbaik</span></div>
+  </div>
+  <div class="prog" aria-hidden="true"><i id="sc_bar"></i></div>
+  <div id="ex"></div>
+</div></section>
+
+<!-- ========== TOOLKIT ========== -->
+<section id="s10"><div class="wrap">
+  <div class="sec-label"><div class="sec-num">10</div><span class="t">Terapkan · Kit alat</span></div>
+  <h2>Bawa kembali ke dasbor Anda sendiri</h2>
+  <div class="takeaway">Gunakan tata letak yang menceritakan kisah secara berlapis, jalankan daftar periksa pra-penerbangan, lalu buat papan cerita di kertas sebelum membuka alat Anda.</div>
+
+  <h3>Anatomi halaman dasbor yang berbasis cerita</h3>
+  <div class="split">
+    <div class="svgbox">
+      <svg viewBox="0 0 640 430" role="img" aria-label="Kerangka kawat halaman dasbor dengan urutan baca bernomor">
+        <rect x="0" y="0" width="640" height="430" fill="#fff"/>
+        <rect x="20" y="16" width="600" height="52" rx="4" fill="#F4F2ED" stroke="#DDD8CC"/>
+        <text x="34" y="38" font-family="Georgia,serif" font-size="15" font-weight="700" fill="#1C2526">Judul aksi: kesimpulan dalam satu kalimat, dengan angka</text>
+        <text x="34" y="57" font-family="Segoe UI,Arial" font-size="11.5" fill="#5B6568">Subjudul: cakupan, periode, definisi</text>
+        <circle cx="610" cy="30" r="12" fill="#B77A2B"/><text x="610" y="35" text-anchor="middle" font-family="Georgia,serif" font-size="14" font-weight="700" fill="#fff">1</text>
+        <g font-family="Segoe UI,Arial" font-size="11" fill="#5B6568">
+          <rect x="20" y="82" width="190" height="84" rx="4" fill="#fff" stroke="#DDD8CC"/><text x="32" y="102">KPI yang meleset dari target</text><text x="32" y="140" font-family="Georgia,serif" font-size="32" font-weight="700" fill="#B77A2B">82%</text><text x="32" y="156">vs target 85%</text>
+          <rect x="225" y="82" width="190" height="84" rx="4" fill="#fff" stroke="#DDD8CC"/><text x="237" y="102">KPI pendukung</text><text x="237" y="140" font-family="Georgia,serif" font-size="32" font-weight="700" fill="#8C8A82">92%</text><text x="237" y="156">vs target 90%</text>
+          <rect x="430" y="82" width="190" height="84" rx="4" fill="#fff" stroke="#DDD8CC"/><text x="442" y="102">KPI pendukung</text><text x="442" y="140" font-family="Georgia,serif" font-size="32" font-weight="700" fill="#8C8A82">96%</text><text x="442" y="156">vs target 95%</text>
+        </g>
+        <circle cx="198" cy="94" r="11" fill="#B77A2B"/><text x="198" y="99" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#fff">2</text>
+        <rect x="20" y="180" width="390" height="190" rx="4" fill="#fff" stroke="#DDD8CC"/>
+        <text x="32" y="200" font-family="Segoe UI,Arial" font-size="11.5" font-weight="700" fill="#1C2526">Visual utama: menunjukkan MENGAPA (satu aksen, konteks abu-abu)</text>
+        <polyline fill="none" stroke="#B9B5AA" stroke-width="2" points="40,300 120,296 200,302 280,298 380,300"/>
+        <polyline fill="none" stroke="#B9B5AA" stroke-width="2" points="40,260 120,264 200,258 280,262 380,260"/>
+        <polyline fill="none" stroke="#B77A2B" stroke-width="4" points="40,320 120,312 200,296 280,250 380,212"/>
+        <circle cx="380" cy="212" r="5" fill="#B77A2B"/>
+        <text x="262" y="236" font-family="Segoe UI,Arial" font-size="11" fill="#B77A2B" font-weight="700">Anotasi menjelaskan penyebabnya</text>
+        <circle cx="398" cy="192" r="11" fill="#B77A2B"/><text x="398" y="197" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#fff">3</text>
+        <rect x="425" y="180" width="195" height="190" rx="4" fill="#fff" stroke="#DDD8CC"/>
+        <text x="437" y="200" font-family="Segoe UI,Arial" font-size="11.5" font-weight="700" fill="#1C2526">Visual sekunder: di mana</text>
+        <g fill="#B9B5AA"><rect x="437" y="214" width="130" height="14"/><rect x="437" y="236" width="104" height="14"/><rect x="437" y="258" width="86" height="14"/><rect x="437" y="280" width="52" height="14"/></g><rect x="437" y="214" width="130" height="14" fill="#B77A2B"/>
+        <circle cx="608" cy="192" r="11" fill="#B77A2B"/><text x="608" y="197" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#fff">4</text>
+        <rect x="20" y="382" width="600" height="34" rx="4" fill="#fff" stroke="#DDD8CC" stroke-dasharray="4 4"/>
+        <text x="32" y="403" font-family="Segoe UI,Arial" font-size="11.5" fill="#5B6568">Rincian sesuai kebutuhan: tabel penelusuran, definisi, sumber data, dan waktu pembaruan</text>
+        <circle cx="608" cy="399" r="11" fill="#B77A2B"/><text x="608" y="404" text-anchor="middle" font-family="Georgia,serif" font-size="13" font-weight="700" fill="#fff">5</text>
+      </svg>
+    </div>
+    <div>
+      <ol class="rules">
+        <li><b>Judul.</b> Kesimpulan atau permintaan, di kiri atas, tempat mata mendarat pertama kali.</li>
+        <li><b>Satu sampai tiga KPI</b> dengan target dan tren. Hanya yang membutuhkan perhatian yang mendapat warna aksen.</li>
+        <li><b>Visual utama.</b> Menjawab "mengapa", dengan konteks abu-abu dan satu seri yang disorot.</li>
+        <li><b>Visual sekunder.</b> Menjawab "di mana" atau "siapa".</li>
+        <li><b>Rincian sesuai kebutuhan.</b> Definisi, tabel, dan filter untuk orang yang ingin memverifikasi.</li>
+      </ol>
+      <p class="small"><span class="tag a">Catatan penerapan</span> Tata letak ini adalah penerapan saya atas pelajaran buku tersebut pada dasbor, bukan templat dari buku.</p>
+    </div>
+  </div>
+
+  <h3>Daftar periksa pra-penerbangan</h3>
+  <div class="prog" aria-hidden="true"><i id="cl_bar"></i></div>
+  <p class="small" id="cl_txt">0 dari 0 pemeriksaan selesai</p>
+  <ul class="cl" id="cl_list"></ul>
+
+  <h3>Papan cerita kosong (cetak ini)</h3>
+  <div class="notes">
+    <div class="note"><b>Audiens</b><br><br><br></div><div class="note"><b>Big Idea (satu kalimat)</b><br><br><br></div><div class="note"><b>Latar</b><br><br><br></div>
+    <div class="note"><b>Konflik / bukti</b><br><br><br></div><div class="note"><b>Resolusi / opsi</b><br><br><br></div><div class="note"><b>Ajakan bertindak</b><br><br><br></div>
+  </div>
+
+  <h3>Glosarium</h3>
+  <div class="tbl"><table>
+    <tr><th>Istilah</th><th>Arti</th></tr>
+    <tr><td class="k">Analisis eksplanatori</td><td>Menyampaikan satu pesan spesifik kepada audiens tertentu.</td></tr>
+    <tr><td class="k">Big Idea</td><td>Satu kalimat lengkap yang memuat sudut pandang Anda dan apa yang dipertaruhkan.</td></tr>
+    <tr><td class="k">cerita 3 menit</td><td>Apa yang akan Anda katakan jika hanya punya tiga menit.</td></tr>
+    <tr><td class="k">Papan cerita</td><td>Kerangka visual dari komunikasi, dibuat di kertas terlebih dahulu.</td></tr>
+    <tr><td class="k">Slideument</td><td>Satu berkas yang berusaha menjadi presentasi sekaligus dokumen.</td></tr>
+    <tr><td class="k">Beban kognitif</td><td>Usaha mental yang dibutuhkan untuk mencerna informasi.</td></tr>
+    <tr><td class="k">Rasio sinyal-ke-derau</td><td>Porsi dari apa yang Anda tampilkan yang membawa pesan.</td></tr>
+    <tr><td class="k">Prinsip Gestalt</td><td>Cara orang mengelompokkan benda: kedekatan, kemiripan, pelingkupan, penutupan, kesinambungan, keterhubungan.</td></tr>
+    <tr><td class="k">Atribut pra-atentif</td><td>Fitur yang disadari sebelum pikiran sadar, seperti warna, ukuran, dan posisi.</td></tr>
+    <tr><td class="k">Hierarki visual</td><td>Mengurutkan elemen berdasarkan kepentingan agar pembaca tahu harus melihat ke mana lebih dulu.</td></tr>
+    <tr><td class="k">Afordansi</td><td>Isyarat yang menunjukkan bagaimana sesuatu seharusnya digunakan.</td></tr>
+    <tr><td class="k">Judul aksi</td><td>Judul yang menyatakan kesimpulan atau permintaan, bukan topik.</td></tr>
+    <tr><td class="k">Slopegraph</td><td>Grafik garis dengan dua titik waktu yang menunjukkan arah dan laju perubahan di antara kategori.</td></tr>
+    <tr><td class="k">Grafik kecil berulang</td><td>Beberapa grafik kecil dengan sumbu yang sama, diletakkan berdampingan.</td></tr>
+    <tr><td class="k">Logika horizontal</td><td>Membaca judulnya saja sudah menceritakan kisahnya.</td></tr>
+    <tr><td class="k">Logika vertikal</td><td>Semua yang ada di satu halaman mendukung judulnya.</td></tr>
+    <tr><td class="k">Papan cerita terbalik</td><td>Merangkum setiap halaman karya yang sudah jadi untuk dibandingkan dengan rencana.</td></tr>
+  </table></div>
+
+  <h3>Langkah berikutnya</h3>
+  <div class="grid g2">
+    <div class="card"><h4>Buku yang direkomendasikan penulis</h4>
+      <ul class="tight"><li><i>Resonate</i>, Nancy Duarte</li><li><i>Show Me the Numbers</i>, Stephen Few</li><li><i>The Visual Display of Quantitative Information</i>, Edward Tufte</li><li><i>Beyond Bullet Points</i>, Cliff Atkinson</li><li><i>The Functional Art</i>, Alberto Cairo</li><li><i>Data Points</i>, Nathan Yau</li></ul></div>
+    <div class="card"><h4>Blog dan situs yang dicantumkan penulis</h4>
+      <ul class="tight"><li>storytellingwithdata.com</li><li>Eager Eyes · Flowing Data · The Functional Art</li><li>Junk Charts · Perceptual Edge · Visualising Data · VizWiz</li><li>HelpMeViz · Make a Powerful Point</li><li>FiveThirtyEight Data Lab · The Guardian Data Blog</li></ul></div>
+  </div>
+  <div class="callout green"><b class="h">Tantangan akhir</b><p>Pilih satu dasbor milik Anda. Tulis Big Idea-nya, jalankan daftar periksa, bangun ulang halaman teratas dengan satu judul, satu warna aksen, dan tanpa legenda, lalu tunjukkan kepada orang yang belum pernah melihatnya. Ke mana mata mereka melihat lebih dulu akan memberi tahu Anda apakah ini berhasil.</p></div>
+</div></section>
+
+<footer><div class="wrap">
+  <p><b>Dari Menampilkan Data ke Bercerita</b> · panduan belajar mandiri yang orisinal.</p>
+  <p>Konsep dan metode diambil dari <i>Storytelling with Data: A Data Visualization Guide for Business Professionals</i> oleh Cole Nussbaumer Knaflic (John Wiley &amp; Sons, 2015). Halaman ini tidak berafiliasi dengan penulis atau penerbit dan bukan pengganti buku tersebut. Kutipan dihindari dan contohnya orisinal.</p>
+  <p>Semua skenario, nama, dan angka bersifat fiktif. Skor dan pemeriksa adalah heuristik pembelajaran. Semuanya berjalan di peramban Anda; tidak ada yang dikirim atau disimpan.</p>
+</div></footer>
+<script>
+(function(){
+"use strict";
+/* ===== CORE HELPERS (all charts are inline SVG built from strings; no external libraries) ===== */
+const $ = id => document.getElementById(id);
+const C = {bg:'#F4F2ED',ink:'#151B1D',muted:'#5B6568',line:'#DDD8CC',copper:'#B77A2B',gold:'#C59B43',dark:'#1C2526',green:'#3E745A',teal:'#2E6E73',amber:'#D49A3A',red:'#B64D42',grey:'#B9B5AA',mgrey:'#8C8A82',lgrey:'#D9D5CA'};
+const RB = ['#E41A1C','#377EB8','#4DAF4A','#984EA3','#FF7F00','#F2E600','#A65628','#F781BF'];
+const SER = "Georgia,'Times New Roman',serif", SAN = "'Segoe UI',Arial,sans-serif";
+const MON = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+const MONF = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const fmt = (n,d) => Number(n).toLocaleString('en-US',{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
+const lin = (d0,d1,r0,r1) => v => r0 + (v-d0)*(r1-r0)/(d1-d0);
+const sum = a => a.reduce((x,y)=>x+y,0);
+const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function dk(hex,f){const n=parseInt(hex.slice(1),16);const r=Math.round((n>>16)*f),g=Math.round(((n>>8)&255)*f),b=Math.round((n&255)*f);return '#'+[r,g,b].map(v=>('0'+clamp(v,0,255).toString(16)).slice(-2)).join('');}
+function pearson(x,y){const n=x.length,mx=sum(x)/n,my=sum(y)/n;let sxy=0,sxx=0,syy=0;for(let i=0;i<n;i++){sxy+=(x[i]-mx)*(y[i]-my);sxx+=(x[i]-mx)**2;syy+=(y[i]-my)**2;}return sxy/Math.sqrt(sxx*syy);}
+
+/* ----- SVG primitives ----- */
+function T(x,y,s,o){o=o||{};return '<text x="'+x+'" y="'+y+'" font-size="'+(o.size||12)+'" fill="'+(o.fill||C.ink)+'" text-anchor="'+(o.anchor||'start')+'" font-weight="'+(o.weight||400)+'" font-family="'+(o.font||SAN)+'"'+(o.rot?' transform="rotate('+o.rot+' '+x+' '+y+')"':'')+(o.italic?' font-style="italic"':'')+'>'+esc(s)+'</text>';}
+function Ln(x1,y1,x2,y2,stroke,w,dash){return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+(stroke||C.line)+'" stroke-width="'+(w||1)+'"'+(dash?' stroke-dasharray="'+dash+'"':'')+'/>';}
+function Rc(x,y,w,h,fill,extra){return '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+Math.max(0,w).toFixed(1)+'" height="'+Math.max(0,h).toFixed(1)+'" fill="'+fill+'" '+(extra||'')+'/>';}
+function Cr(x,y,r,fill,extra){return '<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+r+'" fill="'+fill+'" '+(extra||'')+'/>';}
+function Pl(pts,stroke,w,extra){return '<polyline fill="none" stroke="'+stroke+'" stroke-width="'+w+'" stroke-linejoin="round" stroke-linecap="round" points="'+pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')+'" '+(extra||'')+'/>';}
+function SV(w,h,body,label){return '<svg viewBox="0 0 '+w+' '+h+'" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="'+esc(label||'Grafik')+'">'+body+'</svg>';}
+function wrapTxt(s,n){const w=s.split(' ');const out=[];let cur='';w.forEach(x=>{if((cur+' '+x).trim().length>n){out.push(cur.trim());cur=x;}else cur=(cur+' '+x);});if(cur.trim())out.push(cur.trim());return out;}
+
+/* "Sesudah" frame: left-aligned action title + grey subtitle. Returns {s, y} where y is the first free y below the header. */
+function AT(title,sub,n,color,subcolor){const lines=wrapTxt(title,n||62);let s='',y=28;lines.forEach(l=>{s+=T(24,y,l,{size:17,weight:700,font:SER,fill:color||C.dark});y+=22;});if(sub)s+=T(24,y-4,sub,{size:12,fill:subcolor||C.muted});return {s:s,y:y+12};}
+/* "Sebelum" frame: thick border, centred bold black title. */
+function BT(title,W,H){return Rc(1.5,1.5,W-3,H-3,'#fff','stroke="#777" stroke-width="3"')+T(W/2,26,title,{anchor:'middle',weight:700,size:15,fill:'#000'});}
+
+/* arc slice path for pies */
+function arc(cx,cy,r,a0,a1){const x0=cx+r*Math.cos(a0),y0=cy+r*Math.sin(a0),x1=cx+r*Math.cos(a1),y1=cy+r*Math.sin(a1);const lg=(a1-a0)>Math.PI?1:0;return 'M'+cx+' '+cy+' L'+x0.toFixed(1)+' '+y0.toFixed(1)+' A'+r+' '+r+' 0 '+lg+' 1 '+x1.toFixed(1)+' '+y1.toFixed(1)+' Z';}
+
+/* generic horizontal bar block. items: [{l,v,c,bold,lab}] */
+function HB(items,o){let s='';const bw=o.w;items.forEach((it,i)=>{const y=o.y0+i*(o.bh+o.gap);const w=bw*it.v/o.max;const tf=it.bold?C.dark:C.muted;s+=T(o.x0+o.lw-8,y+o.bh/2+4,it.l,{anchor:'end',size:o.fs||12.5,fill:tf,weight:it.bold?700:400});s+=Rc(o.x0+o.lw,y,w,o.bh,it.c);s+=T(Math.max(o.x0+o.lw+w+6,o.minLx||0),y+o.bh/2+4,it.lab!=null?it.lab:fmt(it.v),{size:o.fs||12.5,fill:tf,weight:it.bold?700:400});});return s;}
+
+function spark(vals,color,w,h,mn,mx){const x=lin(0,vals.length-1,2,w-4),y=lin(mn,mx,h-3,3);return '<svg viewBox="0 0 '+w+' '+h+'" width="'+w+'" height="'+h+'" aria-hidden="true">'+Pl(vals.map((v,i)=>[x(i),y(v)]),color,2)+Cr(x(vals.length-1),y(vals[vals.length-1]),3,color)+'</svg>';}
+
+/* =================== CLINIC DATA (all fictional) =================== */
+const LT = {L1:'Pelajaran 1 · Pahami konteksnya',L2:'Pelajaran 2 · Pilih visual',L3:'Pelajaran 3 · Hilangkan kekacauan',L4:'Pelajaran 4 · Arahkan perhatian',L5:'Pelajaran 5 · Berpikirlah seperti desainer',L6:'Pelajaran 6 · Ceritakan sebuah cerita'};
+
+/* ---- Case 1: pie of delay causes ---- */
+const D1 = [['Pengurusan bea cukai',24],['Keterlambatan produksi vendor',22],['Kesalahan dokumentasi',19],['Kapasitas transportasi',17],['Cuaca',10],['Lainnya',8]];
+function c1Before(){const W=640,H=380,cx=190,cy=190,r=118,k=.56;let a=-Math.PI/2,side='',top='',lab='';
+  D1.forEach((d,i)=>{const a1=a+d[1]/100*2*Math.PI;side+='<path d="'+arc(cx,cy+30,r,a,a1)+'" fill="'+dk(RB[i],.55)+'" stroke="#000" stroke-width="1"/>';top+='<path d="'+arc(cx,cy,r,a,a1)+'" fill="'+RB[i]+'" stroke="#000" stroke-width="1"/>';const m=(a+a1)/2;lab+=T(cx+.62*r*Math.cos(m),cy*(1-k)+k*(cy+.62*r*Math.sin(m))+4,d[1]+'%',{anchor:'middle',size:11,weight:700,fill:'#fff'});a=a1;});
+  const g='<g transform="translate(0 '+(cy*(1-k)).toFixed(1)+') scale(1 '+k+')">'+side+top+'</g>';
+  let lg='';D1.forEach((d,i)=>{lg+=Rc(380,70+i*34,14,14,RB[i],'stroke="#000"')+T(402,82+i*34,d[0],{size:12.5});});
+  return SV(W,H,BT('Penyebab Keterlambatan',W,H)+g+lab+lg,'Diagram lingkaran tiga dimensi berwarna pelangi tentang penyebab keterlambatan');}
+function c1After(){const W=640,H=380,top3=D1.slice(0,3),p=sum(top3.map(d=>d[1]));const h=AT('Tiga penyebab mendorong '+p+'% pengiriman tertunda: bea cukai, produksi vendor, dan dokumentasi','Porsi pengiriman tertunda menurut penyebab, kuartal terakhir',60);
+  const items=D1.map((d,i)=>({l:d[0],v:d[1],c:i<3?C.copper:C.grey,bold:i<3,lab:d[1]+'%'}));
+  return SV(W,H,Rc(0,0,W,H,'#fff')+h.s+HB(items,{x0:20,y0:h.y+14,lw:170,w:360,bh:28,gap:14,max:30})+T(24,H-12,'Sumber: log pengecualian pengiriman (data fiktif)',{size:10.5,fill:C.muted}),'Batang horizontal yang diurutkan dengan tiga penyebab teratas disorot');}
+
+/* ---- Case 2: dual axis ---- */
+const VOL=[1180,1240,1320,1410,1450,1520,1620,1560,1470,1390,1330,1270];
+const OTP=[95,94,93,91,90,87,84,85,89,92,93,94];
+function c2Before(){const W=640,H=390,x0=64,x1=578,y0=50,y1=290,st=(x1-x0)/12;const yl=lin(0,1800,y1,y0),yr=lin(80,100,y1,y0);let s=BT('Volume vs Tepat Waktu',W,H);
+  for(let v=0;v<=1800;v+=300){s+=Ln(x0,yl(v),x1,yl(v),'#555',1)+T(x0-6,yl(v)+4,v.toFixed(2),{anchor:'end',size:10});}
+  for(let v=80;v<=100;v+=4){s+=T(x1+6,yr(v)+4,v.toFixed(2),{size:10});}
+  VOL.forEach((v,i)=>{const x=x0+i*st+st*.2;s+=Rc(x,yl(v),st*.6,y1-yl(v),'#4472C4','stroke="#000"');s+=T(x0+i*st+st*.6,y1+10,MONF[i],{anchor:'end',size:10,rot:-45});});
+  s+=Pl(OTP.map((v,i)=>[x0+i*st+st/2,yr(v)]),'#FF0000',3);OTP.forEach((v,i)=>{s+=Rc(x0+i*st+st/2-4,yr(v)-4,8,8,'#FF0000','stroke="#000"');});
+  s+=Rc(150,362,12,12,'#4472C4')+T(168,373,'Volume (TEU)',{size:11})+Rc(300,362,12,12,'#FF0000')+T(318,373,'Keberangkatan tepat waktu %',{size:11});
+  return SV(W,H,s,'Grafik sumbu ganda dengan batang dan garis, garis kisi tebal, dan label diputar');}
+function c2After(){const W=640,H=380,x0=60,x1=600,st=(x1-x0)/12;const h=AT('Keberangkatan tepat waktu turun di bawah 88% pada setiap dari tiga bulan ketika volume melampaui 1,500 TEU','Volume bulanan (TEU, atas) dan keberangkatan tepat waktu (%, bawah); bulan yang diarsir melampaui 1,500 TEU',62);
+  const t=h.y; const p1a=t+16,p1b=t+124,p2a=t+164,p2b=t+250;const yl=lin(0,1800,p1b,p1a),yr=lin(80,100,p2b,p2a);let s=Rc(0,0,W,H,'#fff')+h.s;
+  const bi=VOL.map((v,i)=>v>1500?i:-1).filter(i=>i>=0),b0=x0+bi[0]*st,b1=x0+(bi[bi.length-1]+1)*st;
+  s+=Rc(b0,p1a-6,b1-b0,p2b-p1a+16,'#F7EFDD');
+  s+=T(x0,p1a-8,'Volume bulanan (TEU)',{size:11.5,weight:700,fill:C.dark})+T(x0,p2a-8,'Keberangkatan tepat waktu (%)',{size:11.5,weight:700,fill:C.dark});
+  s+=Ln(x0,yl(1500),x1,yl(1500),C.copper,1,'4 4')+T(x1+4,yl(1500)+4,'1,500',{size:10,fill:C.copper});
+  s+=Ln(x0,yr(88),x1,yr(88),C.copper,1,'4 4')+T(x1+4,yr(88)+4,'88%',{size:10,fill:C.copper});
+  VOL.forEach((v,i)=>{s+=Rc(x0+i*st+st*.18,yl(v),st*.64,p1b-yl(v),v>1500?C.copper:C.grey);});
+  const pts=OTP.map((v,i)=>[x0+i*st+st/2,yr(v)]);s+=Pl(pts,C.grey,2.5);
+  s+=Pl(pts.filter((p,i)=>VOL[i]>1500),C.copper,4);
+  pts.forEach((p,i)=>{if(VOL[i]>1500)s+=Cr(p[0],p[1],4.5,C.copper);});
+  const j=VOL.indexOf(Math.max.apply(null,VOL));s+=T(x0+j*st+st/2,yl(VOL[j])-5,fmt(VOL[j]),{anchor:'middle',size:11,weight:700,fill:C.dark})+T(pts[j][0],pts[j][1]+17,OTP[j]+'%',{anchor:'middle',size:11,weight:700,fill:C.dark});
+  MON.forEach((m,i)=>{s+=T(x0+i*st+st/2,p2b+18,m,{anchor:'middle',size:10.5,fill:C.muted});});
+  s+=T(24,H-10,'Sumber: log operasi pelabuhan (data fiktif)',{size:10.5,fill:C.muted});
+  return SV(W,H,s,'Dua panel bertumpuk dengan sumbu bulan yang sama dan bulan volume tinggi disorot');}
+
+/* ---- Case 3: truncated axis ---- */
+const D3=[['Hub A',96.1],['Hub B',95.4],['Hub C',95.0],['Hub D',94.2],['Hub E',93.8]];
+function c3Before(){const W=640,H=380,x0=70,x1=600,y0=50,y1=320,st=(x1-x0)/5,yv=lin(93,97,y1,y0);let s=BT('PENGIRIMAN TEPAT WAKTU % PER HUB!!!',W,H);
+  for(let v=93;v<=97;v++){s+=Ln(x0,yv(v),x1,yv(v),'#666',1)+T(x0-6,yv(v)+4,v.toFixed(2),{anchor:'end',size:10.5});}
+  D3.forEach((d,i)=>{const x=x0+i*st+st*.18;s+=Rc(x,yv(d[1]),st*.64,y1-yv(d[1]),RB[i],'stroke="#000" stroke-width="1.5"');s+=T(x+st*.32,yv(d[1])-6,d[1].toFixed(2)+'%',{anchor:'middle',size:11,weight:700});s+=T(x+st*.32,y1+16,d[0],{anchor:'middle',size:11});});
+  return SV(W,H,s,'Grafik batang yang sumbu vertikalnya dimulai dari 93 persen sehingga selisih kecil tampak besar');}
+function c3After(){const W=640,H=380,miss=D3.filter(d=>d[1]<95),gaps=miss.map(d=>+(95-d[1]).toFixed(1));
+  const h=AT('Hub '+miss.map(d=>d[0].replace('Hub ','')).join(' dan ')+' meleset dari target tepat waktu 95%, tetapi hanya sebesar '+Math.min.apply(null,gaps).toFixed(1)+'–'+Math.max.apply(null,gaps).toFixed(1)+' poin','Pengiriman tepat waktu per hub, % (batang dimulai dari nol)',60);
+  const o={x0:20,y0:h.y+34,lw:70,w:420,bh:30,gap:14,max:100,minLx:20+70+420*.95+8};const items=D3.map(d=>({l:d[0],v:d[1],c:d[1]<95?C.copper:C.grey,bold:d[1]<95,lab:d[1].toFixed(1)+'%'+(d[1]<95?'  ('+(d[1]-95).toFixed(1)+' poin)':'')}));
+  const tx=o.x0+o.lw+o.w*.95;let s=Rc(0,0,W,H,'#fff')+h.s+HB(items,o)+Ln(tx,h.y+22,tx,o.y0+5*(o.bh+o.gap)-8,C.dark,1.2,'5 4')+T(tx,h.y+16,'Target 95%',{anchor:'middle',size:11,weight:700,fill:C.dark});
+  s+=T(24,H-10,'Sumber: pelacakan pengiriman (data fiktif)',{size:10.5,fill:C.muted});return SV(W,H,s,'Batang horizontal dari nol dengan garis target 95 persen dan dua hub disorot');}
+
+/* ---- Case 4: spaghetti line chart ---- */
+const HUBS=['Hub A','Hub B','Hub C','Hub D','Hub E','Hub F','Hub G'];
+const LEAD=(function(){const r=mulberry32(11),base=[7.4,8.2,7.8,8.6,0,7.6,8.0];return HUBS.map((h,i)=>h==='Hub E'?[8,8,8.5,9,9.5,10,10.5,11,12,12.5,13,14]:Array.from({length:12},()=>+(base[i]+(r()-.5)*1.1).toFixed(1)));})();
+function c4Before(){const W=640,H=380,x0=56,x1=500,y0=48,y1=300,yy=lin(0,16,y1,y0),xx=lin(0,11,x0+10,x1-10);let s=BT('Waktu Tunggu Per Hub',W,H);
+  for(let v=0;v<=16;v+=2){s+=Ln(x0,yy(v),x1,yy(v),'#666',1)+T(x0-6,yy(v)+4,v.toFixed(1),{anchor:'end',size:10});}
+  LEAD.forEach((ser,i)=>{s+=Pl(ser.map((v,k)=>[xx(k),yy(v)]),RB[i],2);ser.forEach((v,k)=>{s+=Cr(xx(k),yy(v),3.2,RB[i]);});});
+  MONF.forEach((m,i)=>{s+=T(xx(i),y1+12,m,{anchor:'end',size:9.5,rot:-45});});
+  HUBS.forEach((h,i)=>{s+=Rc(520,76+i*26,12,12,RB[i])+T(538,87+i*26,h,{size:12});});
+  return SV(W,H,s,'Grafik garis spageti tujuh hub dalam tujuh warna dengan penanda dan legenda');}
+function c4After(){const W=640,H=380,E=LEAD[4],oth=LEAD.filter((s,i)=>i!==4),all=[].concat.apply([],oth);
+  const up=Math.round((E[11]/E[0]-1)*100);const h=AT('Waktu tunggu Hub E naik '+up+'% dalam 12 bulan, sementara enam hub lainnya tetap datar','Rata-rata waktu tunggu per hub, hari (Hub E berwarna)',62);
+  const x0=40,x1=455,y0=h.y+12,y1=300,yy=lin(0,16,y1,y0),xx=lin(0,11,x0,x1);let s=Rc(0,0,W,H,'#fff')+h.s+Ln(x0,y1,x1,y1,C.line,1);
+  oth.forEach(ser=>{s+=Pl(ser.map((v,k)=>[xx(k),yy(v)]),C.grey,1.8);});
+  s+=Pl(E.map((v,k)=>[xx(k),yy(v)]),C.copper,4)+Cr(xx(0),yy(E[0]),5,C.copper)+Cr(xx(11),yy(E[11]),5.5,C.copper);
+  s+=T(xx(0)+4,yy(E[0])-10,E[0]+' hari',{size:12,weight:700,fill:C.copper})+T(xx(11)+10,yy(E[11])+4,'Hub E: '+E[11]+' hari',{size:13,weight:700,fill:C.copper});
+  const lo=Math.round(Math.min.apply(null,all)),hi=Math.round(Math.max.apply(null,all));s+=T(xx(11)+10,yy(sum(all)/all.length)+4,'Enam hub lainnya: '+lo+'–'+hi+' hari',{size:12,fill:C.muted});
+  MON.forEach((m,i)=>{s+=T(xx(i),y1+18,m,{anchor:'middle',size:10,fill:C.muted});});
+  s+=T(24,H-10,'Sumber: sistem manajemen transportasi (data fiktif)',{size:10.5,fill:C.muted});return SV(W,H,s,'Garis abu-abu untuk enam hub dan satu garis yang disorot untuk Hub E');}
+
+/* ---- Case 5: wall of KPI tiles (HTML) ---- */
+const T5=[['OTIF masuk','92%'],['OTIF lokasi','82%'],['Penempatan PO','96%'],['Baris PO terbuka','1,284'],['Rata-rata waktu tunggu','11.3 d'],['Pesanan tertunda','212'],['Nilai persediaan','$48.2M'],['Kehabisan stok','37'],['Dock-to-stock','2.6 h'],['Akurasi pengambilan','99.2%'],['Tingkat kerusakan','0.4%'],['Biaya / palet','$6.85']];
+const TC=['#e53935','#43a047','#fb8c00','#8e24aa','#1e88e5','#c9a800','#00acc1','#d81b60','#6d4c41','#7cb342','#3949ab','#f4511e'];
+const SITE=[88,87,85,84,83,82];
+function c5Before(){return '<div class="ttl" style="color:#000;text-align:center;font-family:Arial;font-size:18px">DASBOR KPI!!!</div><div class="wall">'+T5.map((t,i)=>'<div class="tile" style="background:linear-gradient(160deg,'+TC[i]+','+dk(TC[i],.65)+')"><span>'+esc(t[0])+'</span><b>'+esc(t[1])+'</b></div>').join('')+'</div>';}
+function c5After(){let down=0;for(let i=SITE.length-1;i>0&&SITE[i]<SITE[i-1];i--)down++;const words=['nol','satu','dua','tiga','empat','lima','enam'];
+  return '<div class="ttl">Pengiriman lokasi adalah satu-satunya KPI di bawah target dan telah melorot '+words[down]+' minggu berturut-turut: '+SITE[SITE.length-1]+'% vs 85%</div><p class="sub">Kartu skor logistik, enam minggu terakhir · hanya yang vital</p><div class="kpi3">'
+  +'<div class="k hot"><small>OTIF lokasi · target 85%</small><b>82%</b><i>'+spark(SITE,C.copper,120,34,80,92)+'<br>turun dari 88% enam minggu lalu</i></div>'
+  +'<div class="k"><small>OTIF masuk · target 90%</small><b>92%</b><i>'+spark([91,92,91,92,93,92],C.mgrey,120,34,80,95)+'<br>sesuai target</i></div>'
+  +'<div class="k"><small>Penempatan PO · target 95%</small><b>96%</b><i>'+spark([95,96,96,95,96,96],C.mgrey,120,34,80,100)+'<br>sesuai target</i></div></div>'
+  +'<p class="srcn">Sembilan metrik lainnya dipindahkan ke halaman penelusuran rinci. Sumber: kartu skor logistik (data fiktif).</p>';}
+
+/* ---- Case 6: stacked downtime ---- */
+const M6=['Apr','Mei','Jun','Jul','Agu','Sep'];
+const S6=[{n:'Pemadaman listrik',v:[12,14,20,28,34,38]},{n:'Mekanikal',v:[40,38,36,35,33,31]},{n:'Perangkat lunak',v:[22,21,22,20,21,20]},{n:'Kesalahan operator',v:[18,17,16,17,15,15]},{n:'Cuaca',v:[10,12,9,11,10,12]}];
+function c6Before(){const W=640,H=380,x0=64,x1=470,y0=50,y1=300,st=(x1-x0)/6,yy=lin(0,120,y1,y0);let s=BT('Jam waktu henti',W,H);
+  for(let v=0;v<=120;v+=20){s+=Ln(x0,yy(v),x1,yy(v),'#666',1)+T(x0-6,yy(v)+4,v.toFixed(2),{anchor:'end',size:10});}
+  M6.forEach((m,i)=>{let acc=0;S6.forEach((sr,k)=>{const v=sr.v[i];s+=Rc(x0+i*st+st*.15,yy(acc+v),st*.7,yy(acc)-yy(acc+v),RB[k],'stroke="#000"');acc+=v;});s+=T(x0+i*st+st/2,y1+16,m,{anchor:'middle',size:11});});
+  S6.forEach((sr,k)=>{s+=Rc(500,90+k*28,12,12,RB[k])+T(518,101+k*28,sr.n,{size:12});});
+  return SV(W,H,s,'Kolom bertumpuk jam waktu henti dalam lima warna pelangi dengan legenda');}
+function c6After(){const W=640,H=380,pw=S6[0].v,ratio=pw[5]/pw[0];const h=AT('Waktu henti akibat listrik telah '+(ratio>3?'lebih dari tiga kali lipat':'naik')+' sejak April; setiap penyebab lain datar atau menurun','Jam waktu henti per bulan menurut penyebab',60);
+  const x0=40,x1=470,y0=h.y+14,y1=312,st=(x1-x0)/6,yy=lin(0,120,y1,y0),cols=[C.copper,'#6E6C65','#8C8A82','#B0ACA1','#D2CEC3'];let s=Rc(0,0,W,H,'#fff')+h.s+Ln(x0,y1,x1,y1,C.line,1);
+  M6.forEach((m,i)=>{let acc=0;S6.forEach((sr,k)=>{const v=sr.v[i];s+=Rc(x0+i*st+st*.16,yy(acc+v),st*.68,yy(acc)-yy(acc+v),cols[k],'stroke="#fff" stroke-width="1"');if(k===0&&(i===0||i===5))s+=T(x0+i*st+st/2,yy(acc+v/2)+4,String(v),{anchor:'middle',size:12,weight:700,fill:'#fff'});acc+=v;});s+=T(x0+i*st+st/2,y1+17,m,{anchor:'middle',size:11,fill:C.muted});});
+  let acc=0;S6.forEach((sr,k)=>{const v=sr.v[5];s+=T(x1+8,yy(acc+v/2)+4,sr.n,{size:12,weight:k===0?700:400,fill:k===0?C.copper:C.muted});acc+=v;});
+  s+=T(24,H-10,'Sumber: log pemeliharaan (data fiktif)',{size:10.5,fill:C.muted});return SV(W,H,s,'Kolom bertumpuk dengan pemadaman listrik di dasar berwarna dan penyebab lain abu-abu');}
+
+/* ---- Case 7: vendor table (HTML) ---- */
+const V7=[['Alpha Steel',120,6,3.1,410],['Brightline Parts',95,19,9.4,285],['Cobalt Tools',140,7,2.8,520],['Delta Hydraulics',60,14,11.2,190],['Echo Safety',110,4,1.9,330],['Falcon Bearings',85,5,3.5,240],['Gamma Filters',70,3,2.2,160],['Horizon Lubes',100,6,3.0,300]];
+function v7stats(){const L=sum(V7.map(v=>v[1])),Lt=sum(V7.map(v=>v[2])),pr=V7.slice().sort((a,b)=>b[2]/b[1]-a[2]/a[1]).slice(0,2);const l2=sum(pr.map(v=>v[1])),t2=sum(pr.map(v=>v[2]));return {L:L,Lt:Lt,pr:pr.map(v=>v[0]),pl:Math.round(100*l2/L),pt:Math.round(100*t2/Lt),wd:sum(V7.map(v=>v[2]*v[3]))/Lt};}
+function c7Before(){return '<div class="ttl" style="color:#000;text-align:center;font-family:Arial;font-size:16px">Data Vendor</div><div class="tbl" style="margin:4px"><table class="tb-bad"><tr><th>Vendor</th><th>Total baris</th><th>Baris terlambat</th><th>% terlambat</th><th>Rata-rata hari keterlambatan</th><th>Belanja $K</th></tr>'+V7.map(v=>'<tr><td>'+v[0]+'</td><td>'+v[1].toFixed(2)+'</td><td>'+v[2].toFixed(2)+'</td><td>'+(100*v[2]/v[1]).toFixed(2)+'</td><td>'+v[3].toFixed(2)+'</td><td>'+v[4].toFixed(2)+'</td></tr>').join('')+'</table></div>';}
+function c7After(){const st=v7stats(),rows=V7.slice().sort((a,b)=>b[2]/b[1]-a[2]/a[1]);
+  return '<div class="ttl">Dua vendor memasok '+st.pl+'% baris PO tetapi menyebabkan '+st.pt+'% baris terlambat</div><p class="sub">Kartu skor vendor, kuartal terakhir · diurutkan menurut % terlambat</p><div class="tbl" style="margin:0 4px"><table class="tb-good"><tr><th>Vendor</th><th>Baris PO</th><th>Baris terlambat</th><th>% terlambat</th><th>Rata-rata keterlambatan (hari)</th></tr>'
+  +rows.map((v,i)=>'<tr'+(i<2?' class="hot"':'')+'><td>'+v[0]+'</td><td>'+v[1]+'</td><td>'+v[2]+'</td><td class="cu">'+Math.round(100*v[2]/v[1])+'%</td><td>'+v[3].toFixed(1)+'</td></tr>').join('')
+  +'<tr class="tot"><td>Semua vendor</td><td>'+st.L+'</td><td>'+st.Lt+'</td><td>'+Math.round(100*st.Lt/st.L)+'%</td><td>'+st.wd.toFixed(1)+'</td></tr></table></div><p class="srcn">Rata-rata keterlambatan dibobot menurut baris terlambat. Sumber: pelacakan PO (data fiktif).</p>';}
+
+/* ---- Case 8: donut gauges ---- */
+const D8=[['Zona A',92],['Zona B',78],['Zona C',88],['Zona D',64]];
+function c8Before(){const W=640,H=380;let s=BT('Pemanfaatan!',W,H);D8.forEach((d,i)=>{const cx=120+(i%2)*260+(i>1?0:0),cy=130+Math.floor(i/2)*130,r=46,circ=2*Math.PI*r;s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="#ddd" stroke-width="22"/><circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="'+RB[(i*2+1)%8]+'" stroke-width="22" stroke-dasharray="'+(circ*d[1]/100).toFixed(1)+' '+circ.toFixed(1)+'" transform="rotate(-90 '+cx+' '+cy+')" stroke-linecap="round"/>'+T(cx,cy+6,d[1]+'%',{anchor:'middle',size:18,weight:700,fill:'#000'})+T(cx+68,cy+4,d[0],{size:14,weight:700});});return SV(W,H,s,'Empat pengukur donat berwarna untuk pemanfaatan zona gudang');}
+function c8After(){const W=640,H=380,ceil=85,rows=D8.slice().sort((a,b)=>b[1]-a[1]),over=rows.filter(d=>d[1]>ceil).map(d=>d[0].replace('Zona ',''));const rest=rows.filter(d=>d[1]<=ceil).map(d=>d[0].replace('Zona ',''));
+  const h=AT('Zona '+over.join(' dan ')+' melampaui batas '+ceil+'% batas pemanfaatan; '+rest.join(' dan ')+' masih memiliki ruang','Pemanfaatan gudang per zona, % dari kapasitas yang dapat digunakan',60);const o={x0:20,y0:h.y+40,lw:70,w:440,bh:34,gap:18,max:100,minLx:20+70+440*ceil/100+8};
+  const items=rows.map(d=>({l:d[0],v:d[1],c:d[1]>ceil?C.copper:C.grey,bold:d[1]>ceil,lab:d[1]+'%'}));const tx=o.x0+o.lw+o.w*ceil/100;
+  return SV(W,H,Rc(0,0,W,H,'#fff')+h.s+HB(items,o)+Ln(tx,h.y+24,tx,o.y0+4*(o.bh+o.gap)-10,C.dark,1.2,'5 4')+T(tx,h.y+18,ceil+'% batas perencanaan',{anchor:'middle',size:11,weight:700,fill:C.dark})+T(24,H-10,'Sumber: sistem manajemen gudang (data fiktif)',{size:10.5,fill:C.muted}),'Batang pemanfaatan zona yang diurutkan dengan garis batas 85 persen');}
+
+/* ---- Case 9: dark neon ---- */
+const FL=(function(){const r=mulberry32(5);const mk=b=>Array.from({length:14},()=>Math.round(b+(r()-.5)*6));return [{n:'Penerimaan barang',v:mk(100)},{n:'Penyimpanan',v:mk(99)},{n:'Pengambilan',v:mk(100)},{n:'Pengiriman',v:[101,100,99,100,98,99,97,100,90,86,84,83,82,81]}];})();
+const NEON=['#39FF14','#FF2BD6','#FFF200','#00E5FF'];
+function c9Before(){const W=640,H=380,x0=56,x1=600,y0=60,y1=320,yy=lin(70,110,y1,y0),xx=lin(0,13,x0+10,x1-10);let s=Rc(0,0,W,H,'#000')+T(W/2,28,'THROUGHPUT %%',{anchor:'middle',size:16,weight:700,fill:'#00E5FF'});
+  for(let v=70;v<=110;v+=10){s+=Ln(x0,yy(v),x1,yy(v),'#8a8a8a',1)+T(x0-6,yy(v)+4,v+'.0',{anchor:'end',size:10,fill:'#fff'});}
+  FL.forEach((f,i)=>{s+=Pl(f.v.map((v,k)=>[xx(k),yy(v)]),NEON[i],7,'opacity=".25"')+Pl(f.v.map((v,k)=>[xx(k),yy(v)]),NEON[i],3);f.v.forEach((v,k)=>{s+=Cr(xx(k),yy(v),3.5,NEON[i]);});s+=Rc(70+i*130,340,12,12,NEON[i])+T(88+i*130,351,f.n,{size:12,fill:NEON[i]});});
+  for(let d=0;d<14;d+=1){s+=T(xx(d),y1+14,String(d+1),{anchor:'middle',size:10,fill:'#fff'});}
+  return SV(W,H,s,'Garis neon di atas latar hitam dengan garis kisi terang dan efek cahaya');}
+function c9After(){const W=640,H=380,BG='#0E1213',last=FL[3].v[13],oth=FL.slice(0,3).map(f=>f.v[13]);const h=AT('Pengeluaran barang telah turun menjadi '+last+'% dari rencana, sementara ketiga alur lainnya bertahan di dekat 100%','Throughput harian sebagai % dari rencana, 14 hari terakhir',62,'#F2F0E8','#9FA9AB');
+  const x0=40,x1=455,y0=h.y+10,y1=300,yy=lin(70,110,y1,y0),xx=lin(0,13,x0,x1);let s=Rc(0,0,W,H,BG)+h.s+Ln(x0,yy(100),x1,yy(100),'#4A5456',1,'4 4')+T(x0,yy(100)-24,'Rencana = 100%',{size:10.5,fill:'#8A9496'});
+  FL.slice(0,3).forEach(f=>{s+=Pl(f.v.map((v,k)=>[xx(k),yy(v)]),'#6A7678',1.8);});
+  s+=Pl(FL[3].v.map((v,k)=>[xx(k),yy(v)]),'#FFFFFF',4)+Cr(xx(13),yy(last),5.5,'#fff')+T(xx(13)+10,yy(last)+4,'Pengiriman '+last+'%',{size:13,weight:700,fill:'#fff'})+T(xx(13)+10,yy(Math.round(sum(oth)/3))+2,'Penerimaan, penyimpanan,',{size:11,fill:'#9FA9AB'})+T(xx(13)+10,yy(Math.round(sum(oth)/3))+16,'pengambilan: ~100%',{size:11,fill:'#9FA9AB'});
+  [0,6,13].forEach(d=>{s+=T(xx(d),y1+18,'Hari '+(d+1),{anchor:'middle',size:10.5,fill:'#9FA9AB'});});
+  s+=T(24,H-10,'Sumber: log throughput WMS (data fiktif)',{size:10.5,fill:'#8A9496'});return SV(W,H,s,'Grafik gelap dengan garis abu-abu dan satu garis putih yang disorot');}
+
+/* =================== CASE DEFINITIONS =================== */
+const CASES = [
+ {n:1,name:'Diagram lingkaran 3D pelangi',ctx:'Tinjauan pengiriman bulanan. Manajer Logistik harus memutuskan penyebab keterlambatan mana yang ditangani lebih dulu.',kind:'svg',before:c1Before,after:c1After,sin:'Diagram lingkaran dengan enam irisan yang mirip',fix:'Batang horizontal yang diurutkan, tiga teratas diberi aksen',tags:['L2','L3','L4','L5'],
+  issues:[{t:'Enam warna pelangi tanpa penekanan',ok:1,L:'L4',w:'Ketika semuanya berbeda, tidak ada yang menonjol.'},{t:'Kemiringan 3D mendistorsi ukuran irisan',ok:1,L:'L2',w:'Irisan di depan tampak lebih besar daripada nilai yang sama di belakang.'},{t:'Legenda memaksa mata bolak-balik',ok:1,L:'L3',w:'Label langsung menghilangkan pencarian.'},{t:'Irisan berukuran hampir sama, jadi pengurutan hanya tebakan',ok:1,L:'L2',w:'Mata tidak dapat memeringkat sudut yang mirip; batang pada satu garis dasar dapat diperingkat sekilas.'},{t:'Judulnya hanya label topik, bukan kesimpulan',ok:1,L:'L5',w:'"Penyebab Keterlambatan" tidak menyatakan apa yang harus disimpulkan.'},{t:'Perlu lebih banyak irisan untuk menampilkan lebih banyak detail',ok:0,w:'Lebih banyak irisan membuat diagram lingkaran lebih buruk, bukan lebih baik.'},{t:'Garis tepi hitam seharusnya lebih tebal',ok:0,w:'Garis tepi yang lebih tebal menambah derau.'}],
+  chg:[['Diagram lingkaran diganti batang horizontal yang diurutkan dari terbesar ke terkecil','L2'],['Legenda dihapus; label berada di sebelah setiap batang','L3'],['Warna aksen hanya pada tiga penyebab teratas; sisanya abu-abu','L4'],['Judul aksi menyatakan temuan 65% yang dihitung dari data','L5']]},
+ {n:2,name:'Dua satuan, satu sumbu yang membingungkan',ctx:'Tinjauan operasi pelabuhan. Apakah volume yang lebih tinggi merugikan keberangkatan tepat waktu? Manajer Terminal ingin tahu.',kind:'svg',before:c2Before,after:c2After,sin:'Sumbu-y sekunder',fix:'Dua panel bertumpuk dengan sumbu-x yang sama',tags:['L2','L3','L5','L6'],
+  issues:[{t:'Sumbu sekunder membuat pembaca harus menguraikan seri mana memakai skala mana',ok:1,L:'L2',w:'Mereka harus memeriksa sumbu dulu sebelum bisa memikirkan pesannya.'},{t:'Nama bulan lengkap diputar 45 derajat',ok:1,L:'L3',w:'Teks diagonal lambat dibaca; singkat dan buat tetap horizontal.'},{t:'Garis kisi gelap dan bingkai tebal bersaing dengan data',ok:1,L:'L3',w:'Mereka menambah tinta tanpa menambah informasi.'},{t:'Tidak ada judul sumbu, dan legenda terletak jauh dari data',ok:1,L:'L5',w:'Setiap sumbu perlu judul; label langsung lebih baik daripada legenda.'},{t:'Judul "Volume vs Tepat Waktu" tidak memberikan kesimpulan',ok:1,L:'L6',w:'Pembaca harus menemukan hubungannya sendiri.'},{t:'Batangnya seharusnya 3D agar volume menonjol',ok:0,w:'3D memiringkan nilai dan tidak menambah apa-apa.'},{t:'Seri ketiga seperti rata-rata keterlambatan akan memperjelas',ok:0,w:'Lebih banyak seri menambah beban; pesannya membutuhkan lebih sedikit hal, bukan lebih banyak.'}],
+  chg:[['Sumbu ganda dipisah menjadi dua panel dengan satu sumbu bulan bersama','L2'],['Kisi, bingkai, dan label diputar dihapus; bulan disingkat','L3'],['Bulan di atas 1,500 TEU diarsir dan diberi warna, menghubungkan kedua panel','L4'],['Judul panel dan judul aksi menggantikan legenda dan label','L5'],['Judul menyebut hubungannya, dengan ambang yang dihitung dari data','L6']]},
+ {n:3,name:'Sumbu batang yang dipotong',ctx:'Tinjauan jaringan. Apakah kelima hub benar-benar berbeda dalam kinerja pengiriman?',kind:'svg',before:c3Before,after:c3After,sin:'Batang yang tidak dimulai dari nol',fix:'Garis dasar nol, garis target, hanya yang meleset disorot',tags:['L2','L3','L4','L5'],
+  issues:[{t:'Sumbu dimulai dari 93%, sehingga selisih kecil tampak sangat besar',ok:1,L:'L2',w:'Mata membandingkan panjang batang, jadi batang harus dimulai dari nol.'},{t:'Setiap batang berwarna pelangi yang berbeda',ok:1,L:'L4',w:'Warna di sini tidak bermakna.'},{t:'Target 95% tidak ditampilkan, sehingga tidak ada yang bisa melihat siapa yang meleset',ok:1,L:'L1',w:'Tanpa tolok ukur, pembaca tidak bisa tahu mana yang baik atau buruk.'},{t:'Judulnya label yang berteriak tanpa pesan',ok:1,L:'L5',w:'Nyatakan kesimpulannya sebagai gantinya.'},{t:'Label dua desimal seperti 96.10% menambah derau',ok:1,L:'L3',w:'Ketelitian tidak diperlukan untuk menyampaikan poin.'},{t:'Seharusnya diagram lingkaran',ok:0,w:'Diagram lingkaran lebih sulit dibaca daripada batang.'},{t:'Sumbu seharusnya dimulai lebih tinggi lagi, di 95%',ok:0,w:'Itu akan melebih-lebihkan selisih lebih jauh lagi.'}],
+  chg:[['Batang dimulai dari nol dan menampilkan panjang yang jujur','L2'],['Batang diubah menjadi horizontal, dengan garis target 95% ditambahkan','L1'],['Hanya dua hub di bawah target yang memakai warna aksen','L4'],['Judul menyatakan bahwa meleset itu nyata tetapi kecil, dihitung dari data','L5']]},
+ {n:4,name:'Grafik garis spageti',ctx:'Tinjauan pengadaan. Apakah waktu tunggu memburuk di mana pun?',kind:'svg',before:c4Before,after:c4After,sin:'Tujuh garis bersilangan, tujuh warna',fix:'Garis konteks abu-abu, satu garis aksen, label langsung',tags:['L3','L4','L6'],
+  issues:[{t:'Tujuh garis berwarna yang bersilangan membuat grafik spageti',ok:1,L:'L4',w:'Tidak ada yang bisa mengikuti satu garis di tengah kekusutan.'},{t:'Legenda tujuh entri melampaui apa yang dapat ditampung memori jangka pendek',ok:1,L:'L3',w:'Memori menampung sekitar empat kelompok; beri label langsung saja.'},{t:'Penanda pada setiap titik data',ok:1,L:'L3',w:'Garis sudah menunjukkan datanya.'},{t:'Garis kisi tebal dan bingkai',ok:1,L:'L3',w:'Mereka bersaing dengan garis-garis.'},{t:'Tidak ada yang menunjuk ke hub yang berubah',ok:1,L:'L6',w:'Temuannya terkubur; sorot dan nyatakan.'},{t:'Perlu sumbu sekunder',ok:0,w:'Semua seri berbagi satu satuan; sumbu kedua hanya akan membingungkan.'},{t:'Haluskan garis agar tampak lebih bagus',ok:0,w:'Penghalusan menyembunyikan titik data yang sebenarnya.'}],
+  chg:[['Enam hub dibuat abu-abu muda; satu garis dalam warna aksen','L4'],['Legenda, penanda, kisi, dan bingkai dihapus','L3'],['Label langsung di ujung dan titik pertama','L3'],['Judul menyebut kenaikan 75%, dihitung dari data','L6']]},
+ {n:5,name:'Tembok kartu KPI',ctx:'Skor logistik mingguan untuk Direktur Operasi, yang hanya punya sekitar dua menit.',kind:'html',before:c5Before,after:c5After,sin:'Dua belas kartu sama besar dengan warna acak',fix:'Yang vital dengan target dan tren; satu aksen',tags:['L1','L3','L4','L6'],
+  issues:[{t:'Dua belas kartu berukuran sama; tidak ada yang diprioritaskan',ok:1,L:'L4',w:'Ukuran yang sama berarti semuanya sama pentingnya.'},{t:'Warnanya acak dan tidak memiliki makna',ok:1,L:'L4',w:'Warna seharusnya menandakan status atau fokus, bukan hiasan.'},{t:'Tidak ada target, tren, atau perbandingan di samping angka',ok:1,L:'L1',w:'Angka saja tidak dapat menyatakan apakah itu baik.'},{t:'Gradien, bingkai, dan bayangan menghiasi kartu',ok:1,L:'L3',w:'Dekorasi adalah kekacauan.'},{t:'Tidak ada judul dan tidak ada permintaan',ok:1,L:'L6',w:'Direktur harus menebak apa yang penting.'},{t:'Perlu lebih banyak kartu KPI agar lengkap',ok:0,w:'Masalahnya, sudah terlalu banyak.'},{t:'Angkanya seharusnya lebih besar',ok:0,w:'Semuanya dibuat lebih besar justru tidak ada yang menonjol.'}],
+  chg:[['Dua belas metrik dipangkas menjadi tiga yang vital; sisanya dipindahkan ke penelusuran rinci','L1'],['Target dan tren enam minggu ditambahkan di samping setiap angka','L1'],['Abu-abu untuk yang sesuai target, aksen hanya untuk KPI yang perlu perhatian','L4'],['Gradien dan bingkai dihapus; ruang kosong dan perataan ditambahkan','L3'],['Judul aksi menyatakan masalah dan besarnya meleset','L6']]},
+ {n:6,name:'Kolom bertumpuk pelangi',ctx:'Tinjauan keandalan. Manajer Pemeliharaan harus memilih di mana berinvestasi.',kind:'svg',before:c6Before,after:c6After,sin:'Tumpukan lima warna dengan legenda',fix:'Seri fokus di garis dasar, yang lain abu-abu',tags:['L2','L3','L4','L6'],
+  issues:[{t:'Lima segmen pelangi di setiap kolom',ok:1,L:'L4',w:'Tidak ada yang menonjol.'},{t:'Hanya segmen bawah yang berbagi garis dasar, sehingga seri tengah tidak bisa dibandingkan',ok:1,L:'L2',w:'Batang bertumpuk membuat segmen atas sulit dibandingkan antar kolom.'},{t:'Legenda di sebelah kanan',ok:1,L:'L3',w:'Label langsung lebih cepat.'},{t:'Garis kisi tebal dan label bergaya "20.00"',ok:1,L:'L3',w:'Angka nol di belakang hanya derau.'},{t:'Tidak ada cerita: penyebab mana yang sedang bertambah?',ok:1,L:'L6',w:'Pembaca harus mencari tahu temuannya sendiri.'},{t:'Tumpukannya seharusnya 3D',ok:0,w:'3D mendistorsi dan tidak menambah apa-apa.'},{t:'Seharusnya satu diagram lingkaran per bulan',ok:0,w:'Enam diagram lingkaran lebih sulit daripada satu grafik bertumpuk.'}],
+  chg:[['Seri yang tumbuh dipindahkan ke garis dasar dan diberi warna aksen','L2'],['Penyebab lain dalam abu-abu yang tenang','L4'],['Legenda, kisi, dan bingkai dihapus; label berada di kanan kolom terakhir','L3'],['Label hanya pada nilai pertama dan terakhir dari seri fokus','L4'],['Judul melaporkan pertumbuhan, dihitung dari data','L6']]},
+ {n:7,name:'Tabel tumpahan data',ctx:'Tinjauan pengadaan. Vendor mana yang perlu diajak bicara?',kind:'html',before:c7Before,after:c7After,sin:'Tabel berbingkai tebal, semuanya tebal',fix:'Tabel ringan, diurutkan, hanya pencilan yang ditekankan',tags:['L3','L4','L5','L6'],
+  issues:[{t:'Bingkai hitam tebal di sekeliling setiap sel',ok:1,L:'L3',w:'Bingkai sebaiknya memudar ke latar belakang.'},{t:'Semuanya dicetak tebal, sehingga tidak ada yang menonjol',ok:1,L:'L4',w:'Penekanan hanya efektif jika jarang digunakan.'},{t:'Angka rata tengah dengan dua desimal',ok:1,L:'L5',w:'Rata kanan dan bulatkan agar digit sejajar dan mudah dibandingkan.'},{t:'Baris tidak diurutkan, sehingga vendor terburuk tersembunyi',ok:1,L:'L2',w:'Urutkan berdasarkan yang penting.'},{t:'Tidak ada kesimpulan dalam judul',ok:1,L:'L6',w:'"Data Vendor" adalah label, bukan pesan.'},{t:'Lebih banyak kolom, seperti kontak dan wilayah, akan membantu',ok:0,w:'Kolom yang tidak mendukung keputusan hanya menambah kekacauan.'},{t:'Diagram lingkaran di samping tabel akan membantu',ok:0,w:'Itu hanya mengulang data dan membuatnya lebih sulit dibaca.'}],
+  chg:[['Bingkai dihapus, hanya garis tipis','L3'],['Diurutkan menurut % terlambat; dua pencilan ditekankan, sisanya abu-abu','L4'],['Angka rata kanan dan dibulatkan; kolom yang tidak perlu dihapus','L5'],['Baris total sebagai konteks','L5'],['Judul aksi dengan porsi yang dihitung dari data','L6']]},
+ {n:8,name:'Obsesi pengukur donat',ctx:'Perencanaan gudang. Zona mana yang melampaui batas perencanaan?',kind:'svg',before:c8Before,after:c8After,sin:'Pengukur donat',fix:'Batang yang diurutkan dengan batas sebagai garis acuan',tags:['L2','L4','L5'],
+  issues:[{t:'Donat mengharuskan membandingkan panjang busur',ok:1,L:'L2',w:'Batang pada garis dasar yang sama jauh lebih mudah.'},{t:'Empat warna tanpa makna',ok:1,L:'L4',w:'Warna sebaiknya menandai zona bermasalah.'},{t:'Batas 85% tidak ditampilkan, sehingga 88% tidak punya konteks',ok:1,L:'L1',w:'Tolok ukur membuat angka itu bermakna.'},{t:'Cincin besar memakan ruang dan tidak diurutkan',ok:1,L:'L3',w:'Ruang habis untuk hiasan, bukan untuk perbandingan.'},{t:'Judulnya hanya satu kata',ok:1,L:'L5',w:'Nyatakan kesimpulannya.'},{t:'Cincin seharusnya 3D',ok:0,w:'Jangan pernah pakai 3D untuk menampilkan satu dimensi.'},{t:'Tambahkan jarum pengukur',ok:0,w:'Dekorasi menambah derau.'}],
+  chg:[['Donat diganti batang horizontal yang diurutkan','L2'],['Batas perencanaan digambar sebagai garis acuan putus-putus','L1'],['Warna aksen hanya pada zona di atas batas','L4'],['Judul aksi mencantumkan zona mana yang melampaui batas, dihitung dari data','L5']]},
+ {n:9,name:'Neon di atas hitam',ctx:'Layar ruang kendali. Templatnya memakai latar gelap dan tim bersikeras mempertahankannya.',kind:'svg',dark:true,before:c9Before,after:c9After,sin:'Pelangi neon, efek cahaya, dan kisi terang',fix:'Gelap yang benar: dasar abu-abu, satu aksen putih',tags:['L3','L4','L6'],
+  issues:[{t:'Empat warna neon berteriak dengan volume yang sama',ok:1,L:'L4',w:'Tidak ada yang memandu mata; di atas hitam, kuning dan hijau neon sangat mencolok.'},{t:'Cahaya dan garis kisi terang lebih mencolok daripada datanya',ok:1,L:'L3',w:'Struktur sebaiknya dibuat mundur.'},{t:'Legenda terpisah dari garis-garisnya',ok:1,L:'L3',w:'Label langsung lebih cepat.'},{t:'Tidak ada judul tentang penurunan pengeluaran barang',ok:1,L:'L6',w:'Ceritanya tidak terlihat.'},{t:'Latar belakang gelap tidak pernah dianjurkan',ok:0,w:'Jika merek atau ruangan menuntutnya, balikkan logikanya: abu-abu sebagai dasar, putih sebagai aksen.'},{t:'Lebih banyak warna neon akan memisahkan garis-garisnya',ok:0,w:'Lebih banyak warna mengurangi kontras.'}],
+  chg:[['Latar gelap yang sama dipertahankan, tetapi garisnya dibuat abu-abu','L4'],['Putih menjadi warna perhatian (di atas hitam, putih paling menonjol)','L4'],['Efek cahaya, kisi terang, dan legenda dihapus; rencana ditampilkan sebagai garis putus-putus samar','L3'],['Label langsung dan judul aksi yang dihitung dari data','L6']]}
+];
+/* =================== QUIZZES =================== */
+const QZ = {
+1:[{q:'Definisi audiens mana yang paling kuat?',o:['Semua pemangku kepentingan internal dan eksternal','Direktur Operasi, yang memutuskan sewa','Siapa saja yang mungkin tertarik'],a:1,w:'Yang spesifik mengalahkan yang umum. Pengambil keputusan yang jelas memungkinkan Anda memilih pesan, data, dan ajakan bertindak.'},
+   {q:'Anda telah menjelajahi 100 tampilan data PO. Untuk rapat tinjauan, Anda sebaiknya…',o:['Tunjukkan semuanya, sebagai bukti kerja','Pilih satu atau dua temuan yang mendukung keputusan dan jelaskan','Kirim tabel pivot dan biarkan mereka menjelajah'],a:1,w:'Itulah perbedaan antara kerja eksploratif dan eksplanatori: tunjukkan mutiaranya, bukan tiramnya.'},
+   {q:'Dasbor yang dibuka orang sendirian, tanpa Anda, paling mirip dengan…',o:['Presentasi langsung','Dokumen tertulis, jadi judul dan catatan harus membawa pesannya','Keduanya tidak; konteks tidak berlaku'],a:1,w:'Tidak ada yang menjelaskan, jadi halaman harus bisa menjelaskan dirinya sendiri.'}],
+2:[{q:'Empat porsi pemasok adalah 34%, 31%, 26%, dan 9%. Visual terbaik?',o:['Diagram lingkaran 3D','Donat','Batang horizontal yang diurutkan','Area bertumpuk'],a:2,w:'Batang pada garis dasar yang sama membuat nilai yang berdekatan mudah diurutkan dan menghindari distorsi 3D.'},
+   {q:'Sumbu grafik batang dimulai dari 93% "untuk memperlihatkan perbedaannya". Apa yang salah?',o:['Tidak ada, itu membuat grafik lebih mudah dibaca','Panjang batang tidak lagi sesuai dengan nilainya, sehingga melebih-lebihkan selisih','Batangnya seharusnya lebih tipis'],a:1,w:'Mata membandingkan panjang batang, jadi batang membutuhkan garis dasar nol. Plot titik atau garis boleh memakai garis dasar bukan nol.'},
+   {q:'Volume (unit) dan % tepat waktu (persen) berbagi sumbu bulan. Alternatif terbaik untuk sumbu sekunder?',o:['Beri warna pada label sumbu','Dua panel bertumpuk dengan sumbu-x yang sama, atau label langsung','Diagram lingkaran untuk setiap bulan'],a:1,w:'Memisahkan seri menghilangkan tebakan tentang sumbu mana yang menjadi milik setiap seri.'}],
+3:[{q:'Penghapusan mana yang didukung oleh prinsip penutupan?',o:['Menghapus bingkai grafik','Menghapus datanya','Menghapus judulnya'],a:0,w:'Orang melihat grafik sebagai utuh tanpa bingkai, dan datanya lebih menonjol.'},
+   {q:'Elemen mana yang biasanya harus dipertahankan, meskipun tampak berlebihan?',o:['$, % dan pemisah ribuan pada angka','Garis kisi di setiap grafik','Bayangan 3D'],a:0,w:'Satuan dan pemisah memudahkan interpretasi; pembaca tidak perlu mengingat arti angka-angkanya.'},
+   {q:'Sebuah halaman memiliki ruang kosong di bagian bawah. Apa respons terbaik?',o:['Tambahkan grafik lain untuk mengisinya','Biarkan, dan gunakan ruang itu sebagai jeda yang memfokuskan perhatian','Regangkan grafik untuk mengisinya'],a:1,w:'Ruang kosong bekerja seperti jeda dalam berbicara. Jangan pernah menambah data hanya karena ada ruang.'}],
+4:[{q:'Tabel peringkat memakai sepuluh warna, satu per peringkat. Apa pendekatan yang lebih baik?',o:['Pertahankan; lebih banyak warna lebih jelas','Satu warna dengan saturasi bervariasi, sehingga pemimpinnya menonjol','Gantilah dengan diagram lingkaran'],a:1,w:'Ketika semuanya berbeda, tidak ada yang menonjol. Saturasi juga berarti "lebih banyak".'},
+   {q:'Pasangan warna mana yang bisa menimbulkan masalah bagi sekitar 8% pria?',o:['Merah dan hijau berdampingan','Biru dan oranye','Abu-abu dan tembaga'],a:0,w:'Hindari, atau tambahkan isyarat kedua seperti huruf tebal atau tanda +/−. Biru dan oranye adalah pasangan positif/negatif yang aman.'},
+   {q:'Kira-kira berapa kelompok informasi visual yang dapat ditampung memori jangka pendek?',o:['Sekitar 1','Sekitar 4','Sekitar 20'],a:1,w:'Karena itu hindari legenda sepuluh seri. Beri label langsung dan kelompokkan informasi menjadi kelompok yang lebih besar.'}],
+5:[{q:'Mana judul slide terbaik?',o:['Anggaran 2026','Perkiraan belanja 2026 melampaui anggaran','Ikhtisar anggaran'],a:1,w:'Judul aksi menyampaikan kesimpulan di tempat yang paling menonjol.'},
+   {q:'Anda melewatkan judul sumbu karena "sudah jelas". Apa yang terjadi?',o:['Tidak ada; pembaca menyimpulkannya sendiri','Pembaca berhenti untuk mencari tahu apa yang sedang mereka lihat','Grafiknya tampak lebih modern'],a:1,w:'Judul menghilangkan keraguan. Hanya dalam kasus langka menghapusnya merupakan pilihan yang disengaja.'},
+   {q:'Pemangku kepentingan menolak desain grafik baru Anda. Apa langkah awal yang baik?',o:['Kembali diam-diam ke desain lama','Tampilkan sebelum dan sesudah berdampingan dan jelaskan manfaatnya','Tambahkan lebih banyak warna'],a:1,w:'Transparansi dan perbandingan yang terlihat membantu orang menerima perubahan. Sekutu dan opsi juga membantu.'}],
+6:[{q:'Seorang eksekutif sibuk yang sudah mempercayai Anda punya sepuluh menit. Urutan mana?',o:['Kronologis: metode dulu, temuan terakhir','Mulai dengan permintaan, lalu bukti terkuat','Lampiran dulu'],a:1,w:'Kepercayaan sudah ada dan waktu singkat, jadi buka dengan "jadi apa".'},
+   {q:'"Logika horizontal" berarti…',o:['Grafik disusun dari kiri ke kanan','Hanya dengan membaca judul slide, seluruh cerita sudah tersampaikan','Setiap slide memiliki tata letak yang sama'],a:1,w:'Perlu judul aksi, bukan label topik.'},
+   {q:'Sebuah deck dikirim lewat email tanpa presenter. Apa yang harus ada di setiap halaman?',o:['Kata-kata yang membuat "jadi apa"-nya jelas: judul aksi dan anotasi','Hanya grafik, untuk menghindari kekacauan','Sebanyak mungkin poin'],a:0,w:'Tanpa narasi suara, narasi tertulis harus membawa pesannya.'}]
+};
+function renderQuiz(id,qs){const box=$(id);if(!box)return;let done=0,score=0;let h='<h4>Periksa diri Anda</h4>';
+  qs.forEach((q,qi)=>{h+='<div class="q" data-q="'+qi+'"><div class="qt">'+(qi+1)+'. '+esc(q.q)+'</div>'+shuf(q.o.map((o,oi)=>oi),id.length*7+qi*13+5).map(oi=>'<label class="opt" data-o="'+oi+'">'+esc(q.o[oi])+'</label>').join('')+'<div class="qwhy">'+esc(q.w)+'</div></div>';});
+  h+='<div class="small" id="'+id+'-s"></div>';box.innerHTML=h;
+  box.querySelectorAll('.q').forEach(qe=>{const qi=+qe.getAttribute('data-q');qe.querySelectorAll('.opt').forEach(op=>{op.addEventListener('click',()=>{if(qe.getAttribute('data-d'))return;qe.setAttribute('data-d','1');const oi=+op.getAttribute('data-o');const ok=oi===qs[qi].a;qe.querySelectorAll('.opt').forEach(x=>{x.setAttribute('disabled','');if(+x.getAttribute('data-o')===qs[qi].a)x.classList.add('ok');});if(!ok)op.classList.add('bad');qe.querySelector('.qwhy').classList.add('show');done++;if(ok)score++;if(done===qs.length)$(id+'-s').textContent='Skor: '+score+' dari '+qs.length+(score===qs.length?'. Kerja bagus.':'. Baca ulang penjelasan di atas dan coba labnya.');});});});}
+
+/* =================== CHART PICKER =================== */
+const MSGS=[
+ {m:'Satu atau dua angka adalah inti dari semuanya',best:'Teks sederhana',why:'Angka besar dengan beberapa kata lebih baik daripada grafik dengan satu atau dua batang.',ex:'"82% pengiriman lokasi tepat waktu (target 85%)."',avoid:'Tabel atau grafik untuk satu angka.'},
+ {m:'Pembaca perlu mencari nilai pasti',best:'Tabel',why:'Tabel dibaca, sehingga setiap pembaca bisa menemukan barisnya sendiri, dan satuannya boleh berbeda.',ex:'Kartu skor vendor untuk audiens campuran.',avoid:'Bingkai tebal, angka rata tengah, tabel dalam presentasi langsung.'},
+ {m:'Detail ditambah gambaran cepat tentang yang tinggi dan rendah',best:'Heatmap',why:'Saturasi warna memandu mata sementara angkanya tetap terlihat.',ex:'% tepat waktu per hub dan minggu.',avoid:'Skala pelangi. Gunakan satu warna dan tambahkan legenda.'},
+ {m:'Bagaimana sesuatu berubah dari waktu ke waktu',best:'Grafik garis',why:'Titik yang terhubung menunjukkan kesinambungan dan arah.',ex:'OTIF masuk mingguan, prakiraan sebagai garis putus-putus.',avoid:'Langkah waktu yang tidak merata; penanda di setiap titik.'},
+ {m:'Membandingkan kategori',best:'Grafik batang horizontal, diurutkan',why:'Mata membandingkan ujung batang, dan label dibaca dari kiri ke kanan sebelum datanya.',ex:'Baris PO terlambat per vendor.',avoid:'Diagram lingkaran atau donat, sumbu terpotong, 3D.'},
+ {m:'Dua titik waktu di banyak kategori',best:'Slopegraph',why:'Kemiringan menunjukkan arah dan besarnya perubahan sekaligus.',ex:'Pemanfaatan per zona, tahun ini vs tahun lalu.',avoid:'Banyak garis yang tumpang tindih. Sorot satu saja.'},
+ {m:'Total dan beberapa komponennya',best:'Batang bertumpuk dengan seri fokus di dasar, atau 100% bertumpuk',why:'Hanya segmen bawah yang berbagi garis dasar.',ex:'Jam waktu henti menurut penyebab.',avoid:'Banyak segmen dan warna pelangi.'},
+ {m:'Skala survei dari negatif ke positif',best:'Batang horizontal 100% bertumpuk',why:'Garis dasar bersama di kedua ujung memungkinkan Anda membandingkan nilai ekstrem.',ex:'Hasil survei budaya keselamatan.',avoid:'Satu diagram lingkaran per pertanyaan.'},
+ {m:'Awal, penambahan dan pengurangan, dan akhir',best:'Grafik air terjun',why:'Menunjukkan apa yang menggerakkan total dari awal sampai akhir.',ex:'Jumlah karyawan: awal, perekrutan, mutasi, keluar, akhir.',avoid:'Batang bertumpuk yang memaksa pengurangan dalam kepala.'},
+ {m:'Hubungan antara dua ukuran',best:'Diagram sebar',why:'Menunjukkan korelasi dan pencilan.',ex:'Biaya per pemindahan vs pemindahan per bulan.',avoid:'Sumbu yang tidak dijelaskan. Beri anotasi pada hal yang perlu diperhatikan.'},
+ {m:'Angka dengan besaran yang sangat berbeda',best:'Grafik area persegi',why:'Dua dimensi membuat kedua ekstrem muat dengan ringkas.',ex:'Dari 100 pertanyaan, 25 mendapat penawaran dan 9 dimenangkan.',avoid:'Menggunakan area untuk perbandingan biasa; mata membacanya dengan buruk.'},
+ {m:'Dua ukuran dengan satuan berbeda dari waktu ke waktu',best:'Dua panel dengan sumbu-x yang sama, atau label langsung',why:'Ini menghilangkan tebakan tentang sumbu mana milik seri yang mana.',ex:'Volume di atas, % tepat waktu di bawah.',avoid:'Sumbu-y sekunder.'},
+ {m:'Bagian dari keseluruhan',best:'Batang horizontal, dengan catatan bahwa jumlahnya 100%',why:'Sudut diagram lingkaran sulit diurutkan; batang pada garis dasar mudah.',ex:'Porsi keterlambatan menurut penyebab.',avoid:'Diagram lingkaran dan donat.'}
+];
+function initPicker(){const tb=$('pickTable');if(tb)tb.innerHTML='<tr><th>Jika pesan Anda adalah…</th><th>Gunakan</th><th>Mengapa</th><th>Hati-hati</th></tr>'+MSGS.map(m=>'<tr><td class="k">'+esc(m.m)+'</td><td><b>'+esc(m.best)+'</b></td><td>'+esc(m.why)+'</td><td>'+esc(m.avoid)+'</td></tr>').join('');
+  const sel=$('pk_sel');if(!sel)return;sel.innerHTML=MSGS.map((m,i)=>'<option value="'+i+'">'+esc(m.m)+'</option>').join('');
+  const draw=()=>{const m=MSGS[+sel.value];$('pk_out').innerHTML='<div class="grid g2"><div class="card green"><span class="tag g">Pilihan terbaik</span><h4 style="margin-top:8px">'+esc(m.best)+'</h4><p>'+esc(m.why)+'</p></div><div class="card"><h4>Contoh logistik</h4><p>'+esc(m.ex)+'</p><p class="small"><b>Hindari:</b> '+esc(m.avoid)+'</p></div></div>';};
+  sel.addEventListener('change',draw);draw();}
+
+/* =================== CONTEXT CANVAS =================== */
+function initCanvas(){const g=id=>($(id).value||'').trim();
+  const draft=()=>{const aud=g('cv_aud').replace(/^the\s+/i,''),act=g('cv_act'),ev=g('cv_ev'),st=g('cv_stake'),mech=$('cv_mech').value,tone=$('cv_tone').value;
+    const miss=[];if(!aud)miss.push('audiens Anda');if(!act)miss.push('aksi');if(!ev)miss.push('bukti');if(!st)miss.push('taruhan');
+    $('cv_msg').textContent=miss.length?'Masih kurang: '+miss.join(', ')+'.':'';
+    const big='Karena '+(ev||'[bukti]')+(st?', dan '+st:'')+', kami meminta '+(aud||'[audiens]')+' untuk '+(act||'[aksi]')+'.';
+    const mt={live:'Presentasi langsung: buat slide seminimal mungkin, latih dengan suara keras, dan beri tahu audiens strukturnya di awal.',read:'Tertulis / dasbor: tidak ada yang menjelaskan, jadi letakkan kesimpulan di judul dan tambahkan anotasi.',both:'Slideument: jaga alur utama tetap ringkas, pindahkan rincian ke lampiran, dan uji kedua penggunaannya.'}[mech];
+    $('cv_out').innerHTML='<div class="grid g2"><div class="card copper"><span class="tag c">Big Idea (draf)</span><p style="margin-top:8px;font-family:Georgia,serif;font-size:19px">'+esc(big)+'</p><p class="small">Periksa: memiliki sudut pandang, menyebutkan taruhannya, dan berupa kalimat lengkap.</p></div>'
+     +'<div class="card top"><span class="tag">Kerangka cerita 3 menit</span><ol class="tight" style="padding-left:20px"><li><b>Latar:</b> situasi yang '+esc(aud||'audiens Anda')+' sudah dikenali.</li><li><b>Konflik:</b> '+esc(ev||'bukti yang menunjukkan kesenjangan')+'.</li><li><b>Resolusi:</b> '+esc(act||'apa yang Anda ingin mereka lakukan')+(st?', karena '+esc(st):'')+'.</li></ol></div></div>'
+     +'<div class="callout teal"><b class="h">Catatan penyampaian</b><p>'+esc(mt)+' Nada: '+esc(tone.toLowerCase())+'.</p></div>';};
+  $('cv_go').addEventListener('click',draft);
+  $('cv_ex').addEventListener('click',()=>{$('cv_aud').value='Direktur Operasi';$('cv_act').value='menyetujui studi sewa untuk ruang gudang tambahan';$('cv_ev').value='prakiraan permintaan penyimpanan melampaui kapasitas saat ini mulai tahun ke-3';$('cv_stake').value='menunggu membahayakan proyek yang akan datang';$('cv_mech').value='read';draft();});}
+
+/* =================== ACTION TITLE CHECKER =================== */
+function initTitleChecker(){const VERBS=['fell','rose','grew','dropped','exceed','exceeds','miss','missed','misses','meets','met','recommend','approve','should','need','needs','drive','drives','cause','causes','doubled','tripled','slipped','declined','increased','decreased','reduce','cut','stop','start','close','trail','trailed','di atas','di bawah','naik','turun','melonjak','anjlok','melambat','meleset','tumbuh','menurun','meningkat','berkurang','melampaui','mencapai','memenuhi','tertinggal','gagal','tembus','menggandakan','dua kali lipat','tiga kali lipat','harus','perlu','sebaiknya','mendorong','menyebabkan','memangkas','hentikan','tutup','mulai','menaikkan','menurunkan','mengurangi','meningkatkan','memperbaiki'];
+  const GEN=/^(overview|summary|report|dashboard|analysis|review|update|status|trend|trends)\b|\bby (week|month|vendor|hub|zone|region|category)\s*$|^(ikhtisar|ringkasan|laporan|dasbor|analisis|tinjauan|pembaruan|tren)\b|\bper (minggu|bulan|vendor|hub|zona|wilayah|kategori)\s*$/i;
+  const run=()=>{const t=($('tt_in').value||'').trim();if(!t){$('tt_out').innerHTML='<p class="msg">Tulis judul terlebih dahulu.</p>';return;}
+    const words=t.split(/\s+/).length,low=t.toLowerCase();
+    const checks=[{ok:/\d/.test(t),y:'Mengandung angka',n:'Tidak ada angka: tambahkan besaran temuan, misalnya "82% vs 85%".'},{ok:VERBS.some(v=>new RegExp('\\b'+v+'\\b').test(low)),y:'Mengandung kata kerja yang menandakan perubahan atau tindakan',n:'Tidak ada kata kerja tindakan atau perubahan (fell, exceeds, approve…). Frasa benda biasanya berupa label topik.'},{ok:!GEN.test(t),y:'Tidak terbaca seperti label umum',n:'Judul dimulai atau diakhiri seperti label topik ("Ikhtisar", "per vendor"). Nyatakan apa yang seharusnya disimpulkan pembaca.'},{ok:words>=7&&words<=22,y:'Panjang yang mudah dibaca ('+words+' kata)',n:words<7?'Sangat pendek ('+words+' kata): kemungkinan besar label.':'Panjang ('+words+' kata): pangkas hingga satu poin.'}];
+    const pts=checks.filter(c=>c.ok).length;
+    $('tt_out').innerHTML='<div class="big"><div><b>'+pts+' / 4</b><span>skor heuristik pembelajaran</span></div></div><ul class="tight">'+checks.map(c=>'<li>'+(c.ok?'<b style="color:var(--green)">✓</b> '+esc(c.y):'<b style="color:var(--red)">✗</b> '+esc(c.n))+'</li>').join('')+'</ul><p class="small">Pola yang perlu dituju: <i>[subjek] [berubah atau meleset] [sebesar berapa] — [implikasi atau permintaan]</i>. Pemeriksaan ini tidak dapat menilai apakah klaimnya benar.</p>';};
+  $('tt_go').addEventListener('click',run);$('tt_ex').addEventListener('click',()=>{$('tt_in').value='Pemanfaatan gudang per zona';run();});}
+
+/* =================== STORY SEQUENCER =================== */
+const SEQ=[{t:'Keputusan ruang gudang mahal dan sulit dibatalkan, jadi kami menentukan ukurannya dari prakiraan.',r:'Latar (Bing)'},{t:'Permintaan penyimpanan yang diprakirakan tumbuh setiap tahun dan mencapai puncak di tahun ke-4.',r:'Bukti'},{t:'Ruang yang dibutuhkan akan melampaui kapasitas saat ini mulai tahun ke-3.',r:'Konflik'},{t:'Sewa, bangun, atau naikkan pemanfaatan: hanya sewa yang menutup kesenjangan tepat waktu.',r:'Opsi'},{t:'Rekomendasi: setujui studi sewa kuartal ini.',r:'Ajakan bertindak'},{t:'Ringkasan: kesenjangan di tahun ke-3, sewa adalah perbaikan tercepat, keputusan dibutuhkan sekarang.',r:'Rekap (Bongo)'}];
+function initSequencer(){const order=[3,0,5,2,4,1];let mine=[];const pool=$('seq_pool'),ml=$('seq_mine');
+  const draw=()=>{pool.innerHTML=order.map(i=>{const used=mine.indexOf(i)>=0;return '<button class="alt" data-i="'+i+'" style="text-align:left;font-weight:400;'+(used?'opacity:.4;':'')+'"'+(used?' disabled':'')+'>'+esc(SEQ[i].t)+'</button>';}).join('');
+    ml.innerHTML=mine.map(i=>'<li>'+esc(SEQ[i].t)+'</li>').join('');
+    pool.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{mine.push(+b.getAttribute('data-i'));$('seq_out').innerHTML='';draw();}));};
+  $('seq_rst').addEventListener('click',()=>{mine=[];$('seq_out').innerHTML='';draw();});
+  $('seq_chk').addEventListener('click',()=>{if(mine.length<SEQ.length){$('seq_out').innerHTML='<p class="msg">Tempatkan dulu keenam judul.</p>';return;}const ok=mine.filter((v,i)=>v===i).length;
+    $('seq_out').innerHTML='<div class="callout '+(ok===6?'green':'')+'"><b class="h">'+ok+' dari 6 di tempat yang benar</b><ol class="tight" style="padding-left:20px">'+SEQ.map((s,i)=>'<li><b>'+esc(s.r)+':</b> '+esc(s.t)+'</li>').join('')+'</ol><p class="small">Baca keenam judul dalam urutan ini dan Anda mendapat seluruh cerita. Itulah logika horizontal. Rekap mengulang pesan dan permintaan, sehingga melekat.</p></div>';});
+  draw();}
+
+/* =================== PRE-FLIGHT CHECKLIST =================== */
+const CHECKS=[['L1','Saya dapat menyebut satu pengambil keputusan untuk halaman ini.'],['L1','Saya dapat menyatakan apa yang ingin saya agar mereka ketahui atau lakukan dalam satu kalimat (Big Idea).'],['L1','Saya tahu apakah ini akan dibaca sendiri atau dipresentasikan.'],['L1','Saya mulai dengan papan cerita, bukan dengan alat.'],['L2','Setiap jenis grafik sesuai dengan pesan (tanpa diagram lingkaran, donat, 3D, atau sumbu sekunder).'],['L2','Grafik batang dimulai dari nol; sumbu waktu memiliki langkah yang merata.'],['L2','Kategori diurutkan atau dalam urutan alami.'],['L3','Bingkai grafik, garis kisi tebal, dan penanda yang tidak perlu sudah dihapus.'],['L3','Label horizontal, disingkat, dan bebas dari angka nol di belakang.'],['L3','Seri diberi label langsung; tidak ada legenda yang harus diuraikan.'],['L4','Konteks abu-abu; hanya titik yang membawa warna aksen.'],['L4','Penggunaan warna konsisten di seluruh halaman dan bekerja untuk pembaca buta warna.'],['L4','Seorang rekan memalingkan pandangan lalu kembali, dan matanya jatuh di tempat yang saya maksud.'],['L5','Setiap grafik dan sumbu memiliki judul; satuan dan tanda % ada.'],['L5','Judul menyatakan kesimpulan atau permintaan, bukan topik.'],['L5','Elemen disejajarkan pada garis yang rapi dengan margin terjaga.'],['L6','Membaca judulnya saja sudah menceritakan kisahnya (logika horizontal).'],['L6','Semua yang ada di setiap halaman mendukung judulnya (logika vertikal).'],['L6','Halaman diakhiri dengan ajakan bertindak yang jelas.'],['L6','Seseorang tanpa konteks memberi tahu saya apa yang mereka pahami.']];
+function initChecklist(){const ul=$('cl_list');if(!ul)return;ul.innerHTML=CHECKS.map((c,i)=>'<li><label><input type="checkbox" data-i="'+i+'"><span><span class="lt" title="'+esc(LT[c[0]])+'">'+c[0]+'</span> '+esc(c[1])+'</span></label></li>').join('');
+  const upd=()=>{const n=ul.querySelectorAll('input:checked').length;$('cl_bar').style.width=(100*n/CHECKS.length)+'%';$('cl_txt').textContent=n+' dari '+CHECKS.length+' pemeriksaan selesai'+(n===CHECKS.length?'. Siap dipublikasikan.':'');};
+  ul.querySelectorAll('input').forEach(x=>x.addEventListener('change',upd));upd();}
+
+/* =================== CLINIC RENDERER =================== */
+function ltags(arr){return arr.map(l=>'<span class="lt" title="'+esc(LT[l])+'">'+l+'</span>').join('');}
+function initClinic(){const host=$('clinic');if(!host)return;
+  host.innerHTML=CASES.map((c,i)=>'<div class="case" id="case-'+c.n+'"><div class="case-h"><span class="case-n">'+c.n+'</span><div><h3>'+esc(c.name)+'</h3><div>'+ltags(c.tags)+'</div></div></div><p class="ctx">'+esc(c.ctx)+'</p>'
+   +'<div class="row"><div><div class="seg" role="group" aria-label="Before or after"><button class="on" data-v="b">Sebelum</button><button data-v="a">Sesudah</button></div><div class="stage'+(c.dark?' dark':'')+'" id="cs-'+c.n+'" style="margin-top:10px"></div></div>'
+   +'<div><h4>Diagnosis dulu: centang setiap kekeliruan yang nyata</h4>'+c.issues.map((s,k)=>'<label class="chk" data-k="'+k+'"><input type="checkbox"><span>'+esc(s.t)+(s.L?' '+ltags([s.L]):'')+'<span class="why" style="display:none">'+esc(s.w)+'</span></span></label>').join('')
+   +'<div class="btns"><button data-act="chk">Periksa diagnosis saya</button><button class="cu" data-act="rev">Lihat perbaikannya</button></div><div class="fb"></div></div></div>'
+   +'<div class="chg"><h4>Apa yang berubah, dan mengapa</h4><ul>'+c.chg.map(x=>'<li>'+esc(x[0])+' '+ltags([x[1]])+'</li>').join('')+'</ul></div></div>').join('');
+  CASES.forEach(c=>{const root=$('case-'+c.n),st=$('cs-'+c.n),btns=root.querySelectorAll('.seg button'),chg=root.querySelector('.chg');
+    const show=v=>{st.innerHTML=(v==='a'?c.after:c.before)();btns.forEach(b=>{const on=b.getAttribute('data-v')===v;b.classList.toggle('on',on);b.classList.toggle('after',on&&v==='a');});chg.classList.toggle('show',v==='a');};
+    show('b');btns.forEach(b=>b.addEventListener('click',()=>show(b.getAttribute('data-v'))));
+    root.querySelector('[data-act=rev]').addEventListener('click',()=>{show('a');chg.scrollIntoView&&chg.scrollIntoView({block:'nearest',behavior:'smooth'});});
+    root.querySelector('[data-act=chk]').addEventListener('click',()=>{let hit=0,miss=0,decoy=0,real=0;
+      root.querySelectorAll('.chk').forEach(l=>{const k=+l.getAttribute('data-k'),s=c.issues[k],on=l.querySelector('input').checked;l.classList.remove('ok','bad','miss');if(s.ok)real++;
+        if(on&&s.ok){l.classList.add('ok');hit++;}else if(on&&!s.ok){l.classList.add('bad');decoy++;}else if(!on&&s.ok){l.classList.add('miss');miss++;}
+        l.querySelector('.why').style.display=(on||s.ok)?'block':'none';});
+      const fb=root.querySelector('.fb');fb.classList.add('show');fb.innerHTML='<b>Anda menemukan '+hit+' dari '+real+' kekeliruan yang nyata</b>'+(decoy?' dan mencentang '+decoy+' yang bukan kekeliruan':'')+'. Hijau = benar, merah = bukan kekeliruan, kuning = terlewat.'+(hit===real&&!decoy?' Mata yang tajam. Sekarang lihat perbaikannya.':'');});});
+  const sm=$('clinicSummary');if(sm)sm.innerHTML='<tr><th>Kasus</th><th>Kesalahannya</th><th>Perbaikannya</th><th>Pelajaran</th></tr>'+CASES.map(c=>'<tr><td class="k">'+c.n+'. '+esc(c.name)+'</td><td>'+esc(c.sin)+'</td><td>'+esc(c.fix)+'</td><td>'+ltags(c.tags)+'</td></tr>').join('');}
+/* =================== LAB A: where does the axis start? =================== */
+function labA(){const sl=$('la_min'),tg=$('la_tgt');if(!sl)return;
+  const draw=()=>{const mn=+sl.value;$('la_v').textContent=mn;const W=640,H=320,x0=70,x1=600,y0=36,y1=270,top=100,yy=lin(mn,top,y1,y0),st=(x1-x0)/5;let s=Rc(0,0,W,H,'#fff');
+    const span=top-mn,step=span<=8?1:(span<=30?5:20);for(let v=Math.ceil(mn/step)*step;v<=top;v+=step){s+=Ln(x0,yy(v),x1,yy(v),'#ECE8DD',1)+T(x0-6,yy(v)+4,v+'%',{anchor:'end',size:11,fill:C.muted});}
+    s+=Ln(x0,y1,x1,y1,C.mgrey,1.2);
+    D3.forEach((d,i)=>{const x=x0+i*st+st*.2;s+=Rc(x,yy(d[1]),st*.6,y1-yy(d[1]),d[1]<95?C.copper:C.grey)+T(x+st*.3,yy(d[1])-6,d[1].toFixed(1)+'%',{anchor:'middle',size:11.5,weight:700,fill:C.dark})+T(x+st*.3,y1+18,d[0],{anchor:'middle',size:11.5,fill:C.muted});});
+    if(tg.checked&&95>mn)s+=Ln(x0,yy(95),x1,yy(95),C.dark,1.2,'5 4')+T(x1,yy(95)-5,'Target 95%',{anchor:'end',size:11,weight:700});
+    s+=T(x0,20,'Pengiriman tepat waktu per hub · sumbu dimulai dari '+mn+'%',{size:12.5,weight:700,fill:C.dark});
+    $('la_chart').innerHTML=SV(W,H,s,'Grafik batang dengan garis dasar sumbu yang dapat diatur');
+    const a=D3[0][1],e=D3[4][1],vis=(a-mn)/(e-mn),real=a/e,looks=(1-(e-mn)/(a-mn))*100,act=(1-e/a)*100;
+    $('la_big').innerHTML='<div><b>'+vis.toFixed(1)+'×</b><span>seberapa lebih tinggi Hub A tampak dibanding Hub E</span></div><div><b>'+real.toFixed(2)+'×</b><span>seberapa lebih tinggi Hub A sebenarnya</span></div><div><b>'+looks.toFixed(0)+'%</b><span>seberapa lebih pendek Hub E tampak</span></div><div><b>'+act.toFixed(1)+'%</b><span>seberapa lebih rendah Hub E sebenarnya</span></div>';
+    $('la_msg').textContent=mn===0?'Jujur: batangnya tampak hampir sama, dan itulah kebenarannya. Gunakan garis target dan warna untuk menunjukkan siapa yang meleset, bukan sumbu yang terdistorsi.':(mn>=80?'Terdistorsi: semakin dekat garis dasar ke data, semakin besar kesenjangan yang tampak. Batang harus dimulai dari nol.':'Semakin mendekati kebenaran. Terus geser ke arah nol.');};
+  sl.addEventListener('input',draw);tg.addEventListener('change',draw);draw();}
+
+/* =================== LAB B: pie or bar =================== */
+const LBL=['Bea cukai','Keterlambatan vendor','Dokumen','Transportasi','Cuaca'],DEFB=[26,24,21,18,11];
+function labB(){const inp=$('lb_in');if(!inp)return;inp.innerHTML=LBL.map((n,i)=>'<label>'+n+'<input type="number" min="0" step="1" id="lb_v'+i+'" value="'+DEFB[i]+'"></label>').join('');
+  const draw=()=>{const vals=LBL.map((n,i)=>Math.max(0,+$('lb_v'+i).value||0)),tot=sum(vals);if(tot<=0){$('lb_msg').textContent='Masukkan setidaknya satu nilai positif.';return;}
+    const pc=vals.map(v=>100*v/tot),tilt=$('lb_3d').checked,showP=$('lb_pct')&&$('lb_pct').checked;
+    const W=320,H=270,cx=105,cy=120,r=88,k=tilt?.55:1;let a=-Math.PI/2,side='',top='',lab='';
+    pc.forEach((p,i)=>{const a1=a+p/100*2*Math.PI;if(p>0){if(tilt)side+='<path d="'+arc(cx,cy+26,r,a,a1)+'" fill="'+dk(RB[i],.55)+'" stroke="#000"/>';top+='<path d="'+arc(cx,cy,r,a,a1)+'" fill="'+RB[i]+'" stroke="#fff" stroke-width="1"/>';const m=(a+a1)/2;if(showP)lab+=T(cx+.64*r*Math.cos(m),cy*(1-k)+k*(cy+.64*r*Math.sin(m))+4,Math.round(p)+'%',{anchor:'middle',size:11,weight:700,fill:'#fff'});}a=a1;});
+    let lg='';LBL.forEach((n,i)=>{lg+=Rc(205,70+i*28,12,12,RB[i])+T(223,81+i*28,n,{size:11.5});});
+    $('lb_pie').innerHTML=SV(W,H,Rc(0,0,W,H,'#fff')+T(12,20,'Diagram lingkaran: dapatkah Anda mengurutkan irisannya?',{size:12.5,weight:700,fill:C.dark})+'<g transform="translate(0 '+(cy*(1-k)).toFixed(1)+') scale(1 '+k+')">'+side+top+'</g>'+lab+lg,'Diagram lingkaran');
+    const ord=LBL.map((n,i)=>({n:n,p:pc[i]})).sort((x,y)=>y.p-x.p),mx=ord[0].p;
+    const items=ord.map((d,i)=>({l:d.n,v:d.p,c:i===0?C.copper:C.grey,bold:i===0,lab:d.p.toFixed(0)+'%'}));
+    $('lb_bar').innerHTML=SV(W,H,Rc(0,0,W,H,'#fff')+T(12,20,'Batang: diurutkan, diberi label',{size:12.5,weight:700,fill:C.dark})+HB(items,{x0:6,y0:44,lw:90,w:170,bh:28,gap:16,max:Math.max(mx*1.05,1),fs:12}),'Grafik batang yang diurutkan');
+    const gap=ord[0].p-ord[1].p;let close=0;for(let i=0;i<ord.length-1;i++)if(ord[i].p-ord[i+1].p<3)close++;
+    $('lb_big').innerHTML='<div><b>'+gap.toFixed(1)+' poin</b><span>selisih antara #1 dan #2</span></div><div><b>'+ord[0].p.toFixed(0)+'%</b><span>porsi terbesar ('+esc(ord[0].n)+')</span></div><div><b>'+close+' dari '+(ord.length-1)+'</b><span>pasangan yang berdekatan dalam 3 poin</span></div>';
+    $('lb_msg').textContent=gap<3?'Diagram lingkaran: hampir mustahil membedakan #1 dari #2. Batang: jelas sekilas karena ujung-ujungnya berada pada garis dasar bersama.':(gap<8?'Diagram lingkaran: hanya terbaca jika Anda menambahkan label. Batang tetap menang dalam kecepatan.':'Pemimpinnya jelas bahkan dalam diagram lingkaran, tetapi batang tetap menunjukkan selisih bertahap di antara sisanya.');};
+  LBL.forEach((n,i)=>$('lb_v'+i).addEventListener('input',draw));$('lb_3d').addEventListener('change',draw);if($('lb_pct'))$('lb_pct').addEventListener('change',draw);
+  $('lb_rst').addEventListener('click',()=>{DEFB.forEach((v,i)=>{$('lb_v'+i).value=v;});$('lb_3d').checked=false;if($('lb_pct'))$('lb_pct').checked=false;draw();});draw();}
+
+/* =================== LAB C: dual axis =================== */
+function labC(){const mn=$('lc_min'),mx=$('lc_max');if(!mn)return;let mode='dual';const rr=pearson(VOL,OTP);
+  const dual=(a,b)=>{const W=640,H=340,x0=64,x1=570,y0=44,y1=290,st=(x1-x0)/12,yl=lin(0,1800,y1,y0),yr=lin(a,b,y1,y0);let s=Rc(0,0,W,H,'#fff')+Ln(x0,y1,x1,y1,C.mgrey,1.2);
+    [0,600,1200,1800].forEach(v=>{s+=Ln(x0,yl(v),x1,yl(v),'#F0ECE2',1)+T(x0-6,yl(v)+4,fmt(v),{anchor:'end',size:10.5,fill:C.muted});});
+    for(let i=0;i<=4;i++){const v=a+(b-a)*i/4;s+=T(x1+8,yr(v)+4,Math.round(v)+'%',{size:10.5,fill:C.copper});}
+    VOL.forEach((v,i)=>{s+=Rc(x0+i*st+st*.18,yl(v),st*.64,y1-yl(v),C.lgrey);s+=T(x0+i*st+st/2,y1+17,MON[i],{anchor:'middle',size:10.5,fill:C.muted});});
+    s+=Pl(OTP.map((v,i)=>[x0+i*st+st/2,yr(v)]),C.copper,3.2)+T(x0,22,'Volume, TEU (batang, sumbu kiri)',{size:11.5,weight:700,fill:C.muted})+T(x1+8,22,'% tepat waktu (garis, sumbu kanan)',{size:11.5,weight:700,fill:C.copper,anchor:'end'});
+    return SV(W,H,s,'Grafik sumbu ganda dengan sumbu kanan yang dapat diatur');};
+  const draw=()=>{let a=+mn.value,b=+mx.value;$('lc_v1').textContent=a;$('lc_v2').textContent=b;
+    $('lc_chart').innerHTML=mode==='split'?c2After():dual(a,b);const span=b-a;
+    $('lc_big').innerHTML='<div><b>r = '+rr.toFixed(2)+'</b><span>korelasi kedua seri (tidak pernah berubah)</span></div><div><b>'+(mode==='split'?'n/a':a+'–'+b)+'</b><span>rentang sumbu kanan</span></div><div><b>'+(mode==='split'?'n/a':Math.round(100*(95-84)/span)+'%')+'</b><span>seberapa tinggi penurunan 11 poin yang sebenarnya tampak (dari tinggi plot)</span></div>';
+    $('lc_msg').textContent=mode==='split'?'Dua panel dengan sumbu bulan yang sama menunjukkan hubungannya tanpa mengundang permainan sumbu. Ini perbaikan yang direkomendasikan.':(span<=16?'Dilebih-lebihkan: penurunan kecil kini tampak seperti keruntuhan.':(span>=100?'Disembunyikan: garisnya tampak hampir datar, dan tidak ada yang melihat masalahnya.':'Rentang yang wajar, tetapi pembaca tetap harus mencari tahu sumbu mana milik seri mana.'));};
+  mn.addEventListener('input',()=>{mode='dual';draw();});mx.addEventListener('input',()=>{mode='dual';draw();});
+  const set=(a,b,m)=>{mn.value=a;mx.value=b;mode=m;draw();};const P={honest:[80,100,'dual'],hide:[0,400,'dual'],exag:[83,96,'dual'],split:[80,100,'split']};
+  document.querySelectorAll('[data-lc]').forEach(btn=>btn.addEventListener('click',()=>{const p=P[btn.getAttribute('data-lc')];set(p[0],p[1],p[2]);}));draw();}
+
+/* =================== LAB D: declutter and focus =================== */
+const RECV=[298,306,312,310,315,318,336,352,350,348,356,362],PROC=[300,305,310,308,312,260,255,268,272,270,265,274];
+const LDC=[['border','Bingkai grafik dan kotak latar'],['grid','Garis kisi gelap'],['markers','Penanda data di setiap titik'],['rot','Nama bulan lengkap, diputar 45°'],['zeros','Angka nol di belakang pada sumbu (250.00)'],['legend','Legenda sebagai pengganti label langsung'],['defcol','Warna bawaan alat (biru dan oranye)']];
+const LDF=[['accent','Abu-abukan "Diterima", beri aksen pada garis "Diproses"'],['gap','Arsir kesenjangan yang membesar'],['title','Judul aksi, anotasi, dan label akhir']];
+function lineLab(o){const W=640,H=o.legend?376:350,x0=64,x1=o.legend?596:520,y0=106,y1=272,yy=lin(200,400,y1,y0),xx=lin(0,11,x0+8,x1-8);
+  let cr=o.defcol?'#4472C4':C.mgrey,cp=o.defcol?'#ED7D31':C.teal,wr=2.5,wp=2.5;if(o.accent){cr='#C9C5B9';cp=C.copper;wr=2;wp=4.5;}
+  let s=o.border?Rc(1.5,1.5,W-3,H-3,'#fff','stroke="#777" stroke-width="3"'):Rc(0,0,W,H,'#fff');
+  const backlog=sum(RECV.slice(5).map((v,i)=>v-PROC[5+i]));
+  if(o.title){const h=AT('Penerimaan tertinggal dari volume masuk sejak Juni, membentuk tumpukan sekitar '+(Math.round(backlog/10)*10)+' palet','Palet masuk per hari, rata-rata bulanan',60);s+=h.s;}else s+=T(24,30,'Palet masuk per hari, per bulan',{size:15,weight:700,font:SER,fill:C.dark});
+  for(let v=200;v<=400;v+=50){if(o.grid)s+=Ln(x0,yy(v),x1,yy(v),'#666',1);s+=T(x0-6,yy(v)+4,o.zeros?v.toFixed(2):String(v),{anchor:'end',size:10.5,fill:C.muted});}
+  s+=Ln(x0,y1,x1,y1,C.mgrey,1.2);
+  if(o.gap){const up=RECV.slice(5).map((v,i)=>[xx(5+i),yy(v)]),dn=PROC.slice(5).map((v,i)=>[xx(5+i),yy(v)]).reverse();s+='<polygon points="'+up.concat(dn).map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')+'" fill="'+C.copper+'" opacity=".16"/>';}
+  const lr=RECV.map((v,i)=>[xx(i),yy(v)]),lp=PROC.map((v,i)=>[xx(i),yy(v)]);s+=Pl(lr,cr,wr)+Pl(lp,cp,wp);
+  if(o.markers){lr.forEach(p=>{s+=Cr(p[0],p[1],3.6,cr);});lp.forEach(p=>{s+=Cr(p[0],p[1],3.6,cp);});}
+  MON.forEach((m,i)=>{if(o.rot)s+=T(xx(i)+4,y1+14,MONF[i],{anchor:'end',size:9.5,rot:-45});else s+=T(xx(i),y1+18,m,{anchor:'middle',size:10.5,fill:C.muted});});
+  if(o.legend){s+=Rc(190,H-26,12,12,cr)+T(208,H-15,'Diterima',{size:11.5})+Rc(310,H-26,12,12,cp)+T(328,H-15,'Diproses',{size:11.5});}
+  else{s+=T(x1+8,yy(RECV[11])+4,'Diterima'+(o.title?' '+RECV[11]:''),{size:12,weight:o.accent?400:700,fill:o.accent?C.mgrey:cr})+T(x1+8,yy(PROC[11])+4,'Diproses'+(o.title?' '+PROC[11]:''),{size:12,weight:700,fill:cp});}
+  if(o.title)s+=T(xx(5),yy(PROC[5])+22,'2 staf keluar pada Juni',{anchor:'middle',size:11.5,weight:700,fill:C.copper});
+  return {svg:SV(W,H,s,'Grafik garis palet diterima dibanding diproses'),backlog:backlog};}
+function labD(){const cl=$('ld_clutter');if(!cl)return;const st={};LDC.forEach(x=>st[x[0]]=true);LDF.forEach(x=>st[x[0]]=false);
+  const mk=(host,list)=>{host.innerHTML=list.map(x=>'<label class="chk"><input type="checkbox" data-k="'+x[0]+'"><span>'+esc(x[1])+'</span></label>').join('');host.querySelectorAll('input').forEach(i=>i.addEventListener('change',()=>{st[i.getAttribute('data-k')]=i.checked;draw();}));};
+  mk(cl,LDC);mk($('ld_focus'),LDF);
+  const sync=()=>{document.querySelectorAll('#ld_clutter input,#ld_focus input').forEach(i=>{i.checked=!!st[i.getAttribute('data-k')];});};
+  const draw=()=>{sync();const r=lineLab(st);$('ld_chart').innerHTML=r.svg;const nc=LDC.filter(x=>st[x[0]]).length,nf=LDF.filter(x=>st[x[0]]).length;
+    $('ld_big').innerHTML='<div><b>'+nc+' / '+LDC.length+'</b><span>elemen kekacauan dinyalakan</span></div><div><b>'+nf+' / '+LDF.length+'</b><span>alat bantu fokus dinyalakan</span></div><div><b>~'+(Math.round(r.backlog/10)*10)+'</b><span>tumpukan palet yang tersembunyi dalam data</span></div>';
+    $('ld_msg').textContent=(nc>=5&&nf===0)?'Pembaca harus mengurai grafik sebelum bisa memikirkannya, dan banyak yang tidak akan repot.':(nc>=3&&nf<3)?'Masih berisik. Setiap elemen tambahan bersaing dengan kesenjangan yang penting.':(nc<=1&&nf===0)?'Bersih, tetapi ceritanya belum terlihat: pembaca harus menemukan kesenjangannya sendiri.':(nc<=1&&nf===3)?'Ceritanya terlihat dalam beberapa detik: buku mencatat Anda sering hanya mendapat 3 sampai 8 detik perhatian.':'Hampir sampai. Coba hapus kekacauan yang tersisa dan tambahkan alat bantu fokus yang belum ada.';};
+  $('ld_all').addEventListener('click',()=>{LDC.forEach(x=>st[x[0]]=true);LDF.forEach(x=>st[x[0]]=false);draw();});
+  $('ld_none').addEventListener('click',()=>{LDC.forEach(x=>st[x[0]]=false);LDF.forEach(x=>st[x[0]]=false);draw();});
+  $('ld_best').addEventListener('click',()=>{LDC.forEach(x=>st[x[0]]=false);LDF.forEach(x=>st[x[0]]=true);draw();});draw();}
+
+/* =================== LAB E: count the 3s =================== */
+function genGrid(seed,target){const r=mulberry32(seed),n=60,d=[],other=[0,1,2,4,5,6,7,8,9];for(let i=0;i<n;i++)d.push(Math.floor(r()*10));let c=d.filter(x=>x===3).length;
+  while(c<target){const j=Math.floor(r()*n);if(d[j]!==3){d[j]=3;c++;}}while(c>target){const j=Math.floor(r()*n);if(d[j]===3){d[j]=other[Math.floor(r()*9)];c--;}}return d;}
+function gridSVG(d,hl){const W=640,H=200;let s=Rc(0,0,W,H,'#fff');d.forEach((v,i)=>{const col=i%12,row=Math.floor(i/12),x=34+col*47,y=38+row*36;const is3=v===3;s+=T(x,y,String(v),{anchor:'middle',size:hl&&is3?26:22,weight:hl&&is3?700:400,fill:hl?(is3?C.copper:'#B9B5AA'):C.dark,font:'Consolas,Courier New,monospace'});});return SV(W,H,s,'Kisi angka');}
+function labE(){const b=$('le_start');if(!b)return;let round=0,t0=0,cnt=7,res=[],cur=null;const grid=$('le_grid'),ans=$('le_ans');
+  const show=()=>{$('le_big').innerHTML=res.map((r,i)=>'<div><b>'+r.t.toFixed(1)+' s</b><span>Putaran '+(i+1)+(i===1?' (isyarat ditambahkan)':' (tanpa isyarat)')+' · '+(r.ok?'benar':'menjawab '+r.a+', jawaban yang benar adalah '+cnt)+'</span></div>').join('');};
+  b.addEventListener('click',()=>{round=res.length+1;if(round>2){res=[];round=1;$('le_res').textContent='';}cur=genGrid(round===1?21:84,cnt);grid.innerHTML=gridSVG(cur,round===2);grid.style.display='block';ans.style.display='flex';$('le_in').value='';$('le_in').focus&&$('le_in').focus();b.style.display='none';$('le_msg').textContent='Hitung angka 3 dan ketik jawaban Anda. Waktu sedang berjalan.';t0=performance.now();show();});
+  $('le_sub').addEventListener('click',()=>{const a=parseInt($('le_in').value,10);if(isNaN(a))return;const t=(performance.now()-t0)/1000;res.push({t:t,a:a,ok:a===cnt});grid.style.display='none';ans.style.display='none';b.style.display='inline-block';$('le_msg').textContent='';
+    if(res.length===1){b.textContent='Mulai putaran 2 (isyarat visual ditambahkan)';}else{b.textContent='Main lagi';const r1=res[0],r2=res[1];$('le_res').textContent=(r1.ok&&r2.ok)?(r2.t<r1.t?'Dengan isyarat, Anda '+(r1.t/r2.t).toFixed(1)+'× lebih cepat, dan usaha memindai yang ekstra hilang. Itulah atribut prapersepsi yang bekerja: warna dan ukuran membuat angka 3 menonjol sebelum Anda mulai berpikir.':'Kali ini isyarat tidak membantu kecepatan Anda. Hasil bervariasi tergantung orang dan layar, tetapi kebanyakan orang merasa kisi dengan isyarat lebih mudah.'):'Salah satu jawaban Anda keliru, sehingga waktunya tidak bisa langsung dibandingkan. Coba lagi.';}
+    show();});}
+
+/* =================== LAB F: one dataset, three audiences =================== */
+const HUBS6=['Hub A','Hub B','Hub C','Hub D','Hub E','Hub F'],LATE6=[14,9,31,12,7,22],COST6=380;
+function labF(){const seg=$('lf_seg');if(!seg)return;const tot=sum(LATE6),avg=tot/LATE6.length,cf=LATE6[2]+LATE6[5],cfPct=Math.round(100*cf/tot),mult=(LATE6[2]/avg).toFixed(1);
+  const AUD=[{k:'vp',n:'Wakil Presiden Logistik',care:'Di mana program perbaikan harus difokuskan',hl:[2,5],title:'Dua hub, C dan F, menyumbang '+cfPct+'% pengiriman terlambat',ask:'Setujui program perbaikan untuk Hub C dan F',big:'Karena dua hub menyebabkan '+cfPct+'% pengiriman terlambat, kami meminta Wakil Presiden mendanai program terfokus di sana.',lab:i=>String(LATE6[i]),line:false},
+   {k:'sup',n:'Penyelia Hub C',care:'Bagaimana hub saya dibandingkan dan apa yang perlu diperbaiki',hl:[2],title:'Hub C memiliki sekitar '+mult+'× rata-rata jaringan pengiriman terlambat: '+LATE6[2]+' vs '+Math.round(avg),ask:'Tinjau akar penyebab Hub C bersama tim Anda minggu ini',big:'Karena Hub C memiliki tingkat keterlambatan sekitar dua kali rata-rata, kami meminta penyelia meninjau akar penyebab minggu ini.',lab:i=>String(LATE6[i]),line:true},
+   {k:'fin',n:'Pengendali keuangan',care:'Berapa biayanya dan apa yang harus dianggarkan',hl:[2,5],title:'Pengiriman terlambat menelan biaya sekitar $'+fmt(tot*COST6)+' dalam empat minggu; Hub C dan F mendorong $'+fmt(cf*COST6),ask:'Masukkan biaya pengiriman terlambat dalam prakiraan Q4',big:'Karena pengiriman terlambat menelan biaya sekitar $'+fmt(tot*COST6)+' per empat minggu, kami meminta Keuangan mencerminkannya dalam prakiraan Q4.',lab:i=>'$'+fmt(LATE6[i]*COST6),line:false}];
+  seg.innerHTML=AUD.map((a,i)=>'<button data-i="'+i+'"'+(i===0?' class="on after"':'')+'>'+a.n+'</button>').join('');
+  const draw=i=>{const a=AUD[i],W=640,H=360,h=AT(a.title,'Pengiriman terlambat per hub, empat minggu terakhir (data fiktif; asumsi biaya per pengiriman terlambat: $'+COST6+')',60);
+    const ord=LATE6.map((v,k)=>k).sort((x,y)=>LATE6[y]-LATE6[x]);const o={x0:20,y0:h.y+30,lw:70,w:360,bh:28,gap:12,max:Math.max.apply(null,LATE6)*1.12};if(a.line)o.minLx=o.x0+o.lw+o.w*avg/o.max+8;
+    const items=ord.map(k=>({l:HUBS6[k],v:LATE6[k],c:a.hl.indexOf(k)>=0?C.copper:C.grey,bold:a.hl.indexOf(k)>=0,lab:a.lab(k)}));let s=Rc(0,0,W,H,'#fff')+h.s+HB(items,o);
+    if(a.line){const tx=o.x0+o.lw+o.w*avg/o.max;s+=Ln(tx,h.y+16,tx,o.y0+6*(o.bh+o.gap)-8,C.dark,1.2,'5 4')+T(tx,h.y+12,'Rata-rata jaringan '+Math.round(avg),{anchor:'middle',size:11,weight:700});}
+    $('lf_chart').innerHTML=SV(W,H,s,'Batang per hub, disorot untuk '+a.n);
+    $('lf_info').className='grid g2x';$('lf_info').innerHTML='<div class="card top"><h4>Apa '+esc(a.n)+' peduli pada</h4><p>'+esc(a.care)+'.</p></div><div class="card copper"><h4>Permintaan</h4><p>'+esc(a.ask)+'.</p></div><div class="card" style="grid-column:1/-1"><h4>Big Idea untuk audiens ini</h4><p style="font-family:Georgia,serif;font-size:18px;margin:0">'+esc(a.big)+'</p><p class="small" style="margin-top:8px">Data yang sama, judul, sorotan, dan permintaan yang berbeda. Audiens yang spesifik mendapat komunikasi yang benar-benar sesuai dengan mereka.</p></div>';
+    seg.querySelectorAll('button').forEach((x,k)=>{x.classList.toggle('on',k===i);x.classList.toggle('after',k===i);});};
+  seg.querySelectorAll('button').forEach(x=>x.addEventListener('click',()=>draw(+x.getAttribute('data-i'))));draw(0);}
+/* =================== EXERCISE STUDIO (all scenarios fictional) =================== */
+const K={core:'Inti',sup:'Pendukung',noise:'Derau',mis:'Menyesatkan'};
+const EX=[
+{t:'Vendor terlambat: eskalasi atau tidak?',aud:'Manajer Logistik, dalam tinjauan mingguan 10 menit',dec:'Apakah akan mengeskalasi ke vendor tertentu',ask:'Setujui rapat eskalasi minggu ini',
+ d:[['core','Baris PO terlambat per vendor, 12 minggu terakhir','Keputusannya adalah vendor mana yang akan dieskalasi, jadi tunjukkan di mana keterlambatan terkonsentrasi.'],['core','% terlambat per vendor vs target yang disepakati','Persentase menormalkan ukuran vendor, dan target mendefinisikan "buruk".'],['sup','Rata-rata keterlambatan (hari) pada baris terlambat','Membedakan terlambat beberapa hari dari terlambat berminggu-minggu.'],['sup','Baris PO per vendor (penyebut)','Menunjukkan bahwa persentasenya tidak didasarkan pada sampel kecil.'],['sup','Porsi belanja yang dikuasai vendor terburuk','Menunjukkan daya tawar, dan biaya hubungan yang buruk.'],['noise','Daftar PO lengkap dengan 40 kolom','Rincian eksploratif. Letakkan di balik penelusuran rinci, bukan di halaman.'],['noise','Jumlah vendor dalam data induk','Benar, tetapi tidak berkaitan dengan keputusan.'],['noise','Logo vendor dan kartu kontak','Hiasan.'],['mis','Hanya % tepat waktu seluruh jaringan','Rata-rata menyembunyikan bahwa dua vendor jauh lebih buruk daripada yang lain.'],['noise','Kinerja vendor lima tahun terakhir','Terlalu banyak riwayat untuk keputusan mingguan.']],
+ v:[['Batang horizontal % terlambat per vendor, diurutkan, dengan garis target',25,'Pengurutan mudah pada satu garis dasar, dan target menunjukkan siapa yang di luar batas.'],['Diagram lingkaran baris terlambat per vendor',5,'Irisan sulit diurutkan, dan porsi keterlambatan mengabaikan ukuran vendor.'],['Kolom berkelompok 3D, satu kelompok per vendor',0,'3D mendistorsi nilai dan menambah kekacauan visual.'],['Tabel 60 baris dengan warna di setiap sel',8,'Warna di mana-mana berarti tidak ada yang menonjol, dan tabel lambat dipindai dalam rapat.']],
+ h:[['Ikhtisar kinerja vendor',0,'Label topik yang tidak memberi tahu pembaca apa pun.'],['Dua vendor menyebabkan separuh baris PO terlambat: eskalasikan Brightline dan Delta minggu ini',25,'Menyatakan temuan dan permintaan dalam satu kalimat.'],['Baris PO terlambat per vendor, Q3',0,'Deskriptif, bukan kesimpulan.'],['Kinerja vendor menjadi perhatian',8,'Semacam kesimpulan, tetapi samar, tanpa besaran dan tanpa permintaan.']],
+ m:'Judul dengan permintaan; batang horizontal % terlambat yang diurutkan dengan garis target, dua vendor di atas target dalam warna aksen; tabel kecil berisi baris, rata-rata keterlambatan, dan porsi belanja untuk keduanya; daftar PO lengkap hanya satu klik jauhnya.'},
+{t:'Apakah kita perlu menyewa lebih banyak ruang gudang?',aud:'Direktur Operasi dan Pengendali Keuangan',dec:'Apakah akan menyewa ruang tambahan',ask:'Setujui studi sewa kuartal ini',
+ d:[['core','Prakiraan volume persediaan rata-rata tahun puncak, tiga sampai lima tahun','Kapasitas ditentukan dari rata-rata tahun puncak hasil prakiraan, jadi ini menjadi dasarnya.'],['core','Luas lantai yang dibutuhkan per tahun vs kapasitas saat ini','Inilah kesenjangan yang mendorong keputusan.'],['core','Pemanfaatan vs batas perencanaan','Menunjukkan seberapa besar ruang yang tersedia saat ini.'],['sup','Sensitivitas hasil terhadap tingkat rak, faktor pergerakan, dan pemanfaatan','Menunjukkan seberapa kuat kesimpulannya, dan asumsi mana yang paling penting.'],['sup','Biaya sewa vs bangun per meter persegi','Dibutuhkan setelah kebutuhan disetujui.'],['sup','Asumsi di balik prakiraan (faktor palet parsial, tingkat rak)','Membuat angkanya dapat dipertanggungjawabkan. Letakkan di catatan kaki atau penelusuran rinci.'],['noise','Potret persediaan harian 24 bulan terakhir','Rincian eksploratif untuk analis, bukan pengambil keputusan.'],['noise','Foto jenis palet','Hiasan.'],['mis','Total nilai persediaan dalam dolar','Nilai bukan ruang: barang kecil dan mahal mendistorsi gambaran.'],['noise','Jumlah SKU per kategori','Tidak berkaitan dengan kebutuhan ruang pada tingkat ini.']],
+ v:[['Grafik garis: ruang yang dibutuhkan (prakiraan putus-putus) dibandingkan garis kapasitas saat ini, kesenjangan diarsir',25,'Waktu pada sumbu-x, ambang yang jelas, dan isyarat prakiraan yang jujur.'],['Diagram lingkaran persediaan per kategori',0,'Menunjukkan komposisi, bukan apakah ruangnya cukup.'],['Pengukur yang menunjukkan pemanfaatan hari ini',6,'Satu titik waktu tidak dapat menunjukkan kesenjangan di masa depan.'],['Kolom bertumpuk 20 kategori per tahun',4,'Terlalu banyak segmen, dan kapasitas tidak terlihat.']],
+ h:[['Prakiraan kapasitas gudang',0,'Label topik.'],['Ruang yang dibutuhkan akan melampaui kapasitas saat ini mulai tahun ke-3: mulai studi sewa sekarang',25,'Menyampaikan temuan, waktunya, dan permintaannya.'],['Persediaan tumbuh di semua kategori',8,'Mungkin benar, tetapi tidak mengarah pada keputusan.'],['Banyak faktor memengaruhi berapa banyak ruang gudang yang kita butuhkan',0,'Samar, tanpa kesimpulan.']],
+ m:'Judul aksi dengan permintaan; satu grafik garis kebutuhan ruang (aktual padat, prakiraan putus-putus) dibandingkan garis kapasitas dengan selisih diarsir sejak tahun ke-3; panel sensitivitas kecil; asumsi dalam catatan kaki.'},
+{t:'Kemacetan dermaga: tambah kapasitas tambat?',aud:'Superintenden Kelautan dan Manajer Umum Terminal',dec:'Apakah akan menambah kapasitas tambat atau jendela waktu',ask:'Putuskan opsi untuk menambah kapasitas',
+ d:[['core','Keterisian tambat per bulan vs ambang perencanaan','Kemacetan terkait keterisian relatif terhadap batas.'],['core','Tren waktu tunggu kapal (jam)','Menunjukkan apakah kemacetan benar-benar memakan waktu.'],['core','Porsi waktu tunggu menurut penyebab (tambat sibuk, pemandu atau kapal tunda, cuaca)','Memberi tahu apakah tambahan kapasitas tambat akan membantu.'],['sup','Prakiraan kedatangan kapal untuk enam bulan ke depan','Menunjukkan apakah tekanannya akan meningkat.'],['sup','Waktu putar per jenis kargo','Membantu melihat alur mana yang paling lama menempati tambatan.'],['noise','Indeks harga bahan bakar','Tidak berkaitan dengan keputusan ini.'],['noise','Rincian kewarganegaraan awak','Tidak relevan di sini.'],['noise','Jejak posisi kapal mentah','Data eksploratif yang membuat halaman berantakan.'],['mis','Hanya keterisian tambat rata-rata tahunan','Kemacetan terjadi pada puncak; rata-rata tahunan menyembunyikannya.']],
+ v:[['Grafik garis: keterisian aktual dan prakiraan (putus-putus) dengan garis ambang dan periode pelanggaran diarsir',25,'Menunjukkan tren, batas, dan masalah di masa depan sekaligus.'],['Batang 100% bertumpuk hanya untuk penyebab waktu tunggu',10,'Berguna sebagai panel pendukung, tetapi melewatkan cerita keterisian.'],['Diagram lingkaran kapal per jenis kargo',0,'Tidak berkaitan dengan pertanyaan.'],['Grafik area 3D kedatangan',0,'3D menambah kekacauan dan mendistorsi.']],
+ h:[['Keterisian tambat diprakirakan melampaui ambang perencanaan 70% pada Q2, mendorong waktu tunggu lebih lama: putuskan penambahan kapasitas',25,'Menyatakan temuan, alasannya, dan permintaannya.'],['Dasbor kinerja dermaga',0,'Label topik.'],['Analisis waktu tunggu kapal',0,'Deskriptif, bukan kesimpulan.'],['Keterisian terus naik',8,'Benar, tetapi tanpa ambang, besaran, atau permintaan.']],
+ m:'Judul aksi; grafik garis utama keterisian dengan ambang dan pelanggaran yang diarsir; panel kecil yang memisahkan waktu tunggu per penyebab; prakiraan kedatangan sebagai anotasi pendukung.'},
+{t:'Komite keselamatan: di mana menambah pengawasan?',aud:'Komite Keselamatan Lokasi',dec:'Area mana yang mendapat pengawasan tambahan',ask:'Alokasikan pengawasan tambahan ke satu area',
+ d:[['core','Insiden per area, 12 bulan terakhir','Menunjukkan di mana masalah terkonsentrasi.'],['core','Tren insiden di area teratas vs yang lain','Area yang naik lebih kuat dasarnya daripada area yang tinggi tetapi stabil.'],['sup','Bauran tingkat keparahan insiden area teratas','Menunjukkan apakah risikonya serius, bukan hanya sering.'],['sup','Laporan nyaris celaka per area','Tanda budaya pelaporan dan peringatan dini.'],['sup','Jam paparan per area','Memungkinkan Anda membandingkan angka secara adil.'],['noise','Nama orang yang terlibat','Tidak diperlukan untuk keputusan dan bersifat sensitif; simpan di sistem investigasi.'],['noise','Narasi lengkap setiap insiden','Rincian untuk penyelidik, bukan untuk komite ini.'],['noise','Catatan cuaca harian','Hanya relevan jika analisis menghubungkannya dengan insiden.'],['mis','Hanya total insiden seluruh perusahaan','Total yang datar dapat menyembunyikan satu area yang makin memburuk.']],
+ v:[['Batang horizontal per area dengan area teratas disorot, ditambah garis tren kecil untuknya',25,'Peringkat ditambah tren menjawab "di mana" dan "apakah makin memburuk".'],['Grafik radar area dengan enam metrik',3,'Grafik radar sulit dibaca dan dibandingkan.'],['Peta dengan pin berwarna untuk setiap insiden',8,'Menambah konteks spasial tetapi padat dan lambat dibaca.'],['Diagram lingkaran insiden per area',5,'Sulit diurutkan, dan tidak ada tren.']],
+ h:[['Insiden di Area 3 naik empat bulan berturut-turut sementara area lain tetap datar: tambahkan pengawasan di sana',25,'Temuan, bukti, dan permintaan dalam satu kalimat.'],['Laporan insiden keselamatan',0,'Label topik.'],['Total insiden turun 2% dibanding tahun lalu',4,'Judul datar yang menyembunyikan area yang makin bermasalah.'],['Keselamatan membutuhkan perhatian semua orang',0,'Sebuah slogan, bukan temuan.']],
+ m:'Judul aksi dengan permintaan; batang insiden per area yang diurutkan dengan Area 3 dalam warna aksen; garis kecil untuk tren Area 3; tingkat keparahan dan jam paparan sebagai catatan pendukung.'},
+{t:'Bisakah kita memangkas stok pengaman?',aud:'Manajer Persediaan dan Direktur Keuangan',dec:'Di mana stok pengaman bisa dikurangi tanpa merugikan layanan',ask:'Setujui pengurangan stok pengaman pada kelas terpilih',
+ d:[['core','Tingkat layanan tercapai vs target per kelas ABC','Stok pengaman dibenarkan oleh layanan, jadi tunjukkan di mana layanan di atas target.'],['core','Nilai persediaan per kelas ABC','Menunjukkan di mana uangnya tertanam.'],['core','Porsi nilai yang lebih dari 365 hari per kelas','Stok yang bergerak lambat adalah tempat pemangkasan paling aman.'],['sup','Galat prakiraan (MAPE dan bias) per kelas','Menjelaskan seberapa banyak stok pengaman yang dibenarkan oleh variabilitas.'],['sup','Kejadian kehabisan stok 12 bulan terakhir','Menunjukkan risiko pemangkasan.'],['sup','Cakupan stok pengaman dalam hari per kelas','Menghubungkan stok dengan kebijakan.'],['mis','Hanya total nilai persediaan','Satu angka besar tidak memberi arah di mana harus memangkas.'],['noise','Daftar semua SKU','Rincian eksploratif; simpan di balik penelusuran rinci.'],['noise','Alamat pemasok','Tidak relevan.']],
+ v:[['Batang horizontal 100% bertumpuk kelompok umur per kelas ABC, kelompok yang bergerak lambat diberi aksen',25,'Garis dasar bersama di kedua ujung membuat porsi yang bergerak lambat mudah dibandingkan.'],['Donat nilai persediaan per kelas',5,'Lebih sulit dibaca dan tidak ada tampilan layanan atau umur stok.'],['Kolom 3D nilai per kelas',0,'3D mendistorsi.'],['Tabel 3,000 SKU',4,'Terlalu banyak detail untuk sebuah keputusan.']],
+ h:[['Stok yang bergerak lambat terkonsentrasi pada item C, tempat layanan jauh di atas target: kurangi stok pengamannya lebih dulu',25,'Temuan, alasan, dan permintaan.'],['Ikhtisar persediaan',0,'Label topik.'],['Kita seharusnya mengurangi persediaan',8,'Permintaan tanpa bukti atau target.'],['Persediaan per kelas, tahun fiskal',0,'Deskriptif.']],
+ m:'Judul aksi dengan permintaan; kelompok umur sebagai batang horizontal 100% bertumpuk per kelas ABC dengan kelompok yang bergerak lambat diberi aksen; strip kecil layanan vs target; galat prakiraan dalam catatan kaki.'},
+{t:'Minta dua perekrutan pengganti',aud:'Kepala Departemen, yang memegang anggaran tenaga kerja',dec:'Apakah akan menyetujui dua perekrutan pengganti di penerimaan',ask:'Setujui dua perekrutan pengganti',
+ d:[['core','Palet diterima vs diproses per bulan, 12 bulan terakhir','Kesenjangan antara kedua garis itulah inti kasusnya.'],['core','Bulan ketika dua staf keluar, sebagai anotasi','Menjelaskan penyebab pergeseran.'],['sup','Tumpukan kumulatif','Menunjukkan seberapa besar kesenjangan telah membesar.'],['sup','Jam lembur','Menunjukkan biaya tersembunyi dari kekurangan staf.'],['sup','Pemrosesan per orang (tersedia jika diminta)','Baik disimpan sebagai cadangan untuk menjawab pertanyaan.'],['mis','Total setahun untuk diterima dan diproses sebagai angka tunggal','Itu menyembunyikan waktu dan kesenjangan yang melebar.'],['noise','Bagan organisasi seluruh departemen','Tidak relevan dengan permintaan.'],['noise','Hasil survei keterlibatan','Tidak berkaitan dengan keputusan ini.'],['noise','Jam pelatihan per orang','Tidak berkaitan dengan keputusan ini.']],
+ v:[['Grafik garis diterima vs diproses dengan anotasi pada bulan staf keluar',25,'Menunjukkan kesenjangan yang terbuka pada suatu peristiwa tertentu.'],['Kolom bertumpuk tugas per jenis',5,'Tidak menunjukkan kesenjangan.'],['Pengukur pemanfaatan staf saat ini',4,'Satu titik waktu tanpa tren.'],['Tabel angka bulanan',8,'Terbaca, tetapi pembaca harus menemukan kesenjangannya sendiri.']],
+ h:[['Penerimaan tertinggal dari volume masuk sejak Juni: mohon setujui dua perekrutan pengganti',25,'Temuan dan permintaan sekaligus.'],['Kinerja tim penerimaan',0,'Label topik.'],['Pergantian staf berdampak pada tim',8,'Sebuah penyebab, tanpa data dan tanpa permintaan.'],['Volume diterima dan diproses, 12 bulan terakhir',0,'Deskriptif.']],
+ m:'Judul aksi dengan permintaan; satu grafik garis dengan dua seri, Diproses dalam warna aksen; anotasi untuk bulan staf keluar; tumpukan dan lembur sebagai angka pendukung kecil.'},
+{t:'Ringkasan satu halaman untuk eksekutif: pilih yang vital',aud:'Komite Eksekutif, bulanan',dec:'Apakah logistik berjalan sesuai rencana dan di mana harus turun tangan',ask:'Putuskan intervensi untuk KPI yang tidak sesuai target',
+ d:[['core','OTIF lokasi vs target','Mengukur apa yang dirasakan bisnis: pengiriman ke lokasi tepat waktu dan lengkap.'],['core','OTIF masuk vs target','Menunjukkan apakah sisi pasokan sedang berjalan.'],['core','Keselamatan: tingkat insiden tercatat vs target','Metrik hasil yang tidak bisa ditawar.'],['core','Biaya logistik per unit yang dipindahkan vs anggaran','Hasil keuangannya.'],['sup','Hari pasokan persediaan vs target','Konteks yang berguna, tetapi hasil sekunder.'],['sup','Tiga pengecualian teratas yang membutuhkan keputusan','Memindahkan halaman dari melaporkan ke memutuskan.'],['noise','Jumlah tampilan dasbor','Metrik aktivitas, bukan hasil.'],['noise','Jumlah baris PO yang dibuat','Aktivitas, bukan kinerja.'],['noise','Jumlah karyawan per shift','Bukan hasil eksekutif di sini.'],['mis','Satu skor "indeks kesehatan logistik" gabungan','Mencampur satuan dan menyembunyikan KPI mana yang gagal.']],
+ v:[['Tiga atau empat kartu KPI dengan target dan sparkline; yang tidak sesuai target diberi aksen; pengecualian didaftar di bawah',25,'Memberi konteks dan fokus, dengan langkah berikutnya yang jelas.'],['Kisi dua belas pengukur',3,'Terlalu banyak item yang sama; tidak ada yang diprioritaskan.'],['Grafik radar semua KPI',5,'Sulit dibaca, dan satuannya berbeda.'],['Satu lampu lalu lintas untuk kinerja keseluruhan',8,'Terlalu kasar untuk ditindaklanjuti.']],
+ h:[['Logistik sesuai target kecuali pengiriman lokasi, yang telah melorot lima minggu berturut-turut: putuskan rencana pemulihan',25,'Temuan, besarnya masalah, dan permintaan.'],['Dasbor KPI bulanan',0,'Label topik.'],['Semua metrik sekilas',0,'Menjelaskan format, bukan pesannya.'],['Ringkasan kinerja: sebagian besar hijau',6,'Menyembunyikan satu hal yang membutuhkan keputusan.']],
+ m:'Judul aksi yang menyebut satu KPI bermasalah dan permintaannya; tiga atau empat kartu KPI dengan target dan tren, hanya yang gagal diberi warna aksen; daftar pendek pengecualian; sisanya di penelusuran rinci.'}
+];
+const EXSC={};
+function shuf(a,seed){const r=mulberry32(seed),b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(r()*(i+1));const t=b[i];b[i]=b[j];b[j]=t;}return b;}
+function initExercises(){const host=$('ex');if(!host)return;
+  host.innerHTML=EX.map((e,i)=>{const cand=shuf(e.d.map((x,k)=>k),i+3),vis=shuf(e.v.map((x,k)=>k),i+11),ttl=shuf(e.h.map((x,k)=>k),i+23);
+   return '<div class="sx" id="ex-'+i+'"><div class="sx-h"><span class="sx-n">'+(i+1)+'</span><h3>'+esc(e.t)+'</h3></div>'
+   +'<div class="ctxgrid"><div><b>Audiens</b>'+esc(e.aud)+'</div><div><b>Keputusan</b>'+esc(e.dec)+'</div><div><b>Anda ingin mereka</b>'+esc(e.ask)+'</div></div>'
+   +'<div class="step-h">Langkah 1 · Pilih datanya. Centang semua yang seharusnya ada di halaman.</div>'+cand.map(k=>'<label class="chk" data-k="'+k+'"><input type="checkbox"><span>'+esc(e.d[k][1])+'<span class="why" style="display:none"></span></span></label>').join('')
+   +'<div class="step-h">Langkah 2 · Pilih visual utama</div>'+vis.map(k=>'<label class="opt" data-k="'+k+'"><input type="radio" name="v'+i+'"> '+esc(e.v[k][0])+'</label>').join('')
+   +'<div class="step-h">Langkah 3 · Pilih judulnya</div>'+ttl.map(k=>'<label class="opt" data-k="'+k+'"><input type="radio" name="h'+i+'"> '+esc(e.h[k][0])+'</label>').join('')
+   +'<div class="btns"><button class="cu" data-a="go">Nilai jawaban saya</button><button class="alt" data-a="rs">Atur ulang</button><span class="msg"></span></div><div class="res-box"></div></div>';}).join('');
+  EX.forEach((e,i)=>{const root=$('ex-'+i),box=root.querySelector('.res-box'),msg=root.querySelector('.msg');
+    root.querySelector('[data-a=rs]').addEventListener('click',()=>{root.querySelectorAll('input').forEach(x=>{x.checked=false;});root.querySelectorAll('.chk,.opt').forEach(x=>x.classList.remove('ok','bad','miss'));root.querySelectorAll('.chk .why').forEach(x=>{x.style.display='none';});box.classList.remove('show');msg.textContent='';});
+    root.querySelector('[data-a=go]').addEventListener('click',()=>{const vi=root.querySelector('.opt input[name=v'+i+']:checked'),hi=root.querySelector('.opt input[name=h'+i+']:checked'),ch=[].slice.call(root.querySelectorAll('.chk')).filter(l=>l.querySelector('input').checked);
+      if(!ch.length||!vi||!hi){msg.textContent='Pilih dulu setidaknya satu data, satu visual, dan satu judul.';return;}msg.textContent='';
+      let raw=0,maxp=0;e.d.forEach(x=>{if(x[0]==='core')maxp+=2;else if(x[0]==='sup')maxp+=1;});
+      let miss=[],hit=[],bad=[];root.querySelectorAll('.chk').forEach(l=>{const k=+l.getAttribute('data-k'),x=e.d[k],on=l.querySelector('input').checked,w=l.querySelector('.why');l.classList.remove('ok','bad','miss');
+        const tag='<b>['+K[x[0]]+']</b> '+esc(x[2]);
+        if(on){if(x[0]==='core'){raw+=2;l.classList.add('ok');}else if(x[0]==='sup'){raw+=1;l.classList.add('ok');}else if(x[0]==='noise'){raw-=1.5;l.classList.add('bad');}else{raw-=2;l.classList.add('bad');}w.style.display='block';w.innerHTML=tag;}
+        else if(x[0]==='core'){l.classList.add('miss');w.style.display='block';w.innerHTML='<b>[Item inti yang terlewat]</b> '+esc(x[2]);}else if(x[0]==='sup'){w.style.display='block';w.innerHTML='<b>[Pendukung, opsional]</b> '+esc(x[2]);}else{w.style.display='none';}});
+      const dp=Math.round(clamp(raw/maxp,0,1)*50);
+      const vk=+vi.parentNode.getAttribute('data-k'),hk=+hi.parentNode.getAttribute('data-k'),vp=e.v[vk][1],hp=e.h[hk][1],tot=dp+vp+hp;
+      const bestV=e.v.filter(x=>x[1]===25)[0],bestH=e.h.filter(x=>x[1]===25)[0];
+      root.querySelectorAll('.opt').forEach(o=>{o.classList.remove('ok','bad');});
+      root.querySelectorAll('.opt').forEach(o=>{const grp=o.querySelector('input').getAttribute('name').charAt(0),k=+o.getAttribute('data-k'),arr=grp==='v'?e.v:e.h;if(arr[k][1]===25)o.classList.add('ok');else if(o.querySelector('input').checked)o.classList.add('bad');});
+      box.classList.add('show');
+      box.innerHTML='<div class="tot">'+tot+' / 100</div><p class="small">Data '+dp+' / 50 · Visual '+vp+' / 25 · Judul '+hp+' / 25</p>'
+        +(vp===25?'<p><b>✓ Visual terbaik dipilih.</b> '+esc(bestV[2])+'</p>':'<p><b>Visual Anda:</b> '+esc(e.v[vk][2])+'</p><p><b>Visual terbaik:</b> '+esc(bestV[0])+'. '+esc(bestV[2])+'</p>')
+        +(hp===25?'<p><b>✓ Judul terbaik dipilih.</b> '+esc(bestH[2])+'</p>':'<p><b>Judul Anda:</b> '+esc(e.h[hk][2])+'</p><p><b>Judul terbaik:</b> “'+esc(bestH[0])+'”: '+esc(bestH[2])+'</p>')
+        +'<div class="callout"><b class="h">Contoh jawaban</b><p>'+esc(e.m)+'</p></div><p class="small">Tanda hijau dan merah pada daftar data di atas menunjukkan apa yang benar dan salah. Skor adalah heuristik pembelajaran. Dalam pekerjaan Anda sendiri, jawaban yang tepat bergantung pada audiens dan keputusan Anda.</p>';
+      EXSC[i]=tot;updScore();box.scrollIntoView&&box.scrollIntoView({block:'nearest',behavior:'smooth'});});});}
+function updScore(){const v=Object.keys(EXSC).map(k=>EXSC[k]),n=v.length;$('sc_done').textContent=n+' / '+EX.length;$('sc_avg').textContent=n?Math.round(sum(v)/n):'–';$('sc_best').textContent=n?Math.max.apply(null,v):'–';$('sc_bar').style.width=(100*n/EX.length)+'%';}
+
+/* =================== INIT =================== */
+function init(){[1,2,3,4,5,6].forEach(n=>renderQuiz('quiz-'+n,QZ[n]));initPicker();initCanvas();initTitleChecker();initSequencer();initChecklist();initClinic();labA();labB();labC();labD();labE();labF();initExercises();}
+if(typeof document!=='undefined'&&document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init);}else if(typeof document!=='undefined'&&typeof window!=='undefined'&&!window.__TEST__){init();}
+})();
+</script>
+</body>
+</html>

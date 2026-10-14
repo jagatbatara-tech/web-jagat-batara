@@ -8,7 +8,7 @@ tags:
   - CSCP
 thumbnail: ''
 en_link: supply-chain-en/2026-10-06-supply-chain-design-and-optimization
-article_url: supply-chain/desain-optimalisasi-supply-chain-id.html
+archive_url: supply-chain/desain-optimalisasi-supply-chain-id.html
 summary: Ringkasan praktis tentang penyelarasan desain jaringan supply chain dengan strategi bisnis, keseimbangan efisiensi, responsivitas, dan ketahanan, serta penyusunan dasar investasi teknologi supply chain.
 ---
 

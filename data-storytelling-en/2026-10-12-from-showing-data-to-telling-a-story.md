@@ -11,6 +11,7 @@ tags:
   - Data Storytelling
   - Data Visualization
   - Dashboard Design
+id_link: "data-storytelling/2026-10-12-dari-menampilkan-data-ke-bercerita"
 ---
 
 [Read the full guide: From Showing Data to Telling a Story](data-storytelling-en/From%20Showing%20Data%20to%20Telling%20a%20Story.html).
